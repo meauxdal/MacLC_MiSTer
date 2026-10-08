@@ -134,7 +134,12 @@ wire SD_CS, SD_CLK, SD_MOSI, SD_MISO, SD_CD;
 	assign SD_SPI_CS   = mcp_en ?  (mcp_sdcd  ? 1'bZ : SD_CS) : (sog & ~cs1 & ~VGA_EN) ? 1'b1 : 1'bZ;
 	assign SD_SPI_CLK  = (~mcp_en | mcp_sdcd) ? 1'bZ : SD_CLK;
 	assign SD_SPI_MOSI = (~mcp_en | mcp_sdcd) ? 1'bZ : SD_MOSI;
+	`ifdef MAC_TV525_DIAG
+	// Keep SD ownership, but gate all DAC bits together during TV startup.
+	assign {SDIO_CLK,SDIO_CMD,SDIO_DAT} = (av_dis | ((mcp_en | sd_cd) & ~tv525_drive)) ? 6'bZZZZZZ : (mcp_en | sd_cd) ? {vga_g,vga_r,vga_b} : {SD_CLK,SD_MOSI,SD_CS,3'bZZZ};
+	`else
 	assign {SDIO_CLK,SDIO_CMD,SDIO_DAT} = av_dis ? 6'bZZZZZZ : (mcp_en | sd_cd) ? {vga_g,vga_r,vga_b} : {SD_CLK,SD_MOSI,SD_CS,3'bZZZ};
+	`endif
 `else
 	assign SD_CD       = mcp_sdcd;
 	assign SD_MISO     = mcp_sdcd | SD_SPI_MISO;
@@ -702,6 +707,38 @@ wire         vbuf_read;
 wire [127:0] vbuf_writedata;
 wire  [15:0] vbuf_byteenable;
 wire         vbuf_write;
+`ifdef MAC_TV525_DIAG
+wire [27:0] scaler_address, tv_store_address;
+wire [7:0] scaler_burstcount, tv_store_burstcount;
+wire [127:0] scaler_writedata, tv_store_writedata, scaler_readdata, tv_store_readdata;
+wire [15:0] scaler_byteenable, tv_store_byteenable;
+wire scaler_read, scaler_write, scaler_waitrequest, scaler_readdatavalid;
+wire tv_store_read, tv_store_write, tv_store_waitrequest, tv_store_readdatavalid;
+wire [23:0] tv_native_rgb;
+wire tv_native_de, tv_native_line, tv_native_frame, tv_native_reset;
+wire [9:0] tv_native_width;
+wire [8:0] tv_native_height;
+(* async_reg="true" *) reg tv_mem_reset_meta=1'b1, tv_mem_reset_sync=1'b1;
+always @(posedge clk_100m) begin
+    tv_mem_reset_meta<=reset; tv_mem_reset_sync<=tv_mem_reset_meta;
+end
+tv_ddr_arbiter tv_vbuf_arbiter (
+    .clk(clk_100m), .inhibit(tv_mem_reset_sync),
+    .a_address(scaler_address), .a_burstcount(scaler_burstcount), .a_writedata(scaler_writedata),
+    .a_byteenable(scaler_byteenable), .a_read(scaler_read), .a_write(scaler_write),
+    .a_waitrequest(scaler_waitrequest), .a_readdatavalid(scaler_readdatavalid), .a_readdata(scaler_readdata),
+    .b_address(tv_store_address), .b_burstcount(tv_store_burstcount), .b_writedata(tv_store_writedata),
+    .b_byteenable(tv_store_byteenable), .b_read(tv_store_read), .b_write(tv_store_write),
+    .b_waitrequest(tv_store_waitrequest), .b_readdatavalid(tv_store_readdatavalid), .b_readdata(tv_store_readdata),
+    .address(vbuf_address), .burstcount(vbuf_burstcount), .writedata(vbuf_writedata),
+    .byteenable(vbuf_byteenable), .read(vbuf_read), .write(vbuf_write),
+    .waitrequest(vbuf_waitrequest), .readdatavalid(vbuf_readdatavalid), .readdata(vbuf_readdata)
+);
+`ifdef MISTER_DEBUG_NOHDMI
+assign scaler_address=0; assign scaler_burstcount=1; assign scaler_writedata=0;
+assign scaler_byteenable=0; assign scaler_read=0; assign scaler_write=0;
+`endif
+`endif
 
 wire  [23:0] hdmi_data;
 wire         hdmi_vs, hdmi_hs, hdmi_de, hdmi_vbl, hdmi_brd;
@@ -818,6 +855,17 @@ wire         bob_deint;
 		.o_fb_stride      (FB_STRIDE),
 
 		.avl_clk          (clk_100m),
+`ifdef MAC_TV525_DIAG
+		.avl_waitrequest  (scaler_waitrequest),
+		.avl_readdata     (scaler_readdata),
+		.avl_readdatavalid(scaler_readdatavalid),
+		.avl_burstcount   (scaler_burstcount),
+		.avl_writedata    (scaler_writedata),
+		.avl_address      (scaler_address),
+		.avl_write        (scaler_write),
+		.avl_read         (scaler_read),
+		.avl_byteenable   (scaler_byteenable)
+`else
 		.avl_waitrequest  (vbuf_waitrequest),
 		.avl_readdata     (vbuf_readdata),
 		.avl_readdatavalid(vbuf_readdatavalid),
@@ -827,6 +875,7 @@ wire         bob_deint;
 		.avl_write        (vbuf_write),
 		.avl_read         (vbuf_read),
 		.avl_byteenable   (vbuf_byteenable)
+`endif
 	);
 `endif
 
@@ -1339,16 +1388,45 @@ assign HDMI_TX_D  = hdmi_out_d;
 /////////////////////////  VGA output  //////////////////////////////////
 
 `ifndef MISTER_DUAL_SDRAM
+	`ifdef MAC_TV525_DIAG
+	wire clk_tv525, tv525_locked, tv525_drive;
+	wire [5:0] tv525_r, tv525_g, tv525_b;
+	wire [1:0] tv525_low_r, tv525_low_g, tv525_low_b;
+	wire tv525_hs_n, tv525_vs_n, tv525_cs_n, tv525_picture_de;
+	pll_tv tv525_pll (
+		.refclk(FPGA_CLK1_50), .rst(1'b0),
+		.outclk_0(clk_tv525), .locked(tv525_locked)
+	);
+	tv525_platform #(.BUFFERED(1)) crt_tv (
+		.clk_tv(clk_tv525), .clk_sys(clk_sys), .pll_locked(tv525_locked),
+		.io_osd(io_osd_vga), .io_strobe(io_strobe), .io_din(io_din),
+		.av_dis(av_dis), .video_disable(VGA_DISABLE), .osd_status(osd_status),
+		.drive_enable(tv525_drive), .dac_r(tv525_r), .dac_g(tv525_g), .dac_b(tv525_b),
+		.low_r(tv525_low_r), .low_g(tv525_low_g), .low_b(tv525_low_b),
+		.hs_n(tv525_hs_n), .vs_n(tv525_vs_n), .csync_n(tv525_cs_n),
+		.picture_de(tv525_picture_de),
+		.clk_source(clk_vid), .source_reset(tv_native_reset), .source_ce(ce_pix),
+		.source_de(tv_native_de), .source_line(tv_native_line), .source_frame(tv_native_frame),
+		.source_width(tv_native_width), .source_height(tv_native_height), .source_rgb(tv_native_rgb),
+		.clk_mem(clk_100m), .inhibit(tv_mem_reset_sync),
+		.address(tv_store_address), .burstcount(tv_store_burstcount), .writedata(tv_store_writedata),
+		.byteenable(tv_store_byteenable), .read(tv_store_read), .write(tv_store_write),
+		.waitrequest(tv_store_waitrequest), .readdatavalid(tv_store_readdatavalid), .readdata(tv_store_readdata),
+		.published(), .dropped(), .repeated(), .overflows(), .underruns()
+	);
+	`endif
 	wire vga_tx_clk;
-	`ifndef MISTER_DEBUG_NOHDMI
+	`ifdef MAC_TV525_DIAG
+		assign vga_tx_clk = clk_tv525;
+	`elsif MISTER_DEBUG_NOHDMI
+		assign vga_tx_clk = clk_vid;
+	`else
 		cyclonev_clkselect vga_clk_sw
 		( 
 			.clkselect({1'b1, ~vga_fb & ~vga_scaler}),
 			.inclk({clk_vid, hdmi_clk_out, 2'b00}),
 			.outclk(vga_tx_clk)
 		);
-	`else
-		assign vga_tx_clk = clk_vid;
 	`endif
 
 	wire VGA_TX_CLK;
@@ -1400,6 +1478,13 @@ scanlines #(0) VGA_scanlines
 
 wire [23:0] vga_data_osd;
 wire        vga_vs_osd, vga_hs_osd, vga_de_osd;
+`ifdef MAC_TV525_DIAG
+// Native stream stays intact; the analog OSD host belongs to the TV canvas.
+assign vga_data_osd = vga_data_sl;
+assign vga_hs_osd = vga_hs_sl;
+assign vga_vs_osd = vga_vs_sl;
+assign vga_de_osd = vga_de_sl;
+`else
 osd vga_osd
 (
 	.clk_sys(clk_sys),
@@ -1420,6 +1505,8 @@ osd vga_osd
 	.vs_out(vga_vs_osd),
 	.de_out(vga_de_osd)
 );
+
+`endif
 
 wire vga_cs_osd;
 csync csync_vga(clk_vid, vga_hs_osd, vga_vs_osd, vga_cs_osd);
@@ -1515,18 +1602,37 @@ reg  [39:0] PhaseInc;
 
 	wire vgas_en = vga_fb | vga_scaler;
 
+	`ifdef MAC_TV525_DIAG
+	wire cs1 = tv525_drive ? tv525_cs_n : 1'b1;
+	wire de1 = tv525_drive & tv525_picture_de;
+	`else
 	wire cs1 = vgas_en ? vgas_cs : vga_cs;
 	wire de1 = vgas_en ? vgas_de : vga_de;
-
+	`endif
+	`ifdef MAC_TV525_DIAG
+	assign VGA_VS = tv525_drive ? tv525_vs_n : 1'bZ;
+	assign VGA_HS = tv525_drive ? tv525_hs_n : 1'bZ;
+	assign VGA_R = tv525_drive ? tv525_r : 6'bZZZZZZ;
+	assign VGA_G = tv525_drive ? tv525_g : 6'bZZZZZZ;
+	assign VGA_B = tv525_drive ? tv525_b : 6'bZZZZZZ;
+	`else
 	assign VGA_VS = av_dis ? 1'bZ      :(((vgas_en ? (~vgas_vs ^ VS[12])                         : VGA_DISABLE ? 1'd1 : ~vga_vs) | csync_en) & subcarrier_out);
 	assign VGA_HS = av_dis ? 1'bZ      :  (vgas_en ? ((csync_en ? ~vgas_cs : ~vgas_hs) ^ HS[12]) : VGA_DISABLE ? 1'd1 : (csync_en ? ~vga_cs : ~vga_hs));
 	assign VGA_R  = av_dis ? 6'bZZZZZZ :   vgas_en ? vgas_o[23:18]                               : VGA_DISABLE ? 6'd0 : vga_o[23:18];
 	assign VGA_G  = av_dis ? 6'bZZZZZZ :   vgas_en ? vgas_o[15:10]                               : VGA_DISABLE ? 6'd0 : vga_o[15:10];
 	assign VGA_B  = av_dis ? 6'bZZZZZZ :   vgas_en ? vgas_o[7:2]                                 : VGA_DISABLE ? 6'd0 : vga_o[7:2]  ;
 
+	`endif
+	`ifdef MAC_TV525_DIAG
+	wire [1:0] vga_r = tv525_low_r;
+	wire [1:0] vga_g = tv525_low_g;
+	wire [1:0] vga_b = tv525_low_b;
+	`else
 	wire [1:0] vga_r  = vgas_en ? vgas_o[17:16] : VGA_DISABLE ? 2'd0 : vga_o[17:16];
 	wire [1:0] vga_g  = vgas_en ? vgas_o[9:8]   : VGA_DISABLE ? 2'd0 : vga_o[9:8];
 	wire [1:0] vga_b  = vgas_en ? vgas_o[1:0]   : VGA_DISABLE ? 2'd0 : vga_o[1:0];
+	`endif
+
 `endif
 
 reg video_sync = 0;
@@ -1783,6 +1889,12 @@ emu emu
 
 	.CLK_VIDEO(clk_vid),
 	.CE_PIXEL(ce_pix),
+`ifdef MAC_TV525_DIAG
+	.TV_NATIVE_RGB(tv_native_rgb), .TV_NATIVE_DE(tv_native_de),
+	.TV_NATIVE_LINE(tv_native_line), .TV_NATIVE_FRAME(tv_native_frame),
+	.TV_NATIVE_WIDTH(tv_native_width), .TV_NATIVE_HEIGHT(tv_native_height), .TV_NATIVE_RESET(tv_native_reset),
+`endif
+
 	.VGA_SL(scanlines),
 	.VIDEO_ARX(ARX),
 	.VIDEO_ARY(ARY),

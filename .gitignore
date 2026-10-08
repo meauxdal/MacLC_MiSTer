@@ -63,3 +63,8 @@ verilator/sim_stdout.log
 # python tooling artifacts
 __pycache__/
 *.pyc
+
+# Offline TV canvas simulation build products and reference images
+verilator/obj_dir_tb_tv*/
+verilator/obj_dir_tb_vbuf_gate/
+verilator/out/

@@ -583,6 +583,20 @@ module emu
 
 	assign CLK_VIDEO = clk_vid;
 	assign CE_PIXEL  = v8_ce_pix;   // constant 1 now (pix_ce tied high below)
+`ifdef MAC_TV525_DIAG
+    // Raw V8 tap precedes MT32 LCD/HUD, video_freak and framework overlays.
+    assign TV_NATIVE_RGB = {v8_vga_r,v8_vga_g,v8_vga_b};
+    assign TV_NATIVE_DE = v8_de;
+    assign TV_NATIVE_LINE = native_line_start;
+    assign TV_NATIVE_FRAME = native_frame_start;
+    assign TV_NATIVE_WIDTH = native_width;
+    assign TV_NATIVE_HEIGHT = native_height;
+    assign TV_NATIVE_RESET = vidrst_s;
+    wire native_line_start, native_frame_start;
+    wire [9:0] native_width;
+    wire [8:0] native_height;
+`endif
+
 
 	// Video Output — V8 video with the MT32-pi LCD overlay composited on the
 	// FINAL VGA_R/G/B (works in the release HUD-off fit). ao486 convention:
@@ -2063,6 +2077,10 @@ module emu
 		.vga_b(v8_vga_b),
 		.de(v8_de),
 		.ce_pix(v8_ce_pix),
+`ifdef MAC_TV525_DIAG
+        .native_line_start(native_line_start), .native_frame_start(native_frame_start),
+        .native_width(native_width), .native_height(native_height),
+`endif
 
 		// Palette Interface (Connected to Ariel RAMDAC)
 		.palette_addr(ariel_pixel_addr),

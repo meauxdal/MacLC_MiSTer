@@ -12,6 +12,15 @@ CPU-glue or top-level wiring fix must be made in **both** files or sim and FPGA
 silently diverge. (This has bitten us before — e.g. sim once hardwired
 `.berr(1'b0)`, masking the MOVES bus-error fix.)
 
+2026-10-08: `MAC_TV525_DIAG` adds a raw V8 RGB/DE/CE and two-stage
+first-active-pixel marker/geometry tap in `MacLC.sv`. The desktop simulator
+continues to show its native V8 stream (historic /2 pixel enable), with no
+HPS DDR canvas, dedicated TV PLL, component DAC or TV OSD. The new
+`make tb_tv_v8` fixture instantiates the actual shared V8 RTL at both FPGA
+native dot-clock rates and feeds its tap into the buffered TV pipeline.
+`make tb_tv_frame` checks portable CE gaps, mode changes and source resets.
+These tests do not substitute for guest boot/audio or fitted timing checks.
+
 Last audited: 2026-08-21 (PDS Ethernet v2 Phase 3: pds_enet grew the
 guest-RAM DMA engine — new cross-top signal bundle `pds_eth_req/we/addr/
 din/ack/dout` plus `.ram_config_phys(configRAMSize)`, wired IDENTICALLY in

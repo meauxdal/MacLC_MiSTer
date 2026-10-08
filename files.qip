@@ -37,3 +37,18 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/egret_wrapper.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_core.sv
 set_global_assignment -name SYSTEMVERILOG_FILE MacLC.sv
+
+# Independent buffered TV canvas and CRT-proven 525-line encoder.
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_timing.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_test_pattern.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_osd.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_component.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_component_pins.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_output.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_platform.sv
+set_global_assignment -name VERILOG_FILE rtl/pll_tv.v
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_video_capture.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_capture_fifo.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_frame_store.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_buffered_canvas.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv

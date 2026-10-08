@@ -122,3 +122,50 @@ fast:
 
 clean:
 	rm -f obj_dir/*
+
+# Independent 27 MHz raster/pattern verification; no FPGA build or hardware.
+TV525_OUT ?= out/tv525
+TV525_STAGE2_OUT ?= out/tv525_stage2
+TV525_STAGE2_RTL = $(RTL)/tv525_output.sv $(RTL)/tv525_timing.sv $(RTL)/tv_test_pattern.sv $(RTL)/tv_osd.sv $(RTL)/tv_component.sv $(RTL)/tv_component_pins.sv
+TV_FRAME_RTL = $(RTL)/tv_buffered_canvas.sv $(RTL)/tv_frame_store.sv $(RTL)/tv_video_capture.sv $(RTL)/tv_capture_fifo.sv $(RTL)/tv_ddr_arbiter.sv
+.PHONY: tb_tv_frame
+tb_tv_frame:
+	$V --lint-only --Wall -Wno-PINCONNECTEMPTY --top-module tv_frame_pipeline tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL)
+	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY --top-module tv_frame_pipeline --Mdir ./obj_dir_tb_tv_frame -o tb_tv_frame -CFLAGS "-std=c++17 -O2" tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL) tb_tv_frame.cpp
+	./obj_dir_tb_tv_frame/tb_tv_frame
+.PHONY: tb_tv_ddr_arbiter
+tb_tv_ddr_arbiter:
+	$V --cc --exe --build -j 4 --Wall --top-module tv_ddr_arbiter --Mdir ./obj_dir_tb_tv_ddr_arbiter -o tb_tv_ddr_arbiter -CFLAGS "-std=c++17 -O2" $(RTL)/tv_ddr_arbiter.sv tb_tv_ddr_arbiter.cpp
+	./obj_dir_tb_tv_ddr_arbiter/tb_tv_ddr_arbiter
+.PHONY: tb_tv_frame_owner
+tb_tv_frame_owner:
+	$V --binary --timing -j 4 --Wall -Wno-PINCONNECTEMPTY -Wno-BLKSEQ --top-module tb_tv_frame_owner --Mdir ./obj_dir_tb_tv_frame_owner -o tb_tv_frame_owner tb_tv_frame_owner.sv $(RTL)/tv_frame_store.sv
+	./obj_dir_tb_tv_frame_owner/tb_tv_frame_owner
+.PHONY: tb_tv525_platform
+tb_tv525_platform:
+	$V --lint-only --Wall --top-module tv525_platform $(RTL)/tv525_platform.sv $(TV525_STAGE2_RTL)
+	$V --cc --exe --build -j 4 --Wall --top-module tv525_platform --Mdir ./obj_dir_tb_tv525_platform -o tb_tv525_platform -CFLAGS "-std=c++17 -O2" $(RTL)/tv525_platform.sv $(TV525_STAGE2_RTL) tb_tv525_platform.cpp
+	./obj_dir_tb_tv525_platform/tb_tv525_platform
+.PHONY: tb_tv_component tb_tv525_output
+tb_tv_component:
+	$V --lint-only --Wall --top-module tv_component $(RTL)/tv_component.sv
+	$V --cc --exe --build -j 4 --Wall --top-module tv_component --Mdir ./obj_dir_tb_tv_component -o tb_tv_component -CFLAGS "-std=c++17 -O2" $(RTL)/tv_component.sv tb_tv_component.cpp
+	./obj_dir_tb_tv_component/tb_tv_component
+
+tb_tv525_output: tb_tv_component
+	$V --lint-only --Wall --top-module tv525_output $(TV525_STAGE2_RTL)
+	$V --cc --exe --build -j 4 --Wall --top-module tv525_output --Mdir ./obj_dir_tb_tv525_output -o tb_tv525_output -CFLAGS "-std=c++17 -O2" $(TV525_STAGE2_RTL) tb_tv525_output.cpp
+	./obj_dir_tb_tv525_output/tb_tv525_output $(TV525_STAGE2_OUT)
+	python3 render_tv525_stage2.py $(TV525_STAGE2_OUT)
+
+tb_sysmem_vbuf_gate:
+	mkdir -p obj_dir_tb_vbuf_gate
+	sed -n '/^module sysmem_lite/,/^endmodule/p' ../sys/sysmem.sv > obj_dir_tb_vbuf_gate/sysmem_lite.sv
+	sed -e 's/^wire next_state_write;/logic next_state_write;/' -e '/_master,$$/ s/^	output /	output logic /' ../sys/f2sdram_safe_terminator.sv > obj_dir_tb_vbuf_gate/f2sdram_safe_terminator.sv
+	$V --binary --timing -j 8 +define+MAC_TV525_DIAG -Wno-fatal -Wno-WIDTH -Wno-UNUSED -Wno-PINMISSING -Wno-DECLFILENAME -Wno-MULTITOP -Wno-INITIALDLY --timescale 1ns/1ps --top-module tb_sysmem_vbuf_gate --Mdir ./obj_dir_tb_vbuf_gate -o tb_sysmem_vbuf_gate tb_sysmem_vbuf_gate.sv obj_dir_tb_vbuf_gate/sysmem_lite.sv obj_dir_tb_vbuf_gate/f2sdram_safe_terminator.sv
+	./obj_dir_tb_vbuf_gate/tb_sysmem_vbuf_gate > obj_dir_tb_vbuf_gate/run.log 2>&1; grep -E "^FAIL|^RESULT" obj_dir_tb_vbuf_gate/run.log | head -40; grep -q "^RESULT: PASS" obj_dir_tb_vbuf_gate/run.log
+
+.PHONY: tb_tv_v8
+tb_tv_v8:
+	$V --cc --exe --build -j 4 -Wno-fatal --top-module tv_v8_pipeline --Mdir ./obj_dir_tb_tv_v8 -o tb_tv_v8 -CFLAGS "-std=c++17 -O2" tv_v8_pipeline.sv tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL) $(RTL)/maclc_v8_video.sv tb_tv_v8.cpp
+	./obj_dir_tb_tv_v8/tb_tv_v8

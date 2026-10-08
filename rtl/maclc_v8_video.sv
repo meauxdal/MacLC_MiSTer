@@ -36,6 +36,10 @@ module maclc_v8_video(
     output reg de,
     output reg ce_pix,
 
+    output reg native_line_start, native_frame_start,
+    output reg [9:0] native_width,
+    output reg [8:0] native_height,
+
     output [7:0] palette_addr,
     input [23:0] palette_data,
 
@@ -394,16 +398,29 @@ assign palette_addr = pixel_index;
 // Pipeline delay: palette RAM read is synchronous (1-cycle latency),
 // so delay de, video_mode, and video_data to align with palette_data output.
 reg        de_d1;
+reg line_d1, frame_d1;
+reg [9:0] width_d1;
+reg [8:0] height_d1;
 reg [2:0]  video_mode_d1;
 reg [15:0] video_data_d1;
 
 always @(posedge clk_sys) begin
     de_d1         <= de_raw;
+    line_d1       <= !reset && de_raw && h_count == 0;
+    frame_d1      <= !reset && de_raw && h_count == 0 && v_count == 0;
+    // Unsupported 640x870 portrait mode: zero geometry prevents truncation
+    // into a supported capture. Native counters and output remain unchanged.
+    width_d1      <= monid_v == 4'h1 ? 10'd0 : h_active[9:0];
+    height_d1     <= monid_v == 4'h1 ? 9'd0 : v_active[8:0];
     video_mode_d1 <= video_mode;
     video_data_d1 <= video_data;
 end
 
 always @(posedge clk_sys) begin
+    native_line_start <= line_d1;
+    native_frame_start <= frame_d1;
+    native_width <= width_d1;
+    native_height <= height_d1;
     de <= de_d1;  // Align DE output with RGB (1-cycle palette latency)
     if (de_d1) begin
         if (video_mode_d1 == 3'd4) begin
