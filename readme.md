@@ -29,13 +29,10 @@ the Egret (HC05) system controller, and the LC's other peripherals.
 - **PRAM/NVRAM:** save (on entering the OSD), automatic load at core start (or forced load),
   and clear
 - **SCC serial** is wired in and "usable" but not yet doing anything useful
-- **Floppy disks (read-only):** 800 KB GCR and 1.44 MB MFM disks in raw or
+- **Floppy disks:** 400/800 KB GCR and 720 KB/1.44 MB MFM disks in raw or
   DiskCopy 4.2 format — booting, mounting, launching applications and copying
-  files off a floppy all work. See [Floppy disk support](#floppy-disk-support)
-
-### Not working yet
-
-- **Floppy writes** (disks mount locked/write-protected)
+  files off a floppy all work. Writes and guest formatting are supported, with
+  **Floppy Writes defaulting to Off**. See [Floppy disk support](#floppy-disk-support)
 
 ## Usage
 
@@ -55,19 +52,46 @@ a reset/reload.
 
 ## OSD menu
 
-Floppy, SCSI disk and CD-ROM mounting remain at the top level. Configuration is
-grouped into **System**, **Video**, **Devices** and **MT32-pi** submenus.
+The top-level menu follows this order (with separators between groups):
 
-**System** starts with Memory, Monitor and **Apply and Reset**. Memory defaults
-to **2 MB** and Monitor defaults to **512×384 12-inch RGB**; both selections take
-effect on reset. PRAM mounting/clearing and the NMI action are also in System.
-**Video** contains aspect ratio and scaling, plus analog output and CRT
-de-flicker controls when built with [480i support](BUILD.md#optional-480i-support).
-**Devices** contains floppy writes, CD-ROM drive enable and Ethernet settings.
-The top-level **Reset** also applies the selected memory and monitor settings.
+1. Mount Floppy
+2. Mount SCSI Disk 0
+3. Mount SCSI Disk 1
+4. Mount CD-ROM
+5. Monitor — 512x384 12in / 640x480 VGA
+6. Memory — 2 MB / 10 MB
+7. Apply and Reset
+8. Video >
+9. System >
+10. MT32-pi >
+11. Reset
 
-This menu uses configuration version **1** (`MACLC_v1.CFG`) so old saved option
-bits cannot override the new monitor default. Media mount slots are unchanged.
+**Video:** Aspect Ratio (Original / Full Screen / custom ARC1 / custom ARC2),
+Scaling (Normal / V-Integer / Narrower HV-Integer / Wider HV-Integer), then
+Analog Output (Native / 480i) and CRT De-flicker (Strong / Mild / Off) only
+when built with [480i support](BUILD.md#optional-480i-support).
+
+**System:** Mount PRAM; Clear PRAM and Reset; Floppy Writes (Off / On);
+CD-ROM Drive (Enabled / Disabled); Ethernet (Off / On); Network Interface
+(eth0 / tap0 / macvlan / eth1); MAC Suffix (0–F); Interrupt (NMI).
+
+**MT32-pi:** Use MT32-pi (Yes / No); Synthesizer (Munt / FluidSynth);
+Munt ROM (MT-32 v1 / MT-32 v2 / CM-32L); SoundFont (0–7);
+Show Info (No / Yes / LCD-On / LCD-Auto).
+
+Fresh settings default to **512×384 12-inch RGB**, **2 MB**, Original aspect,
+Normal scaling, floppy writes Off, CD-ROM Enabled, Ethernet Off, eth0 and
+MAC suffix 0. MT32-pi defaults to Yes, Munt, MT-32 v1, SoundFont 0 and no info.
+With 480i support, analog output defaults to Native and de-flicker to Strong.
+Monitor and memory take effect on **Apply and Reset** or **Reset** at the top level.
+
+Settings continue to use `MACLC.CFG`, with no config-version suffix. Existing
+saved settings take precedence over defaults; `MACLC_v1.CFG` from the earlier
+versioned menu is not loaded. The uppercase version label still displays the
+build date. Option bits and media slots are unchanged: floppy 6, SCSI disks 0/1, CD-ROM 4,
+PRAM 2, hidden Toolbox channels 3/5. Persistent `MACLC.sN` mount records are
+independent of the option config version; the floppy `S6` entry retains its
+existing mount behavior without adding the `C` auto-remount modifier.
 
 ## SCSI bus layout
 
@@ -207,9 +231,12 @@ this step goes away.
 
 ## Floppy disk support
 
-**Floppy reading works** — 800 KB GCR and 1.44 MB MFM 
-Mount images through the OSD's **"Mount Floppy"** slot. Disks are **read-only** for now:
-they mount write-protected, exactly like a locked physical floppy.
+**Floppy reading, writing and guest formatting work** for 400/800 KB GCR and
+720 KB/1.44 MB MFM. Mount images through **Mount Floppy**. **System → Floppy
+Writes** defaults to **Off** and must be enabled to write; an image mounted
+read-only by the host stays write-protected. Writes persist in the image file.
+The Off default is intentional: a write-path failure can hang the ROM's
+unbounded IWM handshake polling loop.
 
 Both common image formats are auto-detected — no conversion needed:
 
@@ -243,15 +270,14 @@ The natural flow is the real-Mac one:
   under software control), so prefer the eject-first flow.
 
 Mount floppies through **"Mount Floppy"** — that is the internal SuperDrive, the
-drive the Mac boots from and the only one that can read 1.44 MB MFM disks. The
-Sec slot emulates a second, external 800K-class drive.
+drive the Mac boots from. There is one drive; the LC has no external floppy port.
 
 ### Booting from a floppy
 
 Booting from floppy works (verified on hardware, August 2026). Mount a bootable image
 at the flashing-`?` screen and the ROM picks it up within a few seconds and boots from
 it — this is also how to start a floppy-based OS installation onto a fresh hard-disk
-image. Mounting before **System → Apply and Reset** works too.
+image. Mounting before the top-level **Apply and Reset** works too.
 
 ## PRAM / NVRAM
 
@@ -270,7 +296,7 @@ A default PRAM image is included as `releases/MacLC.nvr`.
 
 Two configurations are selectable in the OSD: **2 MB** (motherboard RAM only) or **10 MB**
 (2 MB soldered + 8 MB SIMM), matching real LC configurations. Changing the memory setting
-applies on reset (**System → Apply and Reset**). A cold boot with 10 MB selected takes longer to
+applies on reset (**Apply and Reset** at the top level). A cold boot with 10 MB selected takes longer to
 complete its RAM test before booting — be patient.
 
 ### Skipping the boot RAM test (optional)
@@ -303,7 +329,7 @@ The core supports two monitors/resolutions, selectable in the OSD:
 - **512×384 12" RGB** (default; the LC's "Macintosh 12-inch RGB Display")
 - **640×480 VGA** (supports 256-colors only)
 
-Select the monitor in **System → Monitor**, then choose **Apply and Reset**.
+Select **Monitor** at the top level, then choose **Apply and Reset**.
 
 All the LC's colour depths render — 1, 2, 4, 8 and 16bpp* (only available on 512x384 resolution, due to VRAM limtations- . Aspect ratio and scaling
 options are available in the OSD. The "Original" aspect ratio is true **4:3**

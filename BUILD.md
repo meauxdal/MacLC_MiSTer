@@ -26,6 +26,16 @@ Native is the default.
 
 Changing this setting requires a full rebuild. It applies to both GUI and CLI builds.
 
+### Offline OSD check
+
+Run `python scripts/osd_check.py` to check both expanded menu variants, root and
+submenu selection, flat mode, scrolling, media slots and status ranges without
+building hardware. `--baseline c9e0b0d` also reproduces the old invisible-version
+row offset and checks that option values and hardware logic remain unchanged.
+The check models Main's drawing and selection separately; it does not execute
+Main or replace a hardware OSD check. Its source revision references and optional
+`--main-source-dir` cross-check are documented in the script.
+
 ## Prerequisites
 
 - **Intel Quartus Prime 17.0.2 Lite Edition** installed. Typical `bin` locations:

@@ -79,7 +79,6 @@ module emu
 	`include "build_id.v"
 	localparam CONF_STR = {
 		"MACLC;UART57600:115200,MIDI;",
-		"v,1;",
 		"-;",
 		"S6,DSKIMG,Mount Floppy;",
 		"SC0,IMGVHDHDA,Mount SCSI Disk 0;",
@@ -90,50 +89,49 @@ module emu
 		// on a stock Main a 2048-byte-sector .bin also works mounted directly.
 		"SC4,ISOTO*CUEBINCHD,Mount CD-ROM;",
 		"-;",
+		"OA,Monitor,512x384 12in,640x480 VGA;",
+		"O4,Memory,2 MB,10 MB;",
+		"R0,Apply and Reset;",
+		"-;",
+		"P1,Video;",
+		"P1-;",
+		"P1O78,Aspect Ratio,Original,Full Screen,[ARC1],[ARC2];",
+		"P1OCD,Scaling,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
+`ifdef MAC_TV525_DIAG
+		"P1-;",
+		"P1O3,Analog Output,Native,480i;",
+		"P1O12,CRT De-flicker,Strong,Mild,Off;",
+`endif
 		"P2,System;",
-		"P2-;",
-		"P2O4,Memory,2 MB,10 MB;",
-		"P2OA,Monitor,512x384 12in,640x480 VGA;",
-		"P2R0,Apply and Reset;",
 		"P2-;",
 		"P2SC2,NVR,Mount PRAM;",
 		"P2R6,Clear PRAM and Reset;",
 		"P2-;",
-		"P2R5,Interrupt (NMI);",
-		"P3,Video;",
-		"P3-;",
-		"P3O78,Aspect Ratio,Original,Full Screen,[ARC1],[ARC2];",
-		"P3OCD,Scaling,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
-`ifdef MAC_TV525_DIAG
-		"P3-;",
-		"P3O3,Analog Output,Native,480i;",
-		"P3O12,CRT De-flicker,Strong,Mild,Off;",
-`endif
-		"P4,Devices;",
-		"P4-;",
 		// Default OFF, and it must stay that way: the ROM's write primitive
 		// polls the IWM handshake in an UNBOUNDED loop, so the failure mode of
 		// a write bug is a HUNG machine, not a failed write. Gated further in
 		// flp_int_wp below - a read-only mount stays write-protected whatever
 		// this says; a DC42 container does not.
-		"P4OE,Floppy Writes,Off,On;",
-		"P4OI,CD-ROM Drive,Enabled,Disabled;",
-		"P4-;",
+		"P2OE,Floppy Writes,Off,On;",
+		"P2OI,CD-ROM Drive,Enabled,Disabled;",
+		"P2-;",
 		// Default OFF for distribution (2026-08-24): the ethernet card needs
 		// the paired Main (releases/MiSTer) — with an older ethernet Main a
 		// card-ON boot hangs, so users opt in via the OSD after installing
 		// the Main. Bit clear (0) = first entry = Off; ena_osd below is the
 		// matching un-inverted status[19].
-		"P4OJ,Ethernet,Off,On;",
-		"P4o45,Network Interface,eth0,tap0,macvlan,eth1;",
-		"P4o03,MAC Suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
-		"P1,MT32-pi;",
-		"P1-;",
-		"P1OO,Use MT32-pi,Yes,No;",
-		"P1OQ,Synthesizer,Munt,FluidSynth;",
-		"P1ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
-		"P1OTV,SoundFont,0,1,2,3,4,5,6,7;",
-		"P1OMN,Show Info,No,Yes,LCD-On,LCD-Auto;",
+		"P2OJ,Ethernet,Off,On;",
+		"P2o45,Network Interface,eth0,tap0,macvlan,eth1;",
+		"P2o03,MAC Suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
+		"P2-;",
+		"P2R5,Interrupt (NMI);",
+		"P3,MT32-pi;",
+		"P3-;",
+		"P3OO,Use MT32-pi,Yes,No;",
+		"P3OQ,Synthesizer,Munt,FluidSynth;",
+		"P3ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
+		"P3OTV,SoundFont,0,1,2,3,4,5,6,7;",
+		"P3OMN,Show Info,No,Yes,LCD-On,LCD-Auto;",
 		"-;",
 		"R0,Reset;",
 		"I,",
