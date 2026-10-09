@@ -80,3 +80,25 @@ Neither setting blends successive images, so this introduces no temporal
 ghosting. Record whether the stationary bands disappear, weaken or persist.
 An improvement demonstrates filtering is useful, not that the physical sync
 has been qualified or the underlying cause conclusively identified.
+
+## Quartus 17 RAM inference repair
+
+The user's Oct 8 22:52 failed fit requires 4,730 LABs on a device with 4,191.
+The corresponding `MacLC.map.rpt` explicitly lists `crt_filter|rows` as
+uninferred due to asynchronous read logic (276007). The filter hierarchy
+uses 10,957 combinational ALUTs, 30,870 registers and zero block memory bits.
+The original multi-branch read template therefore failed physical inference;
+the functional simulations did not establish synthesis correctness.
+
+The repair places the three-way address mux ahead of one enabled synchronous
+read port (`row_q <= rows[row_read_addr]`) and moves the delayed write port to
+its own clocked block. The RAM read register has no reset or initialization.
+The stream controller no longer contains array reads. This retains the CE
+and pixel pipeline while following the single registered read template used
+by `vram_bram.sv`. Simulation checks are recorded in
+`scratch/tv_deflicker_inference*.log`.
+
+Quartus must still confirm `rows` maps to M10K and the 30,720-bit register
+bank disappears. This repair does not claim a successful synthesis or fit;
+no Quartus invocation was made. Check inference in Analysis & Synthesis
+before spending time on another full fit. Existing QSF edits are preserved.
