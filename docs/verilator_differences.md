@@ -21,6 +21,16 @@ native dot-clock rates and feeds its tap into the buffered TV pipeline.
 `make tb_tv_frame` checks portable CE gaps, mode changes and source resets.
 These tests do not substitute for guest boot/audio or fitted timing checks.
 
+2026-10-08 content-jitter follow-up: `tb_tv_v8` also instantiates the actual
+dual-clock framebuffer and Ariel RAMDAC, programs the palette through its CPU
+interface, and checks nonuniform 1/2/4/8-bpp scanout in both supported modes.
+Live CPU-side drawing is checked against complete raw V8 snapshots for both
+TV fields. This still does not model physical CDC/timing or HPS DDR latency.
+Details: `docs/CRT-480I-LC-CONTENT-JITTER-20261008.md`.
+The shared V8 direct-color pipeline also now uses the current `pix_word` and
+synchronized mode; the nonuniform 512x384 16-bpp negative control reproduced
+the former one-pixel lag. Both FPGA and native simulator share this RTL fix.
+
 Last audited: 2026-08-21 (PDS Ethernet v2 Phase 3: pds_enet grew the
 guest-RAM DMA engine — new cross-top signal bundle `pds_eth_req/we/addr/
 din/ack/dout` plus `.ram_config_phys(configRAMSize)`, wired IDENTICALLY in

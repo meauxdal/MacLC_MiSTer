@@ -167,5 +167,5 @@ tb_sysmem_vbuf_gate:
 
 .PHONY: tb_tv_v8
 tb_tv_v8:
-	$V --cc --exe --build -j 4 -Wno-fatal --top-module tv_v8_pipeline --Mdir ./obj_dir_tb_tv_v8 -o tb_tv_v8 -CFLAGS "-std=c++17 -O2" tv_v8_pipeline.sv tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL) $(RTL)/maclc_v8_video.sv tb_tv_v8.cpp
-	./obj_dir_tb_tv_v8/tb_tv_v8
+	$V --cc --exe --build -j 4 -Wno-fatal --top-module tv_v8_pipeline --Mdir ./obj_dir_tb_tv_v8 -o tb_tv_v8 -CFLAGS "-std=c++17 -O2" tv_v8_pipeline.sv tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL) $(RTL)/maclc_v8_video.sv $(RTL)/vram_bram.sv $(RTL)/ariel_ramdac.sv tb_tv_v8.cpp
+	./obj_dir_tb_tv_v8/tb_tv_v8 $(TV_V8_ARGS)
