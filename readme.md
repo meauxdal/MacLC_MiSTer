@@ -53,6 +53,22 @@ The core requires the 512 KB Macintosh LC ROM (version `$67C`, checksum `$350EAC
 placed as `boot0.rom`. The ROM is loaded into SDRAM at core start; changing it requires
 a reset/reload.
 
+## OSD menu
+
+Floppy, SCSI disk and CD-ROM mounting remain at the top level. Configuration is
+grouped into **System**, **Video**, **Devices** and **MT32-pi** submenus.
+
+**System** starts with Memory, Monitor and **Apply and Reset**. Memory defaults
+to **2 MB** and Monitor defaults to **512×384 12-inch RGB**; both selections take
+effect on reset. PRAM mounting/clearing and the NMI action are also in System.
+**Video** contains aspect ratio and scaling, plus analog output and CRT
+de-flicker controls when built with [480i support](BUILD.md#optional-480i-support).
+**Devices** contains floppy writes, CD-ROM drive enable and Ethernet settings.
+The top-level **Reset** also applies the selected memory and monitor settings.
+
+This menu uses configuration version **1** (`MACLC_v1.CFG`) so old saved option
+bits cannot override the new monitor default. Media mount slots are unchanged.
+
 ## SCSI bus layout
 
 Three real targets sit on the emulated SCSI bus. The remaining OSD slots are
@@ -61,8 +77,8 @@ Main (file transfer, PRAM, CD swapping), and the guest never sees them:
 
 | OSD slot | SCSI ID | Purpose |
 |---|---|---|
-| `Mount SCSI-0` | **0** | Primary hard disk (boot device) |
-| `Mount SCSI-1` | **1** | Secondary hard disk |
+| `Mount SCSI Disk 0` | **0** | Primary hard disk (boot device) |
+| `Mount SCSI Disk 1` | **1** | Secondary hard disk |
 | `Mount CD-ROM` | **3** | CD-ROM drive |
 | `Mount PRAM` | — | PRAM/NVRAM save image (host channel) |
 | *(no OSD entry)* | — | BlueSCSI Toolbox shared folder (host channel) |
@@ -79,12 +95,12 @@ CD changer commands by the **ID 3** target — clients find them by INQUIRY, not
 
 The on-screen display exposes two SCSI slots:
 
-- **Mount SCSI-0** — primary drive (SCSI ID 0), the usual boot device
-- **Mount SCSI-1** — secondary drive (SCSI ID 1)
+- **Mount SCSI Disk 0** — primary drive (SCSI ID 0), the usual boot device
+- **Mount SCSI Disk 1** — secondary drive (SCSI ID 1)
 
 > **The disk IDs are 0 and 1** (they were 6 and 5 in earlier builds). The boot SCSI ID
 > is stored in PRAM, so an existing install blessed for ID 6 will not boot until you
-> run **Reset PRAM & Core** — or re-bless the volume for its new ID.
+> run **System → Clear PRAM and Reset** — or re-bless the volume for its new ID.
 
 Images use a raw SCSI format (same as the SCSI2SD project, documented
 [here](http://www.codesrc.com/mediawiki/index.php?title=HFSFromScratch)) with a `.vhd`,
@@ -148,7 +164,7 @@ commands and MiSTer's Main serves a folder on the SD card as shared storage.
    `MiSTer.ini` to point elsewhere).
 2. Install the client, once: unzip
    [`releases/MiSTer_BlueSCSI_Toolbox_1.1.0b5.hda.zip`](releases/), put the `.hda`
-   in your `MACLC` folder, and mount it with **Mount SCSI-1** (the secondary drive).
+   in your `MACLC` folder, and mount it with **Mount SCSI Disk 1** (the secondary drive).
    It appears on the desktop — copy its contents to a folder on your boot volume,
    then unmount it; you won't need it again.
 3. Run **BlueSCSI SD Transfer** from that folder. It lists the shared folder:
@@ -192,7 +208,7 @@ this step goes away.
 ## Floppy disk support
 
 **Floppy reading works** — 800 KB GCR and 1.44 MB MFM 
-Mount images through the OSD's **"Mount Pri Floppy"** slot. Disks are **read-only** for now:
+Mount images through the OSD's **"Mount Floppy"** slot. Disks are **read-only** for now:
 they mount write-protected, exactly like a locked physical floppy.
 
 Both common image formats are auto-detected — no conversion needed:
@@ -226,7 +242,7 @@ The natural flow is the real-Mac one:
   copes, but may complain — real Macs never experience this (their drives only eject
   under software control), so prefer the eject-first flow.
 
-Mount floppies through **"Mount Pri Floppy"** — that is the internal SuperDrive, the
+Mount floppies through **"Mount Floppy"** — that is the internal SuperDrive, the
 drive the Mac boots from and the only one that can read 1.44 MB MFM disks. The
 Sec slot emulates a second, external 800K-class drive.
 
@@ -235,7 +251,7 @@ Sec slot emulates a second, external 800K-class drive.
 Booting from floppy works (verified on hardware, August 2026). Mount a bootable image
 at the flashing-`?` screen and the ROM picks it up within a few seconds and boots from
 it — this is also how to start a floppy-based OS installation onto a fresh hard-disk
-image. Mounting before a reset ("Reset & Apply") works too.
+image. Mounting before **System → Apply and Reset** works too.
 
 ## PRAM / NVRAM
 
@@ -244,8 +260,9 @@ the real-time clock — is backed by a persistent NVRAM image:
 
 - **Save:** PRAM is written back when you open the OSD.
 - **Load:** the PRAM image is loaded automatically when the core starts; you can also force a
-  reload via the "Mount PRAM" slot in the OSD.
-- **Clear:** "Reset PRAM & Core" clears PRAM and resets the machine (a fresh, default PRAM).
+  reload via **System → Mount PRAM** in the OSD.
+- **Clear:** **System → Clear PRAM and Reset** clears PRAM and resets the machine
+  (a fresh, default PRAM).
 
 A default PRAM image is included as `releases/MacLC.nvr`.
 
@@ -253,7 +270,7 @@ A default PRAM image is included as `releases/MacLC.nvr`.
 
 Two configurations are selectable in the OSD: **2 MB** (motherboard RAM only) or **10 MB**
 (2 MB soldered + 8 MB SIMM), matching real LC configurations. Changing the memory setting
-applies on reset ("Reset & Apply CPU+Memory"). A cold boot with 10 MB selected takes longer to
+applies on reset (**System → Apply and Reset**). A cold boot with 10 MB selected takes longer to
 complete its RAM test before booting — be patient.
 
 ### Skipping the boot RAM test (optional)
@@ -283,8 +300,10 @@ passes. Back up your original ROM, then copy the patched file to your `MACLC` fo
 
 The core supports two monitors/resolutions, selectable in the OSD:
 
+- **512×384 12" RGB** (default; the LC's "Macintosh 12-inch RGB Display")
 - **640×480 VGA** (supports 256-colors only)
-- **512×384 12" RGB** (the LC's "Macintosh 12-inch RGB Display")
+
+Select the monitor in **System → Monitor**, then choose **Apply and Reset**.
 
 All the LC's colour depths render — 1, 2, 4, 8 and 16bpp* (only available on 512x384 resolution, due to VRAM limtations- . Aspect ratio and scaling
 options are available in the OSD. The "Original" aspect ratio is true **4:3**

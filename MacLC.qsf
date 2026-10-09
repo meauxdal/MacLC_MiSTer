@@ -402,7 +402,9 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_frame_store.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_buffered_canvas.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv
 
+# Comment out this assignment to omit 480i hardware and its OSD controls.
 set_global_assignment -name VERILOG_MACRO "MAC_TV525_DIAG=1"
 # HDMI/ASCAL remains enabled; TV shares vbuf through its burst arbiter.
+
 
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

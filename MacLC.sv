@@ -79,55 +79,63 @@ module emu
 	`include "build_id.v"
 	localparam CONF_STR = {
 		"MACLC;UART57600:115200,MIDI;",
+		"v,1;",
 		"-;",
 		"S6,DSKIMG,Mount Floppy;",
-		// Default OFF, and it must stay that way: the ROM's write primitive
-		// polls the IWM handshake in an UNBOUNDED loop, so the failure mode of
-		// a write bug is a HUNG machine, not a failed write. Gated further in
-		// flp_int_wp below - a read-only mount stays write-protected whatever
-		// this says; a DC42 container does not.
-		"OE,Floppy Write,Off,On;",
-		"-;",
-		"SC0,IMGVHDHDA,Mount SCSI-0;",
-		"SC1,IMGVHDHDA,Mount SCSI-1;",
-		"SC2,NVR,Mount PRAM;",
-		"-;",
+		"SC0,IMGVHDHDA,Mount SCSI Disk 0;",
+		"SC1,IMGVHDHDA,Mount SCSI Disk 1;",
 		// CD-ROM (SCSI ID 3). ISO/TOAST (TO* matches .toast) are raw
 		// 2048-byte images and work today; CUE/BIN/CHD are listed for the
 		// Main_MiSTer translation layer (docs/plan_scsi_cdrom.md Phase 2) —
 		// on a stock Main a 2048-byte-sector .bin also works mounted directly.
 		"SC4,ISOTO*CUEBINCHD,Mount CD-ROM;",
-		"OI,CD-ROM Drive,Enabled,Disabled;",
+		"-;",
+		"P2,System;",
+		"P2-;",
+		"P2O4,Memory,2 MB,10 MB;",
+		"P2OA,Monitor,512x384 12in,640x480 VGA;",
+		"P2R0,Apply and Reset;",
+		"P2-;",
+		"P2SC2,NVR,Mount PRAM;",
+		"P2R6,Clear PRAM and Reset;",
+		"P2-;",
+		"P2R5,Interrupt (NMI);",
+		"P3,Video;",
+		"P3-;",
+		"P3O78,Aspect Ratio,Original,Full Screen,[ARC1],[ARC2];",
+		"P3OCD,Scaling,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
+`ifdef MAC_TV525_DIAG
+		"P3-;",
+		"P3O3,Analog Output,Native,480i;",
+		"P3O12,CRT De-flicker,Strong,Mild,Off;",
+`endif
+		"P4,Devices;",
+		"P4-;",
+		// Default OFF, and it must stay that way: the ROM's write primitive
+		// polls the IWM handshake in an UNBOUNDED loop, so the failure mode of
+		// a write bug is a HUNG machine, not a failed write. Gated further in
+		// flp_int_wp below - a read-only mount stays write-protected whatever
+		// this says; a DC42 container does not.
+		"P4OE,Floppy Writes,Off,On;",
+		"P4OI,CD-ROM Drive,Enabled,Disabled;",
+		"P4-;",
 		// Default OFF for distribution (2026-08-24): the ethernet card needs
 		// the paired Main (releases/MiSTer) — with an older ethernet Main a
 		// card-ON boot hangs, so users opt in via the OSD after installing
 		// the Main. Bit clear (0) = first entry = Off; ena_osd below is the
 		// matching un-inverted status[19].
-		"OJ,Ethernet,Off,On;",
-		"o45,Net interface,eth0,tap0,macvlan,eth1;",
-		"o03,MAC suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
-		"-;",
-		"O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
-		"OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
-		"OA,Monitor @Reset,640x480 VGA,512x384 12in;",
-`ifdef MAC_TV525_DIAG
-		"O3,Analog Output,Native,480i;",
-		"O12,CRT De-flicker,Strong,Mild,Off;",
-`endif
-		"-;",
-		"O4,Memory,2MB,10MB;",
-		"-;",
-		"R5,Interrupt (NMI / MacsBug);",
-		"R6,WIPE PRAM (erases settings!);",
-		"R0,Reset & Apply CPU+Memory;",
-		"-;",
+		"P4OJ,Ethernet,Off,On;",
+		"P4o45,Network Interface,eth0,tap0,macvlan,eth1;",
+		"P4o03,MAC Suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
 		"P1,MT32-pi;",
 		"P1-;",
 		"P1OO,Use MT32-pi,Yes,No;",
-		"P1OQ,Synth,Munt,FluidSynth;",
+		"P1OQ,Synthesizer,Munt,FluidSynth;",
 		"P1ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
 		"P1OTV,SoundFont,0,1,2,3,4,5,6,7;",
 		"P1OMN,Show Info,No,Yes,LCD-On,LCD-Auto;",
+		"-;",
+		"R0,Reset;",
 		"I,",
 		"MT32-pi: SoundFont #0,",
 		"MT32-pi: SoundFont #1,",
@@ -1513,23 +1521,23 @@ module emu
 							   status[17] ? 3'd4 : 3'd2;       // 16bpp override
 	*/
 
-	// Monitor ID Selection — 640x480 VGA (default, MAME-faithful) or
-	// 512x384 12" RGB. Portrait is not supported. This is the sense ID the
+	// Monitor ID Selection — 512x384 12" RGB (default) or
+	// 640x480 VGA. Portrait is not supported. This is the sense ID the
 	// ROM reads to pick V8 timing.
 	// LATCHED UNDER RESET: a real LC samples the monitor sense lines only
 	// during the ROM's boot probe — the display cannot change on a running
 	// system, and the OS lays out QuickDraw for the boot geometry. The old
 	// live status[10] wire retargeted the pixel PLL mid-session (guest-
 	// hostile, and the source of the out-of-range class pix_quiet guards).
-	// The OSD choice now applies at the next reset — R0 "Reset & Apply",
+	// The OSD choice now applies at the next reset — R0 "Apply and Reset",
 	// R6, or core reload — the same pattern as the Memory option. Saved
 	// configs still apply on first load: the HPS delivers status while
 	// n_reset is held, so the latch captures it before first release.
 	// (verilator/sim.v hardwires 4'h6 — no sim-side counterpart needed.)
-	reg [3:0] v8_monitor_id = 4'h6;  // 640x480 VGA until first reset sample
+	reg [3:0] v8_monitor_id = 4'h2;  // 512x384 12" RGB until first reset sample
 	always @(posedge clk_sys) begin
-		if (~n_reset) v8_monitor_id <= status[10] ? 4'h2 :  // 512x384 12" RGB
-		                                            4'h6;   // 640x480 VGA
+		if (~n_reset) v8_monitor_id <= status[10] ? 4'h6 :  // 640x480 VGA
+		                                            4'h2;   // 512x384 12" RGB
 	end
 
 	ariel_ramdac ariel(

@@ -8,6 +8,24 @@ edits). For the GUI, just open `MacLC.qpf` in Quartus and run a full compilation
 The build **never touches the MiSTer** — deploying is a separate step (see
 [Deploy](#deploy-optional-separate-step)).
 
+## Optional 480i support
+
+480i support is enabled by this assignment in `MacLC.qsf`:
+
+```tcl
+set_global_assignment -name VERILOG_MACRO "MAC_TV525_DIAG=1"
+```
+
+Comment out or remove the assignment before building to omit the 480i hardware
+and its Analog Output / CRT De-flicker OSD controls. Do not set the macro to `0`:
+the RTL uses `ifdef`, which checks whether it is defined, regardless of its value.
+In the Quartus GUI, remove the macro from the project's Verilog HDL macro settings.
+
+With support included, **Video → Analog Output** selects Native or 480i at runtime;
+Native is the default.
+
+Changing this setting requires a full rebuild. It applies to both GUI and CLI builds.
+
 ## Prerequisites
 
 - **Intel Quartus Prime 17.0.2 Lite Edition** installed. Typical `bin` locations:
