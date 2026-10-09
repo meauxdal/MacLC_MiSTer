@@ -24,12 +24,45 @@ for defines in [[], ["MISTER_DEBUG_NOHDMI"], ["MISTER_DISABLE_VGA_OSD"],
 for defines in [["MAC_TV525_DIAG", "MISTER_DEBUG_NOHDMI"], ["MAC_TV525_DIAG"]]:
     value = preprocess(root/"sys/sys_top.v", defines)
     for required in ["tv525_platform#(.BUFFERED(1))crt_tv(", "tv_ddr_arbitertv_vbuf_arbiter(",
-                     "assignvga_tx_clk=clk_tv525;", "wirecs1=tv525_drive?tv525_cs_n:1'b1;",
-                     "wire[1:0]vga_r=tv525_low_r;", "assignVGA_HS=tv525_drive?tv525_hs_n:1'bZ;",
+                     "wirecs1=tv_analog_enable?(tv525_drive?tv525_cs_n:1'b1):(vgas_en?vgas_cs:vga_cs);",
+                     "wire[1:0]vga_r=tv_analog_enable?tv525_low_r:",
+                     "assignVGA_HS=tv_analog_enable?(tv525_drive?tv525_hs_n:1'bZ):",
+                     ".TV_ANALOG_ENABLE(tv_analog_request)",
+                     "tv_analog_meta<=tv_analog_request;tv_analog_enable<=tv_analog_meta;",
                      ".TV_NATIVE_RGB(tv_native_rgb)", ".source_ce(ce_pix)",
                      ".b_address(tv_store_address)", ".address(vbuf_address)"]:
         assert required in value, required
-    assert "osdvga_osd(" not in value and "mac_interlacerinterlacer(" not in value
+    assert "osdvga_osd(" in value and "mac_interlacerinterlacer(" not in value
+    assert ".osd_status(native_osd_status)" in value
+    assert ".osd_status(tv_osd_status)" in value
+    assert "assignosd_status=tv_analog_enable?tv_osd_status:native_osd_status;" in value
+    normal = preprocess(baseline, [d for d in defines if d != "MAC_TV525_DIAG"])
+    previous_tv = preprocess(baseline, defines)
+    # Every native pin expression is exactly the pre-existing analog route.
+    for pin in ("VGA_VS", "VGA_HS", "VGA_R", "VGA_G", "VGA_B"):
+        original = re.search("assign"+pin+r"=(.*?);", normal)[1]
+        selected = re.search("assign"+pin+r"=tv_analog_enable\?\(.*?\):(.*?);", value)[1]
+        assert selected == original, (pin, selected, original)
+        tv_selected = re.search("assign"+pin+r"=tv_analog_enable\?\((.*?)\):", value)[1]
+        assert tv_selected == re.search("assign"+pin+r"=(.*?);", previous_tv)[1], pin
+    for pin in ("vga_r", "vga_g", "vga_b"):
+        original = re.search(r"wire\[1:0\]"+pin+r"=(.*?);", normal)[1]
+        selected = re.search(r"wire\[1:0\]"+pin+r"=tv_analog_enable\?tv525_low_[rgb]:(.*?);", value)[1]
+        assert selected == original, pin
+    for signal in ("cs1", "de1"):
+        selected = re.search("wire"+signal+r"=tv_analog_enable\?\(.*?\):\((.*?)\);", value)[1]
+        assert selected == re.search("wire"+signal+r"=(.*?);", normal)[1], signal
+    assert "assign{SDIO_CLK,SDIO_CMD,SDIO_DAT}=(av_dis|((mcp_en|sd_cd)&tv_analog_enable&~tv525_drive))?6'bZZZZZZ:(mcp_en|sd_cd)?{vga_g,vga_r,vga_b}:{SD_CLK,SD_MOSI,SD_CS,3'bZZZ};" in value
+    if "MISTER_DEBUG_NOHDMI" in defines:
+        assert "assignnative_vga_tx_clk=clk_vid;" in value
+    else:
+        assert "cyclonev_clkselectvga_clk_sw(.clkselect({1'b1,~vga_fb&~vga_scaler}),.inclk({clk_vid,hdmi_clk_out,2'b00}),.outclk(native_vga_tx_clk));" in value
+    assert "assignvga_tx_clk=tv_analog_enable?clk_tv525:native_vga_tx_clk;" in value
+    assert value.count(".outclock(vga_tx_clk)") == 1
+    assert value.count("vga_tx_clk") == 6  # three uses each of native/selected clock
+    # Quartus 15836: inclk[0:1] cannot be driven by a PLL clock.
+    for inputs in re.findall(r"cyclonev_clkselect\w+\(.*?\.inclk\(\{(.*?)\}\)", value):
+        assert inputs.endswith("2'b00"), inputs
     if "MISTER_DEBUG_NOHDMI" in defines:
         assert "assignscaler_read=0;" in value and "ascal#(" not in value
     else:
@@ -40,8 +73,11 @@ for defines in [["MAC_TV525_DIAG", "MISTER_DEBUG_NOHDMI"], ["MAC_TV525_DIAG"]]:
 emu = preprocess(root/"MacLC.sv", ["MAC_TV525_DIAG"])
 for required in ["tv_deflickercrt_filter(", ".rgb({v8_vga_r,v8_vga_g,v8_vga_b})",
                  ".out_reset(TV_NATIVE_RESET)", ".out_rgb(TV_NATIVE_RGB)",
-                 ".mode(tv_filter_sync)", "tv_filter_meta<=status[2:1];",
-                 "O12,CRTDe-flicker,Off,Mild,Strong;", ".native_frame_start(native_frame_start)"]:
+                 ".mode(tv_filter_sync)", "tv_filter_meta<=tv_filter_mode;",
+                 "O3,AnalogOutput,Native,480i;", "assignTV_ANALOG_ENABLE=status[3];",
+                 "O12,CRTDe-flicker,Strong,Mild,Off;",
+                 "wire[1:0]tv_filter_mode=status[2:1]==2'd0?2'd2:status[2:1]==2'd1?2'd1:status[2:1]==2'd2?2'd0:2'd2;",
+                 ".native_frame_start(native_frame_start)"]:
     assert required in emu, required
 assert "tv_deflicker" not in preprocess(root/"MacLC.sv", [])
 print("PASS CRT-only filtered V8 tap before overlays; normal profile excludes filter")

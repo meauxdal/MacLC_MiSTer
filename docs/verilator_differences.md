@@ -21,6 +21,13 @@ native dot-clock rates and feeds its tap into the buffered TV pipeline.
 `make tb_tv_frame` checks portable CE gaps, mode changes and source resets.
 These tests do not substitute for guest boot/audio or fitted timing checks.
 
+2026-10-08 optional analog output: the FPGA-only `TV_ANALOG_ENABLE` port
+selects the existing analog route or the buffered 480i route from OSD bit 3.
+The native desktop simulator has no analog pin/clock mux or OSD selector.
+CRT filtering defaults to Strong (O12 value 0); standalone filter benches
+continue to use the RTL mode encoding Off=0, Mild=1, Strong=2. Route checks
+verify the FPGA menu-to-filter mapping and unchanged native/HDMI paths.
+
 2026-10-08 content-jitter follow-up: `tb_tv_v8` also instantiates the actual
 dual-clock framebuffer and Ariel RAMDAC, programs the palette through its CPU
 interface, and checks nonuniform 1/2/4/8-bpp scanout in both supported modes.

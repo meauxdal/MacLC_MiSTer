@@ -15,7 +15,8 @@ output        CLK_VIDEO,
 //Must be based on CLK_VIDEO
 output        CE_PIXEL,
 `ifdef MAC_TV525_DIAG
-// Raw DAFB stream, before video_freak and all overlays.
+// Optional analog route; filtered V8 stream before video_freak and overlays.
+output TV_ANALOG_ENABLE,
 output [23:0] TV_NATIVE_RGB,
 output TV_NATIVE_DE, TV_NATIVE_LINE, TV_NATIVE_FRAME, TV_NATIVE_RESET,
 output [9:0] TV_NATIVE_WIDTH,

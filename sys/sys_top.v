@@ -136,7 +136,7 @@ wire SD_CS, SD_CLK, SD_MOSI, SD_MISO, SD_CD;
 	assign SD_SPI_MOSI = (~mcp_en | mcp_sdcd) ? 1'bZ : SD_MOSI;
 	`ifdef MAC_TV525_DIAG
 	// Keep SD ownership, but gate all DAC bits together during TV startup.
-	assign {SDIO_CLK,SDIO_CMD,SDIO_DAT} = (av_dis | ((mcp_en | sd_cd) & ~tv525_drive)) ? 6'bZZZZZZ : (mcp_en | sd_cd) ? {vga_g,vga_r,vga_b} : {SD_CLK,SD_MOSI,SD_CS,3'bZZZ};
+	assign {SDIO_CLK,SDIO_CMD,SDIO_DAT} = (av_dis | ((mcp_en | sd_cd) & tv_analog_enable & ~tv525_drive)) ? 6'bZZZZZZ : (mcp_en | sd_cd) ? {vga_g,vga_r,vga_b} : {SD_CLK,SD_MOSI,SD_CS,3'bZZZ};
 	`else
 	assign {SDIO_CLK,SDIO_CMD,SDIO_DAT} = av_dis ? 6'bZZZZZZ : (mcp_en | sd_cd) ? {vga_g,vga_r,vga_b} : {SD_CLK,SD_MOSI,SD_CS,3'bZZZ};
 	`endif
@@ -718,6 +718,11 @@ wire [23:0] tv_native_rgb;
 wire tv_native_de, tv_native_line, tv_native_frame, tv_native_reset;
 wire [9:0] tv_native_width;
 wire [8:0] tv_native_height;
+wire tv_analog_request;
+(* async_reg="true" *) reg tv_analog_meta=0, tv_analog_enable=0;
+always @(posedge clk_sys) begin
+    tv_analog_meta<=tv_analog_request; tv_analog_enable<=tv_analog_meta;
+end
 (* async_reg="true" *) reg tv_mem_reset_meta=1'b1, tv_mem_reset_sync=1'b1;
 always @(posedge clk_100m) begin
     tv_mem_reset_meta<=reset; tv_mem_reset_sync<=tv_mem_reset_meta;
@@ -1400,7 +1405,7 @@ assign HDMI_TX_D  = hdmi_out_d;
 	tv525_platform #(.BUFFERED(1)) crt_tv (
 		.clk_tv(clk_tv525), .clk_sys(clk_sys), .pll_locked(tv525_locked),
 		.io_osd(io_osd_vga), .io_strobe(io_strobe), .io_din(io_din),
-		.av_dis(av_dis), .video_disable(VGA_DISABLE), .osd_status(osd_status),
+		.av_dis(av_dis), .video_disable(VGA_DISABLE), .osd_status(tv_osd_status),
 		.drive_enable(tv525_drive), .dac_r(tv525_r), .dac_g(tv525_g), .dac_b(tv525_b),
 		.low_r(tv525_low_r), .low_g(tv525_low_g), .low_b(tv525_low_b),
 		.hs_n(tv525_hs_n), .vs_n(tv525_vs_n), .csync_n(tv525_cs_n),
@@ -1417,15 +1422,31 @@ assign HDMI_TX_D  = hdmi_out_d;
 	`endif
 	wire vga_tx_clk;
 	`ifdef MAC_TV525_DIAG
-		assign vga_tx_clk = clk_tv525;
-	`elsif MISTER_DEBUG_NOHDMI
+	// Three PLLs cannot share one Cyclone V clock-select block: only
+	// inclk[2:3] accept PLL outputs. Keep the existing two-PLL selector
+	// intact and mux only the clock forwarded by vgaclk_ddr to LED_USER.
+	// This fabric mux clocks no video pipeline, RAM or other core state.
+	// Output-rate changes may truncate a forwarded pulse while the display
+	// reacquires sync; steady-state native/TV clocks remain unchanged.
+	wire native_vga_tx_clk;
+	assign vga_tx_clk = tv_analog_enable ? clk_tv525 : native_vga_tx_clk;
+	`endif
+	`ifdef MISTER_DEBUG_NOHDMI
+		`ifdef MAC_TV525_DIAG
+		assign native_vga_tx_clk = clk_vid;
+		`else
 		assign vga_tx_clk = clk_vid;
+		`endif
 	`else
 		cyclonev_clkselect vga_clk_sw
 		( 
 			.clkselect({1'b1, ~vga_fb & ~vga_scaler}),
 			.inclk({clk_vid, hdmi_clk_out, 2'b00}),
+			`ifdef MAC_TV525_DIAG
+			.outclk(native_vga_tx_clk)
+			`else
 			.outclk(vga_tx_clk)
+			`endif
 		);
 	`endif
 
@@ -1479,12 +1500,13 @@ scanlines #(0) VGA_scanlines
 wire [23:0] vga_data_osd;
 wire        vga_vs_osd, vga_hs_osd, vga_de_osd;
 `ifdef MAC_TV525_DIAG
-// Native stream stays intact; the analog OSD host belongs to the TV canvas.
-assign vga_data_osd = vga_data_sl;
-assign vga_hs_osd = vga_hs_sl;
-assign vga_vs_osd = vga_vs_sl;
-assign vga_de_osd = vga_de_sl;
+wire native_osd_status, tv_osd_status;
+`ifndef MISTER_DUAL_SDRAM
+assign osd_status = tv_analog_enable ? tv_osd_status : native_osd_status;
 `else
+assign osd_status = native_osd_status;
+`endif
+`endif
 osd vga_osd
 (
 	.clk_sys(clk_sys),
@@ -1492,7 +1514,11 @@ osd vga_osd
 	.io_osd(io_osd_vga),
 	.io_strobe(io_strobe),
 	.io_din(io_din),
+	`ifdef MAC_TV525_DIAG
+	.osd_status(native_osd_status),
+	`else
 	.osd_status(osd_status),
+	`endif
 
 	.clk_video(clk_vid),
 	.din(vga_data_sl),
@@ -1505,8 +1531,6 @@ osd vga_osd
 	.vs_out(vga_vs_osd),
 	.de_out(vga_de_osd)
 );
-
-`endif
 
 wire vga_cs_osd;
 csync csync_vga(clk_vid, vga_hs_osd, vga_vs_osd, vga_cs_osd);
@@ -1603,18 +1627,18 @@ reg  [39:0] PhaseInc;
 	wire vgas_en = vga_fb | vga_scaler;
 
 	`ifdef MAC_TV525_DIAG
-	wire cs1 = tv525_drive ? tv525_cs_n : 1'b1;
-	wire de1 = tv525_drive & tv525_picture_de;
+	wire cs1 = tv_analog_enable ? (tv525_drive ? tv525_cs_n : 1'b1) : (vgas_en ? vgas_cs : vga_cs);
+	wire de1 = tv_analog_enable ? (tv525_drive & tv525_picture_de) : (vgas_en ? vgas_de : vga_de);
 	`else
 	wire cs1 = vgas_en ? vgas_cs : vga_cs;
 	wire de1 = vgas_en ? vgas_de : vga_de;
 	`endif
 	`ifdef MAC_TV525_DIAG
-	assign VGA_VS = tv525_drive ? tv525_vs_n : 1'bZ;
-	assign VGA_HS = tv525_drive ? tv525_hs_n : 1'bZ;
-	assign VGA_R = tv525_drive ? tv525_r : 6'bZZZZZZ;
-	assign VGA_G = tv525_drive ? tv525_g : 6'bZZZZZZ;
-	assign VGA_B = tv525_drive ? tv525_b : 6'bZZZZZZ;
+	assign VGA_VS = tv_analog_enable ? (tv525_drive ? tv525_vs_n : 1'bZ) : av_dis ? 1'bZ : (((vgas_en ? (~vgas_vs ^ VS[12]) : VGA_DISABLE ? 1'd1 : ~vga_vs) | csync_en) & subcarrier_out);
+	assign VGA_HS = tv_analog_enable ? (tv525_drive ? tv525_hs_n : 1'bZ) : av_dis ? 1'bZ : (vgas_en ? ((csync_en ? ~vgas_cs : ~vgas_hs) ^ HS[12]) : VGA_DISABLE ? 1'd1 : (csync_en ? ~vga_cs : ~vga_hs));
+	assign VGA_R = tv_analog_enable ? (tv525_drive ? tv525_r : 6'bZZZZZZ) : av_dis ? 6'bZZZZZZ : vgas_en ? vgas_o[23:18] : VGA_DISABLE ? 6'd0 : vga_o[23:18];
+	assign VGA_G = tv_analog_enable ? (tv525_drive ? tv525_g : 6'bZZZZZZ) : av_dis ? 6'bZZZZZZ : vgas_en ? vgas_o[15:10] : VGA_DISABLE ? 6'd0 : vga_o[15:10];
+	assign VGA_B = tv_analog_enable ? (tv525_drive ? tv525_b : 6'bZZZZZZ) : av_dis ? 6'bZZZZZZ : vgas_en ? vgas_o[7:2] : VGA_DISABLE ? 6'd0 : vga_o[7:2];
 	`else
 	assign VGA_VS = av_dis ? 1'bZ      :(((vgas_en ? (~vgas_vs ^ VS[12])                         : VGA_DISABLE ? 1'd1 : ~vga_vs) | csync_en) & subcarrier_out);
 	assign VGA_HS = av_dis ? 1'bZ      :  (vgas_en ? ((csync_en ? ~vgas_cs : ~vgas_hs) ^ HS[12]) : VGA_DISABLE ? 1'd1 : (csync_en ? ~vga_cs : ~vga_hs));
@@ -1624,9 +1648,9 @@ reg  [39:0] PhaseInc;
 
 	`endif
 	`ifdef MAC_TV525_DIAG
-	wire [1:0] vga_r = tv525_low_r;
-	wire [1:0] vga_g = tv525_low_g;
-	wire [1:0] vga_b = tv525_low_b;
+	wire [1:0] vga_r = tv_analog_enable ? tv525_low_r : vgas_en ? vgas_o[17:16] : VGA_DISABLE ? 2'd0 : vga_o[17:16];
+	wire [1:0] vga_g = tv_analog_enable ? tv525_low_g : vgas_en ? vgas_o[9:8] : VGA_DISABLE ? 2'd0 : vga_o[9:8];
+	wire [1:0] vga_b = tv_analog_enable ? tv525_low_b : vgas_en ? vgas_o[1:0] : VGA_DISABLE ? 2'd0 : vga_o[1:0];
 	`else
 	wire [1:0] vga_r  = vgas_en ? vgas_o[17:16] : VGA_DISABLE ? 2'd0 : vga_o[17:16];
 	wire [1:0] vga_g  = vgas_en ? vgas_o[9:8]   : VGA_DISABLE ? 2'd0 : vga_o[9:8];
@@ -1890,6 +1914,7 @@ emu emu
 	.CLK_VIDEO(clk_vid),
 	.CE_PIXEL(ce_pix),
 `ifdef MAC_TV525_DIAG
+	.TV_ANALOG_ENABLE(tv_analog_request),
 	.TV_NATIVE_RGB(tv_native_rgb), .TV_NATIVE_DE(tv_native_de),
 	.TV_NATIVE_LINE(tv_native_line), .TV_NATIVE_FRAME(tv_native_frame),
 	.TV_NATIVE_WIDTH(tv_native_width), .TV_NATIVE_HEIGHT(tv_native_height), .TV_NATIVE_RESET(tv_native_reset),

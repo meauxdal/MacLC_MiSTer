@@ -111,7 +111,8 @@ module emu
 		"OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
 		"OA,Monitor @Reset,640x480 VGA,512x384 12in;",
 `ifdef MAC_TV525_DIAG
-		"O12,CRT De-flicker,Off,Mild,Strong;",
+		"O3,Analog Output,Native,480i;",
+		"O12,CRT De-flicker,Strong,Mild,Off;",
 `endif
 		"-;",
 		"O4,Memory,2MB,10MB;",
@@ -588,11 +589,16 @@ module emu
 	assign CE_PIXEL  = v8_ce_pix;   // constant 1 now (pix_ce tied high below)
 `ifdef MAC_TV525_DIAG
     // CRT-only filter before capture; native HDMI/overlays keep the raw V8 tap.
-    // O12 was unused. Synchronize the setting, then latch it once per source
+    // Zero status selects native analog and Strong for the optional 480i path.
+    assign TV_ANALOG_ENABLE = status[3];
+    wire [1:0] tv_filter_mode = status[2:1] == 2'd0 ? 2'd2 :
+                                status[2:1] == 2'd1 ? 2'd1 :
+                                status[2:1] == 2'd2 ? 2'd0 : 2'd2;
+    // Synchronize the setting, then latch it once per source
     // frame inside the filter. CE remains the existing native CE in all modes.
-    (* async_reg="true" *) reg [1:0] tv_filter_meta=0, tv_filter_sync=0;
+    (* async_reg="true" *) reg [1:0] tv_filter_meta=2, tv_filter_sync=2;
     always @(posedge clk_vid) begin
-        tv_filter_meta<=status[2:1]; tv_filter_sync<=tv_filter_meta;
+        tv_filter_meta<=tv_filter_mode; tv_filter_sync<=tv_filter_meta;
     end
     tv_deflicker crt_filter (
         .clk(clk_vid), .reset(vidrst_s), .ce(v8_ce_pix), .de(v8_de),
