@@ -185,6 +185,20 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 
     set other_clocks [remove_from_collection [get_clocks *] $native_video_clocks]
     set_false_path -from [remove_from_collection $native_keepers $native_gray] -to $other_clocks
     set_false_path -from $other_clocks -to [remove_from_collection $native_keepers $native_gray_receiver]
+
+    # The no-logic clock fanout stops at the dedicated native/HDMI clock
+    # selectors. Their downstream registers therefore aren't in
+    # native_keepers, although TimeQuest propagates BOTH clocks to them.
+    # Restore the native/HDMI relationship cuts from the normal profile.
+    # Without these, the fitter adds ~9 ns of hold delay to the HDMI output
+    # pipeline to satisfy impossible cross-PLL transfers, breaking the real
+    # 148.5 MHz same-clock paths. These cuts do not include clk_100m, so the
+    # capture FIFO Gray max-delay/skew constraints remain effective.
+    set native_hdmi_clocks [get_clocks {pll_hdmi|pll_hdmi_inst|*|divclk}]
+    if {[get_collection_size $native_hdmi_clocks] != 0} {
+        set_false_path -from $native_video_clocks -to $native_hdmi_clocks
+        set_false_path -from $native_hdmi_clocks -to $native_video_clocks
+    }
 }
 
 # Belt-and-braces documentation of the synchronizer heads (redundant with the

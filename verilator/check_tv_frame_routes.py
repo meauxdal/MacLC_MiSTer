@@ -5,7 +5,9 @@ import subprocess
 
 root = Path(__file__).resolve().parents[1]
 baseline = root / "scratch/tv_frame_routes_baseline.v"
-baseline.write_bytes(subprocess.check_output(["git", "show", "HEAD:sys/sys_top.v"], cwd=root))
+# Last TV-only revision, before the optional analog selector. HEAD is not a
+# stable oracle once the change being tested has been committed.
+baseline.write_bytes(subprocess.check_output(["git", "show", "70229a3:sys/sys_top.v"], cwd=root))
 # Preprocess without altering the real build stamp; this fixture is never built.
 (root / "scratch/build_id.v").write_text('localparam BUILD_DATE = "261008";\n')
 
@@ -87,8 +89,45 @@ normal = preprocess(baseline, [])
 for pin in ("HDMI_TX_CLK", "HDMI_TX_DE", "HDMI_TX_D", "HDMI_TX_HS", "HDMI_TX_VS"):
     assert re.findall("assign"+pin+r"=.*?;", tv) == re.findall("assign"+pin+r"=.*?;", normal), pin
 print("PASS unchanged HDMI pin routes alongside ASCAL in TV profile")
+
+# Check the whole native/HDMI path, not merely the final pin assignments.
+# DDR arbitration is the deliberate exception and is exercised by
+# check_hdmi_ascal.py using the actual ASCAL VHDL.
+def instance(value, name):
+    # Preprocessing removes whitespace, so locate the instance suffix instead.
+    start = value.index(name + "(") + len(name)
+    depth, end = 0, start
+    while end < len(value):
+        if value[end] == "(": depth += 1
+        if value[end] == ")":
+            depth -= 1
+            if depth == 0: return value[start:end + 1]
+        end += 1
+    raise AssertionError("Unterminated instance: " + name)
+
+for name in ("ascal", "HDMI_shadowmask", "hdmi_osd", "VGA_scanlines",
+             "sync_v", "sync_h", "hdmi_clk_sw", "hdmiclk_ddr"):
+    actual = instance(tv, name)
+    if name == "ascal":
+        for suffix in ("address", "burstcount", "writedata", "byteenable", "read",
+                       "write", "waitrequest", "readdata", "readdatavalid"):
+            actual = actual.replace("scaler_" + suffix, "vbuf_" + suffix)
+    assert actual == instance(normal, name), name
+for signal in ("clk_ihdmi", "ce_hpix", "hr_out", "hg_out", "hb_out",
+               "hhs_fix", "hvs_fix", "hde_emu"):
+    assert re.findall("assign" + signal + r"=.*?;", tv) == re.findall("assign" + signal + r"=.*?;", normal), signal
+for first, last in (("reg[23:0]dv_data;", "assignHDMI_TX_D=hdmi_out_d;"),):
+    # Includes direct-video source, clock selection, output mux and registers.
+    assert tv[tv.index(first):tv.index(last)] == normal[normal.index(first):normal.index(last)]
+native_emu = preprocess(root/"MacLC.sv", [])
+for signal in ("CLK_VIDEO", "CE_PIXEL", "VGA_R", "VGA_G", "VGA_B",
+               "VGA_DE", "VGA_HS", "VGA_VS", "VGA_F1", "VGA_SL",
+               "HDMI_FREEZE", "HDMI_BLACKOUT", "HDMI_BOB_DEINT"):
+    assert re.findall("assign" + signal + r"=.*?;", emu) == re.findall("assign" + signal + r"=.*?;", native_emu), signal
+assert ".HPS_BUS({f1,HDMI_TX_VS,clk_100m,clk_ihdmi,ce_hpix,hde_emu,hhs_fix,hvs_fix," in tv
+print("PASS native HDMI source, CE/clock, field/deinterlace, scaler controls, direct-video and OSD path")
 mem_baseline = root / "scratch/tv_sysmem_baseline.sv"
-mem_baseline.write_bytes(subprocess.check_output(["git", "show", "HEAD:sys/sysmem.sv"], cwd=root))
+mem_baseline.write_bytes(subprocess.check_output(["git", "show", "70229a3:sys/sysmem.sv"], cwd=root))
 assert preprocess(mem_baseline, []) == preprocess(root/"sys/sysmem.sv", [])
 assert "vbuf_open_cnt" in preprocess(root/"sys/sysmem.sv", ["MAC_TV525_DIAG"])
 print("PASS normal sysmem unchanged; TV startup gate enabled")

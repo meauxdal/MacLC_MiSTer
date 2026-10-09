@@ -13,12 +13,16 @@ FIFO = PREFIX + 'capture_fifo|'
 NATIVE = 'emu|pllv|pll_inst|divclk'
 OTHER = 'sysmem|h2f_user0_clk'
 TV = 'tv525_pll|pll_inst|divclk'
+HDMI = 'pll_hdmi|pll_hdmi_inst|altera_pll_i|divclk'
 
 
-def check(profile, missing=False, missing_line=False):
+def check(profile, missing=False, missing_line=False, source=None):
     t = tkinter.Tcl()
     regs = ['emu|v8_video|rgb[0]', 'emu|v8_video|rd_gray_meta[0]']
     fanout = regs.copy()
+    # Real TimeQuest -no_logic fanout stops at the native/HDMI selector.
+    # These multi-clock output registers must remain OUTSIDE that collection.
+    regs += ['d[6]', 'hdmi_out_d[6]']
     if profile != 'normal':
         regs += ['crt_tv|stream|osd|config_payload[0]',
                  'crt_tv|stream|osd|tv_config[0]', 'crt_tv|disable_meta']
@@ -34,7 +38,7 @@ def check(profile, missing=False, missing_line=False):
         fanout = [r for r in fanout if 'rd_gray_meta[' not in r]
     if missing_line:
         regs = [r for r in regs if r != PREFIX + 'store|bank']
-    clocks = [NATIVE, OTHER, TV]
+    clocks = [NATIVE, OTHER, TV, HDMI]
     calls = []
 
     def items(value):
@@ -76,7 +80,7 @@ def check(profile, missing=False, missing_line=False):
         t.createcommand(command, lambda *args, command=command: calls.append((command, args)) or '')
     # Deliberately no all_registers command: the original SDC must fail here.
     try:
-        t.eval((ROOT / 'MacLC.sdc').read_text())
+        t.eval(source if source is not None else (ROOT / 'MacLC.sdc').read_text())
     except tkinter.TclError as e:
         if missing and str(e) == 'Native FIFO endpoints missing from video-clock fanout':
             print('PASS missing native endpoint fails closed')
@@ -89,6 +93,11 @@ def check(profile, missing=False, missing_line=False):
     groups = [c for c in calls if c[0] == 'set_clock_groups']
     assert bool(groups) == (profile != 'buffered')
     if profile == 'buffered':
+        clock_cuts = [a for c, a in calls if c == 'set_false_path'
+                      and a in (('-from', NATIVE, '-to', HDMI),
+                                ('-from', HDMI, '-to', NATIVE))]
+        assert len(clock_cuts) == 2, 'Missing native/HDMI cuts past clock selectors'
+        assert 'd[6]' not in fanout and 'hdmi_out_d[6]' not in fanout
         for command, args in calls:
             if command == 'set_false_path' and '-hold' not in args:
                 for option, excluded in (('-from', FIFO + 'wr_gray['),
@@ -106,3 +115,17 @@ for profile in ('normal', 'diagnostic', 'buffered'):
     check(profile)
 check('buffered', missing=True)
 check('buffered', missing_line=True)
+
+# The pre-fix constraints must fail even though all FIFO endpoints exist.
+without_hdmi_cuts = (ROOT / 'MacLC.sdc').read_text()
+for statement in ('set_false_path -from $native_video_clocks -to $native_hdmi_clocks',
+                  'set_false_path -from $native_hdmi_clocks -to $native_video_clocks'):
+    assert statement in without_hdmi_cuts
+    without_hdmi_cuts = without_hdmi_cuts.replace(statement, '')
+try:
+    check('buffered', source=without_hdmi_cuts)
+except AssertionError as error:
+    assert str(error) == 'Missing native/HDMI cuts past clock selectors'
+    print('PASS negative control: missing HDMI selector exceptions rejected')
+else:
+    raise AssertionError('Missing HDMI exceptions were accepted')

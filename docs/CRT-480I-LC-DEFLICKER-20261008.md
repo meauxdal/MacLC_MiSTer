@@ -1,5 +1,16 @@
 # CRT de-flicker experiment
 
+October 9 HDMI follow-up: hardware reports fragmented HDMI text and serrated
+edges, unaffected by changing de-flicker. Earlier statements that HDMI is
+unchanged describe intended routing, not hardware qualification. The full
+native-path audit and actual ASCAL/TV-contention regression are recorded in
+[HDMI isolation investigation](HDMI-480I-ISOLATION-20261009.md). Authorized
+STA subsequently exposed missing native/HDMI clock exceptions past the
+dedicated selectors and large inserted hold delays on HDMI output paths.
+`MacLC.sdc` repairs those exceptions while retaining FIFO Gray budgets. A
+new fit and hardware check are still required to establish the picture fix;
+broad OSD cleanup is deferred.
+
 ## Hardware result and optional output follow-up
 
 The user verified on hardware that Strong resolves the stationary curved,
