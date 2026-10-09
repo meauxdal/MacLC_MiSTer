@@ -110,6 +110,9 @@ module emu
 		"O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
 		"OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
 		"OA,Monitor @Reset,640x480 VGA,512x384 12in;",
+`ifdef MAC_TV525_DIAG
+		"O12,CRT De-flicker,Off,Mild,Strong;",
+`endif
 		"-;",
 		"O4,Memory,2MB,10MB;",
 		"-;",
@@ -584,14 +587,21 @@ module emu
 	assign CLK_VIDEO = clk_vid;
 	assign CE_PIXEL  = v8_ce_pix;   // constant 1 now (pix_ce tied high below)
 `ifdef MAC_TV525_DIAG
-    // Raw V8 tap precedes MT32 LCD/HUD, video_freak and framework overlays.
-    assign TV_NATIVE_RGB = {v8_vga_r,v8_vga_g,v8_vga_b};
-    assign TV_NATIVE_DE = v8_de;
-    assign TV_NATIVE_LINE = native_line_start;
-    assign TV_NATIVE_FRAME = native_frame_start;
-    assign TV_NATIVE_WIDTH = native_width;
-    assign TV_NATIVE_HEIGHT = native_height;
-    assign TV_NATIVE_RESET = vidrst_s;
+    // CRT-only filter before capture; native HDMI/overlays keep the raw V8 tap.
+    // O12 was unused. Synchronize the setting, then latch it once per source
+    // frame inside the filter. CE remains the existing native CE in all modes.
+    (* async_reg="true" *) reg [1:0] tv_filter_meta=0, tv_filter_sync=0;
+    always @(posedge clk_vid) begin
+        tv_filter_meta<=status[2:1]; tv_filter_sync<=tv_filter_meta;
+    end
+    tv_deflicker crt_filter (
+        .clk(clk_vid), .reset(vidrst_s), .ce(v8_ce_pix), .de(v8_de),
+        .line_start(native_line_start), .frame_start(native_frame_start),
+        .width(native_width), .height(native_height), .rgb({v8_vga_r,v8_vga_g,v8_vga_b}),
+        .mode(tv_filter_sync), .out_rgb(TV_NATIVE_RGB), .out_de(TV_NATIVE_DE),
+        .out_line(TV_NATIVE_LINE), .out_frame(TV_NATIVE_FRAME),
+        .out_width(TV_NATIVE_WIDTH), .out_height(TV_NATIVE_HEIGHT), .out_reset(TV_NATIVE_RESET)
+    );
     wire native_line_start, native_frame_start;
     wire [9:0] native_width;
     wire [8:0] native_height;

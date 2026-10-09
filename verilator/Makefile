@@ -127,11 +127,16 @@ clean:
 TV525_OUT ?= out/tv525
 TV525_STAGE2_OUT ?= out/tv525_stage2
 TV525_STAGE2_RTL = $(RTL)/tv525_output.sv $(RTL)/tv525_timing.sv $(RTL)/tv_test_pattern.sv $(RTL)/tv_osd.sv $(RTL)/tv_component.sv $(RTL)/tv_component_pins.sv
-TV_FRAME_RTL = $(RTL)/tv_buffered_canvas.sv $(RTL)/tv_frame_store.sv $(RTL)/tv_video_capture.sv $(RTL)/tv_capture_fifo.sv $(RTL)/tv_ddr_arbiter.sv
+TV_FRAME_RTL = $(RTL)/tv_buffered_canvas.sv $(RTL)/tv_frame_store.sv $(RTL)/tv_video_capture.sv $(RTL)/tv_capture_fifo.sv $(RTL)/tv_ddr_arbiter.sv $(RTL)/tv_deflicker.sv
+TV_FRAME_FILTER ?= -1
+.PHONY: tb_tv_deflicker
+tb_tv_deflicker:
+	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY --top-module tv_deflicker_capture --Mdir ./obj_dir_tb_tv_deflicker -o tb_tv_deflicker -CFLAGS "-std=c++17 -O2" tv_deflicker_capture.sv $(RTL)/tv_deflicker.sv $(RTL)/tv_video_capture.sv tb_tv_deflicker.cpp
+	./obj_dir_tb_tv_deflicker/tb_tv_deflicker
 .PHONY: tb_tv_frame
 tb_tv_frame:
-	$V --lint-only --Wall -Wno-PINCONNECTEMPTY --top-module tv_frame_pipeline tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL)
-	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY --top-module tv_frame_pipeline --Mdir ./obj_dir_tb_tv_frame -o tb_tv_frame -CFLAGS "-std=c++17 -O2" tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL) tb_tv_frame.cpp
+	$V --lint-only --Wall -Wno-PINCONNECTEMPTY -GFILTER_MODE=$(TV_FRAME_FILTER) --top-module tv_frame_pipeline tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL)
+	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY -GFILTER_MODE=$(TV_FRAME_FILTER) --top-module tv_frame_pipeline --Mdir ./obj_dir_tb_tv_frame -o tb_tv_frame -CFLAGS "-std=c++17 -O2 -DTV_FRAME_FILTER=$(TV_FRAME_FILTER)" tv_frame_pipeline.sv $(TV525_STAGE2_RTL) $(TV_FRAME_RTL) tb_tv_frame.cpp
 	./obj_dir_tb_tv_frame/tb_tv_frame
 .PHONY: tb_tv_ddr_arbiter
 tb_tv_ddr_arbiter:

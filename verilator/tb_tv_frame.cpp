@@ -10,9 +10,22 @@
 #include <string>
 
 using Word=std::array<uint32_t,4>;
+#ifndef TV_FRAME_FILTER
+#define TV_FRAME_FILTER -1
+#endif
 static uint32_t color(int id,int x,int y) {
     return uint32_t((id^x^y)&255)<<16 | uint32_t((x*13+y*3+id*17)&255)<<8 |
            uint32_t((y*7+x*5+id*11)&255);
+}
+static uint32_t display_color(int id,int x,int y,int height) {
+    if(TV_FRAME_FILTER<=0)return color(id,x,y);
+    uint32_t a=color(id,x,std::max(0,y-1)),c=color(id,x,y),b=color(id,x,std::min(height-1,y+1)),v=0;
+    int center_weight=TV_FRAME_FILTER==1?6:2,denom=center_weight+2;
+    for(int shift:{0,8,16}) {
+        int sum=((a>>shift)&255)+center_weight*((c>>shift)&255)+((b>>shift)&255);
+        v|=uint32_t((sum+denom/2)/denom)<<shift;
+    }
+    return v;
 }
 static uint32_t component(uint32_t rgb) {
     int r=rgb>>16,g=(rgb>>8)&255,b=rgb&255;
@@ -172,14 +185,14 @@ struct Run {
         if(!pair_id && rgb) {
             for(int candidate=1;candidate<id+1;candidate++) {
                 auto f=frames[candidate];int cx=x-(640-f.w)/2,cy=y-(480-f.h)/2;
-                if(f.valid && cx>=0 && cy>=0 && cx<f.w && cy<f.h && rgb==color(candidate,cx,cy)) {
+                if(f.valid && cx>=0 && cy>=0 && cx<f.w && cy<f.h && rgb==display_color(candidate,cx,cy,f.h)) {
                     pair_id=candidate;ox=(640-f.w)/2;oy=(480-f.h)/2;inside=true;break;
                 }
             }
             if(!pair_id)fail("displayed incomplete or invalid frame");
         }
         if(pair_id) {
-            uint32_t expected=inside?color(pair_id,x-ox,y-oy):0;
+            uint32_t expected=inside?display_color(pair_id,x-ox,y-oy,frames[pair_id].h):0;
             if(stress && inside && x==ox && rgb==0) {line_black=true;++black_lines;}
             if(line_black)expected=0;
             if(rgb!=expected)fail("pixel mismatch x="+std::to_string(x)+" y="+std::to_string(y)+" id="+std::to_string(pair_id)+" actual="+std::to_string(rgb)+" expected="+std::to_string(expected));

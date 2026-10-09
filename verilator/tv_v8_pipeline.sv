@@ -1,5 +1,5 @@
 // Actual LC scanout with registered palette/VRAM fixtures. Raw V8 signals
-// feed exactly the portable capture used by MacLC.sv, before any overlays.
+// feed the CRT filter in Off mode and portable capture, before any overlays.
 module tv_v8_pipeline (
     input wire clk_source, clk_mem, clk_tv, reset_tv, reset_source,
     input wire [3:0] monitor_id,
@@ -64,10 +64,21 @@ maclc_v8_video source (
     .palette_addr(palette_addr), .palette_data(actual_memory ? actual_palette : palette_data),
     .words_per_line(), .vram_raddr(vram_addr), .vram_rdata(actual_memory ? vram_data : 16'd0)
 );
+wire filter_de,filter_line,filter_frame,filter_reset;
+wire [9:0] filter_width;
+wire [8:0] filter_height;
+wire [23:0] filter_rgb;
+tv_deflicker filter (
+    .clk(clk_source), .reset(reset_source), .ce(native_ce), .de(native_de),
+    .line_start(native_line), .frame_start(native_frame), .width(native_width),
+    .height(native_height), .rgb(native_rgb), .mode(2'd0),
+    .out_de(filter_de), .out_line(filter_line), .out_frame(filter_frame),
+    .out_width(filter_width), .out_height(filter_height), .out_rgb(filter_rgb), .out_reset(filter_reset)
+);
 tv_frame_pipeline pipeline (
-    .clk_source(clk_source), .source_reset(reset_source), .source_ce(native_ce), .source_de(native_de),
-    .source_line(native_line), .source_frame(native_frame), .source_width(native_width),
-    .source_height(native_height), .source_rgb(native_rgb),
+    .clk_source(clk_source), .source_reset(filter_reset), .source_ce(native_ce), .source_de(filter_de),
+    .source_line(filter_line), .source_frame(filter_frame), .source_width(filter_width),
+    .source_height(filter_height), .source_rgb(filter_rgb),
     .clk_mem(clk_mem), .inhibit(1'b0), .clk_tv(clk_tv), .reset_tv(reset_tv),
     .a_address(28'd0), .a_burstcount(8'd1), .a_writedata(128'd0), .a_byteenable(16'd0),
     .a_read(1'b0), .a_write(1'b0), .a_waitrequest(), .a_readdatavalid(), .a_readdata(),

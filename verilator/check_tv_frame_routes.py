@@ -38,10 +38,13 @@ for defines in [["MAC_TV525_DIAG", "MISTER_DEBUG_NOHDMI"], ["MAC_TV525_DIAG"]]:
     print("PASS buffered TV routes and exclusive/arbitrated vbuf ownership:", defines)
 
 emu = preprocess(root/"MacLC.sv", ["MAC_TV525_DIAG"])
-for required in ["assignTV_NATIVE_RGB={v8_vga_r,v8_vga_g,v8_vga_b};", "assignTV_NATIVE_DE=v8_de;",
-                 "assignTV_NATIVE_RESET=vidrst_s;", ".native_frame_start(native_frame_start)"]:
+for required in ["tv_deflickercrt_filter(", ".rgb({v8_vga_r,v8_vga_g,v8_vga_b})",
+                 ".out_reset(TV_NATIVE_RESET)", ".out_rgb(TV_NATIVE_RGB)",
+                 ".mode(tv_filter_sync)", "tv_filter_meta<=status[2:1];",
+                 "O12,CRTDe-flicker,Off,Mild,Strong;", ".native_frame_start(native_frame_start)"]:
     assert required in emu, required
-print("PASS emu exports raw V8 tap before video_freak and MT32/HUD/normal VGA overlays")
+assert "tv_deflicker" not in preprocess(root/"MacLC.sv", [])
+print("PASS CRT-only filtered V8 tap before overlays; normal profile excludes filter")
 
 tv = preprocess(root/"sys/sys_top.v", ["MAC_TV525_DIAG"])
 normal = preprocess(baseline, [])
