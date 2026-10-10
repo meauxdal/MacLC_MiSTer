@@ -43,7 +43,37 @@ always @(posedge clk_tv) begin
     if (tv_reset_pipe[2]) begin disable_meta <= 1'b1; disable_sync <= 1'b1; end
     else begin disable_meta <= video_disable; disable_sync <= disable_meta; end
 end
-wire [28:0] tag_out;
+wire [28:0] tag_stream;
+wire [23:0] pin_code;
+wire pin_hs, pin_vs;
+reg [23:0] pin_code_q = 24'h800080;
+reg [28:0] pin_tag_q = {3'b111,26'b0};
+reg pin_hs_q = 1'b1, pin_vs_q = 1'b1;
+// Keep the output-enable release separate from the high-fanout stream reset.
+// It releases on the same third edge as tv_reset_pipe[2], and asynchronously
+// clears on lock loss even if clk_tv stops. Prevent synthesis merging it back
+// into the reset tree (including the equivalent inverted reset register).
+(* preserve, dont_merge *) reg pin_ready = 1'b0;
+always @(posedge clk_tv or negedge pll_locked)
+    if (!pll_locked) pin_ready <= 1'b0;
+    else pin_ready <= !tv_reset_pipe[1];
+// Register the complete pin sample after video-disable selection. Color,
+// sync and DE all gain one edge together; the raster/OSD pipeline is unchanged.
+// The external mux/tri-state remains in sys_top, but no reset or disable mux
+// remains between these color registers and that integration boundary.
+always @(posedge clk_tv) begin
+    if (tv_reset_pipe[2]) begin
+        pin_code_q <= 24'h800080;
+        pin_tag_q <= {3'b111,26'b0};
+        pin_hs_q <= 1'b1;
+        pin_vs_q <= 1'b1;
+    end else begin
+        pin_code_q <= pin_code;
+        pin_tag_q <= tag_stream;
+        pin_hs_q <= pin_hs;
+        pin_vs_q <= pin_vs;
+    end
+end
 wire [28:0] unused_tag_raw, unused_tag_composed;
 wire [23:0] unused_rgb_raw, unused_composed_rgb, unused_component;
 wire active_drive;
@@ -55,9 +85,10 @@ tv525_output #(.BUFFERED(BUFFERED)) stream (
     .av_dis(av_dis), .video_disable(disable_sync), .drive_enable(active_drive),
     .component(unused_component), .composed_rgb(unused_composed_rgb),
     .tag_raw(unused_tag_raw), .tag_composed(unused_tag_composed),
-    .tag_out(tag_out), .rgb_raw(unused_rgb_raw),
-    .dac_r(dac_r), .dac_g(dac_g), .dac_b(dac_b),
-    .low_r(low_r), .low_g(low_g), .low_b(low_b), .hs_n(hs_n), .vs_n(vs_n),
+    .tag_out(tag_stream), .rgb_raw(unused_rgb_raw),
+    .dac_r(pin_code[23:18]), .dac_g(pin_code[15:10]), .dac_b(pin_code[7:2]),
+    .low_r(pin_code[17:16]), .low_g(pin_code[9:8]), .low_b(pin_code[1:0]),
+    .hs_n(pin_hs), .vs_n(pin_vs),
     .clk_source(clk_source), .source_reset(source_reset), .source_ce(source_ce),
     .source_de(source_de), .source_line(source_line), .source_frame(source_frame),
     .source_width(source_width), .source_height(source_height), .source_rgb(source_rgb),
@@ -68,8 +99,13 @@ tv525_output #(.BUFFERED(BUFFERED)) stream (
 );
 // Do not drive the board before TV-clock startup has completed, nor after
 // loss of lock. av_dis remains an immediate platform tri-state control.
-assign drive_enable = active_drive && !tv_reset_pipe[2] && pll_locked;
-assign csync_n = tag_out[28];
-assign picture_de = tag_out[25];
-wire unused_tag_bits = ^{tag_out[27:26],tag_out[24:0]};
+assign drive_enable = active_drive && pin_ready && pll_locked;
+assign {dac_r,low_r} = pin_code_q[23:16];
+assign {dac_g,low_g} = pin_code_q[15:8];
+assign {dac_b,low_b} = pin_code_q[7:0];
+assign hs_n = pin_hs_q;
+assign vs_n = pin_vs_q;
+assign csync_n = pin_tag_q[28];
+assign picture_de = pin_tag_q[25];
+wire unused_tag_bits = ^{pin_tag_q[27:26],pin_tag_q[24:0]};
 endmodule

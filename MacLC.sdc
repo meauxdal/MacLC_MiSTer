@@ -162,13 +162,19 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 
     # A clock-group false path would override the FIFO Gray max-delay/skew
     # budgets below. Preserve the normal native-domain exceptions while
     # leaving the two deliberate Gray buses available for physical timing.
-    # Quartus 17 all_registers has no -clock option. Walk the native PLL
-    # clock target's buffered/inverted fanout instead (TimeQuest keepers).
-    # This also retains native-clock output-port exceptions from the group.
+    # Quartus 17 all_registers has no -clock option. Follow the native PLL
+    # through clock selectors as well as buffers/inverters. -no_logic alone
+    # stops at the HDMI clock selector, missing its downstream registers.
+    # Restrict the additional traversal to register clock pins so a clock
+    # used as data cannot cause unrelated data endpoints to be cut.
+    # Keep the no-logic fanout too, for native-clock output-port exceptions.
     set native_keepers [get_keepers -nowarn {__tv_empty_collection__}]
+    set native_clock_pins [get_pins -compatibility_mode {*|clk}]
     foreach_in_collection native_clock $native_video_clocks {
         set native_keepers [add_to_collection $native_keepers \
             [get_fanouts -no_logic [get_clock_info -targets $native_clock]]]
+        set native_keepers [add_to_collection $native_keepers \
+            [get_fanouts -through $native_clock_pins [get_clock_info -targets $native_clock]]]
     }
     set native_gray [get_registers {*crt_tv|*|capture_fifo|wr_gray[*]}]
     set native_gray_receiver [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]}]
@@ -186,10 +192,9 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 
     set_false_path -from [remove_from_collection $native_keepers $native_gray] -to $other_clocks
     set_false_path -from $other_clocks -to [remove_from_collection $native_keepers $native_gray_receiver]
 
-    # The no-logic clock fanout stops at the dedicated native/HDMI clock
-    # selectors. Their downstream registers therefore aren't in
-    # native_keepers, although TimeQuest propagates BOTH clocks to them.
-    # Restore the native/HDMI relationship cuts from the normal profile.
+    # TimeQuest propagates BOTH native and HDMI clocks through the selectors.
+    # Restore the native/HDMI clock-pair cuts from the normal profile too:
+    # keeper exceptions alone cannot distinguish the two clock relationships.
     # Without these, the fitter adds ~9 ns of hold delay to the HDMI output
     # pipeline to satisfy impossible cross-PLL transfers, breaking the real
     # 148.5 MHz same-clock paths. These cuts do not include clk_100m, so the
@@ -203,7 +208,12 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 
 
 # Belt-and-braces documentation of the synchronizer heads (redundant with the
 # clock group above, harmless).
-set_false_path -to [get_keepers {*vmode_meta* *monid_meta* *tbyp_meta* *tsel_meta*}]
+set_false_path -to [get_keepers {*vmode_meta* *monid_meta*}]
+# Test-pattern controls can be constants and disappear during synthesis.
+set native_test_meta [get_keepers -nowarn {*tbyp_meta* *tsel_meta*}]
+if {[get_collection_size $native_test_meta] != 0} {
+    set_false_path -to $native_test_meta
+}
 set_false_path -to [get_keepers {*vidrst_meta* *vbl_meta* *hbl_meta*}]
 
 # ----------------------------------------------------------------------------
@@ -269,7 +279,19 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
     }
     set_false_path -to [get_registers {*crt_tv|*|req_meta *crt_tv|*|ack_meta *crt_tv|disable_meta}]
     # PLL-lock assertion is asynchronous; release is a 3FF chain per domain.
-    set_false_path -from [get_pins {*tv525_pll|*|locked}] -to [get_registers {*crt_tv|tv_reset_pipe* *crt_tv|sys_reset_pipe*}]
+    # The RTL locked alias is not a fitted PLL pin name. Target only the
+    # asynchronous clear pins; keep the release chain's D paths timed.
+    set tv525_reset_clear [get_pins -compatibility_mode {*crt_tv|tv_reset_pipe*|clrn *crt_tv|sys_reset_pipe*|clrn}]
+    if {[get_collection_size $tv525_reset_clear] == 0} {
+        error "TV PLL reset-chain asynchronous clear pins were not found"
+    }
+    set_false_path -to $tv525_reset_clear
+    # Dedicated pin-enable register also clears asynchronously on PLL loss.
+    # Optional for timing analysis of fits made before the output-stage repair.
+    set tv525_pin_clear [get_pins -nowarn -compatibility_mode {*crt_tv|pin_ready*|clrn}]
+    if {[get_collection_size $tv525_pin_clear] != 0} {
+        set_false_path -to $tv525_pin_clear
+    }
     # Receiver has two synchronizer stages plus a frame-boundary wait before
     # sampling the held bus. Bound physical data delay to one 27 MHz period.
     set tv525_payload [get_registers {*crt_tv|*|config_payload*}]
@@ -296,8 +318,14 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
         set_max_delay 8.0 -from $tv_rd_gray -to $tv_rd_meta
         set_max_skew 8.0 -from $tv_wr_gray -to $tv_wr_meta
         set_max_skew 8.0 -from $tv_rd_gray -to $tv_rd_meta
-        set_false_path -hold -from $tv_wr_gray -to $tv_wr_meta
-        set_false_path -hold -from $tv_rd_gray -to $tv_rd_meta
+        # Quartus 17 also removes skew paths when they have a hold false path.
+        # These are asynchronous FIRST synchronizer stages: there is no
+        # source/destination phase or hold contract. Use a deliberately loose
+        # minimum instead, preserving the real 8 ns delay AND skew budgets.
+        # 100 ns exceeds both domains' periods; this is not a fitted-slack
+        # adjustment. Meta->sync paths retain ordinary setup/hold checks.
+        set_min_delay -100.0 -from $tv_wr_gray -to $tv_wr_meta
+        set_min_delay -100.0 -from $tv_rd_gray -to $tv_rd_meta
         # Pair/line toggle mailboxes; line_payload remains held until the
         # full line completes. The receiver reads it only after two FFs.
         set_false_path -to [get_registers {*crt_tv|*|pair_meta *crt_tv|*|line_meta *crt_tv|*|pair_ack_meta *crt_tv|*|line_ack_meta *crt_tv|*|display_meta tv_mem_reset_meta}]
@@ -314,9 +342,11 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
         set_max_delay 20.0 -from $tv_line_payload -to $tv_line_receivers
         set_false_path -hold -from $tv_line_payload -to $tv_line_receivers
     }
-    # Analog DAC has no receiver clock; budget 10 ns for register-to-pin
-    # propagation. This is an FPGA routing budget, not an analog voltage spec.
-    set tv525_dac_ports [get_ports {VGA_R* VGA_G* VGA_B* VGA_HS VGA_VS SDIO_CLK SDIO_CMD SDIO_DAT*}]
+    # Analog DAC has no receiver clock. Quartus 17 includes launch-clock
+    # latency in this 10 ns clock-to-pin budget (not just register-Q routing).
+    # Retain that stricter contract; do not offset latency using fit results.
+    # SD_SPI_CS carries the board's sync-on-Y drive and needs the same budget.
+    set tv525_dac_ports [get_ports {VGA_R* VGA_G* VGA_B* VGA_HS VGA_VS SDIO_CLK SDIO_CMD SDIO_DAT* SD_SPI_CS}]
     set_max_delay 10.0 -from $tv525_clocks -to $tv525_dac_ports
     set_false_path -hold -from $tv525_clocks -to $tv525_dac_ports
 }

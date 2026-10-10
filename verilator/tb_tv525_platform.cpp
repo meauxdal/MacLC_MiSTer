@@ -29,6 +29,9 @@ int main(int argc,char**argv) try {
     uint64_t samples=0;
     for(unsigned trial=0;trial<3;++trial) {
         d.pll_locked=1;d.eval();
+        if(d.drive_enable)fail("drive before synchronized startup");
+        wait(2);if(d.drive_enable)fail("drive before third startup edge");
+        wait(1);if(!d.drive_enable)fail("drive missing at third startup edge");
         // First pipeline-emitted pulse establishes tick zero independently.
         while(d.csync_n)tick();
         for(unsigned t=0;t<1801800;++t) {
@@ -37,6 +40,26 @@ int main(int argc,char**argv) try {
             bool de=((line>=23&&line<=262)||(line>=285&&line<=524))&&h>=253&&h<1675;
             if(d.csync_n!=sync[phase]||d.picture_de!=de||d.hs_n!=sync[phase]||d.vs_n!=1||!d.drive_enable)
                 fail("independent 525-line sync/DE reference");
+            // Independently reconstruct the default grid/circle image at the
+            // emitted raster position. This catches a color/tag latency split
+            // when adding a final pin register (including at aperture edges).
+            int r=0,g=0,b=0;
+            if(de) {
+                unsigned x=(h-253)*640/1422;
+                // Electrical field 1 carries odd rows, field 2 even rows.
+                unsigned y=phase<450450 ? (line-23)*2+1 : (line-285)*2;
+                r=g=b=16;
+                if(x%32==0||y%32==0)r=g=b=96;
+                int dx=int(x)-320,dy=int(y)-240,rr=dx*dx+dy*dy;
+                if(rr>=25344&&rr<=25856)r=g=b=255;
+                if(x==320||y==240){r=g=255;b=0;}
+                if(x<2||x>=638||y<2||y>=478){r=b=0;g=255;}
+            }
+            unsigned pr=(32768+128*r-106*g-21*b)/256;
+            unsigned lum=(77*r+150*g+29*b)/256;
+            unsigned pb=(32768-42*r-85*g+128*b)/256;
+            if(((d.dac_r<<2)|d.low_r)!=pr||((d.dac_g<<2)|d.low_g)!=lum||
+               ((d.dac_b<<2)|d.low_b)!=pb)fail("independent color/sync alignment");
             ++samples;
         }
         d.av_dis=1;d.eval();if(d.drive_enable)fail("immediate analog disable");
@@ -50,8 +73,11 @@ int main(int argc,char**argv) try {
         d.clk_tv=0;d.clk_sys=0;d.eval();
         // Both async-reset chains assert without requiring a clock edge.
         if(d.drive_enable)fail("stopped clock drive");
+        // Lock returning without any TV edge must not enable stale output.
+        d.pll_locked=1;d.eval();if(d.drive_enable)fail("stopped-clock relock drive");
+        d.pll_locked=0;d.eval();
         wait(13+trial*17);
         if(!d.csync_n||d.picture_de||d.osd_status)fail("lock-loss stream reset");
     }
-    std::cout<<"PASS: "<<samples<<" independent sync/DE sample checks; three lock/relock sequences; startup, stopped-clock lock loss, analog disable, synchronized video disable.\n";
+    std::cout<<"PASS: "<<samples<<" independent sync/DE/color sample checks; three lock/relock sequences; startup, stopped-clock lock loss/relock, analog disable, synchronized video disable.\n";
 }catch(const std::exception&e){std::cerr<<"FAIL: "<<e.what()<<"\n";return 1;}
