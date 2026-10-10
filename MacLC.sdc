@@ -293,7 +293,9 @@ set tv525_clocks [get_clocks -nowarn {*tv525_pll|*|divclk}]
 if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
     if {[get_collection_size $tv525_clocks] == 0} { error "TV PLL clock missing" }
     set_false_path -to [get_pins -compatibility_mode {*emu|tv_reset_pipe*|clrn}]
-    set tv_memory_clocks [get_clocks {*emu|pll|pll_inst|*|divclk}]
+    # Only the 65 MHz DDR clock shares the bounded line-mailbox paths.
+    # The 32.5 MHz system clock is asynchronous to TV scanout.
+    set tv_memory_clocks $fifo_memory_clocks
     set tv_other_clocks [remove_from_collection [get_clocks *] [add_to_collection $tv525_clocks $tv_memory_clocks]]
     set_false_path -from $tv525_clocks -to $tv_other_clocks
     set_false_path -from $tv_other_clocks -to $tv525_clocks

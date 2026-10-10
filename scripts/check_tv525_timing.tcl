@@ -73,6 +73,7 @@ if {[get_collection_size $native_clock] != 1 || [get_collection_size $memory_clo
 set hdmi_clock [get_clocks -nowarn {pll_hdmi|pll_hdmi_inst|*|divclk}]
 if {[get_collection_size $hdmi_clock] != 1} {error "Expected one HDMI output PLL clock"}
 set hdmi_output_registers [required_registers {*hdmi_out_d[*]*}]
+set system_clock [remove_from_collection $main_clocks $memory_clock]
 set checked_corners {}
 
 foreach_in_collection op [get_available_operating_conditions] {
@@ -80,6 +81,13 @@ foreach_in_collection op [get_available_operating_conditions] {
     lappend checked_corners $corner
     set_operating_conditions $op
     update_timing_netlist
+    foreach check {setup hold} {
+        foreach pair [list [list $system_clock $tv_clock] [list $tv_clock $system_clock]] {
+            set paths [get_timing_paths -$check -from_clock [lindex $pair 0] \
+                -to_clock [lindex $pair 1] -npaths 1]
+            if {[get_collection_size $paths] != 0} {error "Asynchronous system/TV $check paths still timed"}
+        }
+    }
     # Both clocks reach this bank through hdmi_clk_sw. Require surviving
     # same-clock paths in each selectable mode; global slack alone cannot
     # detect clock exceptions that inadvertently remove one of these paths.

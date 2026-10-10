@@ -68,6 +68,9 @@ def check(enabled,missing=None):
         raise
     assert not missing,'Missing endpoint accepted'
     if enabled:
+        assert t.eval('set tv_memory_clocks')==MEMORY
+        tv_other=items(t.eval('set tv_other_clocks'))
+        assert SDRAM in tv_other and MEMORY not in tv_other and TV not in tv_other
         for source,dest in [(FIFO+'wr_gray[0]',FIFO+'wr_gray_meta[0]'),(FIFO+'rd_gray[0]',FIFO+'rd_gray_meta[0]')]:
             assert any(c=='set_max_delay' and a[0]=='8.0' and source in items(a[2]) and dest in items(a[4]) for c,a in calls)
             assert any(c=='set_max_skew' and a[0]=='8.0' and source in items(a[2]) and dest in items(a[4]) for c,a in calls)
