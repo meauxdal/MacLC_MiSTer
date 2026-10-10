@@ -165,16 +165,23 @@ if {[get_collection_size $native_video_clocks] == 0} {
 if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 0} {
     set_clock_groups -asynchronous -group $native_video_clocks
 } else {
-    # A clock-group false path would override the FIFO Gray max-delay/skew
-    # budgets below. Preserve the normal native-domain exceptions while
-    # leaving the two deliberate Gray buses available for physical timing.
-    # Quartus 17 all_registers has no -clock option. Follow the native PLL
-    # through clock selectors as well as buffers/inverters. -no_logic alone
-    # stops at the HDMI clock selector, missing its downstream registers.
-    # Restrict the additional traversal to register clock pins so a clock
-    # used as data cannot cause unrelated data endpoints to be cut.
-    # Keep the no-logic fanout too, for native-clock output-port exceptions.
+    # Clock-pair cuts preserve both HDMI->HDMI and native->native timing
+    # behind hdmi_clk_sw. Node-only cuts on that register bank would cut ALL
+    # of its launch clocks, hiding the real HDMI relationship as well.
+    # Leave native<->memory out of these cuts to retain the FIFO Gray bounds.
+    set fifo_memory_clocks [get_clocks {*|h2f_user0_clk}]
+    if {[get_collection_size $fifo_memory_clocks] != 1} {
+        error "Expected one capture FIFO memory clock"
+    }
+    set native_other_clocks [remove_from_collection [get_clocks *] \
+        [add_to_collection $native_video_clocks $fifo_memory_clocks]]
+    set_false_path -from $native_video_clocks -to $native_other_clocks
+    set_false_path -from $native_other_clocks -to $native_video_clocks
+
+    # Quartus 17 all_registers has no -clock option. Follow clock fanout,
+    # including native fanout through selectors to register clock pins.
     set native_keepers [get_keepers -nowarn {__tv_empty_collection__}]
+    set memory_keepers [get_keepers -nowarn {__tv_empty_collection__}]
     set native_clock_pins [get_pins -compatibility_mode {*|clk}]
     foreach_in_collection native_clock $native_video_clocks {
         set native_keepers [add_to_collection $native_keepers \
@@ -182,41 +189,31 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 
         set native_keepers [add_to_collection $native_keepers \
             [get_fanouts -through $native_clock_pins [get_clock_info -targets $native_clock]]]
     }
-    set native_gray [get_registers {*crt_tv|*|capture_fifo|wr_gray[*]*}]
+    foreach_in_collection memory_clock $fifo_memory_clocks {
+        set memory_keepers [add_to_collection $memory_keepers \
+            [get_fanouts -no_logic [get_clock_info -targets $memory_clock]]]
+    }
     set native_gray_receiver [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
-    # wr_gray and rd_gray_meta are explicitly clocked by wr_clk = clk_vid
-    # (sys_top -> crt_tv -> buffered.canvas -> capture_fifo). Include them
-    # explicitly rather than requiring get_fanouts to rediscover every fitted
-    # register/alias. That membership assertion passed in the fitter but
-    # aborted post-fit read_sdc on the 20:41 build, losing ALL later constraints.
-    # Match router-created bit copies too: wr_gray[1]~DUPLICATE, etc. Every
-    # physical Gray launch/head must escape the native async cuts AND receive
-    # the max-delay/skew/min-delay constraints below.
-    if {[get_collection_size $native_keepers] == 0} {
-        error "Native video clock fanout was not found"
+    set memory_gray_receiver [get_registers {*crt_tv|*|capture_fifo|wr_gray_meta[*]*}]
+    if {[get_collection_size $native_keepers] == 0 ||
+        [get_collection_size $memory_keepers] == 0} {
+        error "Native/FIFO memory clock fanout was not found"
     }
-    foreach native_endpoint [list $native_gray $native_gray_receiver] {
-        if {[get_collection_size $native_endpoint] == 0} {
-            error "Native FIFO endpoints missing; review synthesis hierarchy"
+    foreach receiver [list $native_gray_receiver $memory_gray_receiver] {
+        if {[get_collection_size $receiver] == 0} {
+            error "Capture FIFO Gray synchronizer heads missing"
         }
-        set native_keepers [add_to_collection $native_keepers $native_endpoint]
     }
-    set other_clocks [remove_from_collection [get_clocks *] $native_video_clocks]
-    set_false_path -from [remove_from_collection $native_keepers $native_gray] -to $other_clocks
-    set_false_path -from $other_clocks -to [remove_from_collection $native_keepers $native_gray_receiver]
-
-    # TimeQuest propagates BOTH native and HDMI clocks through the selectors.
-    # Restore the native/HDMI clock-pair cuts from the normal profile too:
-    # keeper exceptions alone cannot distinguish the two clock relationships.
-    # Without these, the fitter adds ~9 ns of hold delay to the HDMI output
-    # pipeline to satisfy impossible cross-PLL transfers, breaking the real
-    # 148.5 MHz same-clock paths. These cuts do not include clk_100m, so the
-    # capture FIFO Gray max-delay/skew constraints remain effective.
-    set native_hdmi_clocks [get_clocks {pll_hdmi|pll_hdmi_inst|*|divclk}]
-    if {[get_collection_size $native_hdmi_clocks] != 0} {
-        set_false_path -from $native_video_clocks -to $native_hdmi_clocks
-        set_false_path -from $native_hdmi_clocks -to $native_video_clocks
-    }
+    # RTL wires these heads to the respective clocks. Include router copies
+    # explicitly, so fanout aliases cannot accidentally cut a Gray receiver.
+    set native_keepers [add_to_collection $native_keepers $native_gray_receiver]
+    set memory_keepers [add_to_collection $memory_keepers $memory_gray_receiver]
+    # Qualify the SOURCE clock on each remaining native<->memory cut. Do not
+    # cut HDMI->HDMI paths merely because their endpoint also has native clock.
+    set_false_path -from $native_video_clocks \
+        -to [remove_from_collection $memory_keepers $memory_gray_receiver]
+    set_false_path -from $fifo_memory_clocks \
+        -to [remove_from_collection $native_keepers $native_gray_receiver]
 }
 
 # Belt-and-braces documentation of the synchronizer heads (redundant with the

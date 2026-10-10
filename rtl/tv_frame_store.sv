@@ -42,7 +42,7 @@ reg [16:0] write_count=0;
 reg [7:0] clear_index=0, read_index=0, read_words=0, read_offset=0;
 reg bank=0;
 reg current_line_req=0;
-(* async_reg="true" *) reg pair_meta=0, pair_sync=0, line_meta=0, line_sync=0;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg pair_meta=0, pair_sync=0, line_meta=0, line_sync=0;
 wire [16:0] expected_words = write_geometry==2 ? 17'd76800 :
                             write_geometry==1 ? 17'd49152 : 17'd43776;
 wire [8:0] origin_y = display_geometry==2 ? 9'd0 : display_geometry==1 ? 9'd48 : 9'd69;

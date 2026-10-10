@@ -602,7 +602,7 @@ module emu
                                 status[2:1] == 2'd2 ? 2'd0 : 2'd2;
     // Synchronize the setting, then latch it once per source
     // frame inside the filter. CE remains the existing native CE in all modes.
-    (* async_reg="true" *) reg [1:0] tv_filter_meta=2, tv_filter_sync=2;
+    (* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [1:0] tv_filter_meta=2, tv_filter_sync=2;
     always @(posedge clk_vid) begin
         tv_filter_meta<=tv_filter_mode; tv_filter_sync<=tv_filter_meta;
     end
@@ -793,9 +793,9 @@ module emu
 	                               + {{2{cd_snd_r[15]}}, cd_snd_r}
 	                               + (mt32_use ? {{2{mt32_i2s_r[15]}}, mt32_i2s_r} : 18'sd0);
 	assign AUDIO_L = (audio_mix_l > 18'sd32767)  ? 16'sd32767 :
-	                 (audio_mix_l < -18'sd32768) ? -16'sd32768 : audio_mix_l[15:0];
+	                 (audio_mix_l < -18'sd32768) ? 16'sh8000 : audio_mix_l[15:0];
 	assign AUDIO_R = (audio_mix_r > 18'sd32767)  ? 16'sd32767 :
-	                 (audio_mix_r < -18'sd32768) ? -16'sd32768 : audio_mix_r[15:0];
+	                 (audio_mix_r < -18'sd32768) ? 16'sh8000 : audio_mix_r[15:0];
 	assign AUDIO_S = 1;
 	assign AUDIO_MIX = 0;
 

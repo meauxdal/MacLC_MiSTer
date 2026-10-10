@@ -45,7 +45,6 @@ reg [9:0] line_payload=0;
 wire pair_ack, line_ack, line_we;
 wire [8:0] line_addr;
 wire [127:0] line_data;
-wire [1:0] display_slot;
 wire display_valid;
 tv_frame_store store (
     .clk(clk_mem), .inhibit(inhibit), .fifo_empty(empty), .fifo_valid(fifo_valid),
@@ -56,12 +55,12 @@ tv_frame_store store (
     .read(read), .write(write), .waitrequest(waitrequest),
     .readdatavalid(readdatavalid), .readdata(readdata),
     .published(published), .dropped(dropped), .repeated(repeated),
-    .display_slot(display_slot), .display_valid(display_valid)
+    .display_slot(), .display_valid(display_valid)
 );
 (* ramstyle="M10K, no_rw_check" *) reg [127:0] line_ram [0:511];
 always @(posedge clk_mem) if (line_we) line_ram[line_addr]<=line_data;
-(* async_reg="true" *) reg pair_ack_meta=0, pair_ack_sync=0, line_ack_meta=0, line_ack_sync=0;
-(* async_reg="true" *) reg display_meta=0, display_sync=0;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg pair_ack_meta=0, pair_ack_sync=0, line_ack_meta=0, line_ack_sync=0;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg display_meta=0, display_sync=0;
 reg have_picture=0, pair_usable=0, line_usable=0;
 reg current_bank=0;
 reg ack_seen=0;
@@ -124,5 +123,4 @@ end
 wire [23:0] pixel = pixel_word[pixel_lane*32 +: 24];
 assign rgb_out = !tag_out[25] ? 24'd0 : !use_picture_q ? fallback_q :
                  use_line_q ? pixel : 24'd0;
-wire unused = ^display_slot;
 endmodule

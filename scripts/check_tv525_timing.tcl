@@ -53,8 +53,8 @@ proc check_path {label args} {
 }
 
 # Reject pre-optimization databases instead of attributing them to current RTL.
-required_registers {*crt_tv|pin_ready*}
-required_registers {*crt_tv|pin_code_q[*]}
+set pin_ready_registers [required_registers {*crt_tv|pin_ready*}]
+set pin_code_registers [required_registers {*crt_tv|pin_code_q[*]*}]
 required_registers {*crt_tv|pin_tag_q[28]}
 set tv_clock [get_clocks -nowarn {*tv525_pll|*|divclk}]
 if {[get_collection_size $tv_clock] != 1} {error "Expected one TV clock"}
@@ -65,13 +65,30 @@ set memory_clock [get_clocks {*|h2f_user0_clk}]
 if {[get_collection_size $native_clock] != 1 || [get_collection_size $memory_clock] != 1} {
     error "Expected native video and FIFO memory clocks"
 }
+set hdmi_clock [get_clocks -nowarn {pll_hdmi|pll_hdmi_inst|*|divclk}]
+if {[get_collection_size $hdmi_clock] != 1} {error "Expected one HDMI output PLL clock"}
+set hdmi_output_registers [required_registers {*hdmi_out_d[*]*}]
+set checked_corners {}
 
 foreach_in_collection op [get_available_operating_conditions] {
     set corner [get_operating_conditions_info -name $op]
+    lappend checked_corners $corner
     set_operating_conditions $op
     update_timing_netlist
+    # Both clocks reach this bank through hdmi_clk_sw. Require surviving
+    # same-clock paths in each selectable mode; global slack alone cannot
+    # detect clock exceptions that inadvertently remove one of these paths.
+    foreach check {setup hold} {
+        check_path hdmi_output_${check} -$check \
+            -from_clock $hdmi_clock -to_clock $hdmi_clock -to $hdmi_output_registers
+        check_path direct_video_output_${check} -$check \
+            -from_clock $native_clock -to_clock $native_clock -to $hdmi_output_registers
+    }
     foreach check {setup hold recovery removal} {check_path $check -$check}
     check_path register_setup -setup -to [all_registers]
+    # Report data and enable separately; the worst OE path can hide slow data.
+    check_path color_data -setup -from_clock $tv_clock -from $pin_code_registers -to $ports
+    check_path output_enable -setup -from_clock $tv_clock -from $pin_ready_registers -to $ports
     set index 0
     foreach_in_collection port $ports {
         # A collection iterator returns a node ID, not a port collection.
@@ -109,10 +126,15 @@ foreach_in_collection op [get_available_operating_conditions] {
     }
     incr failures $violations
 }
+foreach required_corner {7_slow_1100mv_100c 7_slow_1100mv_-40c MIN_fast_1100mv_100c MIN_fast_1100mv_-40c} {
+    if {[lsearch -exact $checked_corners $required_corner] < 0} {
+        error "Required operating corner missing: $required_corner (checked $checked_corners)"
+    }
+}
 report_ucp -file [file join $output unconstrained.rpt]
 close $summary
 delete_timing_netlist
-project_close
+project_close -dont_export_assignments
 puts "TIMING_GATE reports=$output failed_checks=$failures"
 if {$failures != 0} {exit 2}
 puts "TIMING_GATE PASS: no negative slack in the checked timing contracts at any available corner"

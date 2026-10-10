@@ -12,8 +12,8 @@ module tv_capture_fifo #(parameter WIDTH=133, parameter AW=10) (
 );
 (* ramstyle = "M10K, no_rw_check" *) reg [WIDTH-1:0] mem [0:(1<<AW)-1];
 reg [AW:0] wr_bin=0, wr_gray=0, rd_bin=0, rd_gray=0;
-(* async_reg="true" *) reg [AW:0] rd_gray_meta=0, rd_gray_sync=0;
-(* async_reg="true" *) reg [AW:0] wr_gray_meta=0, wr_gray_sync=0;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [AW:0] rd_gray_meta=0, rd_gray_sync=0;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [AW:0] wr_gray_meta=0, wr_gray_sync=0;
 assign wr_full = wr_gray == {~rd_gray_sync[AW:AW-1],rd_gray_sync[AW-2:0]};
 assign rd_empty = rd_gray == wr_gray_sync;
 wire [AW:0] wr_next = wr_bin + 1'b1, rd_next = rd_bin + 1'b1;

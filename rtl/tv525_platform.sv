@@ -30,15 +30,15 @@ module tv525_platform #(
 );
 // Asynchronous assertion works even with the PLL stopped. Release takes
 // three local edges; both endpoints start from the same reset handshake.
-(* async_reg = "true" *) reg [2:0] tv_reset_pipe = 3'b111;
-(* async_reg = "true" *) reg [2:0] sys_reset_pipe = 3'b111;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [2:0] tv_reset_pipe = 3'b111;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [2:0] sys_reset_pipe = 3'b111;
 always @(posedge clk_tv or negedge pll_locked)
     if (!pll_locked) tv_reset_pipe <= 3'b111;
     else tv_reset_pipe <= {tv_reset_pipe[1:0],1'b0};
 always @(posedge clk_sys or negedge pll_locked)
     if (!pll_locked) sys_reset_pipe <= 3'b111;
     else sys_reset_pipe <= {sys_reset_pipe[1:0],1'b0};
-(* async_reg = "true" *) reg disable_meta = 1'b1, disable_sync = 1'b1;
+(* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg disable_meta = 1'b1, disable_sync = 1'b1;
 always @(posedge clk_tv) begin
     if (tv_reset_pipe[2]) begin disable_meta <= 1'b1; disable_sync <= 1'b1; end
     else begin disable_meta <= video_disable; disable_sync <= disable_meta; end

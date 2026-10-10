@@ -24,7 +24,7 @@ set_global_assignment -name MIN_CORE_JUNCTION_TEMP "-40"
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS OFF
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name OPTIMIZE_POWER_DURING_FITTING OFF
 set_global_assignment -name FINAL_PLACEMENT_OPTIMIZATION ALWAYS
 set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
@@ -112,6 +112,7 @@ set_global_assignment -name VERILOG_MACRO "USE_ASC_AUDIO=1"
 # set_global_assignment -name VERILOG_MACRO "USE_DBG_HUD=1"
 
 source sys/sys.tcl
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_CLK
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEBA6U23I7
 set_global_assignment -name DEVICE_FILTER_PACKAGE UFBGA
@@ -212,7 +213,7 @@ set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_D[*]
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_DE
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_HS
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_VS
-set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_CLK
+# HDMI_TX_CLK already uses altddio_out; FAST_OUTPUT_REGISTER cannot apply.
 set_location_assignment PIN_U10 -to HDMI_I2C_SCL
 set_location_assignment PIN_AA4 -to HDMI_I2C_SDA
 set_location_assignment PIN_T13 -to HDMI_I2S
@@ -408,6 +409,27 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv
 # Comment out this assignment to omit 480i hardware and its OSD controls.
 set_global_assignment -name VERILOG_MACRO "MAC_TV525_DIAG=1"
 # HDMI/ASCAL remains enabled; TV shares vbuf through its burst arbiter.
+
+# Gray transfers retain explicit delay/skew bounds in MacLC.sdc, so force
+# identification of their asynchronous first stages for metastability analysis.
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|*capture_fifo|wr_gray_meta[*]*\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|*capture_fifo|rd_gray_meta[*]*\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|tv_reset_pipe[0]\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|sys_reset_pipe[0]\}"
+# Identify and protect existing framework/OSD chains from the project side.
+# Their unsupported async_reg source warnings remain visible; no suppression.
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{tv_analog_meta\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{tv_mem_reset_meta\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{*crt_tv|*osd|ack_meta\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{*crt_tv|*osd|req_meta\}"
+set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|ack_meta\}"
+set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|ack_sync\}"
+set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|req_meta\}"
+set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|req_sync\}"
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|ack_meta\}"
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|ack_sync\}"
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|req_meta\}"
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|req_sync\}"
 
 
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
