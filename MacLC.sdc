@@ -174,7 +174,8 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 
     # DDR uses the 65 MHz main-PLL output; Ethernet stays at 32.5 MHz.
     foreach_in_collection core_clock $core_memory_clocks {
         if {abs([get_clock_info -period $core_clock] - 1000.0/65) < 0.01} {
-            set fifo_memory_clocks [add_to_collection $fifo_memory_clocks $core_clock]
+            set fifo_memory_clocks [add_to_collection $fifo_memory_clocks \
+                [get_clocks [get_clock_info -name $core_clock]]]
         }
     }
     if {[get_collection_size $fifo_memory_clocks] != 1} {

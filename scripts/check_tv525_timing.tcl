@@ -63,7 +63,8 @@ set main_clocks [get_clocks {*emu|pll|pll_inst|*|divclk}]
 set memory_clock [remove_from_collection $main_clocks $main_clocks]
 foreach_in_collection clock $main_clocks {
     if {abs([get_clock_info -period $clock] - 1000.0/65) < 0.01} {
-        set memory_clock [add_to_collection $memory_clock $clock]
+        set memory_clock [add_to_collection $memory_clock \
+            [get_clocks [get_clock_info -name $clock]]]
     }
 }
 if {[get_collection_size $native_clock] != 1 || [get_collection_size $memory_clock] != 1} {

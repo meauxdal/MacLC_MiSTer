@@ -26,6 +26,7 @@ def check(enabled,missing=None):
             regs+=[FIFO+name+f'[{i}]' for i in range(11)]
     if missing: regs=[r for r in regs if missing not in r]
     calls=[]
+    clock_ids={f'clk_{i}':clock for i,clock in enumerate(clocks)}
     def items(value): return list(t.splitlist(value))
     def objects(values,*args):
         args=[a for a in args if a not in ('-nowarn','-compatibility_mode')]
@@ -39,6 +40,8 @@ def check(enabled,missing=None):
     t.createcommand('remove_from_collection',lambda a,b:tuple(x for x in items(a) if x not in items(b)))
     t.createcommand('add_to_collection',lambda a,b:tuple(dict.fromkeys(items(a)+items(b))))
     def clock_info(option,clock):
+        clock=clock_ids.get(clock,clock)
+        if option=='-name': return clock
         if option=='-period': return 1000/65 if clock==MEMORY else 1000/32.5
         assert option=='-targets'
         return (clock,)
@@ -49,7 +52,11 @@ def check(enabled,missing=None):
         return ('cpu|data[0]',)
     t.createcommand('get_clock_info',clock_info)
     t.createcommand('get_fanouts',fanouts)
-    t.eval('proc foreach_in_collection {var collection body} {uplevel 1 [list foreach $var $collection $body]}')
+    def collection_ids(collection):
+        ids={clock:identifier for identifier,clock in clock_ids.items()}
+        return tuple(ids.get(value,value) for value in items(collection))
+    t.createcommand('collection_ids',collection_ids)
+    t.eval('proc foreach_in_collection {var collection body} {uplevel 1 [list foreach $var [collection_ids $collection] $body]}')
     for command in ('set_false_path','set_clock_groups','set_max_delay','set_min_delay','set_max_skew',
                     'set_multicycle_path','create_generated_clock','set_input_delay','set_output_delay'):
         t.createcommand(command,lambda *args,command=command:calls.append((command,args)) or '')
