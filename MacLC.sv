@@ -240,7 +240,7 @@ module emu
 	// neither hazard exists and the stock Main is enough.
 
 	// the status register is controlled by the on screen display (OSD)
-	wire [31:0] status;
+	wire [127:0] status;
 	wire  [1:0] buttons;
 
 	// hps_io block-device buses (all VDNUM devices)
