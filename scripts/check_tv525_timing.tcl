@@ -1,15 +1,20 @@
 # Read-only post-fit gate for builds containing the 480i output stage.
 # Run from the project root: quartus_sta -t scripts/check_tv525_timing.tcl
+# Run that command in an OS terminal, not the main Quartus Prime Tcl Console.
 # Does not synthesize, fit, deploy, or change constraints. Reports go to a new
 # scratch directory. Exit 2 means negative slack; missing evidence is an error.
 # A pass covers the timed design and TV/CDC contracts, not every external board
 # interface: review the unconstrained-path report separately.
 package require ::quartus::project
-package require ::quartus::sta
+if {[catch {package require ::quartus::sta} sta_package_error]} {
+    error "This script requires quartus_sta. Run in PowerShell from C:/Workspace/Git/MacLC_MiSTer: quartus_sta -t scripts/check_tv525_timing.tcl\n$sta_package_error"
+}
 
 project_open MacLC
 create_timing_netlist
+set maclc_sdc_loaded 0
 read_sdc
+if {!$maclc_sdc_loaded} {error "MacLC.sdc did not finish loading; timing results are incomplete"}
 update_timing_netlist
 
 set output [file join scratch timing_gate [clock format [clock seconds] -format %Y%m%d_%H%M%S]]
@@ -55,6 +60,11 @@ set tv_clock [get_clocks -nowarn {*tv525_pll|*|divclk}]
 if {[get_collection_size $tv_clock] != 1} {error "Expected one TV clock"}
 set ports [get_ports {VGA_R* VGA_G* VGA_B* VGA_HS VGA_VS SDIO_CLK SDIO_CMD SDIO_DAT* SD_SPI_CS}]
 if {[get_collection_size $ports] != 27} {error "Expected all 27 TV output ports"}
+set native_clock [get_clocks {emu|pllv|*|divclk}]
+set memory_clock [get_clocks {*|h2f_user0_clk}]
+if {[get_collection_size $native_clock] != 1 || [get_collection_size $memory_clock] != 1} {
+    error "Expected native video and FIFO memory clocks"
+}
 
 foreach_in_collection op [get_available_operating_conditions] {
     set corner [get_operating_conditions_info -name $op]
@@ -68,9 +78,15 @@ foreach_in_collection op [get_available_operating_conditions] {
         set endpoint [get_ports [get_node_info -name $port]]
         check_path output_[incr index] -setup -from_clock $tv_clock -to $endpoint
     }
-    foreach name {gray_write gray_read config line reset pin_ready} pair {
-        {{*crt_tv|*|capture_fifo|wr_gray[*]} {*crt_tv|*|capture_fifo|wr_gray_meta[*]}}
-        {{*crt_tv|*|capture_fifo|rd_gray[*]} {*crt_tv|*|capture_fifo|rd_gray_meta[*]}}
+    # Check the RTL's explicit clock ownership as well as the physical budget.
+    # These patterns include fitted router copies, just like MacLC.sdc.
+    check_path gray_write -setup -from_clock $native_clock -to_clock $memory_clock \
+        -from [required_registers {*crt_tv|*|capture_fifo|wr_gray[*]*}] \
+        -to [required_registers {*crt_tv|*|capture_fifo|wr_gray_meta[*]*}]
+    check_path gray_read -setup -from_clock $memory_clock -to_clock $native_clock \
+        -from [required_registers {*crt_tv|*|capture_fifo|rd_gray[*]*}] \
+        -to [required_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
+    foreach name {config line reset pin_ready} pair {
         {{*crt_tv|*|config_payload*} {*crt_tv|*|tv_config*}}
         {{*crt_tv|*|line_payload[*]} {*crt_tv|*|store|address[*]}}
         {{*crt_tv|tv_reset_pipe[0]} {*crt_tv|tv_reset_pipe[1]}}
@@ -79,8 +95,8 @@ foreach_in_collection op [get_available_operating_conditions] {
         check_path $name -setup -from [required_registers [lindex $pair 0]] -to [required_registers [lindex $pair 1]]
     }
     foreach dir {wr rd} {
-        set meta [required_registers "*crt_tv|*|capture_fifo|${dir}_gray_meta\[*\]"]
-        set sync [required_registers "*crt_tv|*|capture_fifo|${dir}_gray_sync\[*\]"]
+        set meta [required_registers "*crt_tv|*|capture_fifo|${dir}_gray_meta\[*\]*"]
+        set sync [required_registers "*crt_tv|*|capture_fifo|${dir}_gray_sync\[*\]*"]
         foreach check {setup hold} {check_path ${dir}_synchronizer_${check} -$check -from $meta -to $sync}
     }
     set skew_file [file join $output ${corner}_skew.rpt]

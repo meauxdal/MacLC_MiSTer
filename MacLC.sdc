@@ -1,4 +1,7 @@
 # MacLC project timing constraints (read after sys/sys_top.sdc).
+# A post-fit check must reject a partially loaded file, even if read_sdc
+# logs its error and returns control to the caller.
+set maclc_sdc_loaded 0
 #
 # ----------------------------------------------------------------------------
 # TG68 kernel — two-period credit (restored 2026-09-15 after the loop fix);
@@ -156,6 +159,9 @@ set_multicycle_path -hold  -end 1 -to [get_keepers {*periph_din_reg*}]
 # incoherent only across a monitor/depth change, when the guest redraws the
 # whole screen anyway.
 set native_video_clocks [get_clocks {emu|pllv|*|divclk}]
+if {[get_collection_size $native_video_clocks] == 0} {
+    error "Native video PLL clock was not found"
+}
 if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 0} {
     set_clock_groups -asynchronous -group $native_video_clocks
 } else {
@@ -176,17 +182,24 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 
         set native_keepers [add_to_collection $native_keepers \
             [get_fanouts -through $native_clock_pins [get_clock_info -targets $native_clock]]]
     }
-    set native_gray [get_registers {*crt_tv|*|capture_fifo|wr_gray[*]}]
-    set native_gray_receiver [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]}]
-    # Fail closed if hierarchy/clock propagation changes: both native FIFO
-    # endpoints must belong to the clock fanout used for these exceptions.
+    set native_gray [get_registers {*crt_tv|*|capture_fifo|wr_gray[*]*}]
+    set native_gray_receiver [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
+    # wr_gray and rd_gray_meta are explicitly clocked by wr_clk = clk_vid
+    # (sys_top -> crt_tv -> buffered.canvas -> capture_fifo). Include them
+    # explicitly rather than requiring get_fanouts to rediscover every fitted
+    # register/alias. That membership assertion passed in the fitter but
+    # aborted post-fit read_sdc on the 20:41 build, losing ALL later constraints.
+    # Match router-created bit copies too: wr_gray[1]~DUPLICATE, etc. Every
+    # physical Gray launch/head must escape the native async cuts AND receive
+    # the max-delay/skew/min-delay constraints below.
+    if {[get_collection_size $native_keepers] == 0} {
+        error "Native video clock fanout was not found"
+    }
     foreach native_endpoint [list $native_gray $native_gray_receiver] {
-        if {[get_collection_size $native_endpoint] == 0 ||
-            [get_collection_size $native_keepers] -
-            [get_collection_size [remove_from_collection $native_keepers $native_endpoint]] !=
-            [get_collection_size $native_endpoint]} {
-            error "Native FIFO endpoints missing from video-clock fanout"
+        if {[get_collection_size $native_endpoint] == 0} {
+            error "Native FIFO endpoints missing; review synthesis hierarchy"
         }
+        set native_keepers [add_to_collection $native_keepers $native_endpoint]
     }
     set other_clocks [remove_from_collection [get_clocks *] $native_video_clocks]
     set_false_path -from [remove_from_collection $native_keepers $native_gray] -to $other_clocks
@@ -305,10 +318,10 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
     # fastest source period. RAM ports have no combinational cross-clock arc.
     set tv_fifo [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]
     if {[get_collection_size $tv_fifo] != 0} {
-        set tv_wr_gray [get_registers {*crt_tv|*|capture_fifo|wr_gray[*]}]
-        set tv_rd_gray [get_registers {*crt_tv|*|capture_fifo|rd_gray[*]}]
-        set tv_wr_meta [get_registers {*crt_tv|*|capture_fifo|wr_gray_meta[*]}]
-        set tv_rd_meta [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]}]
+        set tv_wr_gray [get_registers {*crt_tv|*|capture_fifo|wr_gray[*]*}]
+        set tv_rd_gray [get_registers {*crt_tv|*|capture_fifo|rd_gray[*]*}]
+        set tv_wr_meta [get_registers {*crt_tv|*|capture_fifo|wr_gray_meta[*]*}]
+        set tv_rd_meta [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
         foreach tv_gray_endpoint [list $tv_wr_gray $tv_rd_gray $tv_wr_meta $tv_rd_meta] {
             if {[get_collection_size $tv_gray_endpoint] == 0} {
                 error "TV capture FIFO Gray endpoints missing; review synthesis hierarchy"
@@ -350,3 +363,4 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
     set_max_delay 10.0 -from $tv525_clocks -to $tv525_dac_ports
     set_false_path -hold -from $tv525_clocks -to $tv525_dac_ports
 }
+set maclc_sdc_loaded 1
