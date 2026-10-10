@@ -24,7 +24,7 @@ set_global_assignment -name MIN_CORE_JUNCTION_TEMP "-40"
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS OFF
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name OPTIMIZE_POWER_DURING_FITTING OFF
 set_global_assignment -name FINAL_PLACEMENT_OPTIMIZATION ALWAYS
 set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
@@ -112,6 +112,7 @@ set_global_assignment -name VERILOG_MACRO "USE_ASC_AUDIO=1"
 # set_global_assignment -name VERILOG_MACRO "USE_DBG_HUD=1"
 
 source sys/sys.tcl
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_CLK
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEBA6U23I7
 set_global_assignment -name DEVICE_FILTER_PACKAGE UFBGA
@@ -212,7 +213,7 @@ set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_D[*]
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_DE
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_HS
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_VS
-set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_CLK
+# HDMI_TX_CLK already uses altddio_out; FAST_OUTPUT_REGISTER cannot apply.
 set_location_assignment PIN_U10 -to HDMI_I2C_SCL
 set_location_assignment PIN_AA4 -to HDMI_I2C_SDA
 set_location_assignment PIN_T13 -to HDMI_I2S
@@ -332,6 +333,9 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED_*
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to BTN_*
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to BTN_*
 source files.qip
+set_global_assignment -name VERILOG_FILE rtl/floppy_track_decoder.v
+set_global_assignment -name VERILOG_FILE rtl/floppy_sd.v
+set_global_assignment -name VERILOG_FILE rtl/mfm_write_decoder.v
 set_global_assignment -name QIP_FILE rtl/tg68k/TG68K.qip
 set_global_assignment -name VERILOG_FILE rtl/sdram.v
 set_global_assignment -name VERILOG_FILE rtl/scsi.v
@@ -358,7 +362,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/egret_wrapper.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_core.sv
 set_global_assignment -name SYSTEMVERILOG_FILE MacLC.sv
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/adb_device.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/v8_clocks.sv
 
@@ -387,3 +390,31 @@ set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *dv_de1*
 
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/pds/pds_enet.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/fetch_cache.sv
+# Dedicated 480i profile using the standard core interface.
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_timing.sv
+set_global_assignment -name VERILOG_FILE rtl/pll_tv.v
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_video_capture.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_deflicker.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_capture_fifo.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_frame_store.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_buffered_canvas.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv
+
+# Comment out this assignment to omit 480i hardware and its OSD controls.
+set_global_assignment -name VERILOG_MACRO "MAC_TV525_DIAG=1"
+# HDMI scales the 480i RGB stream; the framework is unmodified.
+
+# Gray transfers retain explicit delay/skew bounds in MacLC.sdc, so force
+# identification of their asynchronous first stages for metastability analysis.
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|*capture_fifo|wr_gray_meta[*]*
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|*capture_fifo|rd_gray_meta[*]*
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *tv_reset_pipe[0]
+
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_video.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_bridge.sv
+
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_cdc.sv
+
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *pds_bridge|request_meta
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *pds_bridge|acknowledge_meta
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *tv_mem_reset_meta

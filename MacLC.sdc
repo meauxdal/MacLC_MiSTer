@@ -1,4 +1,7 @@
 # MacLC project timing constraints (read after sys/sys_top.sdc).
+# A post-fit check must reject a partially loaded file, even if read_sdc
+# logs its error and returns control to the caller.
+set maclc_sdc_loaded 0
 #
 # ----------------------------------------------------------------------------
 # TG68 kernel — two-period credit (restored 2026-09-15 after the loop fix);
@@ -155,11 +158,79 @@ set_multicycle_path -hold  -end 1 -to [get_keepers {*periph_din_reg*}]
 # quasi-static words_per_line bus into addrController's VRAM write packing —
 # incoherent only across a monitor/depth change, when the guest redraws the
 # whole screen anyway.
-set_clock_groups -asynchronous -group [get_clocks {emu|pllv|*|divclk}]
+set native_video_clocks [get_clocks {emu|pllv|*|divclk}]
+if {[get_collection_size $native_video_clocks] == 0} {
+    error "Native video PLL clock was not found"
+}
+if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 0} {
+    set_clock_groups -asynchronous -group $native_video_clocks
+} else {
+    # Clock-pair cuts preserve both HDMI->HDMI and native->native timing
+    # behind hdmi_clk_sw. Node-only cuts on that register bank would cut ALL
+    # of its launch clocks, hiding the real HDMI relationship as well.
+    # Leave native<->memory out of these cuts to retain the FIFO Gray bounds.
+    set core_memory_clocks [get_clocks {*emu|pll|pll_inst|*|divclk}]
+    set fifo_memory_clocks [remove_from_collection $core_memory_clocks $core_memory_clocks]
+    # DDR uses the 65 MHz main-PLL output; Ethernet stays at 32.5 MHz.
+    foreach_in_collection core_clock $core_memory_clocks {
+        if {abs([get_clock_info -period $core_clock] - 1000.0/65) < 0.01} {
+            set fifo_memory_clocks [add_to_collection $fifo_memory_clocks $core_clock]
+        }
+    }
+    if {[get_collection_size $fifo_memory_clocks] != 1} {
+        error "Expected one capture FIFO memory clock"
+    }
+    set native_other_clocks [remove_from_collection [get_clocks *] \
+        [add_to_collection $native_video_clocks $fifo_memory_clocks]]
+    set_false_path -from $native_video_clocks -to $native_other_clocks
+    set_false_path -from $native_other_clocks -to $native_video_clocks
+
+    # Quartus 17 all_registers has no -clock option. Follow clock fanout,
+    # including native fanout through selectors to register clock pins.
+    set native_keepers [get_keepers -nowarn {__tv_empty_collection__}]
+    set memory_keepers [get_keepers -nowarn {__tv_empty_collection__}]
+    set native_clock_pins [get_pins -compatibility_mode {*|clk}]
+    foreach_in_collection native_clock $native_video_clocks {
+        set native_keepers [add_to_collection $native_keepers \
+            [get_fanouts -no_logic [get_clock_info -targets $native_clock]]]
+        set native_keepers [add_to_collection $native_keepers \
+            [get_fanouts -through $native_clock_pins [get_clock_info -targets $native_clock]]]
+    }
+    foreach_in_collection memory_clock $fifo_memory_clocks {
+        set memory_keepers [add_to_collection $memory_keepers \
+            [get_fanouts -no_logic [get_clock_info -targets $memory_clock]]]
+    }
+    set native_gray_receiver [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
+    set memory_gray_receiver [get_registers {*crt_tv|*|capture_fifo|wr_gray_meta[*]*}]
+    if {[get_collection_size $native_keepers] == 0 ||
+        [get_collection_size $memory_keepers] == 0} {
+        error "Native/FIFO memory clock fanout was not found"
+    }
+    foreach receiver [list $native_gray_receiver $memory_gray_receiver] {
+        if {[get_collection_size $receiver] == 0} {
+            error "Capture FIFO Gray synchronizer heads missing"
+        }
+    }
+    # RTL wires these heads to the respective clocks. Include router copies
+    # explicitly, so fanout aliases cannot accidentally cut a Gray receiver.
+    set native_keepers [add_to_collection $native_keepers $native_gray_receiver]
+    set memory_keepers [add_to_collection $memory_keepers $memory_gray_receiver]
+    # Qualify the SOURCE clock on each remaining native<->memory cut. Do not
+    # cut HDMI->HDMI paths merely because their endpoint also has native clock.
+    set_false_path -from $native_video_clocks \
+        -to [remove_from_collection $memory_keepers $memory_gray_receiver]
+    set_false_path -from $fifo_memory_clocks \
+        -to [remove_from_collection $native_keepers $native_gray_receiver]
+}
 
 # Belt-and-braces documentation of the synchronizer heads (redundant with the
 # clock group above, harmless).
-set_false_path -to [get_keepers {*vmode_meta* *monid_meta* *tbyp_meta* *tsel_meta*}]
+set_false_path -to [get_keepers {*vmode_meta* *monid_meta*}]
+# Test-pattern controls can be constants and disappear during synthesis.
+set native_test_meta [get_keepers -nowarn {*tbyp_meta* *tsel_meta*}]
+if {[get_collection_size $native_test_meta] != 0} {
+    set_false_path -to $native_test_meta
+}
 set_false_path -to [get_keepers {*vidrst_meta* *vbl_meta* *hbl_meta*}]
 
 # ----------------------------------------------------------------------------
@@ -215,3 +286,71 @@ set_input_delay  -clock sdram_clk -min 2.5 [get_ports {SDRAM_DQ[*]}]
 set SDRAM_OUT [get_ports {SDRAM_A[*] SDRAM_BA[*] SDRAM_DQ[*] SDRAM_DQMH SDRAM_DQML SDRAM_nCAS SDRAM_nRAS SDRAM_nWE SDRAM_nCS}]
 set_output_delay -clock sdram_clk -max  2.0 $SDRAM_OUT
 set_output_delay -clock sdram_clk -min -0.8 $SDRAM_OUT
+
+# Independent TV PLL. DDRAM uses the 65 MHz core memory clock.
+set tv525_clocks [get_clocks -nowarn {*tv525_pll|*|divclk}]
+if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
+    if {[get_collection_size $tv525_clocks] == 0} { error "TV PLL clock missing" }
+    set_false_path -to [get_pins -compatibility_mode {*emu|tv_reset_pipe*|clrn}]
+    set tv_memory_clocks [get_clocks {*emu|pll|pll_inst|*|divclk}]
+    set tv_other_clocks [remove_from_collection [get_clocks *] [add_to_collection $tv525_clocks $tv_memory_clocks]]
+    set_false_path -from $tv525_clocks -to $tv_other_clocks
+    set_false_path -from $tv_other_clocks -to $tv525_clocks
+    # Native capture FIFO: bound Gray-pointer skew/delay to less than the
+    # fastest source period. RAM ports have no combinational cross-clock arc.
+    set tv_fifo [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]
+    if {[get_collection_size $tv_fifo] != 0} {
+        set tv_wr_gray [get_registers {*crt_tv|*|capture_fifo|wr_gray[*]*}]
+        set tv_rd_gray [get_registers {*crt_tv|*|capture_fifo|rd_gray[*]*}]
+        set tv_wr_meta [get_registers {*crt_tv|*|capture_fifo|wr_gray_meta[*]*}]
+        set tv_rd_meta [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
+        foreach tv_gray_endpoint [list $tv_wr_gray $tv_rd_gray $tv_wr_meta $tv_rd_meta] {
+            if {[get_collection_size $tv_gray_endpoint] == 0} {
+                error "TV capture FIFO Gray endpoints missing; review synthesis hierarchy"
+            }
+        }
+        set_max_delay 8.0 -from $tv_wr_gray -to $tv_wr_meta
+        set_max_delay 8.0 -from $tv_rd_gray -to $tv_rd_meta
+        set_max_skew 8.0 -from $tv_wr_gray -to $tv_wr_meta
+        set_max_skew 8.0 -from $tv_rd_gray -to $tv_rd_meta
+        # Quartus 17 also removes skew paths when they have a hold false path.
+        # These are asynchronous FIRST synchronizer stages: there is no
+        # source/destination phase or hold contract. Use a deliberately loose
+        # minimum instead, preserving the real 8 ns delay AND skew budgets.
+        # 100 ns exceeds both domains' periods; this is not a fitted-slack
+        # adjustment. Meta->sync paths retain ordinary setup/hold checks.
+        set_min_delay -100.0 -from $tv_wr_gray -to $tv_wr_meta
+        set_min_delay -100.0 -from $tv_rd_gray -to $tv_rd_meta
+        # Pair/line toggle mailboxes; line_payload remains held until the
+        # full line completes. The receiver reads it only after two FFs.
+        set_false_path -to [get_registers {*crt_tv|*|pair_meta *crt_tv|*|line_meta *crt_tv|*|pair_ack_meta *crt_tv|*|line_ack_meta *crt_tv|*|display_meta}]
+        set tv_line_payload [get_registers {*crt_tv|*|line_payload[*]}]
+        set tv_line_bank [get_registers {*crt_tv|*|store|bank}]
+        set tv_line_address [get_registers {*crt_tv|*|store|address[*]}]
+        set tv_line_words [get_registers {*crt_tv|*|store|read_words[*]}]
+        foreach tv_line_endpoint [list $tv_line_payload $tv_line_bank $tv_line_address $tv_line_words] {
+            if {[get_collection_size $tv_line_endpoint] == 0} {
+                error "TV held-line mailbox endpoint missing; review synthesis hierarchy"
+            }
+        }
+        set tv_line_receivers [add_to_collection [add_to_collection $tv_line_bank $tv_line_address] $tv_line_words]
+        set_max_delay 20.0 -from $tv_line_payload -to $tv_line_receivers
+        set_false_path -hold -from $tv_line_payload -to $tv_line_receivers
+    }
+}
+set ethernet_cdc [get_registers -nowarn {*pds_bridge|*}]
+if {[get_collection_size $ethernet_cdc] != 0} {
+    set_false_path -to [get_registers {*pds_bridge|request_meta *pds_bridge|acknowledge_meta *tv_mem_reset_meta}]
+    set ethernet_command [get_registers {*pds_bridge|command_payload[*]}]
+    set ethernet_command_regs [get_registers {*pds_bridge|reading *pds_bridge|address[*] *pds_bridge|writedata[*] *pds_bridge|byteenable[*]}]
+    set ethernet_response [get_registers {*pds_bridge|response_payload[*]}]
+    set ethernet_response_regs [get_registers {*pds_bridge|source_readdata[*]}]
+    foreach endpoint [list $ethernet_command $ethernet_command_regs $ethernet_response $ethernet_response_regs] {
+        if {[get_collection_size $endpoint] == 0} {error "Ethernet CDC payload endpoints missing"}
+    }
+    set_max_delay 30.0 -from $ethernet_command -to $ethernet_command_regs
+    set_false_path -hold -from $ethernet_command -to $ethernet_command_regs
+    set_max_delay 30.0 -from $ethernet_response -to $ethernet_response_regs
+    set_false_path -hold -from $ethernet_response -to $ethernet_response_regs
+}
+set maclc_sdc_loaded 1

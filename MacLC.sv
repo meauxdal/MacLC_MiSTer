@@ -27,16 +27,20 @@ module emu
 	// USER_OUT is driven by the mt32pi instance (user-port MIDI + I2C);
 	// unused user-port pins are held at '1 inside sys/mt32pi.sv.
 
-	// DDR3 port: wholly owned by the PDS Ethernet card's shared-memory mailbox
-	// (rtl/pds/pds_enet.sv — Main's mac_eth service serves the other side).
-	// Single clock domain: the mailbox runs in clk_sys.
-	assign DDRAM_CLK      = clk_sys;
+    // TV and Ethernet share the core DDRAM port; native builds use clk_sys.
+`ifdef MAC_TV525_DIAG
+    assign DDRAM_CLK = clk_mem;
+`else
+    assign DDRAM_CLK = clk_sys;
+`endif
+`ifndef MAC_TV525_DIAG
 	assign DDRAM_BURSTCNT = pds_mem_burst;
 	assign DDRAM_ADDR     = pds_mem_addr;
 	assign DDRAM_DIN      = pds_mem_wdata;
 	assign DDRAM_BE       = pds_mem_be;
 	assign DDRAM_RD       = pds_mem_rd;
 	assign DDRAM_WE       = pds_mem_we;
+`endif
 	wire [28:0] pds_mem_addr;
 	wire  [7:0] pds_mem_burst, pds_mem_be;
 	wire        pds_mem_rd, pds_mem_we;
@@ -81,49 +85,59 @@ module emu
 		"MACLC;UART57600:115200,MIDI;",
 		"-;",
 		"S6,DSKIMG,Mount Floppy;",
-		// Default OFF, and it must stay that way: the ROM's write primitive
-		// polls the IWM handshake in an UNBOUNDED loop, so the failure mode of
-		// a write bug is a HUNG machine, not a failed write. Gated further in
-		// flp_int_wp below - a read-only mount stays write-protected whatever
-		// this says; a DC42 container does not.
-		"OE,Floppy Write,Off,On;",
-		"-;",
-		"SC0,IMGVHDHDA,Mount SCSI-0;",
-		"SC1,IMGVHDHDA,Mount SCSI-1;",
-		"SC2,NVR,Mount PRAM;",
-		"-;",
+		"SC0,IMGVHDHDA,Mount SCSI Disk 0;",
+		"SC1,IMGVHDHDA,Mount SCSI Disk 1;",
 		// CD-ROM (SCSI ID 3). ISO/TOAST (TO* matches .toast) are raw
 		// 2048-byte images and work today; CUE/BIN/CHD are listed for the
 		// Main_MiSTer translation layer (docs/plan_scsi_cdrom.md Phase 2) —
 		// on a stock Main a 2048-byte-sector .bin also works mounted directly.
 		"SC4,ISOTO*CUEBINCHD,Mount CD-ROM;",
-		"OI,CD-ROM Drive,Enabled,Disabled;",
+		"-;",
+		"OA,Monitor,512x384 12in,640x480 VGA;",
+		"O4,Memory,2 MB,10 MB;",
+		"R0,Apply and Reset;",
+		"-;",
+		"P1,Video;",
+		"P1-;",
+		"P1O78,Aspect Ratio,Original,Full Screen,[ARC1],[ARC2];",
+		"P1OCD,Scaling,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
+`ifdef MAC_TV525_DIAG
+		"P1-;",
+		"P1-,480i output;",
+		"P1O12,CRT De-flicker,Strong,Mild,Off;",
+`endif
+		"P2,System;",
+		"P2-;",
+		"P2SC2,NVR,Mount PRAM;",
+		"P2R6,Clear PRAM and Reset;",
+		"P2-;",
+		// Default OFF, and it must stay that way: the ROM's write primitive
+		// polls the IWM handshake in an UNBOUNDED loop, so the failure mode of
+		// a write bug is a HUNG machine, not a failed write. Gated further in
+		// flp_int_wp below - a read-only mount stays write-protected whatever
+		// this says; a DC42 container does not.
+		"P2OE,Floppy Writes,Off,On;",
+		"P2OI,CD-ROM Drive,Enabled,Disabled;",
+		"P2-;",
 		// Default OFF for distribution (2026-08-24): the ethernet card needs
 		// the paired Main (releases/MiSTer) — with an older ethernet Main a
 		// card-ON boot hangs, so users opt in via the OSD after installing
 		// the Main. Bit clear (0) = first entry = Off; ena_osd below is the
 		// matching un-inverted status[19].
-		"OJ,Ethernet,Off,On;",
-		"o45,Net interface,eth0,tap0,macvlan,eth1;",
-		"o03,MAC suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
+		"P2OJ,Ethernet,Off,On;",
+		"P2o45,Network Interface,eth0,tap0,macvlan,eth1;",
+		"P2o03,MAC Suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
+		"P2-;",
+		"P2R5,Interrupt (NMI);",
+		"P3,MT32-pi;",
+		"P3-;",
+		"P3OO,Use MT32-pi,Yes,No;",
+		"P3OQ,Synthesizer,Munt,FluidSynth;",
+		"P3ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
+		"P3OTV,SoundFont,0,1,2,3,4,5,6,7;",
+		"P3OMN,Show Info,No,Yes,LCD-On,LCD-Auto;",
 		"-;",
-		"O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
-		"OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
-		"OA,Monitor @Reset,640x480 VGA,512x384 12in;",
-		"-;",
-		"O4,Memory,2MB,10MB;",
-		"-;",
-		"R5,Interrupt (NMI / MacsBug);",
-		"R6,WIPE PRAM (erases settings!);",
-		"R0,Reset & Apply CPU+Memory;",
-		"-;",
-		"P1,MT32-pi;",
-		"P1-;",
-		"P1OO,Use MT32-pi,Yes,No;",
-		"P1OQ,Synth,Munt,FluidSynth;",
-		"P1ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
-		"P1OTV,SoundFont,0,1,2,3,4,5,6,7;",
-		"P1OMN,Show Info,No,Yes,LCD-On,LCD-Auto;",
+		"R0,Reset;",
 		"I,",
 		"MT32-pi: SoundFont #0,",
 		"MT32-pi: SoundFont #1,",
@@ -581,8 +595,111 @@ module emu
 		.uart_mode(uart_mode)
 	);
 
-	assign CLK_VIDEO = clk_vid;
-	assign CE_PIXEL  = v8_ce_pix;   // constant 1 now (pix_ce tied high below)
+`ifdef MAC_TV525_DIAG
+    assign CLK_VIDEO = clk_tv525;
+    // Every 27 MHz sample is visible to the framework, including sync edges.
+    assign CE_PIXEL = 1'b1;
+`else
+    assign CLK_VIDEO = clk_vid;
+    assign CE_PIXEL = v8_ce_pix;
+`endif
+`ifdef MAC_TV525_DIAG
+    // Filter only the captured image; guest video timing stays native.
+    wire [23:0] tv_source_rgb;
+    wire tv_source_de, tv_source_line, tv_source_frame, tv_source_reset;
+    wire [9:0] tv_source_width;
+    wire [8:0] tv_source_height;
+    wire [1:0] tv_filter_mode = status[2:1] == 2'd0 ? 2'd2 :
+                                status[2:1] == 2'd1 ? 2'd1 :
+                                status[2:1] == 2'd2 ? 2'd0 : 2'd2;
+    // Synchronize the setting, then latch it once per source
+    // frame inside the filter. CE remains the existing native CE in all modes.
+    (* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [1:0] tv_filter_meta=2, tv_filter_sync=2;
+    always @(posedge clk_vid) begin
+        tv_filter_meta<=tv_filter_mode; tv_filter_sync<=tv_filter_meta;
+    end
+    tv_deflicker crt_filter (
+        .clk(clk_vid), .reset(vidrst_s), .ce(v8_ce_pix), .de(v8_de),
+        .line_start(native_line_start), .frame_start(native_frame_start),
+        .width(native_width), .height(native_height), .rgb({v8_vga_r,v8_vga_g,v8_vga_b}),
+        .mode(tv_filter_sync), .out_rgb(tv_source_rgb), .out_de(tv_source_de),
+        .out_line(tv_source_line), .out_frame(tv_source_frame),
+        .out_width(tv_source_width), .out_height(tv_source_height), .out_reset(tv_source_reset)
+    );
+    wire native_line_start, native_frame_start;
+    wire [9:0] native_width;
+    wire [8:0] native_height;
+`endif
+
+
+`ifdef MAC_TV525_DIAG
+    wire clk_tv525, tv525_locked;
+    pll_tv tv525_pll (.refclk(CLK_50M), .rst(1'b0), .outclk_0(clk_tv525), .locked(tv525_locked));
+    (* preserve, dont_merge *) reg [2:0] tv_reset_pipe=3'b111;
+    always @(posedge clk_tv525 or negedge tv525_locked)
+        if (!tv525_locked) tv_reset_pipe<=3'b111;
+        else tv_reset_pipe<={tv_reset_pipe[1:0],1'b0};
+    wire [23:0] tv_rgb;
+    wire tv_hs, tv_vs, tv_de, tv_field;
+    wire [27:0] tv_address;
+    wire [7:0] tv_burstcount;
+    wire [127:0] tv_writedata, tv_readdata;
+    wire [15:0] tv_byteenable;
+    wire tv_read, tv_write, tv_waitrequest, tv_readdatavalid;
+    tv525_video crt_tv (
+        .clk_tv(clk_tv525), .reset_tv(tv_reset_pipe[2]), .clk_mem(clk_mem), .inhibit(tv_mem_reset_sync),
+        .clk_source(clk_vid), .source_reset(tv_source_reset), .source_ce(v8_ce_pix),
+        .source_de(tv_source_de), .source_line(tv_source_line), .source_frame(tv_source_frame),
+        .source_width(tv_source_width), .source_height(tv_source_height), .source_rgb(tv_source_rgb),
+        .rgb(tv_rgb), .hs(tv_hs), .vs(tv_vs), .de(tv_de), .field_id(tv_field),
+        .address(tv_address), .burstcount(tv_burstcount), .writedata(tv_writedata),
+        .byteenable(tv_byteenable), .read(tv_read), .write(tv_write), .waitrequest(tv_waitrequest),
+        .readdatavalid(tv_readdatavalid), .readdata(tv_readdata)
+    );
+    wire [28:0] tv_ddr_address;
+    wire [7:0] tv_ddr_burstcount, tv_ddr_byteenable;
+    wire [63:0] tv_ddr_writedata, tv_ddr_readdata, pds_mem_rdata;
+    wire tv_ddr_read, tv_ddr_write, tv_ddr_waitrequest, tv_ddr_readdatavalid;
+    wire pds_mem_busy, pds_mem_rvalid;
+    tv_ddram_bridge tv_bridge (
+        .clk(clk_mem), .source_address(tv_address), .source_burstcount(tv_burstcount),
+        .source_writedata(tv_writedata), .source_byteenable(tv_byteenable),
+        .source_read(tv_read), .source_write(tv_write), .source_waitrequest(tv_waitrequest),
+        .source_readdatavalid(tv_readdatavalid), .source_readdata(tv_readdata),
+        .address(tv_ddr_address), .burstcount(tv_ddr_burstcount), .writedata(tv_ddr_writedata),
+        .byteenable(tv_ddr_byteenable), .read(tv_ddr_read), .write(tv_ddr_write),
+        .waitrequest(tv_ddr_waitrequest), .readdatavalid(tv_ddr_readdatavalid), .readdata(tv_ddr_readdata)
+    );
+    (* preserve, dont_merge *) reg tv_mem_reset_meta=1, tv_mem_reset_sync=1;
+    always @(posedge clk_mem) begin
+        tv_mem_reset_meta<=RESET; tv_mem_reset_sync<=tv_mem_reset_meta;
+    end
+    wire [28:0] pds_ddr_address;
+    wire [63:0] pds_ddr_writedata, pds_ddr_readdata;
+    wire [7:0] pds_ddr_byteenable;
+    wire pds_ddr_read, pds_ddr_write, pds_ddr_waitrequest, pds_ddr_readdatavalid;
+    tv_ddram_cdc pds_bridge (
+        .clk_source(clk_sys), .reset_source(~pll_locked_s | RESET), .clk_mem(clk_mem),
+        .source_address(pds_mem_addr), .source_writedata(pds_mem_wdata), .source_byteenable(pds_mem_be),
+        .source_read(pds_mem_rd), .source_write(pds_mem_we), .source_waitrequest(pds_mem_busy),
+        .source_readdatavalid(pds_mem_rvalid), .source_readdata(pds_mem_rdata),
+        .address(pds_ddr_address), .writedata(pds_ddr_writedata), .byteenable(pds_ddr_byteenable),
+        .read(pds_ddr_read), .write(pds_ddr_write), .waitrequest(pds_ddr_waitrequest),
+        .readdatavalid(pds_ddr_readdatavalid), .readdata(pds_ddr_readdata)
+    );
+    tv_ddr_arbiter #(.DW(64), .AW(29)) tv_ram_arbiter (
+        .clk(clk_mem), .inhibit(1'b0),
+        .a_address(pds_ddr_address), .a_burstcount(8'd1), .a_writedata(pds_ddr_writedata),
+        .a_byteenable(pds_ddr_byteenable), .a_read(pds_ddr_read), .a_write(pds_ddr_write),
+        .a_waitrequest(pds_ddr_waitrequest), .a_readdatavalid(pds_ddr_readdatavalid), .a_readdata(pds_ddr_readdata),
+        .b_address(tv_ddr_address), .b_burstcount(tv_ddr_burstcount), .b_writedata(tv_ddr_writedata),
+        .b_byteenable(tv_ddr_byteenable), .b_read(tv_ddr_read), .b_write(tv_ddr_write),
+        .b_waitrequest(tv_ddr_waitrequest), .b_readdatavalid(tv_ddr_readdatavalid), .b_readdata(tv_ddr_readdata),
+        .address(DDRAM_ADDR), .burstcount(DDRAM_BURSTCNT), .writedata(DDRAM_DIN), .byteenable(DDRAM_BE),
+        .read(DDRAM_RD), .write(DDRAM_WE), .waitrequest(DDRAM_BUSY),
+        .readdatavalid(DDRAM_DOUT_READY), .readdata(DDRAM_DOUT)
+    );
+`endif
 
 	// Video Output — V8 video with the MT32-pi LCD overlay composited on the
 	// FINAL VGA_R/G/B (works in the release HUD-off fit). ao486 convention:
@@ -593,6 +710,13 @@ module emu
 	wire [7:0] mt32_vga_r = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_r[7:2]} : v8_vga_r;
 	wire [7:0] mt32_vga_g = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_g[7:2]} : v8_vga_g;
 	wire [7:0] mt32_vga_b = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_b[7:2]} : v8_vga_b;
+`ifdef MAC_TV525_DIAG
+    assign {VGA_R,VGA_G,VGA_B} = tv_rgb;
+    assign VGA_DE = tv_de;
+    assign VGA_HS = tv_hs;
+    assign VGA_VS = tv_vs;
+    assign VGA_F1 = tv_field;
+`else
 `ifdef USE_DBG_HUD
 	// Debug HUD (see the USE_DBG_HUD block near the probe deck): binary
 	// pixel-strip overlay, BOTTOM-left corner, video-only (input untouched).
@@ -609,6 +733,7 @@ module emu
 	assign VGA_VS = v8_vsync;
 	assign VGA_HS = v8_hsync;
 	assign VGA_F1 = 0;
+`endif
 	assign VGA_SL = 0;
 
 	// ------------------------------------------------------------------------
@@ -757,9 +882,9 @@ module emu
 	                               + {{2{cd_snd_r[15]}}, cd_snd_r}
 	                               + (mt32_use ? {{2{mt32_i2s_r[15]}}, mt32_i2s_r} : 18'sd0);
 	assign AUDIO_L = (audio_mix_l > 18'sd32767)  ? 16'sd32767 :
-	                 (audio_mix_l < -18'sd32768) ? -16'sd32768 : audio_mix_l[15:0];
+	                 (audio_mix_l < -18'sd32768) ? 16'sh8000 : audio_mix_l[15:0];
 	assign AUDIO_R = (audio_mix_r > 18'sd32767)  ? 16'sd32767 :
-	                 (audio_mix_r < -18'sd32768) ? -16'sd32768 : audio_mix_r[15:0];
+	                 (audio_mix_r < -18'sd32768) ? 16'sh8000 : audio_mix_r[15:0];
 	assign AUDIO_S = 1;
 	assign AUDIO_MIX = 0;
 
@@ -1150,9 +1275,11 @@ module emu
 		.mem_we    (pds_mem_we),
 		.mem_wdata (pds_mem_wdata),
 		.mem_be    (pds_mem_be),
-		.mem_rdata (DDRAM_DOUT),
-		.mem_rvalid(DDRAM_DOUT_READY),
-		.mem_busy  (DDRAM_BUSY)
+		`ifdef MAC_TV525_DIAG
+        .mem_rdata (pds_mem_rdata), .mem_rvalid(pds_mem_rvalid), .mem_busy(pds_mem_busy)
+`else
+        .mem_rdata (DDRAM_DOUT), .mem_rvalid(DDRAM_DOUT_READY), .mem_busy(DDRAM_BUSY)
+`endif
 	);
 
 	assign      _cpuVPA = fc7_iack ? 1'b0 : ((fc7_berr || slot_space || pds_card_sel) ? 1'b1 : ~(!_cpuAS && cpuAddr[23:21] == 3'b111 && !selectVRAM && !selectSCSIDMA));
@@ -1483,23 +1610,23 @@ module emu
 							   status[17] ? 3'd4 : 3'd2;       // 16bpp override
 	*/
 
-	// Monitor ID Selection — 640x480 VGA (default, MAME-faithful) or
-	// 512x384 12" RGB. Portrait is not supported. This is the sense ID the
+	// Monitor ID Selection — 512x384 12" RGB (default) or
+	// 640x480 VGA. Portrait is not supported. This is the sense ID the
 	// ROM reads to pick V8 timing.
 	// LATCHED UNDER RESET: a real LC samples the monitor sense lines only
 	// during the ROM's boot probe — the display cannot change on a running
 	// system, and the OS lays out QuickDraw for the boot geometry. The old
 	// live status[10] wire retargeted the pixel PLL mid-session (guest-
 	// hostile, and the source of the out-of-range class pix_quiet guards).
-	// The OSD choice now applies at the next reset — R0 "Reset & Apply",
+	// The OSD choice now applies at the next reset — R0 "Apply and Reset",
 	// R6, or core reload — the same pattern as the Memory option. Saved
 	// configs still apply on first load: the HPS delivers status while
 	// n_reset is held, so the latch captures it before first release.
 	// (verilator/sim.v hardwires 4'h6 — no sim-side counterpart needed.)
-	reg [3:0] v8_monitor_id = 4'h6;  // 640x480 VGA until first reset sample
+	reg [3:0] v8_monitor_id = 4'h2;  // 512x384 12" RGB until first reset sample
 	always @(posedge clk_sys) begin
-		if (~n_reset) v8_monitor_id <= status[10] ? 4'h2 :  // 512x384 12" RGB
-		                                            4'h6;   // 640x480 VGA
+		if (~n_reset) v8_monitor_id <= status[10] ? 4'h6 :  // 640x480 VGA
+		                                            4'h2;   // 512x384 12" RGB
 	end
 
 	ariel_ramdac ariel(
@@ -2063,6 +2190,10 @@ module emu
 		.vga_b(v8_vga_b),
 		.de(v8_de),
 		.ce_pix(v8_ce_pix),
+`ifdef MAC_TV525_DIAG
+        .native_line_start(native_line_start), .native_frame_start(native_frame_start),
+        .native_width(native_width), .native_height(native_height),
+`endif
 
 		// Palette Interface (Connected to Ariel RAMDAC)
 		.palette_addr(ariel_pixel_addr),

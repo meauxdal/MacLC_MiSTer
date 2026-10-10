@@ -37,3 +37,18 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/egret_wrapper.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_core.sv
 set_global_assignment -name SYSTEMVERILOG_FILE MacLC.sv
+
+# Dedicated 480i profile using the standard core interface.
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_timing.sv
+set_global_assignment -name VERILOG_FILE rtl/pll_tv.v
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_video_capture.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_deflicker.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_capture_fifo.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_frame_store.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_buffered_canvas.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv
+
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_video.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_bridge.sv
+
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_cdc.sv

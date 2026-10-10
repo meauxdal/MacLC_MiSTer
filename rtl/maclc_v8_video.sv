@@ -36,6 +36,10 @@ module maclc_v8_video(
     output reg de,
     output reg ce_pix,
 
+    output reg native_line_start, native_frame_start,
+    output reg [9:0] native_width,
+    output reg [8:0] native_height,
+
     output [7:0] palette_addr,
     input [23:0] palette_data,
 
@@ -278,7 +282,6 @@ end
 // --- Display side: read the current line from buffer v_count[0] at
 // the pixel rate. px_in_word counts down the pixels left in the word. ---
 reg [15:0] pixel_shift;
-reg [15:0] video_data;     // current word (for 16bpp direct color)
 reg [8:0]  disp_idx;       // next word to load from the line buffer
 reg [3:0]  px_in_word;     // pixels remaining in the loaded word
 
@@ -310,14 +313,12 @@ always @(posedge clk_sys) begin
         disp_idx    <= 0;
         px_in_word  <= 0;
         pixel_shift <= 16'h0000;
-        video_data  <= 16'h0000;
     end else if (pix_en) begin
         if (hblank_c || vblank_c) begin
             // Prime for the first pixel of the next line.
             disp_idx    <= 0;
             px_in_word  <= 0;
             pixel_shift <= 16'h0000;
-            video_data  <= 16'h0000;
         end else if (px_in_word == 0) begin
             // Load a fresh word (async read of word disp_idx), advance pointer.
             // The word's FIRST pixel is displayed THIS cycle via pix_word; store
@@ -330,7 +331,6 @@ always @(posedge clk_sys) begin
                 5'd8:  pixel_shift <= {disp_word[7:0],  8'b0};
                 default: pixel_shift <= disp_word;
             endcase
-            video_data  <= disp_word;
             disp_idx    <= disp_idx + 1'b1;
             px_in_word  <= px_per_word;
         end else begin
@@ -364,7 +364,7 @@ wire [7:0] pixel_index;
 // 4bpp: 0x0F | (4-bit << 4) → 0x0F, 0x1F, 0x2F, ..., 0xFF
 // 8bpp: direct 0x00-0xFF
 always @(*) begin
-    case (video_mode)
+    case (vmode_v)
         3'd0: pixel_index_real = {pix_word[15], 7'b1111111};               // 1bpp: 0x7F or 0xFF
         3'd1: pixel_index_real = {pix_word[15:14], 6'b111111};             // 2bpp: 0x3F, 0x7F, 0xBF, 0xFF
         3'd2: pixel_index_real = {pix_word[15:12], 4'b1111};               // 4bpp: 0x0F-0xFF
@@ -394,16 +394,33 @@ assign palette_addr = pixel_index;
 // Pipeline delay: palette RAM read is synchronous (1-cycle latency),
 // so delay de, video_mode, and video_data to align with palette_data output.
 reg        de_d1;
+reg line_d1, frame_d1;
+reg [9:0] width_d1;
+reg [8:0] height_d1;
 reg [2:0]  video_mode_d1;
 reg [15:0] video_data_d1;
 
 always @(posedge clk_sys) begin
     de_d1         <= de_raw;
-    video_mode_d1 <= video_mode;
-    video_data_d1 <= video_data;
+    line_d1       <= !reset && de_raw && h_count == 0;
+    frame_d1      <= !reset && de_raw && h_count == 0 && v_count == 0;
+    // Unsupported 640x870 portrait mode: zero geometry prevents truncation
+    // into a supported capture. Native counters and output remain unchanged.
+    width_d1      <= monid_v == 4'h1 ? 10'd0 : h_active[9:0];
+    height_d1     <= monid_v == 4'h1 ? 9'd0 : v_active[8:0];
+    video_mode_d1 <= vmode_v;
+    // Match the palette address's h_count pixel. The former video_data
+    // register loaded on this edge, supplying the PREVIOUS word here.
+    // In direct color every pixel loads a word, so that was a one-pixel
+    // horizontal shift hidden by uniform VRAM fixtures.
+    video_data_d1 <= pix_word;
 end
 
 always @(posedge clk_sys) begin
+    native_line_start <= line_d1;
+    native_frame_start <= frame_d1;
+    native_width <= width_d1;
+    native_height <= height_d1;
     de <= de_d1;  // Align DE output with RGB (1-cycle palette latency)
     if (de_d1) begin
         if (video_mode_d1 == 3'd4) begin

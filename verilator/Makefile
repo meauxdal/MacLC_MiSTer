@@ -122,3 +122,47 @@ fast:
 
 clean:
 	rm -f obj_dir/*
+
+# Independent 27 MHz raster/pattern verification; no FPGA build or hardware.
+TV525_RTL = $(RTL)/tv525_video.sv $(RTL)/tv525_timing.sv
+TV_FRAME_RTL = $(RTL)/tv_buffered_canvas.sv $(RTL)/tv_frame_store.sv $(RTL)/tv_video_capture.sv $(RTL)/tv_capture_fifo.sv $(RTL)/tv_ddr_arbiter.sv $(RTL)/tv_deflicker.sv $(RTL)/tv_ddram_bridge.sv
+TV_FRAME_FILTER ?= -1
+.PHONY: tb_tv_deflicker
+tb_tv_deflicker:
+	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY --top-module tv_deflicker_capture --Mdir ./obj_dir_tb_tv_deflicker -o tb_tv_deflicker -CFLAGS "-std=c++17 -O2" tv_deflicker_capture.sv $(RTL)/tv_deflicker.sv $(RTL)/tv_video_capture.sv tb_tv_deflicker.cpp
+	./obj_dir_tb_tv_deflicker/tb_tv_deflicker
+.PHONY: tb_tv_frame
+tb_tv_frame:
+	$V --lint-only --Wall -Wno-PINCONNECTEMPTY -GFILTER_MODE=$(TV_FRAME_FILTER) --top-module tv_frame_pipeline tv_frame_pipeline.sv $(TV525_RTL) $(TV_FRAME_RTL)
+	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY -GFILTER_MODE=$(TV_FRAME_FILTER) --top-module tv_frame_pipeline --Mdir ./obj_dir_tb_tv_frame -o tb_tv_frame -CFLAGS "-std=c++17 -O2 -DTV_FRAME_FILTER=$(TV_FRAME_FILTER)" tv_frame_pipeline.sv $(TV525_RTL) $(TV_FRAME_RTL) tb_tv_frame.cpp
+	./obj_dir_tb_tv_frame/tb_tv_frame
+.PHONY: tb_tv_ddr_arbiter
+tb_tv_ddr_arbiter:
+	$V --cc --exe --build -j 4 --Wall --top-module tv_ddr_arbiter --Mdir ./obj_dir_tb_tv_ddr_arbiter -o tb_tv_ddr_arbiter -CFLAGS "-std=c++17 -O2" $(RTL)/tv_ddr_arbiter.sv tb_tv_ddr_arbiter.cpp
+	./obj_dir_tb_tv_ddr_arbiter/tb_tv_ddr_arbiter
+.PHONY: tb_tv_frame_owner
+tb_tv_frame_owner:
+	$V --binary --timing -j 4 --Wall -Wno-PINCONNECTEMPTY -Wno-BLKSEQ --top-module tb_tv_frame_owner --Mdir ./obj_dir_tb_tv_frame_owner -o tb_tv_frame_owner tb_tv_frame_owner.sv $(RTL)/tv_frame_store.sv
+	./obj_dir_tb_tv_frame_owner/tb_tv_frame_owner
+
+
+
+.PHONY: tb_tv_v8
+tb_tv_v8:
+	$V --cc --exe --build -j 4 -Wno-fatal --top-module tv_v8_pipeline --Mdir ./obj_dir_tb_tv_v8 -o tb_tv_v8 -CFLAGS "-std=c++17 -O2" tv_v8_pipeline.sv tv_frame_pipeline.sv $(TV525_RTL) $(TV_FRAME_RTL) $(RTL)/maclc_v8_video.sv $(RTL)/vram_bram.sv $(RTL)/ariel_ramdac.sv tb_tv_v8.cpp
+	./obj_dir_tb_tv_v8/tb_tv_v8 $(TV_V8_ARGS)
+
+.PHONY: tb_tv_ddram
+tb_tv_ddram:
+	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY --top-module tv_ddram_pipeline --Mdir ./obj_dir_tb_tv_ddram -o tb_tv_ddram -CFLAGS "-std=c++17 -O2" tv_ddram_pipeline.sv $(RTL)/tv_ddram_bridge.sv $(RTL)/tv_ddr_arbiter.sv tb_tv_ddram.cpp
+	./obj_dir_tb_tv_ddram/tb_tv_ddram
+
+.PHONY: tb_tv525_video
+tb_tv525_video:
+	$V --cc --exe --build -j 4 --Wall -Wno-PINCONNECTEMPTY --top-module tv525_video --Mdir ./obj_dir_tb_tv525_video -o tb_tv525_video -CFLAGS "-std=c++17 -O2" $(RTL)/tv525_video.sv $(RTL)/tv525_timing.sv $(RTL)/tv_buffered_canvas.sv $(RTL)/tv_frame_store.sv $(RTL)/tv_video_capture.sv $(RTL)/tv_capture_fifo.sv tb_tv525_video.cpp
+	./obj_dir_tb_tv525_video/tb_tv525_video
+
+.PHONY: tb_tv_ddram_cdc
+tb_tv_ddram_cdc:
+	$V --cc --exe --build -j 4 --Wall --top-module tv_ddram_cdc --Mdir ./obj_dir_tb_tv_ddram_cdc -o tb_tv_ddram_cdc -CFLAGS "-std=c++17 -O2" $(RTL)/tv_ddram_cdc.sv tb_tv_ddram_cdc.cpp
+	./obj_dir_tb_tv_ddram_cdc/tb_tv_ddram_cdc
