@@ -412,24 +412,47 @@ set_global_assignment -name VERILOG_MACRO "MAC_TV525_DIAG=1"
 
 # Gray transfers retain explicit delay/skew bounds in MacLC.sdc, so force
 # identification of their asynchronous first stages for metastability analysis.
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|*capture_fifo|wr_gray_meta[*]*\}"
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|*capture_fifo|rd_gray_meta[*]*\}"
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|tv_reset_pipe[0]\}"
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to "\{*crt_tv|sys_reset_pipe[0]\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|*capture_fifo|wr_gray_meta[*]*
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|*capture_fifo|rd_gray_meta[*]*
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|tv_reset_pipe[0]
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|sys_reset_pipe[0]
 # Identify and protect existing framework/OSD chains from the project side.
 # Their unsupported async_reg source warnings remain visible; no suppression.
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{tv_analog_meta\}"
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{tv_mem_reset_meta\}"
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{*crt_tv|*osd|ack_meta\}"
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to "\{*crt_tv|*osd|req_meta\}"
-set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|ack_meta\}"
-set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|ack_sync\}"
-set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|req_meta\}"
-set_instance_assignment -name PRESERVE_REGISTER ON -to "\{*crt_tv|*osd|req_sync\}"
-set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|ack_meta\}"
-set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|ack_sync\}"
-set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|req_meta\}"
-set_instance_assignment -name DONT_MERGE_REGISTER ON -to "\{*crt_tv|*osd|req_sync\}"
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to tv_analog_meta
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to tv_mem_reset_meta
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to *crt_tv|*osd|ack_meta
+set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION "FORCED IF ASYNCHRONOUS" -to *crt_tv|*osd|req_meta
+set_instance_assignment -name PRESERVE_REGISTER ON -to *crt_tv|*osd|ack_meta
+set_instance_assignment -name PRESERVE_REGISTER ON -to *crt_tv|*osd|ack_sync
+set_instance_assignment -name PRESERVE_REGISTER ON -to *crt_tv|*osd|req_meta
+set_instance_assignment -name PRESERVE_REGISTER ON -to *crt_tv|*osd|req_sync
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to *crt_tv|*osd|ack_meta
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to *crt_tv|*osd|ack_sync
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to *crt_tv|*osd|req_meta
+set_instance_assignment -name DONT_MERGE_REGISTER ON -to *crt_tv|*osd|req_sync
+
+
+# Local copies of the shared VGA enable LUT reduce its 20-pin fanout.
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_r0 -from VGA_R[5]~8 -to VGA_R[0]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_r1 -from VGA_R[5]~8 -to VGA_R[1]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_r2 -from VGA_R[5]~8 -to VGA_R[2]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_r3 -from VGA_R[5]~8 -to VGA_R[3]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_r4 -from VGA_R[5]~8 -to VGA_R[4]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_r5 -from VGA_R[5]~8 -to VGA_R[5]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_g0 -from VGA_R[5]~8 -to VGA_G[0]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_g1 -from VGA_R[5]~8 -to VGA_G[1]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_g2 -from VGA_R[5]~8 -to VGA_G[2]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_g3 -from VGA_R[5]~8 -to VGA_G[3]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_g4 -from VGA_R[5]~8 -to VGA_G[4]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_g5 -from VGA_R[5]~8 -to VGA_G[5]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_b0 -from VGA_R[5]~8 -to VGA_B[0]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_b1 -from VGA_R[5]~8 -to VGA_B[1]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_b2 -from VGA_R[5]~8 -to VGA_B[2]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_b3 -from VGA_R[5]~8 -to VGA_B[3]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_b4 -from VGA_R[5]~8 -to VGA_B[4]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_b5 -from VGA_R[5]~8 -to VGA_B[5]~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_hs -from VGA_R[5]~8 -to VGA_HS~output*
+set_instance_assignment -name DUPLICATE_ATOM tv_oe_vs -from VGA_R[5]~8 -to VGA_VS~output*
 
 
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -11,7 +11,7 @@ proc read_qsf_bytes {} {
 
 set original_qsf [read_qsf_bytes]
 if {[catch {
-    if {[regexp -- {-to\s+\{} $original_qsf]} {
+    if {[regexp -- {-to\s+"?\\?\{} $original_qsf]} {
         error "QSF node targets cannot use Tcl braces; Quartus treats them literally"
     }
     project_open -revision MacLC MacLC

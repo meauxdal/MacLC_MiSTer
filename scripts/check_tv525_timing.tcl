@@ -89,6 +89,11 @@ foreach_in_collection op [get_available_operating_conditions] {
     # Report data and enable separately; the worst OE path can hide slow data.
     check_path color_data -setup -from_clock $tv_clock -from $pin_code_registers -to $ports
     check_path output_enable -setup -from_clock $tv_clock -from $pin_ready_registers -to $ports
+    # Keep each pin's data path visible even when its OE path is slower.
+    report_timing -setup -from_clock $tv_clock -from $pin_code_registers -to $ports \
+        -npaths 27 -nworst 1 -detail full_path -file [file join $output ${corner}_color_pins.rpt]
+    report_timing -setup -from_clock $tv_clock -from $pin_ready_registers -to $ports \
+        -npaths 27 -nworst 1 -detail full_path -file [file join $output ${corner}_enable_pins.rpt]
     set index 0
     foreach_in_collection port $ports {
         # A collection iterator returns a node ID, not a port collection.
