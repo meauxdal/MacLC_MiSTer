@@ -7,7 +7,7 @@ root = Path(__file__).resolve().parents[1]
 baseline = root / "scratch/tv_frame_routes_baseline.v"
 # Last TV-only revision, before the optional analog selector. HEAD is not a
 # stable oracle once the change being tested has been committed.
-baseline.write_bytes(subprocess.check_output(["git", "show", "70229a3:sys/sys_top.v"], cwd=root))
+baseline.write_bytes(subprocess.check_output(["git", "show", "70229a3:sys/sys_top.v"], cwd=root).replace(b"MAC_TV525_DIAG", b"MAC_TV525"))
 # Preprocess without altering the real build stamp; this fixture is never built.
 (root / "scratch/build_id.v").write_text('localparam BUILD_DATE = "261008";\n')
 
@@ -23,7 +23,7 @@ for defines in [[], ["MISTER_DEBUG_NOHDMI"], ["MISTER_DISABLE_VGA_OSD"],
     assert preprocess(baseline, defines) == preprocess(root/"sys/sys_top.v", defines), defines
     print("PASS unchanged sys_top branch:", defines or "normal")
 
-for defines in [["MAC_TV525_DIAG", "MISTER_DEBUG_NOHDMI"], ["MAC_TV525_DIAG"]]:
+for defines in [["MAC_TV525", "MISTER_DEBUG_NOHDMI"], ["MAC_TV525"]]:
     value = preprocess(root/"sys/sys_top.v", defines)
     for required in ["tv525_platform#(.BUFFERED(1))crt_tv(", "tv_ddr_arbitertv_vbuf_arbiter(",
                      "wirecs1=tv_analog_enable?(tv525_drive?tv525_cs_n:1'b1):(vgas_en?vgas_cs:vga_cs);",
@@ -38,7 +38,7 @@ for defines in [["MAC_TV525_DIAG", "MISTER_DEBUG_NOHDMI"], ["MAC_TV525_DIAG"]]:
     assert ".osd_status(native_osd_status)" in value
     assert ".osd_status(tv_osd_status)" in value
     assert "assignosd_status=tv_analog_enable?tv_osd_status:native_osd_status;" in value
-    normal = preprocess(baseline, [d for d in defines if d != "MAC_TV525_DIAG"])
+    normal = preprocess(baseline, [d for d in defines if d != "MAC_TV525"])
     previous_tv = preprocess(baseline, defines)
     # Every native pin expression is exactly the pre-existing analog route.
     for pin in ("VGA_VS", "VGA_HS", "VGA_R", "VGA_G", "VGA_B"):
@@ -72,7 +72,7 @@ for defines in [["MAC_TV525_DIAG", "MISTER_DEBUG_NOHDMI"], ["MAC_TV525_DIAG"]]:
         assert ".avl_address(vbuf_address)" not in value
     print("PASS buffered TV routes and exclusive/arbitrated vbuf ownership:", defines)
 
-emu = preprocess(root/"MacLC.sv", ["MAC_TV525_DIAG"])
+emu = preprocess(root/"MacLC.sv", ["MAC_TV525"])
 for required in ["tv_deflickercrt_filter(", ".rgb({v8_vga_r,v8_vga_g,v8_vga_b})",
                  ".out_reset(TV_NATIVE_RESET)", ".out_rgb(TV_NATIVE_RGB)",
                  ".mode(tv_filter_sync)", "tv_filter_meta<=tv_filter_mode;",
@@ -84,7 +84,7 @@ for required in ["tv_deflickercrt_filter(", ".rgb({v8_vga_r,v8_vga_g,v8_vga_b})"
 assert "tv_deflicker" not in preprocess(root/"MacLC.sv", [])
 print("PASS CRT-only filtered V8 tap before overlays; normal profile excludes filter")
 
-tv = preprocess(root/"sys/sys_top.v", ["MAC_TV525_DIAG"])
+tv = preprocess(root/"sys/sys_top.v", ["MAC_TV525"])
 normal = preprocess(baseline, [])
 for pin in ("HDMI_TX_CLK", "HDMI_TX_DE", "HDMI_TX_D", "HDMI_TX_HS", "HDMI_TX_VS"):
     assert re.findall("assign"+pin+r"=.*?;", tv) == re.findall("assign"+pin+r"=.*?;", normal), pin
@@ -129,5 +129,5 @@ print("PASS native HDMI source, CE/clock, field/deinterlace, scaler controls, di
 mem_baseline = root / "scratch/tv_sysmem_baseline.sv"
 mem_baseline.write_bytes(subprocess.check_output(["git", "show", "70229a3:sys/sysmem.sv"], cwd=root))
 assert preprocess(mem_baseline, []) == preprocess(root/"sys/sysmem.sv", [])
-assert "vbuf_open_cnt" in preprocess(root/"sys/sysmem.sv", ["MAC_TV525_DIAG"])
+assert "vbuf_open_cnt" in preprocess(root/"sys/sysmem.sv", ["MAC_TV525"])
 print("PASS normal sysmem unchanged; TV startup gate enabled")

@@ -156,7 +156,7 @@ always @(posedge vbuf_clk) begin
 	vbuf_reset_1 <= vbuf_reset_0;
 end
 
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
 // The scaler's port stays shut from configuration until the core has come
 // out of its first reset (MacQuadra800, 2026-10-02).
 //
@@ -196,7 +196,7 @@ f2sdram_safe_terminator #(128, 8) f2sdram_safe_terminator_vbuf
 	.clk                      (vbuf_clk),
 	.rst_req_sync             (vbuf_reset_1),
 
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
 	.waitrequest_slave        (vbuf_waitrequest_t),
 `else
 	.waitrequest_slave        (vbuf_waitrequest),
@@ -205,14 +205,14 @@ f2sdram_safe_terminator #(128, 8) f2sdram_safe_terminator_vbuf
 	.address_slave            (vbuf_address),
 	.readdata_slave           (vbuf_readdata),
 	.readdatavalid_slave      (vbuf_readdatavalid),
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
 	.read_slave               (vbuf_read & vbuf_open),
 `else
 	.read_slave               (vbuf_read),
 `endif
 	.writedata_slave          (vbuf_writedata),
 	.byteenable_slave         (vbuf_byteenable),
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
 	.write_slave              (vbuf_write & vbuf_open),
 `else
 	.write_slave              (vbuf_write),

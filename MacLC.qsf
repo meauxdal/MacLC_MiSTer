@@ -407,7 +407,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_buffered_canvas.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv
 
 # Comment out this assignment to omit 480i hardware and its OSD controls.
-set_global_assignment -name VERILOG_MACRO "MAC_TV525_DIAG=1"
+set_global_assignment -name VERILOG_MACRO "MAC_TV525=1"
 # HDMI/ASCAL remains enabled; TV shares vbuf through its burst arbiter.
 
 # Gray transfers retain explicit delay/skew bounds in MacLC.sdc, so force

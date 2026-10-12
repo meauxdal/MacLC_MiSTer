@@ -104,7 +104,7 @@ invalid geometry, malformed rows and interrupted frames invalidate capture.
 Old histories are overwritten before being used in the next frame. The
 unsupported portrait mode never publishes an image.
 
-The filter is instantiated only under `MAC_TV525_DIAG` in `MacLC.sv`, before
+The filter is instantiated only under `MAC_TV525` in `MacLC.sv`, before
 the MT32/HUD/framework overlays. Native HDMI is untouched. There are no
 changes to `sys/`, timing/PLL, composite sync, OSD composition, DDR traffic
 size, frame ownership, field parity or TV raster pipeline latency. Both source

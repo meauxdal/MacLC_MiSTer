@@ -14,7 +14,7 @@ output        CLK_VIDEO,
 //Multiple resolutions are supported using different CE_PIXEL rates.
 //Must be based on CLK_VIDEO
 output        CE_PIXEL,
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
 // Optional analog route; filtered V8 stream before video_freak and overlays.
 output TV_ANALOG_ENABLE,
 output [23:0] TV_NATIVE_RGB,

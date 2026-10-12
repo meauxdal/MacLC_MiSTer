@@ -97,7 +97,7 @@ module emu
 		"P1-;",
 		"P1O78,Aspect Ratio,Original,Full Screen,[ARC1],[ARC2];",
 		"P1OCD,Scaling,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
 		"P1-;",
 		"P1O3,Analog Output,Native,480i;",
 		"P1O12,CRT De-flicker,Strong,Mild,Off;",
@@ -593,7 +593,7 @@ module emu
 
 	assign CLK_VIDEO = clk_vid;
 	assign CE_PIXEL  = v8_ce_pix;   // constant 1 now (pix_ce tied high below)
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
     // CRT-only filter before capture; native HDMI/overlays keep the raw V8 tap.
     // Zero status selects native analog and Strong for the optional 480i path.
     assign TV_ANALOG_ENABLE = status[3];
@@ -2099,7 +2099,7 @@ module emu
 		.vga_b(v8_vga_b),
 		.de(v8_de),
 		.ce_pix(v8_ce_pix),
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
         .native_line_start(native_line_start), .native_frame_start(native_frame_start),
         .native_width(native_width), .native_height(native_height),
 `endif

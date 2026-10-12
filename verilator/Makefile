@@ -167,7 +167,7 @@ tb_sysmem_vbuf_gate:
 	mkdir -p obj_dir_tb_vbuf_gate
 	sed -n '/^module sysmem_lite/,/^endmodule/p' ../sys/sysmem.sv > obj_dir_tb_vbuf_gate/sysmem_lite.sv
 	sed -e 's/^wire next_state_write;/logic next_state_write;/' -e '/_master,$$/ s/^	output /	output logic /' ../sys/f2sdram_safe_terminator.sv > obj_dir_tb_vbuf_gate/f2sdram_safe_terminator.sv
-	$V --binary --timing -j 8 +define+MAC_TV525_DIAG -Wno-fatal -Wno-WIDTH -Wno-UNUSED -Wno-PINMISSING -Wno-DECLFILENAME -Wno-MULTITOP -Wno-INITIALDLY --timescale 1ns/1ps --top-module tb_sysmem_vbuf_gate --Mdir ./obj_dir_tb_vbuf_gate -o tb_sysmem_vbuf_gate tb_sysmem_vbuf_gate.sv obj_dir_tb_vbuf_gate/sysmem_lite.sv obj_dir_tb_vbuf_gate/f2sdram_safe_terminator.sv
+	$V --binary --timing -j 8 +define+MAC_TV525 -Wno-fatal -Wno-WIDTH -Wno-UNUSED -Wno-PINMISSING -Wno-DECLFILENAME -Wno-MULTITOP -Wno-INITIALDLY --timescale 1ns/1ps --top-module tb_sysmem_vbuf_gate --Mdir ./obj_dir_tb_vbuf_gate -o tb_sysmem_vbuf_gate tb_sysmem_vbuf_gate.sv obj_dir_tb_vbuf_gate/sysmem_lite.sv obj_dir_tb_vbuf_gate/f2sdram_safe_terminator.sv
 	./obj_dir_tb_vbuf_gate/tb_sysmem_vbuf_gate > obj_dir_tb_vbuf_gate/run.log 2>&1; grep -E "^FAIL|^RESULT" obj_dir_tb_vbuf_gate/run.log | head -40; grep -q "^RESULT: PASS" obj_dir_tb_vbuf_gate/run.log
 
 .PHONY: tb_tv_v8
