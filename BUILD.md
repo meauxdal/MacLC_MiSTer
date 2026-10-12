@@ -13,7 +13,7 @@ The build **never touches the MiSTer** — deploying is a separate step (see
 480i support is enabled by this assignment in `MacLC.qsf`:
 
 ```tcl
-set_global_assignment -name VERILOG_MACRO "MAC_TV525_DIAG=1"
+set_global_assignment -name VERILOG_MACRO "MAC_TV525=1"
 ```
 
 Comment out or remove the assignment before building to omit the 480i hardware

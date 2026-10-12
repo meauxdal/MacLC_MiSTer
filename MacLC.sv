@@ -28,12 +28,12 @@ module emu
 	// unused user-port pins are held at '1 inside sys/mt32pi.sv.
 
     // TV and Ethernet share the core DDRAM port; native builds use clk_sys.
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
     assign DDRAM_CLK = clk_mem;
 `else
     assign DDRAM_CLK = clk_sys;
 `endif
-`ifndef MAC_TV525_DIAG
+`ifndef MAC_TV525
 	assign DDRAM_BURSTCNT = pds_mem_burst;
 	assign DDRAM_ADDR     = pds_mem_addr;
 	assign DDRAM_DIN      = pds_mem_wdata;
@@ -101,7 +101,7 @@ module emu
 		"P1-;",
 		"P1O78,Aspect Ratio,Original,Full Screen,[ARC1],[ARC2];",
 		"P1OCD,Scaling,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
 		"P1-;",
 		"P1-,480i output;",
 		"P1O12,CRT De-flicker,Strong,Mild,Off;",
@@ -595,7 +595,7 @@ module emu
 		.uart_mode(uart_mode)
 	);
 
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
     assign CLK_VIDEO = clk_tv525;
     // Every 27 MHz sample is visible to the framework, including sync edges.
     assign CE_PIXEL = 1'b1;
@@ -603,7 +603,7 @@ module emu
     assign CLK_VIDEO = clk_vid;
     assign CE_PIXEL = v8_ce_pix;
 `endif
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
     // Filter only the captured image; guest video timing stays native.
     wire [23:0] tv_source_rgb;
     wire tv_source_de, tv_source_line, tv_source_frame, tv_source_reset;
@@ -632,7 +632,7 @@ module emu
 `endif
 
 
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
     wire clk_tv525, tv525_locked;
     pll_tv tv525_pll (.refclk(CLK_50M), .rst(1'b0), .outclk_0(clk_tv525), .locked(tv525_locked));
     (* preserve, dont_merge *) reg [2:0] tv_reset_pipe=3'b111;
@@ -710,7 +710,7 @@ module emu
 	wire [7:0] mt32_vga_r = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_r[7:2]} : v8_vga_r;
 	wire [7:0] mt32_vga_g = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_g[7:2]} : v8_vga_g;
 	wire [7:0] mt32_vga_b = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_b[7:2]} : v8_vga_b;
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
     assign {VGA_R,VGA_G,VGA_B} = tv_rgb;
     assign VGA_DE = tv_de;
     assign VGA_HS = tv_hs;
@@ -1275,7 +1275,7 @@ module emu
 		.mem_we    (pds_mem_we),
 		.mem_wdata (pds_mem_wdata),
 		.mem_be    (pds_mem_be),
-		`ifdef MAC_TV525_DIAG
+		`ifdef MAC_TV525
         .mem_rdata (pds_mem_rdata), .mem_rvalid(pds_mem_rvalid), .mem_busy(pds_mem_busy)
 `else
         .mem_rdata (DDRAM_DOUT), .mem_rvalid(DDRAM_DOUT_READY), .mem_busy(DDRAM_BUSY)
@@ -2190,7 +2190,7 @@ module emu
 		.vga_b(v8_vga_b),
 		.de(v8_de),
 		.ce_pix(v8_ce_pix),
-`ifdef MAC_TV525_DIAG
+`ifdef MAC_TV525
         .native_line_start(native_line_start), .native_frame_start(native_frame_start),
         .native_width(native_width), .native_height(native_height),
 `endif

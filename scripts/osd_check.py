@@ -43,7 +43,7 @@ def expand(text, diag):
     active, pieces = True, []
     for line in block.splitlines():
         if '`ifdef' in line:
-            assert line.strip() == '`ifdef MAC_TV525_DIAG'
+            assert line.strip() == '`ifdef MAC_TV525'
             active = diag
         elif '`endif' in line:
             active = True
@@ -226,12 +226,12 @@ def main():
             args.dump_dir.mkdir(parents=True, exist_ok=True)
             (args.dump_dir / f'conf_str_{"480i" if diag else "native"}.txt').write_text(
                 conf + '\n', encoding='utf-8')
-        print(f'PASS: MAC_TV525_DIAG={"defined" if diag else "omitted"}: '
+        print(f'PASS: MAC_TV525={"defined" if diag else "omitted"}: '
               f'{checks} control mappings across root, pages and flat menu; '
               '8/16-row scrolling, Back/reopen, media, bits, config/default fixtures')
     if args.baseline:
         old = subprocess.check_output(['git', 'show', f'{args.baseline}:MacLC.sv'],
-                                      cwd=ROOT).decode('utf-8')
+                                      cwd=ROOT).decode('utf-8').replace('MAC_TV525_DIAG', 'MAC_TV525')
         old_conf = expand(old, True)
         shown = [t for t in drawing(old_conf) if t]
         resolved = selection(old_conf)

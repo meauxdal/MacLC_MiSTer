@@ -29,12 +29,12 @@ if {[catch {
     set tv_enabled 0
     foreach_in_collection assignment [get_all_global_assignments -name VERILOG_MACRO] {
         set value [lindex $assignment 2]
-        if {$value eq "MAC_TV525_DIAG=1"} {set tv_enabled 1}
-        if {[string match "MAC_TV525_DIAG=*" $value] && $value ne "MAC_TV525_DIAG=1"} {
-            error "Conflicting TV diagnostic macro: $value"
+        if {$value eq "MAC_TV525=1"} {set tv_enabled 1}
+        if {[string match "MAC_TV525=*" $value] && $value ne "MAC_TV525=1"} {
+            error "Conflicting TV macro: $value"
         }
     }
-    if {!$tv_enabled} {error "MAC_TV525_DIAG=1 is required for this timing review"}
+    if {!$tv_enabled} {error "MAC_TV525=1 is required for this timing review"}
     set project_sdc 0
     foreach_in_collection assignment [get_all_global_assignments -name SDC_FILE] {
         set value [lindex $assignment 2]

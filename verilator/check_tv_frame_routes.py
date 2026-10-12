@@ -12,7 +12,7 @@ def preprocess(enabled):
         # The Quartus pre-flow generates this file; lint uses a fixed fixture.
         Path(folder,'build_id.v').write_text('`define BUILD_DATE "000000"\n')
         command=['verilator','-E','-I'+folder]
-        if enabled: command.append('-DMAC_TV525_DIAG')
+        if enabled: command.append('-DMAC_TV525')
         command.append('MacLC.sv')
         text=subprocess.check_output(command,cwd=ROOT,text=True)
         text=re.sub(r'//[^\n]*|/\*.*?\*/','',text,flags=re.S)
