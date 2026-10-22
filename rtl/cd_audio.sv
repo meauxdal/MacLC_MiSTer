@@ -1370,28 +1370,6 @@ assign dbg_cdur = {ur_cnt, ur_clks[23:8]};
 
 endmodule
 
-// Minimal simple-dual-port RAM (one write, one registered read) for the
-// single-reader buffers above — scsi_dpram would burn two unused mirror
-// arrays per instance (the map.rpt M10K check applies here; see the
-// 2026-07-07 BRAM-inference lesson: exactly one write statement per array).
-module cd_sdp #(parameter DW = 16, AW = 12)
-(
-	input           clock,
-	input  [AW-1:0] waddr,
-	input  [DW-1:0] wdata,
-	input           wr,
-	input  [AW-1:0] raddr,
-	output reg [DW-1:0] q
-);
-// vram_bram's hardware-proven inference recipe (see rtl/vram_bram.sv):
-// forced "M10K" (overrides the small-RAM heuristic that silently turned the
-// 2 Kbit response planes into ~2000 registers each — fit attempts #1-#3 of
-// this file) + no_rw_check, with write and read in SEPARATE always blocks.
-(* ramstyle = "M10K,no_rw_check" *) reg [DW-1:0] ram [0:(1<<AW)-1];
-always @(posedge clock) if (wr) ram[waddr] <= wdata;
-always @(posedge clock) q <= ram[raddr];
-endmodule
-
 // MLAB variant for the small (2 Kbit) planes. Same contract as cd_sdp; the
 // forced-M10K recipe above exists because AUTO turned these into ~2000
 // registers each — MLAB is the third option that recipe predates: ALM-based

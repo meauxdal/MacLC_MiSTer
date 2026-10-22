@@ -18,24 +18,17 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = ['Pri. disk (ID 0)', 'Disk (ID 1)', 'CD-ROM (ID 3)', 'Floppy', 'Load ROM',
-       'Memory', 'Network interface', 'Machine', 'Video', 'Audio', 'Advanced',
-       'Apply and reset']
+TOP = ['Pri. disk (ID 0)', 'Disk (ID 1)', 'Floppy', 'Load ROM',
+       'Memory', 'Machine', 'Video', 'Advanced', 'Apply and reset']
 PAGES = {1: ['Interrupt (NMI)', 'Clear PRAM and reset'],
          2: ['Monitor', 'Aspect ratio', 'Scale'],
-         4: ['Use MT32-pi', 'Synthesizer', 'Munt ROM', 'SoundFont', 'Show info'],
-         5: ['PRAM image', 'Floppy writes', 'CD-ROM drive', 'Ethernet', 'MAC suffix']}
+         5: ['PRAM image', 'Floppy writes']}
 BITS = {'Aspect ratio': (7, 8), 'Scale': (12, 13),
-        'CRT de-flicker': (1, 2), 'Monitor': (10, 10), 'Memory': (4, 4),
+        'Monitor': (10, 10), 'Memory': (4, 4),
         'Apply and reset': (0, 0), 'Clear PRAM and reset': (6, 6),
-        'Floppy writes': (14, 14), 'CD-ROM drive': (18, 18), 'Ethernet': (19, 19),
-        'Network interface': (36, 37), 'MAC suffix': (32, 35),
-        'Interrupt (NMI)': (5, 5), 'Use MT32-pi': (24, 24),
-        'Synthesizer': (26, 26), 'Munt ROM': (27, 28), 'SoundFont': (29, 31),
-        'Show info': (22, 23)}
+        'Floppy writes': (14, 14), 'Interrupt (NMI)': (5, 5)}
 MEDIA = ['SC0,IMGVHDHDA,Pri. disk (ID 0)', 'SC1,IMGVHDHDA,Disk (ID 1)',
-         'SC4,ISOTO*CUEBINCHD,CD-ROM (ID 3)', 'S6,DSKIMG,Floppy',
-         'F0,ROM,Load ROM', 'SC2,NVR,PRAM image']
+         'S6,DSKIMG,Floppy', 'F0,ROM,Load ROM', 'SC2,NVR,PRAM image']
 
 
 def expand(text, diag):
@@ -126,12 +119,6 @@ def verify_menu(conf, diag, hdmask):
     root = [t for t in drawing(conf) if t]
     assert [label(t) for t in root] == TOP
     expected = dict(PAGES)
-    if diag:
-        expected[2] = expected[2] + ['CRT de-flicker']
-    expected[4] = [name for name in expected[4]
-                   if not (name in ('Synthesizer', 'Show info') and hdmask & 2)
-                   and not (name == 'Munt ROM' and hdmask & 4)
-                   and not (name == 'SoundFont' and hdmask & 8)]
     checks = 0
     for page, flat in [(0, False), *[(page, False) for page in PAGES], (0, True)]:
         physical = drawing(conf, page, flat, hdmask)
@@ -175,19 +162,6 @@ def verify_menu(conf, diag, hdmask):
     assert all(i > last_control for i, t in enumerate(conf.split(';'))
                if t.startswith(('I,', 'V,')))
     return checks
-
-
-def verify_audio_rows(conf):
-    for disabled, synth in [(0, 0), (0, 1), (1, 0), (1, 1)]:
-        mask = (disabled << 1) | ((disabled | synth) << 2) | ((disabled | (not synth)) << 3)
-        rows = drawing(conf, 4, hdmask=mask)
-        assert len(rows) == 5  # title plus four rows, including hidden-row blanks
-        names = [label(t) for t in rows if t]
-        if disabled:
-            assert names == ['Use MT32-pi']
-        else:
-            assert names == ['Use MT32-pi', 'Synthesizer',
-                             'SoundFont' if synth else 'Munt ROM', 'Show info']
 
 
 def verify_sources(directory):
@@ -235,9 +209,7 @@ def verify_configs_and_defaults(conf):
         assert not (folder / name).exists()  # Main zeroes options on missing file
     options = {label(t): t.split(',')[2:] for t in all_controls(conf) if t[0] in 'Oo'}
     for name, value in {'Monitor': '640x480 VGA', 'Memory': '2 MB',
-                        'Floppy writes': 'Off', 'CD-ROM drive': 'Enabled',
-                        'Ethernet': 'Off', 'Network interface': 'eth0',
-                        'MAC suffix': '0'}.items():
+                        'Floppy writes': 'Off'}.items():
         assert options[name][0] == value
 
 
@@ -250,7 +222,7 @@ def verify_pending(text, conf, diag):
             expected.update(range(int(code[0], 36), int(code[-1], 36) + 1))
     block = text.split('localparam [31:0] CFG_MASK =', 1)[1].split(';', 1)[0]
     values = [int(value, 16) for value in re.findall(r"32'h([0-9A-F]+)", block)]
-    mask = values[0] | (values[1] if diag else 0)
+    mask = values[0]
     assert mask == sum(1 << bit for bit in expected)
     assert len(drawing(conf, hdmask=1)) == len(drawing(conf, hdmask=0)) + 1
     # The upstream monitor encoding must also match the ROM's sense IDs.
@@ -267,10 +239,9 @@ def main():
     if args.main_source_dir:
         verify_sources(args.main_source_dir)
         print('PASS: upstream/fork source rules and host network bit ranges')
-    for diag in (False, True):
+    for diag in (False,):
         conf = expand(text, diag)
         checks = sum(verify_menu(conf, diag, mask) for mask in range(16))
-        verify_audio_rows(conf)
         verify_configs_and_defaults(conf)
         verify_pending(text, conf, diag)
         if args.dump_dir:
@@ -283,19 +254,17 @@ def main():
     if args.baseline:
         old = subprocess.check_output(['git', 'show', f'{args.baseline}:MacLC.sv'],
                                       cwd=ROOT).decode('utf-8')
-        for diag in (False, True):
+        for diag in (False,):
             new_tokens = all_controls(expand(text, diag))
             old_tokens = all_controls(expand(old, diag))
             # Labels may change; stored option values and media indices may not.
             def saved_values(tokens):
                 return Counter((t.split(',')[0], tuple(v.replace(' ', '') for v in t.split(',')[2:]))
                                for t in tokens if t[0] in 'Oo')
-            assert not (saved_values(old_tokens) - saved_values(new_tokens))
+            assert not (saved_values(new_tokens) - saved_values(old_tokens))
             media = lambda ts: Counter(tuple(t.split(',')[:2]) for t in ts if t[0] == 'S')
-            assert media(old_tokens) == media(new_tokens)
-            assert Counter(t for t in old_tokens if t.startswith('I,')) == Counter(
-                t for t in new_tokens if t.startswith('I,'))
-        print(f'PASS: {args.baseline} saved option values, media slots/filters and popup strings preserved')
+            assert not (media(new_tokens) - media(old_tokens))
+        print(f'PASS: {args.baseline} remaining saved option values and media slots/filters preserved')
 
 
 if __name__ == '__main__':

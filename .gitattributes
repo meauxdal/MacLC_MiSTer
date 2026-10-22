@@ -24,3 +24,7 @@
 /MacLC.qsf         text eol=lf
 /MacLC.qpf         text eol=lf
 /MacLC.sdc         text eol=lf
+
+# Preserve the existing committed CRLF form of these files.
+/files.qip         -text whitespace=cr-at-eol
+/rtl/swim.v        -text whitespace=cr-at-eol

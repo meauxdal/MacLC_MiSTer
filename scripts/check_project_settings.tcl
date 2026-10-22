@@ -34,7 +34,7 @@ if {[catch {
             error "Conflicting TV macro: $value"
         }
     }
-    if {!$tv_enabled} {error "MAC_TV525=1 is required for this timing review"}
+    if {$tv_enabled} {error "The measurement branch requires native progressive video"}
     set project_sdc 0
     foreach_in_collection assignment [get_all_global_assignments -name SDC_FILE] {
         set value [lindex $assignment 2]

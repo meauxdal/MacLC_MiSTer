@@ -368,7 +368,6 @@ set_global_assignment -name VERILOG_FILE rtl/mfm_track_encoder.v
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/vram_bram.sv
 set_global_assignment -name VERILOG_FILE rtl/pll_video.v
 set_global_assignment -name QIP_FILE sys/pll_cfg.qip
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/cd_audio.sv
 
 # --- m10k-repack tier 1: stop tiny delay-line shifters from eating M10K blocks.
 # The fitter maps these altshift_taps (42-324 bits each) into whole M10K blocks
@@ -383,20 +382,7 @@ set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *HDMI_shad
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *yc_out|phase*
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *dv_de1*
 
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/pds/pds_enet.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/fetch_cache.sv
-# Comment out this assignment to omit 480i hardware and its OSD controls.
-set_global_assignment -name VERILOG_MACRO "MAC_TV525=1"
-# HDMI scales the 480i RGB stream; the framework is unmodified.
-
-# Gray transfers retain explicit delay/skew bounds in MacLC.sdc, so force
-# identification of their asynchronous first stages for metastability analysis.
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|*capture_fifo|wr_gray_meta[*]*
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *crt_tv|*capture_fifo|rd_gray_meta[*]*
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *tv_reset_pipe[0]
-
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *pds_bridge|request_meta
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *pds_bridge|acknowledge_meta
-set_instance_assignment -name SYNCHRONIZER_IDENTIFICATION FORCED -to *tv_mem_reset_meta
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/cd_sdp.sv
 
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

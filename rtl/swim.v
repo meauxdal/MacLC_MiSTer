@@ -391,72 +391,20 @@ module swim
 		.dbg_mfm_stall_cnt(dbg_mfm_stall[7:0])
 	);
 
-	// ★ WRITE_SUPPORT(0): the LC has no external floppy port and this drive
-	// never has media, so its write path could never fire. Instantiated it
-	// still cost a decoder -- see the parameter's comment in floppy.v.
-	floppy #(.WRITE_SUPPORT(0)) floppyExt
-	(
-		.clk(clk),
-		.cep(cep),
-		.cen(cen),
-
-		._reset(_reset),
-		.ca0(ca0),
-		.ca1(ca1),
-		.ca2(ca2),
-		.SEL(effSEL),
-		.lstrb(lstrb),
-		._enable(ism_mode ? ~ism_selonly_ext : ~diskEnableExt),
-		.writeData(dataInLo),          // live bus value, not a register
-		.writeReq(writeReqExt),
-		// WRITE_SUPPORT(0): no write path, so nothing consumes this.
-		.writeMode(1'b0),
-		.writeProtect(writeProtect[1]),
-		.writeBusy(writeBusyExt),
-		.writeUnderrun(writeUnderrunExt),
-		.wrSecValid(),
-		.wrSecNum(),
-		.wrSecAddr(),
-		.wrSdAddr(),
-		.wrSdData(),
-		.wrSdReq(),
-		.wrSdAck(1'b0),
-		.wrCommitDone(),
-		.wrCommitAddr(),
-		.wrSdBufAddr(),
-		.wrSdBufData(),
-		.wrSdBufWr(),
-		.readData(readDataExt),
-		.advanceDriveHead(advanceDriveHead),
-		.newByteReady(newByteReadyExt),
-		.insertDisk(insertDisk[1]),
-		.diskSides(diskSides[1]),
-		.mediaSides(mediaSides[1]),
-		.diskEject(diskEject[1]),
-
-		.motor(diskMotor[1]),
-		.act(diskAct[1]),
-
-		.dskReadAddr(dskReadAddrExt),
-		.dskReadAck(dskReadAckExt),
-		.dskReadData(dskReadData),
-		.ism_active(ism_mode),
-		.ism_action(ism_mode && ism_mode_reg[3]),
-		.ism_sel(ism_devsel_ext),
-		.mfm_disk(diskMFM[1]),
-		.mfm_hd(diskHD[1]),
-		.mfm_byte(mfm_byte_ext),
-		.mfm_sector(mfm_sector_ext),
-		// WRITE_SUPPORT(0) and never any media: the stream is tied off
-		.mfm_wr_byte(8'h00),
-		.mfm_wr_mark(1'b0),
-		.mfm_wr_stb(1'b0),
-		.mfm_wr_anchor(5'd1),
-		.mfm_wr_anchor_ok(1'b0),
-		.mfm_mark(mfm_mark_ext),
-		.mfm_crc0(mfm_crc0_ext),
-		.mfm_stb(mfm_stb_ext)
-	);
+	// No external drive: the bus floats high and never supplies data.
+	assign readDataExt = 8'hFF;
+	assign newByteReadyExt = 1'b0;
+	assign writeBusyExt = 1'b0;
+	assign writeUnderrunExt = 1'b0;
+	assign diskEject[1] = 1'b0;
+	assign diskMotor[1] = 1'b0;
+	assign diskAct[1] = 1'b0;
+	assign dskReadAddrExt = 22'd0;
+	assign mfm_byte_ext = 8'd0;
+	assign mfm_sector_ext = 5'd0;
+	assign mfm_mark_ext = 1'b0;
+	assign mfm_crc0_ext = 1'b0;
+	assign mfm_stb_ext = 1'b0;
 
 	wire [7:0] readData = selectExternalDrive ? readDataExt : readDataInt;
 	wire newByteReady = selectExternalDrive ? newByteReadyExt : newByteReadyInt;

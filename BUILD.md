@@ -8,34 +8,23 @@ edits). For the GUI, just open `MacLC.qpf` in Quartus and run a full compilation
 The build **never touches the MiSTer** — deploying is a separate step (see
 [Deploy](#deploy-optional-separate-step)).
 
-## Optional 480i support
+## Apple IIe card measurement branch
 
-480i support is enabled by this assignment in `MacLC.qsf`:
+This branch omits CD-ROM/audio, the second floppy, 480i/de-flicker,
+Ethernet, MT32-pi and BlueSCSI Toolbox hardware. Native progressive video,
+two SCSI hard disks, PRAM and the internal floppy remain. `sys` is unchanged.
+Media slot numbers are retained for saved mounts; unused slots are tied off.
 
-```tcl
-set_global_assignment -name VERILOG_MACRO "MAC_TV525=1"
-```
-
-Comment out or remove the assignment before building to omit the 480i hardware
-and its CRT de-flicker OSD control. Do not set the macro to `0`:
-the RTL uses `ifdef`, which checks whether it is defined, regardless of its value.
-In the Quartus GUI, remove the macro from the project's Verilog HDL macro settings.
-
-With support included, both analog and scaled HDMI use 480i from startup.
-CRT de-flicker selects Strong, Mild or Off on reset. There is no runtime Native/480i toggle.
-Remove the macro and rebuild for native progressive output.
-
-The standard MiSTer framework supplies OSD, RGB/component conversion and sync.
-For CRT output use unscaled analog video; select component or composite sync in
-MiSTer configuration as required by the display. HDMI direct video carries 480i;
-use scaled HDMI for a progressive HDMI display.
+Compare Quartus fitter logic, register, memory-bit and M10K totals and timing
+against parent `814a7e0`, using the same tool version, device and seed.
+Boot the IIe software and check floppy access before trusting hardware results.
 
 ### Offline OSD check
 
-Run `python scripts/osd_check.py --baseline upstream/master` to check both
-expanded menu variants, root and submenu selection, hide masks, flat mode,
+Run `python scripts/osd_check.py --baseline 814a7e0` to check the native
+menu, root and submenu selection, hide masks, flat mode,
 scrolling, media slots and status ranges without building hardware. The baseline
-check verifies that upstream saved option values and media mappings survive.
+check verifies that the remaining saved option values and media mappings survive.
 The check models Main's drawing and selection separately; it does not execute
 Main or replace a hardware OSD check. Its source revision references and optional
 `--main-source-dir` cross-check are documented in the script.

@@ -273,7 +273,6 @@ module addrController_top(
 
 	// Floppy disk addresses: byte offset → SDRAM word
 	wire [22:0] dsk_int_sdram_word = 23'h600000 + {2'b0, dskReadAddrInt[21:1]};
-	wire [22:0] dsk_ext_sdram_word = 23'h700000 + {2'b0, dskReadAddrExt[21:1]};
 
 	// CPU address mux (selects based on address decode)
 	wire [22:0] cpu_sdram_word = selectVRAM ? vram_sdram_word :
@@ -355,7 +354,7 @@ module addrController_top(
 	// the floppy path is provably idle.
 	wire flp_ok = !dio_download && flp_present;
 	assign dskReadAckInt = (extraBusControl == 1'b1) && (extra_slot_count == 0) && flp_ok;
-	assign dskReadAckExt = (extraBusControl == 1'b1) && (extra_slot_count == 1) && flp_ok;
+	assign dskReadAckExt = 1'b0;
 	// extra_slot_count == 2 is now idle (legacy sound DMA removed)
 
 	// flp_guard: a pending floppy window fires this rotation — hold off new
@@ -365,13 +364,12 @@ module addrController_top(
 	// (not just its last 3 ticks) costs the CPU at most one extra slot only
 	// while a floppy fetch is actually pending, and makes the guard's rise
 	// race-free against the sequencer's clk_64 sampling.
-	assign flp_guard = ((extra_slot_count == 2'd0) || (extra_slot_count == 2'd1)) &&
+	assign flp_guard = (extra_slot_count == 2'd0) &&
 	                   ((busCycle == 2'b01) || (busCycle == 2'b10)) && flp_ok;
 
 	// Final SDRAM word address output
 	assign memoryAddr =
 		dskReadAckInt ? dsk_int_sdram_word :
-		dskReadAckExt ? dsk_ext_sdram_word :
 		addr_mux;
 
 	// ============================================================

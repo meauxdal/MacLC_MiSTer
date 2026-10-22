@@ -16,10 +16,10 @@ git diff --binary | Out-File (Join-Path $runPath 'source-diff.txt') -Encoding ut
 # Snapshot changed files, including new review scripts, before Quartus can
 # rewrite anything. Keep their relative paths alongside the source diff.
 $sourcePath = Join-Path $runPath 'sources'
-foreach ($relative in @('MacLC.qsf', 'MacLC.sdc', 'MacLC.sv',
-    'rtl/tv525_video.sv', 'rtl/tv_ddram_bridge.sv', 'rtl/tv_ddram_cdc.sv', 'rtl/tv_capture_fifo.sv',
-    'rtl/tv_buffered_canvas.sv', 'rtl/tv_frame_store.sv',
-    'scripts/check_project_settings.tcl', 'scripts/check_tv525_timing.tcl',
+foreach ($relative in @('MacLC.qsf', 'MacLC.sdc', 'MacLC.sv', 'files.qip',
+    'rtl/addrController_top.v', 'rtl/dataController_top.sv', 'rtl/ncr5380.sv',
+    'rtl/swim.v', 'rtl/asc.sv', 'rtl/cd_sdp.sv',
+    'scripts/check_project_settings.tcl', 'scripts/check_native_timing.tcl',
     'scripts/run_timing_review.ps1')) {
     $destination = Join-Path $sourcePath $relative
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
@@ -50,5 +50,5 @@ if ($fitReport.LastWriteTime -lt $compileStarted -or
     !(Select-String -LiteralPath $fitReport.FullName -Pattern 'Fitter Status\s*;\s*Successful' -Quiet)) {
     throw "No fresh successful fitter report. Stop here and inspect $runPath/compile.log."
 }
-Invoke-ReviewStage 'timing_gate' (Join-Path $QuartusBin 'quartus_sta.exe') @('-t', 'scripts/check_tv525_timing.tcl')
+Invoke-ReviewStage 'timing_gate' (Join-Path $QuartusBin 'quartus_sta.exe') @('-t', 'scripts/check_native_timing.tcl')
 Write-Host "REVIEW complete: inspect diagnostics and unconstrained paths as well as gate results. Reports: $runPath"

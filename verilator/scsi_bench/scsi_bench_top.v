@@ -74,14 +74,15 @@ assign io_lba_1 = io_lba[1];
 assign sd_buff_din_0 = sd_buff_din[0];
 assign sd_buff_din_1 = sd_buff_din[1];
 
+assign tb_lba = 32'd0;
+assign tb_rd = 1'b0;
+assign tb_wr = 1'b0;
+assign tb_buff_din = 16'd0;
+
 ncr5380 #(.DEVS(2)) ncr
 (
 	.clk(clk),
 	.reset(reset),
-	.cd_enable(1'b1),      // CD target (ID 3) selectable — cdvol mode pokes it
-	.cd_img_mounted(1'b1), // virtual disc present: media-gated CD commands
-	                       // (0x42 subqfmt mode) reach their own sense paths
-	                       // instead of CHECKing NOT READY/no-disc first
 	.bus_cs(bus_cs),
 	.bus_rs(bus_rs),
 	.ior(ior),
@@ -105,13 +106,6 @@ ncr5380 #(.DEVS(2)) ncr
 	.sd_buff_dout(sd_buff_dout),
 	.sd_buff_din(sd_buff_din),
 	.sd_buff_wr(sd_buff_wr),
-
-	.tb_mounted(tb_mounted),
-	.tb_lba(tb_lba),
-	.tb_rd(tb_rd),
-	.tb_wr(tb_wr),
-	.tb_ack(tb_ack),
-	.tb_buff_din(tb_buff_din),
 
 	.dbg_scsi(),
 	.dbg_scsi2(),
