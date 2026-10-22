@@ -6,7 +6,7 @@ loops. Reference revisions: upstream 42e64002280578e01346d0afa37851ea49c24427
 and danifunker/Main_MiSTer b308dbfde2e97a9434b2064793616334b0061834.
 This checks this core's grammar subset, not arbitrary MiSTer CONF_STR syntax.
 Use --main-source-dir to check downloaded menu.cpp/user_io.cpp and fork_ copies
-against the modeled rules. Use --baseline c9e0b0d to demonstrate the old failure.
+against the modeled rules. --baseline checks saved values against upstream.
 It does not execute Main or establish the version deployed on a physical box.
 """
 import argparse
@@ -18,23 +18,24 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = ['Mount Floppy', 'Mount SCSI Disk 0', 'Mount SCSI Disk 1', 'Mount CD-ROM',
-       'Monitor', 'Memory', 'Apply and Reset', 'Video', 'System', 'MT32-pi', 'Reset']
-PAGES = {1: ['Aspect Ratio', 'Scaling'],
-         2: ['Mount PRAM', 'Clear PRAM and Reset', 'Floppy Writes', 'CD-ROM Drive',
-             'Ethernet', 'Network Interface', 'MAC Suffix', 'Interrupt (NMI)'],
-         3: ['Use MT32-pi', 'Synthesizer', 'Munt ROM', 'SoundFont', 'Show Info']}
-BITS = {'Aspect Ratio': (7, 8), 'Scaling': (12, 13), 'Analog Output': (3, 3),
-        'CRT De-flicker': (1, 2), 'Monitor': (10, 10), 'Memory': (4, 4),
-        'Apply and Reset': (0, 0), 'Reset': (0, 0), 'Clear PRAM and Reset': (6, 6),
-        'Floppy Writes': (14, 14), 'CD-ROM Drive': (18, 18), 'Ethernet': (19, 19),
-        'Network Interface': (36, 37), 'MAC Suffix': (32, 35),
+TOP = ['Pri. disk (ID 0)', 'Disk (ID 1)', 'CD-ROM (ID 3)', 'Floppy', 'Load ROM',
+       'Memory', 'Network interface', 'Machine', 'Video', 'Audio', 'Advanced',
+       'Apply and reset']
+PAGES = {1: ['Interrupt (NMI)', 'Clear PRAM and reset'],
+         2: ['Monitor', 'Aspect ratio', 'Scale'],
+         4: ['Use MT32-pi', 'Synthesizer', 'Munt ROM', 'SoundFont', 'Show info'],
+         5: ['PRAM image', 'Floppy writes', 'CD-ROM drive', 'Ethernet', 'MAC suffix']}
+BITS = {'Aspect ratio': (7, 8), 'Scale': (12, 13),
+        'CRT de-flicker': (1, 2), 'Monitor': (10, 10), 'Memory': (4, 4),
+        'Apply and reset': (0, 0), 'Clear PRAM and reset': (6, 6),
+        'Floppy writes': (14, 14), 'CD-ROM drive': (18, 18), 'Ethernet': (19, 19),
+        'Network interface': (36, 37), 'MAC suffix': (32, 35),
         'Interrupt (NMI)': (5, 5), 'Use MT32-pi': (24, 24),
         'Synthesizer': (26, 26), 'Munt ROM': (27, 28), 'SoundFont': (29, 31),
-        'Show Info': (22, 23)}
-MEDIA = ['S6,DSKIMG,Mount Floppy', 'SC0,IMGVHDHDA,Mount SCSI Disk 0',
-         'SC1,IMGVHDHDA,Mount SCSI Disk 1', 'SC4,ISOTO*CUEBINCHD,Mount CD-ROM',
-         'SC2,NVR,Mount PRAM']
+        'Show info': (22, 23)}
+MEDIA = ['SC0,IMGVHDHDA,Pri. disk (ID 0)', 'SC1,IMGVHDHDA,Disk (ID 1)',
+         'SC4,ISOTO*CUEBINCHD,CD-ROM (ID 3)', 'S6,DSKIMG,Floppy',
+         'F0,ROM,Load ROM', 'SC2,NVR,PRAM image']
 
 
 def expand(text, diag):
@@ -55,13 +56,18 @@ def expand(text, diag):
     return ''.join(pieces)
 
 
-def drawing(conf, page=0, flat=False):
+def drawing(conf, page=0, flat=False, hdmask=0):
     # Main MENU_GENERIC_MAIN2: recognized controls increment selentry;
     # separators increment only the physical row. I/V/v do neither.
     rows = []
     for token in conf.split(';')[2:]:
         if not token:
             continue
+        hidden = False
+        while token[0] in 'Hh':
+            flag = bool(hdmask & (1 << int(token[1], 36)))
+            hidden |= flag if token[0] == 'H' else not flag
+            token = token[2:]
         eligible = page == 0
         if token.startswith('P') and token[2] != ',':
             n = int(token[1])
@@ -69,11 +75,11 @@ def drawing(conf, page=0, flat=False):
             token = token[2:]
             if flat and not page and token.startswith('-'):
                 eligible = False
-        if not eligible:
+        if hidden or not eligible:
             continue
         kind = token[0]
-        assert kind in 'PSORo-IVv', f'Unmodeled drawing token: {token}'
-        if kind in 'PSORo':
+        assert kind in 'PFSORo-IVv', f'Unmodeled drawing token: {token}'
+        if kind in 'PFSORo':
             if kind == 'P' and flat and rows and rows[-1] is not None:
                 rows.append(None)  # flat-page title separation
             rows.append(token)
@@ -82,12 +88,17 @@ def drawing(conf, page=0, flat=False):
     return rows
 
 
-def selection(conf, page=0, flat=False):
+def selection(conf, page=0, flat=False, hdmask=0):
     # Main MENU_GENERIC_MAIN3: generic ASCII eligibility, NOT drawing's list.
     entries = []
     for token in conf.split(';')[2:]:
         if not token:
             continue
+        hidden = False
+        while token[0] in 'Hh':
+            flag = bool(hdmask & (1 << int(token[1], 36)))
+            hidden |= flag if token[0] == 'H' else not flag
+            token = token[2:]
         inpage = not page
         if token[0] == 'P' and token[2] != ',':
             n = ord(token[1]) - ord('0')
@@ -96,27 +107,36 @@ def selection(conf, page=0, flat=False):
             if not page and n and not flat:
                 inpage = False
             token = token[2:]
-        if not inpage or token[0] < 'A' or token[0] == 'f':
+        if hidden or not inpage or token[0] < 'A' or token[0] == 'f':
             continue
         entries.append(token)
     return entries
 
 
 def label(token):
-    return token.split(',')[2 if token.startswith('S') else 1]
+    return token.split(',')[2 if token[0] in 'SF' else 1]
 
 
-def verify_menu(conf, diag):
+def all_controls(conf):
+    return list(dict.fromkeys(t for mask in range(16)
+                             for t in selection(conf, 0, True, mask)))
+
+
+def verify_menu(conf, diag, hdmask):
     root = [t for t in drawing(conf) if t]
     assert [label(t) for t in root] == TOP
     expected = dict(PAGES)
     if diag:
-        expected[1] = expected[1] + ['CRT De-flicker']
+        expected[2] = expected[2] + ['CRT de-flicker']
+    expected[4] = [name for name in expected[4]
+                   if not (name in ('Synthesizer', 'Show info') and hdmask & 2)
+                   and not (name == 'Munt ROM' and hdmask & 4)
+                   and not (name == 'SoundFont' and hdmask & 8)]
     checks = 0
-    for page, flat in [(0, False), (1, False), (2, False), (3, False), (0, True)]:
-        physical = drawing(conf, page, flat)
+    for page, flat in [(0, False), *[(page, False) for page in PAGES], (0, True)]:
+        physical = drawing(conf, page, flat, hdmask)
         controls = [t for t in physical if t]
-        actions = selection(conf, page, flat)
+        actions = selection(conf, page, flat, hdmask)
         if page:
             assert [label(t) for t in controls] == expected[page]
         # Test all indices, including controls beyond the first screen.
@@ -131,7 +151,7 @@ def verify_menu(conf, diag):
                 elif row >= screen_size:
                     firstmenu += row - screen_size + 1
                 assert 0 <= physical.index(control) - firstmenu < screen_size
-                assert selection(conf, page, flat)[index] == control
+                assert selection(conf, page, flat, hdmask)[index] == control
             checks += 1
         # Main intercepts menusub_last as Back/Exit BEFORE token traversal.
         back_index = len(controls)
@@ -140,10 +160,10 @@ def verify_menu(conf, diag):
             parent = next(i for i, t in enumerate(root) if t.startswith(f'P{page},'))
             assert selection(conf)[parent] == root[parent]
             # Back restores the parent index; re-enter starts submenu at zero.
-            assert selection(conf, page)[0] == controls[0]
-        assert drawing(conf, page, flat) == physical  # close/reopen is stable
-    assert [t for t in selection(conf, 0, True) if t.startswith('S')] == MEDIA
-    for token in selection(conf, 0, True):
+            assert selection(conf, page, hdmask=hdmask)[0] == controls[0]
+        assert drawing(conf, page, flat, hdmask) == physical  # close/reopen is stable
+    assert [t for t in selection(conf, 0, True, hdmask) if t[0] in 'SF'] == MEDIA
+    for token in all_controls(conf):
         if token[0] in 'ORo':
             code = token.split(',')[0][1:]
             bits = [int(c, 36) + (32 if token[0] == 'o' else 0) for c in code]
@@ -151,10 +171,23 @@ def verify_menu(conf, diag):
     assert conf.split(';')[:2] == ['MACLC', 'UART57600:115200,MIDI']
     assert not any(t.startswith('v') for t in conf.split(';'))
     last_control = max(i for i, t in enumerate(conf.split(';')[2:], 2)
-                       if t and t[0] in 'PSORo')
+                       if t and (t[0] in 'PFSORo' or t.startswith(('H', 'h'))))
     assert all(i > last_control for i, t in enumerate(conf.split(';'))
                if t.startswith(('I,', 'V,')))
     return checks
+
+
+def verify_audio_rows(conf):
+    for disabled, synth in [(0, 0), (0, 1), (1, 0), (1, 1)]:
+        mask = (disabled << 1) | ((disabled | synth) << 2) | ((disabled | (not synth)) << 3)
+        rows = drawing(conf, 4, hdmask=mask)
+        assert len(rows) == 5  # title plus four rows, including hidden-row blanks
+        names = [label(t) for t in rows if t]
+        if disabled:
+            assert names == ['Use MT32-pi']
+        else:
+            assert names == ['Use MT32-pi', 'Synthesizer',
+                             'SoundFont' if synth else 'Munt ROM', 'Show info']
 
 
 def verify_sources(directory):
@@ -200,18 +233,34 @@ def verify_configs_and_defaults(conf):
         assert status == 0x4010  # existing 10MB/write-On settings retained
         (folder / name).unlink()
         assert not (folder / name).exists()  # Main zeroes options on missing file
-    options = {label(t): t.split(',')[2:] for t in selection(conf, 0, True) if t[0] in 'Oo'}
-    for name, value in {'Monitor': '512x384 12in', 'Memory': '2 MB',
-                        'Floppy Writes': 'Off', 'CD-ROM Drive': 'Enabled',
-                        'Ethernet': 'Off', 'Network Interface': 'eth0',
-                        'MAC Suffix': '0'}.items():
+    options = {label(t): t.split(',')[2:] for t in all_controls(conf) if t[0] in 'Oo'}
+    for name, value in {'Monitor': '640x480 VGA', 'Memory': '2 MB',
+                        'Floppy writes': 'Off', 'CD-ROM drive': 'Enabled',
+                        'Ethernet': 'Off', 'Network interface': 'eth0',
+                        'MAC suffix': '0'}.items():
         assert options[name][0] == value
+
+
+def verify_pending(text, conf, diag):
+    # Derive pending bits from the menu, excluding the fields consumed by Main.
+    expected = set()
+    for token in all_controls(conf):
+        if token[0] == 'O':
+            code = token.split(',')[0][1:]
+            expected.update(range(int(code[0], 36), int(code[-1], 36) + 1))
+    block = text.split('localparam [31:0] CFG_MASK =', 1)[1].split(';', 1)[0]
+    values = [int(value, 16) for value in re.findall(r"32'h([0-9A-F]+)", block)]
+    mask = values[0] | (values[1] if diag else 0)
+    assert mask == sum(1 << bit for bit in expected)
+    assert len(drawing(conf, hdmask=1)) == len(drawing(conf, hdmask=0)) + 1
+    # The upstream monitor encoding must also match the ROM's sense IDs.
+    assert "v8_monitor_id = cfg[10] ? 4'h2 : 4'h6;" in text
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--main-source-dir', type=Path)
-    parser.add_argument('--baseline', help='Git revision of the broken menu (e.g. c9e0b0d)')
+    parser.add_argument('--baseline', help='Git revision to check saved option values against')
     parser.add_argument('--dump-dir', type=Path, help='Save exact expanded CONF_STR variants')
     args = parser.parse_args()
     text = (ROOT / 'MacLC.sv').read_text(encoding='utf-8')
@@ -220,38 +269,33 @@ def main():
         print('PASS: upstream/fork source rules and host network bit ranges')
     for diag in (False, True):
         conf = expand(text, diag)
-        checks = verify_menu(conf, diag)
+        checks = sum(verify_menu(conf, diag, mask) for mask in range(16))
+        verify_audio_rows(conf)
         verify_configs_and_defaults(conf)
+        verify_pending(text, conf, diag)
         if args.dump_dir:
             args.dump_dir.mkdir(parents=True, exist_ok=True)
             (args.dump_dir / f'conf_str_{"480i" if diag else "native"}.txt').write_text(
                 conf + '\n', encoding='utf-8')
         print(f'PASS: MAC_TV525={"defined" if diag else "omitted"}: '
               f'{checks} control mappings across root, pages and flat menu; '
-              '8/16-row scrolling, Back/reopen, media, bits, config/default fixtures')
+              'hide masks, 8/16-row scrolling, Back/reopen, media, pending bits, config/default fixtures')
     if args.baseline:
         old = subprocess.check_output(['git', 'show', f'{args.baseline}:MacLC.sv'],
-                                      cwd=ROOT).decode('utf-8').replace('MAC_TV525_DIAG', 'MAC_TV525')
-        old_conf = expand(old, True)
-        shown = [t for t in drawing(old_conf) if t]
-        resolved = selection(old_conf)
-        failures = [(label(t), resolved[i]) for i, t in enumerate(shown) if resolved[i] != t]
-        assert failures[0] == ('Mount Floppy', 'v,1')
-        assert ('System', 'SC4,ISOTO*CUEBINCHD,Mount CD-ROM') in failures
-        print(f'PASS negative control {args.baseline}: {len(failures)} wrong root mappings; '
-              'Mount Floppy -> v,1; System -> CD-ROM')
-        # All changes are inside CONF_STR: hardware/reset/PRAM logic identical.
-        assert text.split('\n\t};', 1)[1] == old.split('\n\t};', 1)[1]
-        assert text.split('localparam CONF_STR', 1)[0] == old.split('localparam CONF_STR', 1)[0]
+                                      cwd=ROOT).decode('utf-8')
         for diag in (False, True):
-            new_tokens = selection(expand(text, diag), 0, True)
-            old_tokens = selection(expand(old, diag), 0, True)
-            # Compare tokens without page wrappers: ranges, values, filters and
-            # persistence flags must survive the reorganization byte-for-byte.
-            unchanged = lambda ts: Counter(t for t in ts if t[0] in 'SORoIV')
-            assert unchanged(new_tokens) == unchanged(old_tokens)
-        print('PASS: all RTL after CONF_STR unchanged, including reset latches/PRAM/media wiring')
-        print('PASS: baseline option values/ranges, media modifiers/filters and popup strings preserved')
+            new_tokens = all_controls(expand(text, diag))
+            old_tokens = all_controls(expand(old, diag))
+            # Labels may change; stored option values and media indices may not.
+            def saved_values(tokens):
+                return Counter((t.split(',')[0], tuple(v.replace(' ', '') for v in t.split(',')[2:]))
+                               for t in tokens if t[0] in 'Oo')
+            assert not (saved_values(old_tokens) - saved_values(new_tokens))
+            media = lambda ts: Counter(tuple(t.split(',')[:2]) for t in ts if t[0] == 'S')
+            assert media(old_tokens) == media(new_tokens)
+            assert Counter(t for t in old_tokens if t.startswith('I,')) == Counter(
+                t for t in new_tokens if t.startswith('I,'))
+        print(f'PASS: {args.baseline} saved option values, media slots/filters and popup strings preserved')
 
 
 if __name__ == '__main__':

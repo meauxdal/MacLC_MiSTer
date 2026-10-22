@@ -32,10 +32,11 @@ for required in ('assignCLK_VIDEO=clk_vid;', 'assignCE_PIXEL=v8_ce_pix;',
                  'assignVGA_F1=0;', 'assignDDRAM_RD=pds_mem_rd;', '.mem_rvalid(DDRAM_DOUT_READY)'):
     assert required in native,required
 assert 'tv525_videocrt_tv(' not in native
+assert 'source files.qip' in (ROOT/'MacLC.qsf').read_text()
 for name in ('MacLC.qsf','files.qip'):
     sources=(ROOT/name).read_text()
     for rtl in ('tv525_video.sv','tv_ddram_bridge.sv'):
-        assert 'rtl/'+rtl in sources
+        assert sources.count('rtl/'+rtl) == (1 if name == 'files.qip' else 0)
     for rtl in ('tv525_platform.sv','tv525_output.sv','tv_osd.sv','tv_component.sv','tv_component_pins.sv'):
         assert 'rtl/'+rtl not in sources
 print('PASS stock framework, dedicated 480i routes, native build, DDRAM ownership and source lists')

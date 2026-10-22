@@ -84,7 +84,7 @@ tv_frame_pipeline pipeline (
     .a_read(1'b0), .a_write(1'b0), .a_waitrequest(), .a_readdatavalid(), .a_readdata(),
     .address(address), .burstcount(burstcount), .writedata(writedata), .byteenable(byteenable),
     .read(read), .write(write), .waitrequest(waitrequest), .readdatavalid(readdatavalid), .readdata(readdata),
-    .tag_raw(tag_raw), .tag_out(tag_out), .rgb_raw(rgb_raw), 
+    .tag_raw(tag_raw), .tag_out(tag_out), .rgb_raw(rgb_raw),
     .published(published), .dropped(), .repeated(), .overflows(overflows), .underruns(underruns)
 );
 endmodule

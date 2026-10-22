@@ -57,7 +57,7 @@ module emu
 	assign HDMI_BLACKOUT = 0;
 	assign HDMI_BOB_DEINT = 0;
 
-	wire [1:0] ar = status[8:7];
+	wire [1:0] ar = cfg[8:7];
 	video_freak video_freak
 	(
 		.*,
@@ -77,67 +77,61 @@ module emu
 		.ARY((!ar) ? 12'd3 : 12'd0),
 		.CROP_SIZE(0),
 		.CROP_OFF(0),
-		.SCALE(status[13:12])
+		.SCALE(cfg[13:12])
 	);
 	
 	`include "build_id.v"
 	localparam CONF_STR = {
 		"MACLC;UART57600:115200,MIDI;",
 		"-;",
-		"S6,DSKIMG,Mount Floppy;",
-		"SC0,IMGVHDHDA,Mount SCSI Disk 0;",
-		"SC1,IMGVHDHDA,Mount SCSI Disk 1;",
-		// CD-ROM (SCSI ID 3). ISO/TOAST (TO* matches .toast) are raw
-		// 2048-byte images and work today; CUE/BIN/CHD are listed for the
-		// Main_MiSTer translation layer (docs/plan_scsi_cdrom.md Phase 2) —
-		// on a stock Main a 2048-byte-sector .bin also works mounted directly.
-		"SC4,ISOTO*CUEBINCHD,Mount CD-ROM;",
+		"SC0,IMGVHDHDA,Pri. disk (ID 0);",
+		"SC1,IMGVHDHDA,Disk (ID 1);",
+		"SC4,ISOTO*CUEBINCHD,CD-ROM (ID 3);",
+		"S6,DSKIMG,Floppy;",
+		"F0,ROM,Load ROM;",
 		"-;",
-		"OA,Monitor,512x384 12in,640x480 VGA;",
 		"O4,Memory,2 MB,10 MB;",
-		"R0,Apply and Reset;",
+		"o45,Network interface,eth0,tap0,macvlan,eth1;",
 		"-;",
-		"P1,Video;",
+		"P1,Machine;",
+		"P2,Video;",
+		"P4,Audio;",
+		"P5,Advanced;",
+		"-;",
+		"h0-,Changes pending;",
+		"R0,Apply and reset;",
+
+		"P1R5,Interrupt (NMI);",
 		"P1-;",
-		"P1O78,Aspect Ratio,Original,Full Screen,[ARC1],[ARC2];",
-		"P1OCD,Scaling,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
+		"P1R6,Clear PRAM and reset;",
+
+		"P2OA,Monitor,640x480 VGA,512x384 12in;",
+		"P2O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
+		"P2OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
 `ifdef MAC_TV525
-		"P1-;",
-		"P1-,480i output;",
-		"P1O12,CRT De-flicker,Strong,Mild,Off;",
+		"P2-;",
+		"P2-,480i output;",
+		"P2O12,CRT de-flicker,Strong,Mild,Off;",
 `endif
-		"P2,System;",
-		"P2-;",
-		"P2SC2,NVR,Mount PRAM;",
-		"P2R6,Clear PRAM and Reset;",
-		"P2-;",
-		// Default OFF, and it must stay that way: the ROM's write primitive
-		// polls the IWM handshake in an UNBOUNDED loop, so the failure mode of
-		// a write bug is a HUNG machine, not a failed write. Gated further in
-		// flp_int_wp below - a read-only mount stays write-protected whatever
-		// this says; a DC42 container does not.
-		"P2OE,Floppy Writes,Off,On;",
-		"P2OI,CD-ROM Drive,Enabled,Disabled;",
-		"P2-;",
-		// Default OFF for distribution (2026-08-24): the ethernet card needs
-		// the paired Main (releases/MiSTer) — with an older ethernet Main a
-		// card-ON boot hangs, so users opt in via the OSD after installing
-		// the Main. Bit clear (0) = first entry = Off; ena_osd below is the
-		// matching un-inverted status[19].
-		"P2OJ,Ethernet,Off,On;",
-		"P2o45,Network Interface,eth0,tap0,macvlan,eth1;",
-		"P2o03,MAC Suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
-		"P2-;",
-		"P2R5,Interrupt (NMI);",
-		"P3,MT32-pi;",
-		"P3-;",
-		"P3OO,Use MT32-pi,Yes,No;",
-		"P3OQ,Synthesizer,Munt,FluidSynth;",
-		"P3ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
-		"P3OTV,SoundFont,0,1,2,3,4,5,6,7;",
-		"P3OMN,Show Info,No,Yes,LCD-On,LCD-Auto;",
-		"-;",
-		"R0,Reset;",
+
+		"P4-,MT32-pi;",
+		"P4OO,Use MT32-pi,Yes,No;",
+		"H1P4OQ,Synthesizer,Munt,FluidSynth;",
+		"h1P4-;",
+		"H2P4ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
+		"H3P4OTV,SoundFont,0,1,2,3,4,5,6,7;",
+		"h1P4-;",
+		"H1P4OMN,Show info,No,Yes,LCD-On,LCD-Auto;",
+		"h1P4-;",
+
+		"P5SC2,NVR,PRAM image;",
+		"P5-;",
+		// Floppy writes and Ethernet remain opt-in.
+		"P5OE,Floppy writes,Off,On;",
+		"P5OI,CD-ROM drive,Enabled,Disabled;",
+		"P5-;",
+		"P5OJ,Ethernet,Off,On;",
+		"P5o03,MAC suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
 		"I,",
 		"MT32-pi: SoundFont #0,",
 		"MT32-pi: SoundFont #1,",
@@ -185,10 +179,9 @@ module emu
 	reg rom_loaded = 1'b0;
 	always @(posedge clk_sys) if (dio_download && dio_index == 0) rom_loaded <= 1'b1;
 
-	reg       status_mem = 1'b1;
 	localparam [1:0] status_cpu = 2'b10; // 68020
 	reg       n_reset = 0;
-	reg       pram_force_reset = 1'b0;  // "Reset PRAM & Core" -> system reset pulse
+	reg       pram_force_reset = 1'b0;  // PRAM clear -> system reset pulse
 	wire      egret_reset_680x0_w;      // Egret HC05 holding 68k in reset (#3 probe)
 	// Mac LC always runs at C15M (~15.67 MHz) - use 16 MHz clock enables
 	always @(posedge clk_sys) begin
@@ -212,13 +205,23 @@ module emu
 			end
 			else if(rst_cnt) begin
 				rst_cnt    <= rst_cnt - 1'd1;
-				status_mem <= status[4];
 			end
 			else begin
 				n_reset <= 1;
 			end
 		end
 	end
+
+	// Apply machine settings only while reset is asserted. Host network bits stay live.
+	reg [31:0] cfg = 0;
+	always @(posedge clk_sys) if (~n_reset) cfg <= status;
+	// OSD settings only; exclude unused bits and momentary actions.
+	localparam [31:0] CFG_MASK = 32'hFDCC7590
+`ifdef MAC_TV525
+		| 32'h00000006
+`endif
+	;
+	wire osd_pending = |((status ^ cfg) & CFG_MASK);
 
 	///////////////////////////////////////////////////
 
@@ -314,10 +317,8 @@ module emu
 	assign sd_buff_din[VD_CDROM] = cd_buff_din;
 	wire        cd_ack     = sd_ack[VD_CDROM];
 	wire        cd_mounted = img_mounted[VD_CDROM];
-	// OSD "CD-ROM Drive" option (OI / status[18], 0 = Enabled). Disabling
-	// makes ID 3 vanish from the bus entirely — the pre-CD baseline, kept as
-	// a hardware A/B lever given the SCSI wedge history.
-	wire        cd_enable  = ~status[18];
+	// Disabling the CD-ROM removes SCSI ID 3 at the next reset.
+	wire        cd_enable  = ~cfg[18];
 	wire        ioctl_write;
 	reg         ioctl_wait = 0;
 	wire [10:0] ps2_key;
@@ -555,6 +556,7 @@ module emu
 
 		.buttons(buttons),
 		.status(status),
+		.status_menumask({12'd0, status[24] | ~status[26], status[24] | status[26], status[24], osd_pending}),
 
 		// MT32-pi "Show Info = Yes" OSD popup (CONF_STR "I," strings, 1-based)
 		.info_req(mt32_info_req),
@@ -609,9 +611,9 @@ module emu
     wire tv_source_de, tv_source_line, tv_source_frame, tv_source_reset;
     wire [9:0] tv_source_width;
     wire [8:0] tv_source_height;
-    wire [1:0] tv_filter_mode = status[2:1] == 2'd0 ? 2'd2 :
-                                status[2:1] == 2'd1 ? 2'd1 :
-                                status[2:1] == 2'd2 ? 2'd0 : 2'd2;
+    wire [1:0] tv_filter_mode = cfg[2:1] == 2'd0 ? 2'd2 :
+                                cfg[2:1] == 2'd1 ? 2'd1 :
+                                cfg[2:1] == 2'd2 ? 2'd0 : 2'd2;
     // Synchronize the setting, then latch it once per source
     // frame inside the filter. CE remains the existing native CE in all modes.
     (* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [1:0] tv_filter_meta=2, tv_filter_sync=2;
@@ -902,7 +904,7 @@ module emu
 	//   10MB = $E4  (2MB board + 4MB + 4MB SIMMs => 8MB bank A)
 	// NOTE: currently only the 2MB config is validated against MAME (-ramsize 2M).
 	// The 10MB path is not yet verified — see docs and addrController_top.v.
-	wire [7:0] configRAMSize = status[4] ? 8'hE4 : 8'h24; // 1=10MB (2MB board + 4MB+4MB SIMM), 0=2MB (board only)
+	wire [7:0] configRAMSize = cfg[4] ? 8'hE4 : 8'h24; // 1=10MB (2MB board + 4MB+4MB SIMM), 0=2MB (board only)
 	wire [7:0] pvia_ram_config_out;   // Active RAM config from pseudovia
 	wire       pvia_ram_configured;   // ROM has programmed V8 RAM config ($0 mirror enable)
 				  
@@ -965,16 +967,15 @@ module emu
 	// path runs in the fixed 24.576 MHz CLK_AUDIO domain; the LCD-overlay
 	// raster tracker runs on clk_vid (live video inputs below) and its box is
 	// composited into the final VGA_R/G/B at the video output above.
-	// Mode/ROM/SoundFont are chosen from the OSD "MT32-pi" page (CONF_STR P1,
-	// status[31:24]); "Show Info" (status[23:22]) selects the readout:
-	// 1=Yes → framework OSD info popup, 2/3=LCD-On/LCD-Auto → LCD overlay.
+	// Audio page settings apply on reset. Show info selects the OSD popup
+	// (1) or LCD overlay (2/3 = LCD-On/LCD-Auto).
 	wire [15:0] mt32_i2s_l, mt32_i2s_r;
 	wire        mt32_available;
 	wire        mt32_midi_rx;
-	wire        mt32_disable = status[24];                 // "Use MT32-pi" = No
+	wire        mt32_disable = cfg[24];                    // "Use MT32-pi" = No
 	wire        mt32_mute    = mt32_available & mt32_disable;
 	wire        mt32_use     = mt32_available & ~mt32_disable;
-	wire  [1:0] mt32_info    = status[23:22];              // Show Info: No/Yes/LCD-On/LCD-Auto
+	wire  [1:0] mt32_info    = cfg[23:22];                 // Show Info: No/Yes/LCD-On/LCD-Auto
 	wire  [7:0] mt32_mode, mt32_rom, mt32_sf;
 	wire        mt32_newmode;
 	wire        mt32_lcd_en, mt32_lcd_pix, mt32_lcd_update;
@@ -993,9 +994,9 @@ module emu
 		.mt32_i2s_r(mt32_i2s_r),
 		.mt32_i2s_l(mt32_i2s_l),
 		.mt32_available(mt32_available),
-		.mt32_mode_req(status[26]),          // Synth: 0=Munt, 1=FluidSynth
-		.mt32_rom_req(status[28:27]),        // Munt ROM: MT-32 v1/v2/CM-32L
-		.mt32_sf_req({5'd0, status[31:29]}), // SoundFont 0-7
+		.mt32_mode_req(cfg[26]),             // Synth: 0=Munt, 1=FluidSynth
+		.mt32_rom_req(cfg[28:27]),           // Munt ROM: MT-32 v1/v2/CM-32L
+		.mt32_sf_req({5'd0, cfg[31:29]}),    // SoundFont 0-7
 		.mt32_mode(mt32_mode),
 		.mt32_rom(mt32_rom),
 		.mt32_sf(mt32_sf),
@@ -1253,7 +1254,7 @@ module emu
 		.eth_din   (pds_eth_din),
 		.eth_ack   (pds_eth_ack),
 		.eth_dout  (pds_eth_dout),
-		.ena_osd   (status[19]),   // OJ list is Off,On -> bit SET = On (default Off)
+		.ena_osd   (cfg[19]),      // OJ list is Off,On -> bit SET = On (default Off)
 		.cpuAddr   (cpuAddr),
 		.cpuDataIn (cpuDataOut),
 		._cpuAS    (_cpuAS),
@@ -1610,24 +1611,9 @@ module emu
 							   status[17] ? 3'd4 : 3'd2;       // 16bpp override
 	*/
 
-	// Monitor ID Selection — 512x384 12" RGB (default) or
-	// 640x480 VGA. Portrait is not supported. This is the sense ID the
-	// ROM reads to pick V8 timing.
-	// LATCHED UNDER RESET: a real LC samples the monitor sense lines only
-	// during the ROM's boot probe — the display cannot change on a running
-	// system, and the OS lays out QuickDraw for the boot geometry. The old
-	// live status[10] wire retargeted the pixel PLL mid-session (guest-
-	// hostile, and the source of the out-of-range class pix_quiet guards).
-	// The OSD choice now applies at the next reset — R0 "Apply and Reset",
-	// R6, or core reload — the same pattern as the Memory option. Saved
-	// configs still apply on first load: the HPS delivers status while
-	// n_reset is held, so the latch captures it before first release.
-	// (verilator/sim.v hardwires 4'h6 — no sim-side counterpart needed.)
-	reg [3:0] v8_monitor_id = 4'h2;  // 512x384 12" RGB until first reset sample
-	always @(posedge clk_sys) begin
-		if (~n_reset) v8_monitor_id <= status[10] ? 4'h6 :  // 640x480 VGA
-		                                            4'h2;   // 512x384 12" RGB
-	end
+	// Preserve saved monitor values: 0 = VGA, 1 = 12-inch RGB.
+	// A real LC samples monitor sense lines during the ROM's boot probe.
+	wire [3:0] v8_monitor_id = cfg[10] ? 4'h2 : 4'h6;
 
 	ariel_ramdac ariel(
 		.clk_sys(clk_sys),
@@ -2689,7 +2675,7 @@ module emu
 	// DC42 is NOT excluded: the load path normalises the container away, so
 	// SDRAM holds pure sector data and a volatile write is container-agnostic.
 	// Only the write-BACK has to care which layout it is writing.
-	assign flp_int_wp = ~status[14] || flp_int_ro;
+	assign flp_int_wp = ~cfg[14] || flp_int_ro;
 
 	// -- Committed sectors reach the user's file ---------------------------
 	// Everything upstream is volatile: the committer lands a verified sector

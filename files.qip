@@ -47,8 +47,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_capture_fifo.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_frame_store.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_buffered_canvas.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv
-
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_video.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_bridge.sv
-
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_cdc.sv

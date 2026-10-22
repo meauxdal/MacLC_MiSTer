@@ -17,12 +17,12 @@ set_global_assignment -name VERILOG_MACRO "MAC_TV525=1"
 ```
 
 Comment out or remove the assignment before building to omit the 480i hardware
-and its CRT De-flicker OSD control. Do not set the macro to `0`:
+and its CRT de-flicker OSD control. Do not set the macro to `0`:
 the RTL uses `ifdef`, which checks whether it is defined, regardless of its value.
 In the Quartus GUI, remove the macro from the project's Verilog HDL macro settings.
 
 With support included, both analog and scaled HDMI use 480i from startup.
-CRT De-flicker selects Strong, Mild or Off. There is no runtime Native/480i toggle.
+CRT de-flicker selects Strong, Mild or Off on reset. There is no runtime Native/480i toggle.
 Remove the macro and rebuild for native progressive output.
 
 The standard MiSTer framework supplies OSD, RGB/component conversion and sync.
@@ -32,10 +32,10 @@ use scaled HDMI for a progressive HDMI display.
 
 ### Offline OSD check
 
-Run `python scripts/osd_check.py` to check both expanded menu variants, root and
-submenu selection, flat mode, scrolling, media slots and status ranges without
-building hardware. `--baseline c9e0b0d` also reproduces the old invisible-version
-row offset and checks that option values and hardware logic remain unchanged.
+Run `python scripts/osd_check.py --baseline upstream/master` to check both
+expanded menu variants, root and submenu selection, hide masks, flat mode,
+scrolling, media slots and status ranges without building hardware. The baseline
+check verifies that upstream saved option values and media mappings survive.
 The check models Main's drawing and selection separately; it does not execute
 Main or replace a hardware OSD check. Its source revision references and optional
 `--main-source-dir` cross-check are documented in the script.
