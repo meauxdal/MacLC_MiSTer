@@ -69,3 +69,4 @@ verilator/obj_dir_tb_tv*/
 verilator/obj_dir_tb_vbuf_gate/
 verilator/out/
 /rbf_archive
+/local
