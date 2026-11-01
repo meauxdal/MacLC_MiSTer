@@ -12,6 +12,7 @@ Read every session.
 
 ## MiSTer cores
 
+- Develop the card on this branch in MacLC.qpf, MacLC.sv, rtl and files.qip. Do not create alternate Quartus projects, output subfolders or frozen build sources.
 - `sys` must match upstream MiSTer; never make project-specific edits there. Make local changes elsewhere so the project remains eligible for MiSTer-devel (important qualification: upstream `sys` updates are allowed and desired whenever there are Template_MiSTer updates to keep the core in line with upstream)
 
 ## Token efficiency

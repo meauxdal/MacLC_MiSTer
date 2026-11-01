@@ -44,6 +44,7 @@ module sdram
 	output              sd_cas,     // columns address select
 
 	// cpu/chipset interface
+	output              memory_ready,
 	input               init,       // init signal after FPGA config to initialize RAM
 	input               clk_64,     // sdram is accessed at 64MHz
 	input               clk_8,      // 8MHz chipset clock to which sdram state machine is synchonized
@@ -208,6 +209,7 @@ always @(posedge clk_64) begin
 		reset <= reset - 10'd1;
 end
 
+assign memory_ready = reset == 0 && !init;
 initial reset = 10'h3FF;
 initial t     = 3'd0;    // Icarus starts regs at X; Verilator/Quartus power up at 0
 

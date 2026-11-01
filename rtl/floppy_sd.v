@@ -8,7 +8,7 @@
 //   floppy_sd_writer        SDRAM -> card, and the DC42 checksum rewrite
 //   eth_port_arb            shares sdram.v's DMA port with pds_enet
 
-module floppy_loader
+module floppy_loader #(parameter [63:0] REGION_WORDS = 64'h100000)
 (
 	input             clk_sys,
 	input             reset,
@@ -82,9 +82,11 @@ module floppy_loader
 	localparam S_DRAIN  = 3'd3;   // push words to SDRAM
 	localparam S_NEXT   = 3'd4;
 	localparam S_DONE   = 3'd5;
+	localparam S_REJECT = 3'd6;
 
 	reg  [2:0] state;
 	reg [31:0] sec_total;         // sectors to stream (file size / 512)
+	reg [23:0] base_addr_l;
 	reg [23:0] file_word;         // word index within the FILE
 	reg        dc42;              // this image has a DiskCopy 4.2 header
 	reg        dc42_name_ok;
@@ -96,6 +98,11 @@ module floppy_loader
 	//   word 40 byte 80 = d[7:0] : disk-format byte (DC42 offset 0x50)
 	//   word 41         = d      : the magic, 16'h0001
 	localparam DC42_HDR_WORDS = 24'd42;   // 84 bytes
+
+	localparam [63:0] REGION_BYTES = REGION_WORDS * 64'd2;
+	wire region_valid = REGION_WORDS != 0 && REGION_WORDS <= 64'h800000 &&
+	                    {40'd0, base_addr} + REGION_WORDS <= 64'h800000;
+	wire [63:0] file_words = (img_size_l >> 1) + {63'd0, img_size_l[0]};
 
 	wire [15:0] sw_data = {sd_buff_dout[7:0], sd_buff_dout[15:8]};   // byte swap,
 	// matching the old download path's `{ioctl_data[7:0], ioctl_data[15:8]}` —
@@ -185,6 +192,7 @@ module floppy_loader
 
 		if (reset) begin
 			state    <= S_IDLE;
+			base_addr_l <= 0;
 			sd_rd    <= 1'b0;
 			wr_req   <= 1'b0;
 			loading  <= 1'b0;
@@ -213,6 +221,7 @@ module floppy_loader
 				// UNMOUNT. readonly is latched here, at THIS slot's own pulse.
 				if (img_mounted) begin
 					readonly     <= img_readonly;
+					base_addr_l  <= base_addr;
 					dc42         <= 1'b0;
 					dc42_name_ok <= 1'b0;
 					dc42_fmt     <= 8'd0;
@@ -220,12 +229,16 @@ module floppy_loader
 					is_dc42      <= 1'b0;   // an unmount must not leave the old
 					                        // container flag standing
 					size         <= 64'd0;
-					if (img_size != 64'd0) begin
+					if (img_size != 0 && (!region_valid || img_size > REGION_BYTES + 64'd84)) begin
+						loading <= 0;
+						sd_rd <= 0;
+						wr_req <= 0;
+						state <= S_REJECT;
+					end else if (img_size != 64'd0) begin
 						// CEIL, not floor: a DC42 file is 84 + payload bytes and
 						// never ends on a block boundary, so a floor drops the
-						// last sector's tail. Main serves the partial block and
-						// the stale remainder drains past the payload end, well
-						// inside the floppy region. Raw images are 512-multiples,
+						// last sector's tail. S_DRAIN skips padding past EOF.
+						// Raw images are 512-multiples,
 						// so ceil == floor.
 						sec_total <= img_size[40:9] + {31'd0, |img_size[8:0]};
 						sd_lba    <= 32'd0;
@@ -252,19 +265,22 @@ module floppy_loader
 			end
 
 			S_WAIT: begin
-				state <= S_DRAIN;      // one cycle for buf_ram's read port
+				if (sd_lba == 0 && (dc42 ? (img_size_l <= 64'd84 ||
+				    img_size_l - 64'd84 > REGION_BYTES) : img_size_l > REGION_BYTES))
+					state <= S_REJECT;
+				else state <= S_DRAIN;
 			end
 
 			S_DRAIN: begin
 				if (!wr_req) begin
 					// Skip the DC42 header entirely: those words are not disk
 					// data and must not shift the payload.
-					if (dc42 && (file_word < DC42_HDR_WORDS)) begin
+					if ((dc42 && file_word < DC42_HDR_WORDS) || {40'd0, file_word} >= file_words) begin
 						file_word <= file_word + 24'd1;
 						drain_idx <= drain_idx + 8'd1;
 						if (drain_idx == 8'd255) state <= S_NEXT;
 					end else begin
-						wr_addr <= base_addr +
+						wr_addr <= base_addr_l +
 						           (dc42 ? (file_word - DC42_HDR_WORDS) : file_word);
 						wr_data <= buf_ram[drain_idx];
 						wr_req  <= 1'b1;
@@ -285,6 +301,18 @@ module floppy_loader
 					sd_rd  <= 1'b1;
 					state  <= S_RD;
 				end
+			end
+
+			S_REJECT: begin
+				loading <= 0;
+				sd_rd <= 0;
+				wr_req <= 0;
+				size <= 0;
+				raw_img <= 0;
+				is_dc42 <= 0;
+				dc42_fmt <= 0;
+				done <= 1;
+				state <= S_IDLE;
 			end
 
 			S_DONE: begin

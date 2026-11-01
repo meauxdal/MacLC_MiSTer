@@ -90,25 +90,25 @@ set_global_assignment -name VERILOG_MACRO "USE_ASC_AUDIO=1"
 
 # DEBUG (JTAG): the main probe deck is split across TWO macros (2026-07-29,
 # probes-off Finder-marginality bisect). Uncomment BOTH for a full debug build.
-# Read with scripts/read_probes.sh / *.tcl. Keep COMMENTED for release —
+# Read with scripts/read_probes.sh / *.tcl. Keep COMMENTED for release â€”
 # release RBFs ship without the probe deck. Flips are working-tree-only.
 #   USE_DBG_PROBES   = 11 top-level probes (CDA0-4/CDUR, PSDT/PSDS/PSD2/PSD3, WRFB)
 #   USE_DBG_OBSERVER = the dbg_probes SCSI/CPU/video deck (PADR..PVID)
 # set_global_assignment -name VERILOG_MACRO "USE_DBG_PROBES=1"
 # set_global_assignment -name VERILOG_MACRO "USE_DBG_OBSERVER=1"
 
-# DEBUG (screen): on-screen floppy HUD — renders the FLPA-E forensics as a
+# DEBUG (screen): on-screen floppy HUD â€” renders the FLPA-E forensics as a
 # binary pixel strip in the BOTTOM-LEFT corner (12 rows x 32 cells of 4x4 px,
 # layout in the MacLC.sv USE_DBG_HUD block; parse screenshots with
 # scripts/parse_hud.py, which auto-detects both this and the older top-left 8x8
 # geometry). Built 2026-08-04 because this board's JTAG hub name table is
 # corrupt and the ISSP probes can't be read. Needs NO JTAG.
-# ★ Uncomment for any floppy/VIA-timer investigation — it is the only working
+# â˜… Uncomment for any floppy/VIA-timer investigation â€” it is the only working
 # forensic channel on this board. HUD-on and HUD-off are DIFFERENT netlists and
 # re-roll the fit lottery independently, so re-gate after flipping it (colour
 # icons by eye + >= 2-boot Finder soak). COMMENT AGAIN for release fits.
 # HUD row 7 = the media-change witness (floppy.v dbg_media; port comment).
-# OFF 2026-08-06 pm: disk-swap mission complete — release configuration.
+# OFF 2026-08-06 pm: disk-swap mission complete â€” release configuration.
 # set_global_assignment -name VERILOG_MACRO "USE_DBG_HUD=1"
 
 source sys/sys.tcl
@@ -331,49 +331,16 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED_*
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to BTN_*
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to BTN_*
 source files.qip
-set_global_assignment -name QIP_FILE rtl/tg68k/TG68K.qip
-set_global_assignment -name VERILOG_FILE rtl/sdram.v
-set_global_assignment -name VERILOG_FILE rtl/scsi.v
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/ncr5380.sv
-set_global_assignment -name VERILOG_FILE rtl/floppy_track_encoder.v
-set_global_assignment -name VERILOG_FILE rtl/floppy.v
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/ps2_kbd.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/adb.sv
-set_global_assignment -name VERILOG_FILE rtl/ps2_mouse.v
-set_global_assignment -name VERILOG_FILE rtl/scc.v
-set_global_assignment -name VERILOG_FILE rtl/uart/txuart.v
-set_global_assignment -name VERILOG_FILE rtl/uart/rxuart.v
-set_global_assignment -name VERILOG_FILE rtl/swim.v
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/via6522.sv
-set_global_assignment -name VERILOG_FILE rtl/addrDecoder.v
-set_global_assignment -name VERILOG_FILE rtl/addrController_top.v
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/dataController_top.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret_behavioral.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/ariel_ramdac.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/maclc_v8_video.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/pseudovia.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/asc.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/egret_wrapper.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_alu.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_core.sv
-set_global_assignment -name SYSTEMVERILOG_FILE MacLC.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/adb_device.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/v8_clocks.sv
 
 # Project timing constraints (read after sys/sys_top.sdc). Contains the TG68
-# kernel multicycle required for reliable timing closure — see MacLC.sdc.
+# kernel multicycle required for reliable timing closure â€” see MacLC.sdc.
 set_global_assignment -name SDC_FILE MacLC.sdc
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/dbg_probes.sv
-set_global_assignment -name VERILOG_FILE rtl/mfm_track_encoder.v
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/vram_bram.sv
-set_global_assignment -name VERILOG_FILE rtl/pll_video.v
-set_global_assignment -name QIP_FILE sys/pll_cfg.qip
 
 # --- m10k-repack tier 1: stop tiny delay-line shifters from eating M10K blocks.
 # The fitter maps these altshift_taps (42-324 bits each) into whole M10K blocks
 # at 1-3% utilization (fit census 2026-07-17: ~6-8 blocks across shadowmask,
 # vga_out, osd rdout, yc phase, sys_top dv_de). Per-INSTANCE recognition-off
-# turns each back into plain registers (<1K regs total) — framework constrained
+# turns each back into plain registers (<1K regs total) â€” framework constrained
 # from OUR qsf; sys/ files stay stock. The big ascal shifters (4-6Kbit) are
 # deliberately NOT listed (register cost too high).
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *|rdout2*
@@ -382,7 +349,6 @@ set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *HDMI_shad
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *yc_out|phase*
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *dv_de1*
 
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/fetch_cache.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/cd_sdp.sv
 
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_CLK

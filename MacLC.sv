@@ -34,7 +34,18 @@ module emu
 	assign DDRAM_WE = 0;
 	assign {SD_SCK, SD_MOSI, SD_CS} = 'Z;
 
-	assign LED_USER  = dio_download || (disk_act ^ |diskMotor);
+    wire iie_diagnostic_boundary, iie_diagnostic_fault;
+    wire [199:0] iie_debug_status;
+    reg [24:0] iie_diagnostic_ticks = 0;
+    always @(posedge clk_sys) begin
+        if (!pll_locked || (!iie_diagnostic_boundary && !iie_diagnostic_fault))
+            iie_diagnostic_ticks <= 0;
+        else
+            iie_diagnostic_ticks <= iie_diagnostic_ticks + 25'd1;
+    end
+    assign LED_USER = iie_diagnostic_fault ? iie_diagnostic_ticks[21] :
+                      iie_diagnostic_boundary ? iie_diagnostic_ticks[24] :
+                      dio_download || (disk_act ^ |diskMotor);
 	assign LED_DISK  = 0;
 	assign LED_POWER = 0;
 	assign BUTTONS   = 0;
@@ -85,6 +96,7 @@ module emu
 		"h0-,Changes pending;",
 		"R0,Apply and reset;",
 
+		"P1OI,IIe ROM mapping,Automatic,Runtime;",
 		"P1R5,Interrupt (NMI);",
 		"P1-;",
 		"P1R6,Clear PRAM and reset;",
@@ -494,17 +506,13 @@ module emu
 	assign CLK_VIDEO = clk_vid;
 	assign CE_PIXEL = v8_ce_pix;
 
-`ifdef USE_DBG_HUD
-	// Debug HUD (see the USE_DBG_HUD block near the probe deck): binary
-	// pixel-strip overlay, BOTTOM-left corner, video-only (input untouched).
-	assign VGA_R  = hud_on_q ? hud_px : v8_vga_r;
-	assign VGA_G  = hud_on_q ? hud_px : v8_vga_g;
-	assign VGA_B  = hud_on_q ? hud_px : v8_vga_b;
-`else
-	assign VGA_R  = v8_vga_r;
-	assign VGA_G  = v8_vga_g;
-	assign VGA_B  = v8_vga_b;
-`endif
+    iie_status_overlay iie_status (
+        .clk_sys(clk_sys), .clk_vid(clk_vid), .reset(!pll_locked),
+        .ce_pixel(v8_ce_pix), .de(v8_de), .vblank(v8_vblank), .status_sys(iie_debug_status),
+        .red_in(v8_vga_r), .green_in(v8_vga_g), .blue_in(v8_vga_b),
+        .red_out(VGA_R), .green_out(VGA_G), .blue_out(VGA_B)
+    );
+
 	assign VGA_DE = v8_de;
 	assign VGA_VS = v8_vsync;
 	assign VGA_HS = v8_hsync;
@@ -712,6 +720,17 @@ module emu
 	// RAM/ROM
 	wire _romOE;
 	wire _ramOE, _ramWE;
+
+	// Experimental diagnostic card; backend survives warm Mac reset.
+	wire iie_card_claim_raw;
+	wire iie_card_claim = iie_card_claim_raw && !_cpuAS && cpuFC != 3'b111;
+	wire iie_card_dtack_n;
+	wire iie_card_error;
+	wire [15:0] iie_card_read_data;
+	wire iie_rom_oe_raw, iie_ram_oe_raw, iie_ram_we_raw;
+	assign _romOE = iie_rom_oe_raw || iie_card_claim;
+	assign _ramOE = iie_ram_oe_raw || iie_card_claim;
+	assign _ramWE = iie_ram_we_raw || iie_card_claim;
 	wire _memoryUDS, _memoryLDS;
 	wire dioBusControl;
 	wire cpuBusControl;
@@ -861,8 +880,9 @@ module emu
 		end
 	end
 
-	assign      _cpuVPA = fc7_iack ? 1'b0 : ((fc7_berr || slot_space) ? 1'b1 : ~(!_cpuAS && cpuAddr[23:21] == 3'b111 && !selectVRAM && !selectSCSIDMA));
+	assign      _cpuVPA = fc7_iack ? 1'b0 : ((fc7_berr || slot_space || iie_card_claim) ? 1'b1 : ~(!_cpuAS && cpuAddr[23:21] == 3'b111 && !selectVRAM && !selectSCSIDMA));
 	assign      _cpuDTACK = fc7_berr ? 1'b1 :
+	                        iie_card_claim ? (iie_card_error ? 1'b1 : iie_card_dtack_n) :
 	                        icache_hit ? 1'b0 :        // fetch-cache hit answers now
 	                        (slot_space && !_cpuAS) ? 1'b0 :
 	                        selectSCSIDMA ? ~scsiDREQ :
@@ -1006,8 +1026,8 @@ module emu
 		.as_n       ( _cpuAS ),
 		.rw         ( _cpuRW ),
 		.fc         ( cpuFC ),
-		.cacheable  ( selectRAM || selectROM ),
-		.snoopable  ( selectRAM ),
+		.cacheable  ( !iie_card_claim && (selectRAM || selectROM) ),
+		.snoopable  ( !iie_card_claim && selectRAM ),
 		.mem_din    ( dataControllerDataOut ),
 		.hit        ( icache_hit ),
 		.hit_data   ( icache_data ),
@@ -1045,7 +1065,8 @@ module emu
 	                       (cpuAddr[23:21] == 3'b111) && !selectVRAM && !selectSCSIDMA;
 	reg [15:0] periph_din_reg;
 	always @(posedge clk_sys) periph_din_reg <= dataControllerDataOut;
-	wire [15:0] cpu_din_muxed = slot_space     ? 16'hFFFF :
+	wire [15:0] cpu_din_muxed = iie_card_claim ? iie_card_read_data :
+	                            slot_space     ? 16'hFFFF :
 	                            icache_hit     ? icache_data :
 	                            vpa_periph_read ? periph_din_reg :
 	                                              dataControllerDataOut;
@@ -1123,7 +1144,7 @@ module emu
 		._cpuRW(_cpuRW),
 		._cpuAS(_cpuAS),
 		.cpuFC(cpuFC),
-		.pds_claim(1'b0),
+		.pds_claim(iie_card_claim),
 		.ram_config(pvia_ram_config_out),
 		.ram_config_phys(configRAMSize),   // PHYSICAL SIMM size — was unconnected (=0),
 		                                   // so the 10MB SIMM was invisible and the Mac
@@ -1133,9 +1154,9 @@ module emu
 		.memoryLatch(memoryLatch),
 		._memoryUDS(_memoryUDS),
 		._memoryLDS(_memoryLDS),
-		._romOE(_romOE),
-		._ramOE(_ramOE),
-		._ramWE(_ramWE),
+		._romOE(iie_rom_oe_raw),
+		._ramOE(iie_ram_oe_raw),
+		._ramWE(iie_ram_we_raw),
 		.dioBusControl(dioBusControl),
 		.cpuBusControl(cpuBusControl),
 		.flp_guard(flp_guard),
@@ -2130,6 +2151,15 @@ module emu
 	wire        flp_int_sdw_busy;
 	wire        flp_sdw_wr;
 	wire        flp_mem_req, flp_mem_ack;
+
+	// Card and floppy share the native port through locked ownership.
+	wire iie_native_req;
+	wire iie_native_we;
+	wire [23:0] iie_native_addr;
+	wire [15:0] iie_native_din;
+	wire iie_native_ack;
+	wire [15:0] iie_native_dout;
+
 	wire [23:0] flp_mem_addr;
 	wire [15:0] flp_mem_dout;
 	floppy_sd_writer floppy_sd_writer_int
@@ -2453,37 +2483,26 @@ module emu
 
 	assign SDRAM_CKE = 1;
 
-	// Dedicated SDRAM re-init pulse on the explicit user resets (R0 / R6 /
-	// core button). The reverted d88c098/50d0c32 attempts tied .init to
-	// signals that are ALSO asserted through the cold-load ROM download, so
-	// init swallowed the download writes and broke cold boot (HW-confirmed
-	// 2026-06-08). This pulse is structurally different — exactly the shape
-	// the handoff §5 follow-up prescribed:
-	//   * edge-triggered, never level-held through a download;
-	//   * fires only once the ROM is already in SDRAM (rom_loaded);
-	//   * suppressed while ANY download is active (!dio_download);
-	//   * the init ladder is content-preserving (NOPs + refreshes + mode-
-	//     register rewrite, ~126 us — see rtl/sdram.v), and n_reset's ~4 ms
-	//     stretch keeps the CPU in reset until long after it completes.
-	reg  [3:0] sdram_reinit_cnt = 4'd0;
-	reg        user_reset_d = 1'b0;
-	wire       user_reset_now = status[0] | buttons[1] | pram_force_reset;
-	always @(posedge clk_sys) begin
-		user_reset_d <= user_reset_now;
-		if (user_reset_now && !user_reset_d && rom_loaded && !dio_download)
-			sdram_reinit_cnt <= 4'd15;
-		else if (sdram_reinit_cnt != 0)
-			sdram_reinit_cnt <= sdram_reinit_cnt - 4'd1;
-	end
-	wire sdram_reinit = (sdram_reinit_cnt != 0);
+	// Diagnostic build: SDRAM init only on cold PLL loss.
 
+    wire iie_memory_ready;
+    maclc_iie_binding iie_card (
+        .clk_sys(clk_sys), .clk_mem(clk_mem), .pll_locked(pll_locked),
+        .memory_ready(iie_memory_ready), .host_reset(!_cpuReset),
+        .pds_address(cpuAddr), .pds_fc(cpuFC), .pds_as_n(_cpuAS),
+        .pds_uds_n(_cpuUDS), .pds_lds_n(_cpuLDS), .pds_rw(_cpuRW), .pds_write_data(cpuDataOut),
+        .runtime_mode(status[18]), .debug_status(iie_debug_status), .diagnostic_boundary(iie_diagnostic_boundary), .diagnostic_fault(iie_diagnostic_fault),
+        .claim(iie_card_claim_raw), .dtack_n(iie_card_dtack_n), .error(iie_card_error),
+        .pds_read_data(iie_card_read_data),
+        .floppy_req(flp_mem_req), .floppy_addr(flp_mem_addr), .floppy_ack(flp_mem_ack), .floppy_data(flp_mem_dout),
+        .native_req(iie_native_req), .native_we(iie_native_we), .native_addr(iie_native_addr),
+        .native_din(iie_native_din), .native_ack(iie_native_ack), .native_dout(iie_native_dout)
+    );
 	sdram sdram
 	(
 		// system interface
-		// Full init at config (`!pll_locked`), plus the gated user-reset
-		// re-init pulse above. Do NOT add any signal here that is held
-		// during the ROM download (see comment above for the history).
-		.init           ( !pll_locked || sdram_reinit ),
+		.init           ( !pll_locked ),
+		.memory_ready   ( iie_memory_ready ),
 		.clk_64         ( clk_mem                  ),
 		.clk_8          ( clk8                     ),
 
@@ -2529,12 +2548,12 @@ module emu
 		.dl_ack         ( sdram_dl_ack             ),
 
 		// Floppy image writeback reads through the SDRAM DMA port.
-		.eth_req        ( flp_mem_req ),
-		.eth_we         ( 1'b0 ),
-		.eth_addr       ( flp_mem_addr ),
-		.eth_din        ( 16'd0 ),
-		.eth_ack        ( flp_mem_ack ),
-		.eth_dout       ( flp_mem_dout ),
+		.eth_req        ( iie_native_req ),
+		.eth_we         ( iie_native_we ),
+		.eth_addr       ( iie_native_addr ),
+		.eth_din        ( iie_native_din ),
+		.eth_ack        ( iie_native_ack ),
+		.eth_dout       ( iie_native_dout ),
 
 		.cpu_done       ( sdram_cpu_done           ),
 		.cpu_dout       ( sdram_cpu_dout           )
