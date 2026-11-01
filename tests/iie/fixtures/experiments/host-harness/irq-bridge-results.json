@@ -1,0 +1,37 @@
+{
+  "scope": "original MAME host through candidate IRQ/PDS/WDC/CDC/native-SDRAM RTL",
+  "run": {
+    "source_sha256_before": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "source_sha256_after": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "mame_exit_code": 0,
+    "mame_wall_seconds": 13.2608705,
+    "emulated_seconds_limit": 85,
+    "run_name": "rtl-irq-bridge-01",
+    "diagnostic_bridge": true,
+    "rtl_bridge": true,
+    "irq_bridge": true
+  },
+  "diagnostic_transactions": 155,
+  "captures": 42,
+  "boundary": "203A before banking test",
+  "Conf_200_result": 0,
+  "full_memory_bytes_compared": 262144,
+  "allowed_interrupt_stack_bytes": "223520",
+  "final_memory_sha256": "b891b33b34b604c30f25da588edafee2df15d49a6993481b1af2fdb6abbd0393",
+  "rtl_source_hashes_verified": 24,
+  "inputs_sha256": {
+    "docs/experiments/host-harness/analyze_irq_bridge.py": "e12866fc44f7bb0b342d604d2b1555347591a34c5bb0b547a72dd470aebaa798",
+    "docs/experiments/card-irq-service/prepare-results.json": "2c4d7fb1350a5f4f840613d3526e2fc7fce34a43c326ca91a8abf0f35f88e752",
+    "docs/experiments/card-interrupt-contract/interrupt_model.py": "d16a49e2b2c639432e0645b0098a59a427f96009b596f204da7582f4cd251912",
+    "local/experiments/card-irq-service/service.vvp": "facb69d64c646623dae91d55008eaa5ab0c92ccf70d500e13aabc8e311d78da5",
+    "docs/experiments/host-harness/execute.ps1": "6ff1236d9db40431540f06af794067fb8449e45b98a18303d23a12040da685c7",
+    "docs/experiments/host-harness/rtl_bridge_server.py": "fca61461f46e487457677a5225b1ecf06ab021f9fe5594c755a76e0a762f90ae",
+    "local/experiments/host-execution/rtl-irq-bridge-01/run.json": "9711d3774bad5f808eec47c60b9a51b9a1f6fd70f4a97cf262205074eaf44997",
+    "local/experiments/host-execution/rtl-irq-bridge-01/mame.log": "91c58395c2de51e2a3032694cc240c5a5463c807e308032ae2f925e187b32080",
+    "local/experiments/host-execution/rtl-irq-bridge-01/bus.jsonl": "6044bbb9f42da9df0353302f025afcec8bb6252c6ab14361293c636f7a63dd61",
+    "local/experiments/host-execution/rtl-irq-bridge-01/bridge.jsonl": "d3e73e5c3a12c0d040b887abc4f77f504c0e73a7c576226b20e1f0b7b653f571",
+    "local/experiments/host-execution/rtl-irq-bridge-01/bridge-result.json": "33e829656a1dc60872e5a5b05dbcf08218886a24003d98036958722e762f43a5",
+    "local/experiments/host-execution/rtl-irq-bridge-01/rtl-final.hex": "baff0bbf9a76684acc4edf5ec6bf38df6aeac68bc8e2e57f0667eadc2661739c",
+    "local/experiments/host-execution/rtl-irq-bridge-01/rtl-service.log": "99d573cfac4683e09382e2cc91e1f244b1832658c28d5cadd69db591f63a6c8b"
+  }
+}

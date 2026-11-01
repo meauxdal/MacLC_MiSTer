@@ -1,0 +1,1243 @@
+{
+  "schema_version": 1,
+  "image": {
+    "path": "local/hardfiles/Apple-II_100MB.hda",
+    "bytes": 104906752,
+    "sha256": "203650a0a9b840c4dfc290ef5600dcbac6d97b9a591d335ac1c99baa813008af",
+    "sha256_after": "203650a0a9b840c4dfc290ef5600dcbac6d97b9a591d335ac1c99baa813008af",
+    "unchanged": true
+  },
+  "ddr": {
+    "block_size": 512,
+    "block_count": 204896,
+    "driver_count": 1,
+    "driver_start_lba": 64,
+    "driver_blocks": 19,
+    "driver_os_type": 1
+  },
+  "partitions": [
+    {
+      "map_entry": 1,
+      "name": "Apple",
+      "type": "Apple_partition_map",
+      "start_lba": 1,
+      "blocks": 63,
+      "status": "00000037"
+    },
+    {
+      "map_entry": 2,
+      "name": "Macintosh",
+      "type": "Apple_Driver43",
+      "start_lba": 64,
+      "blocks": 32,
+      "status": "0000007f"
+    },
+    {
+      "map_entry": 3,
+      "name": "MacOS",
+      "type": "Apple_HFS",
+      "start_lba": 96,
+      "blocks": 204800,
+      "status": "000000b7"
+    }
+  ],
+  "hfs": {
+    "volume": "Untitled",
+    "attributes_hex": "0100",
+    "allocation_blocks": 51195,
+    "allocation_block_bytes": 2048,
+    "allocation_start_sector": 16,
+    "free_allocation_blocks": 48610,
+    "finder_info": [
+      18,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "blessed_cnid": 18,
+    "bless_query": "/System 7.1.2 (CNID 18)",
+    "boot_signature_hex": "4c4b",
+    "boot_blocks_sha256": "6d03359c5438ac9306c619938704755c073a7bf0c2195716a74d48ac3ddb57ad",
+    "extents_clump_bytes": 204288,
+    "catalog_clump_bytes": 204288,
+    "primary_mdb_sha256": "0f84ec9c00c5254c438b3ba96e0b78537a504cfa760c6fe492d292c87091d3d2",
+    "alternate_mdb_sha256": "d7f9a16773640cd1bc34911b6cef47dc40c59adea9ff80f09a8ce269f4497ea4",
+    "alternate_blessed_cnid": 0,
+    "primary_alternate_mdb_equal": false
+  },
+  "files": [
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Calculator",
+      "type": "dfil",
+      "creator": "calc",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 7006,
+      "resource_sha256": "347fa95806f358b6af7839b1d632ae50e71f5ef5c28e72796a5fc5f96fe54715",
+      "versions": [
+        {
+          "id": -15999,
+          "fork_offset": 260,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938332d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 1,
+          "fork_offset": 310,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938332d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 6582,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Chooser",
+      "type": "dfil",
+      "creator": "chzr",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 24423,
+      "resource_sha256": "dc387e62dd50bece6195152d053201c6d68a5959b443d0f6fe3e9616c6e8f603",
+      "versions": [
+        {
+          "id": -15904,
+          "fork_offset": 20263,
+          "hex": "07318000000005372e332e3127372e332e312c20a9204170706c6520436f6d70757465722c20496e632e20313938342d31393934",
+          "short": "7.3.1"
+        },
+        {
+          "id": 1,
+          "fork_offset": 20319,
+          "hex": "07318000000005372e332e3127372e332e312c20a9204170706c6520436f6d70757465722c20496e632e20313938342d31393934",
+          "short": "7.3.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 23762,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Control Panels",
+      "type": "fact",
+      "creator": "MACS",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 611,
+      "resource_sha256": "0d64922db323d07ced9f0c004cfab85ed9683ea9cb834e2e03c36089f9400cf9",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 490,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Fast Find",
+      "type": "adrp",
+      "creator": "PNff",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 620,
+      "resource_sha256": "680fc83e811ec9ed7915343968082454ddab9f03d406ef2e8c0a8194448fbd48",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Key Caps",
+      "type": "dfil",
+      "creator": "keyc",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 11585,
+      "resource_sha256": "a881e0c5c857ba0a673867e3f2563e165bf02a025871beb108c5861e53681e20",
+      "versions": [
+        {
+          "id": -15935,
+          "fork_offset": 2741,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938362d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 1,
+          "fork_offset": 2791,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938362d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 10967,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/NoFinder",
+      "type": "adrp",
+      "creator": "Prss",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 559,
+      "resource_sha256": "faecfd0dca3a20f6e4c1152d44f91a89778ed38d446cdf6ba8eaea1428be36a2",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Note Pad",
+      "type": "dfil",
+      "creator": "npad",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 8556,
+      "resource_sha256": "7fd2986e2ee8beb5c6760732c6275bdfc3b5cfd94c570878326d68c708d5a515",
+      "versions": [
+        {
+          "id": -15999,
+          "fork_offset": 260,
+          "hex": "07108000000003372e3123372e312c20a920313938332d3932204170706c6520436f6d70757465722c20496e632e",
+          "short": "7.1"
+        },
+        {
+          "id": 1,
+          "fork_offset": 310,
+          "hex": "07108000000003372e3123372e312c20a920313938332d3932204170706c6520436f6d70757465722c20496e632e",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 8030,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Puzzle",
+      "type": "dfil",
+      "creator": "puzz",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 13461,
+      "resource_sha256": "7919b6909aad5a74067a0ffa88ddca38d6b1ba1ed84a3fbfeb1df9b5d1be0a98",
+      "versions": [
+        {
+          "id": -15999,
+          "fork_offset": 260,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938332d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 1,
+          "fork_offset": 310,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938332d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 12917,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Recent Applications/Icon\r",
+      "type": "....",
+      "creator": "....",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 2670,
+      "resource_sha256": "5be7ed84db500e79d8974a543a967b94fa09d62e9db66e8d8d29e8124c5f3747",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Recent Applications/System Picker 1.1a3",
+      "type": "adrp",
+      "creator": "SYSP",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 534,
+      "resource_sha256": "9cb3558af49c468dd94a52ca2518b6d416c302c7e1e46829a2740eb87c328a6f",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Recent Documents/Icon\r",
+      "type": "....",
+      "creator": "....",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 2670,
+      "resource_sha256": "c1687a2732a52a860ed4d901242f34be3a7dc6a8cada177bc0690421f396a154",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Recent Documents/System",
+      "type": "ZSYS",
+      "creator": "MACS",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 518,
+      "resource_sha256": "604ea47a89812f7a04155e0fe50c9974bb25d41fbea041a75610ef22dd61ac6e",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/Scrapbook",
+      "type": "dfil",
+      "creator": "scbk",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 15289,
+      "resource_sha256": "073170adbbed2387a1e36d51a51382ab96ee301eb39b274632e1574071e8732a",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 14646,
+          "hex": "07128000000005372e312e3227372e312e322c20a9204170706c6520436f6d70757465722c20496e632e20313938332d31393932",
+          "short": "7.1.2"
+        },
+        {
+          "id": 2,
+          "fork_offset": 14702,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Apple Menu Items/\u2022 System Picker",
+      "type": "adrp",
+      "creator": "SYSP",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 562,
+      "resource_sha256": "b097215f564645df4ef4d8336adf215ea6802e3efb2871b5539f3fb47f736013",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Clipboard",
+      "type": "CLIP",
+      "creator": "MACS",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 0,
+      "resource_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Apple Menu Options",
+      "type": "cdev",
+      "creator": "CDJR",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 56757,
+      "resource_sha256": "f7a461ddd375bee78ccc0aa0401eb053a14d67606bd7da8a38016f8aedcce979",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 55738,
+          "hex": "01008000000003312e3042312e302c20a9204170706c6520436f6d70757465722c20496e632e20313939340d20202020202020a9204368726973204465726f7373692c20313939312d31393934",
+          "short": "1.0"
+        },
+        {
+          "id": 2,
+          "fork_offset": 55704,
+          "hex": "07508000000003372e351353797374656d20536f66747761726520372e35",
+          "short": "7.5"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Date & Time",
+      "type": "cdev",
+      "creator": "time",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 52736,
+      "resource_sha256": "67f7efa4a65669534c7eb42ba967c7b75b854b03a70e790db609a745926ab345",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 51539,
+          "hex": "07118000000005372e312e3125372e312e312c20a9204170706c6520436f6d70757465722c20496e632e20313939322d3933",
+          "short": "7.1.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 51593,
+          "hex": "07118000000005372e312e310c53797374656d20372050726f",
+          "short": "7.1.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Easy Access",
+      "type": "cdev",
+      "creator": "easy",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 12303,
+      "resource_sha256": "9ecc2461ecb5499259b446d42c2fe79b7b5c65ec8745ca67d01f87b4645112b8",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 288,
+          "hex": "07208000000003372e3229372e322c20a9204170706c6520436f6d70757465722c20496e632e20313938372c20313939302d3934",
+          "short": "7.2"
+        },
+        {
+          "id": 2,
+          "fork_offset": 11447,
+          "hex": "03008000000003332e301153797374656d2055706461746520332e30",
+          "short": "3.0"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/General Controls",
+      "type": "cdev",
+      "creator": "misc",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 21827,
+      "resource_sha256": "be081500dc74456f8b7c2d4f30f3900f34e78d3b263e9e9ce908d261826242a4",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 17587,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938362d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 21223,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Keyboard",
+      "type": "cdev",
+      "creator": "keyb",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 7889,
+      "resource_sha256": "13e32eb167a11439a4e375859cc1186d461778a55cef9de6c453278360233d0b",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 3554,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938362d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 7365,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Map",
+      "type": "cdev",
+      "creator": "wmap",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 32304,
+      "resource_sha256": "7929efad67e9dda10308a63cf3fb63b4cc9455cc80e42677caf8b7478621093a",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 31601,
+          "hex": "07118000000005372e312e3127372e312e312c20a9204170706c6520436f6d70757465722c20496e632e20313938372d31393933",
+          "short": "7.1.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 31657,
+          "hex": "07118000000005372e312e310c53797374656d20372050726f",
+          "short": "7.1.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Memory",
+      "type": "cdev",
+      "creator": "mmry",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 40241,
+      "resource_sha256": "b09e5e317237296f09fd7023d642a1b038f89d9cba963973e7395b338c0c6970",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 23454,
+          "hex": "07408000000003372e3425372e342c20a9204170706c6520436f6d70757465722c20496e632e20313938382d31393934",
+          "short": "7.4"
+        },
+        {
+          "id": 2,
+          "fork_offset": 39265,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Mouse",
+      "type": "cdev",
+      "creator": "mous",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 8237,
+      "resource_sha256": "3b3091e7a25d4fe959ce2909334ce32885e5746c0673ba0c3db2142c9919f001",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 274,
+          "hex": "07108000000003372e3123372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938362d3932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 7749,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Numbers",
+      "type": "cdev",
+      "creator": "nbrs",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 16048,
+      "resource_sha256": "1be1fff252d5b5599f5c6f0d46f2cd663284373158db54764904ef8291517e5d",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 260,
+          "hex": "07108000000003372e3120372e312c20a9204170706c6520436f6d70757465722c20496e632e2031393932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 15360,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Sound",
+      "type": "cdev",
+      "creator": "soun",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 52839,
+      "resource_sha256": "769a0b32498edf575b5538e00b62e1743b35c5e0f68b8c20fabdb7d842335ebf",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 6598,
+          "hex": "08038000000005382e302e3325382e302e332c20a9204170706c6520436f6d70757465722c20496e632e20313938362d3934",
+          "short": "8.0.3"
+        },
+        {
+          "id": 2,
+          "fork_offset": 51535,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Startup Disk",
+      "type": "cdev",
+      "creator": "sdsk",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 5235,
+      "resource_sha256": "597c85eaebe5c2490f27c08804d13c8147f933cf48b27715729124446f40fefa",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 2127,
+          "hex": "07328000000005372e332e3227372e332e322c20a9204170706c6520436f6d70757465722c20496e632e20313938362d31393934",
+          "short": "7.3.2"
+        },
+        {
+          "id": 2,
+          "fork_offset": 4814,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/TidyMenus",
+      "type": "cdev",
+      "creator": "NLbl",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 32863,
+      "resource_sha256": "818d8eaeab8b0826b3c8c7dd91118ffb97c110f7cb67bad90b0a729ae563aa34",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 31846,
+          "hex": "02028000000005322e302e322e546964794d656e757320322e302e32206279205374657665204372757463686669656c642c20a9323032302d3233",
+          "short": "2.0.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/Views",
+      "type": "cdev",
+      "creator": "fvew",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 2930,
+      "resource_sha256": "ad75a9918e3eca4be27747a8a3741e0d2ab7fdd1d70ace9c3b657c3c4d568a5b",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 260,
+          "hex": "07108000000003372e3125372e312c20a9204170706c6520436f6d70757465722c20496e632e20313938332d31393932",
+          "short": "7.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 2654,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Control Panels/WindowShade",
+      "type": "cdev",
+      "creator": "WS2!",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 26192,
+      "resource_sha256": "fb7161a70a1d40e1458c3b7e6dc0aab65a5515b829f6d67347dcaffd4e660a4e",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 4992,
+          "hex": "01208001000003312e3232312e3220285553292c20a920496e74657261637469766520546563686e6f6c6f676965732c20496e632e20313938392d3932",
+          "short": "1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/2020Patch",
+      "type": "INIT",
+      "creator": "2020",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 1472,
+      "resource_sha256": "e6abbbe4ca14b5c228eab790fa4ad19080e5ffbbd1717e50d3958ff3fab478ad",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 260,
+          "hex": "01008000000003312e301a312e302c20a9203230323020476c656e6e20416e646572736f6e",
+          "short": "1.0"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Bomb Shelter",
+      "type": "INIT",
+      "creator": "BOMS",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 1426,
+      "resource_sha256": "358b3c5dd7f3f2d4ab8c74274208b6a4edc79d392d6fe8d8571d42155fe87b10",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 814,
+          "hex": "01008000000003312e3015a93139393020627920416e647265772057656c6368",
+          "short": "1.0"
+        },
+        {
+          "id": 1,
+          "fork_offset": 850,
+          "hex": "01008000000003312e3013312e3020627920416e647265772057656c6368",
+          "short": "1.0"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Clipping Extension",
+      "type": "fext",
+      "creator": "clip",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 26128,
+      "resource_sha256": "89c73bfa1db9908eb0c8c6be88210d1e095d1cf29f37bf23f31be15d4b0fb3d4",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 13860,
+          "hex": "07148000000005372e312e3425372e312e342c20a9204170706c6520436f6d70757465722c20496e632e20313939332d3934",
+          "short": "7.1.4"
+        },
+        {
+          "id": 2,
+          "fork_offset": 25307,
+          "hex": "01118000000005312e312e311d4d6163696e746f7368204472616720616e642044726f7020312e312e31",
+          "short": "1.1.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Dragging Enabler",
+      "type": "INIT",
+      "creator": "????",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 82515,
+      "resource_sha256": "c4ea272fff311883879f68786eccaa0bb014d26b53426a91068fe9bc89bbdbd0",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Extensions/FixFindFile 1.1",
+      "type": "INIT",
+      "creator": "FFF ",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 6636,
+      "resource_sha256": "80bcf5a12e6644a655090d0fd674220968ad5a7140ce58a76fd63f0e8f8ba6c4",
+      "versions": [
+        {
+          "id": 128,
+          "fork_offset": 2209,
+          "hex": "01102000000003312e312746697846696e6446696c6520312e3120a932303230205374657665204372757463686669656c64",
+          "short": "1.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Forward Delete",
+      "type": "INIT",
+      "creator": "TEKy",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 4708,
+      "resource_sha256": "293472613488b6ccef3bd8dd0de837f97651e6ea008ba2a1ac9afffaeed7866b",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 260,
+          "hex": "01148000000005312e312e3441312e312e3420a9313939332d313939352046616272697a696f204f64646f6e65202d20467265657761726520627574206e6f74207075626c696320646f6d61696e",
+          "short": "1.1.4"
+        },
+        {
+          "id": 2,
+          "fork_offset": 342,
+          "hex": "01148000000005312e312e3414466f72776172642044656c65746520312e312e34",
+          "short": "1.1.4"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Macintosh Drag and Drop",
+      "type": "INIT",
+      "creator": "hman",
+      "data_bytes": 7008,
+      "data_sha256": "5017e67dd504d51c0a76f0158b0ec7556eda00ea454b9b62d8e8affe1852dc27",
+      "resource_bytes": 34094,
+      "resource_sha256": "9b19da8b549c7bc968a6838a50ab02dd572c291b3158f638974d80ad48fc3130",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 29712,
+          "hex": "01108000000003312e3123312e312c20a9204170706c6520436f6d70757465722c20496e632e20313939332d3934",
+          "short": "1.1"
+        },
+        {
+          "id": 2,
+          "fork_offset": 33497,
+          "hex": "01118000000005312e312e311d4d6163696e746f7368204472616720616e642044726f7020312e312e31",
+          "short": "1.1.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Option-Tab Program Switcher",
+      "type": "INIT",
+      "creator": "MFK*",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 8376,
+      "resource_sha256": "cdc5977a2c149e7f2a646851341c208c9e0d5d8642fba153b125c1cbaebef1a4",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 7926,
+          "hex": "0100800000000476312e302d76312e302c20436f7079726967687420a92031393934206279204d69636861656c20462e204b616d7072617468",
+          "short": "v1.0"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/OptionPageUp",
+      "type": "INIT",
+      "creator": "OpPU",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 12057,
+      "resource_sha256": "6489538e2c68c1efd4f4a94ffbe41787d1a6b0f23814fd569c778034f855104c",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 8307,
+          "hex": "01018000000005312e302e312d4f7074696f6e50616765557020312e302e31206279205374657665204372757463686669656c6420a932303233",
+          "short": "1.0.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Stack6000",
+      "type": "INIT",
+      "creator": "????",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 1534,
+      "resource_sha256": "cf880ca2d49eb046e27ff59f4f647f1ad4cd6bb9c9fe136ec5ddeb3ecda2e707",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 728,
+          "hex": "00904000000012537461636b3630303020496e697420302e393b537461636b3630303020496e697420302e390da93139393220436875636b20506c69736b652c2053656177656c6c204d6963726f53797374656d73",
+          "short": "Stack6000 Init 0.9"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/StickyClick",
+      "type": "INIT",
+      "creator": "SKCL",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 14307,
+      "resource_sha256": "59f3de828421c26a151cc3f14837851a8bfbd482c8e8f7da3eb90c34b2cd4389",
+      "versions": [
+        {
+          "id": 128,
+          "fork_offset": 6856,
+          "hex": "0120800000001076312e3220537469636b79436c69636b33a92031393932205369787865486561647320536f6674776172650d5772697474656e204279205374657665205a656c6c657273",
+          "short": "v1.2 StickyClick"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/System Update",
+      "type": "scri",
+      "creator": "csce",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 17399,
+      "resource_sha256": "f96ca456e8b2bcdd7d256f8107e5e3abebbbfc69f93eed921efe1d3c1ca62936",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 12576,
+          "hex": "03008000000003332e3023332e302c20a9204170706c6520436f6d70757465722c20496e632e20313939322d3934",
+          "short": "3.0"
+        },
+        {
+          "id": 2,
+          "fork_offset": 17007,
+          "hex": "03008000000003332e301153797374656d2055706461746520332e30",
+          "short": "3.0"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Thread Manager 2.1",
+      "type": "INIT",
+      "creator": "thds",
+      "data_bytes": 15232,
+      "data_sha256": "731aaa28d756c8cafdf9e005b0dc04a295e6b13fee86ea6969dbbb034177e507",
+      "resource_bytes": 15674,
+      "resource_sha256": "da05ab9df389cab308a2130fdce6c102f3ef349dad15f69960522a6ed6a5a7ce",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 304,
+          "hex": "02108000000003322e3125322e312c20a9204170706c6520436f6d70757465722c20496e632e20313939312d31393934",
+          "short": "2.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/Today\u2019s the Day",
+      "type": "INIT",
+      "creator": "TdTd",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 16906,
+      "resource_sha256": "0200f1b55c2cc45dacd1f7dc07f50e15d25750f9d6209af7e78e6efd2e0ecaa7",
+      "versions": [
+        {
+          "id": 1,
+          "fork_offset": 15437,
+          "hex": "01018000000005312e302e3130546f646179d573207468652044617920312e302e31206279205374657665204372757463686669656c6420a932303233",
+          "short": "1.0.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Finder",
+      "type": "FNDR",
+      "creator": "MACS",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 453425,
+      "resource_sha256": "2d91bcf15305508ab1a0bf7a2b8e4bc881e0ed740bafbe3a3f89c3c9c534c2ff",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 56291,
+          "hex": "07148000000005372e312e340c46696e64657220372e312e34",
+          "short": "7.1.4"
+        },
+        {
+          "id": 1,
+          "fork_offset": 104392,
+          "hex": "07148000000005372e312e3427372e312e342c20a9204170706c6520436f6d70757465722c20496e632e20313938332d31393934",
+          "short": "7.1.4"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Chicago",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 48126,
+      "resource_sha256": "f7ad12ff2ec1327476d13825c1be1da32ba4b95c0dc10fb53d09135f38cc4706",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 47786,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/ClosedCaption2",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 31975,
+      "resource_sha256": "2397b66c9dd8c75848a3167a5e30808722d0c530687c0a237de86f5285d1b661",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 31778,
+          "hex": "07128000000006372e312e32701653797374656d20536f66747761726520372e312e3270",
+          "short": "7.1.2p"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Courier",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 138251,
+      "resource_sha256": "aaf5f8f7941b438c796731f5d6761900b41875547f03a7b123e355d1089f9dbe",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 135660,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Geneva",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 88867,
+      "resource_sha256": "7fac6cdf9404c235b6b8a9db8b35166078fe731bca21d25efd8cb1be1f9c9296",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 88404,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Helvetica",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 137457,
+      "resource_sha256": "2de2a36c8449ee83fdc8009dddf1fd3c9bf5d8af7df5e24f05163a8f98fb7dc2",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 129460,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Monaco",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 54939,
+      "resource_sha256": "c5ef84b5902d43ebdd98b9ac92a8fcbe1e3775ee1a5c9a9560efa50855e6eb16",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 54584,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/New York",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 86375,
+      "resource_sha256": "991927e1e6ac45d2f5be8580287048fe1551961b6ee8bd8fecdbc5cda19a6862",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 85924,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Palatino",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 301846,
+      "resource_sha256": "2c93b21c487e997066f5767362cf7bc33e47e8da0f07b0a6823bde0c0e62bb71",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 297466,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Symbol",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 69743,
+      "resource_sha256": "b6699d27668ca342d51b372a4f7a7752de6a9c46f960862147b023d46474aa0f",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 68796,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Fonts/Times",
+      "type": "FFIL",
+      "creator": "DMOV",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 287254,
+      "resource_sha256": "658c4ad53ae07b3f561222b6a99bade33519a8d473703198402d72680c5d4fe7",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 282720,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Preferences/Apple Menu Options Prefs",
+      "type": "pref",
+      "creator": "CDJR",
+      "data_bytes": 2333,
+      "data_sha256": "27fd27f7fe5ccdff914389c0cd3f0b043d5af7ed47f16d8ccff4dca7cc2494c6",
+      "resource_bytes": 1226,
+      "resource_sha256": "0e19abe14070be187e2150d073c2ff7a444ccb5c13ffe0a066dbc80e62a436dd",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Preferences/Finder Preferences",
+      "type": "pref",
+      "creator": "MACS",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 14887,
+      "resource_sha256": "e56231ee133898ddf9b7478d4c753a5755dcac28a377c2f9224a527d9a6b7044",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Preferences/WindowShade Preferences",
+      "type": "WS2P",
+      "creator": "WS2!",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 439,
+      "resource_sha256": "9b2a68064771513d223bedbba516a3ca2e31af4f96163f874e60f7d2a3f53703",
+      "versions": []
+    },
+    {
+      "path": "/System 7.1.2/Scrapbook File",
+      "type": "scbk",
+      "creator": "scbk",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 29600,
+      "resource_sha256": "548391678ff78b9098599f58a3a676d9ba008333a65e59c87022892c0926e076",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 29400,
+          "hex": "07108000000003372e311353797374656d20536f66747761726520372e31",
+          "short": "7.1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/System",
+      "type": "zsys",
+      "creator": "MACS",
+      "data_bytes": 924,
+      "data_sha256": "958f8f9f3798c770d5aca73222f0cd48dc0e26100c4bea1d4ed4f8cca0b6d82b",
+      "resource_bytes": 1121615,
+      "resource_sha256": "1545cc6c5d4ce6c8d3b3ccc11f6aebe856627e1b7a5b2b1b5e72b002336d6acc",
+      "versions": [
+        {
+          "id": 2,
+          "fork_offset": 670182,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        },
+        {
+          "id": 1,
+          "fork_offset": 971522,
+          "hex": "07128000000005372e312e3225372e312e322c20a9204170706c6520436f6d707574657220496e632e2c20313938332d3934",
+          "short": "7.1.2"
+        }
+      ],
+      "boot_resources": [
+        {
+          "type": "gbly",
+          "id": -16385,
+          "name": null,
+          "attributes": 64,
+          "fork_offset": 598974,
+          "size": 54,
+          "sha256": "a9c16ccb8ba5a1b187e4cffc832abfdbfc23fbbfae7f99ee03d3a377e1fbd762"
+        },
+        {
+          "type": "boot",
+          "id": 1,
+          "name": null,
+          "attributes": 72,
+          "fork_offset": 743282,
+          "size": 1024,
+          "sha256": "6d03359c5438ac9306c619938704755c073a7bf0c2195716a74d48ac3ddb57ad"
+        },
+        {
+          "type": "boot",
+          "id": 2,
+          "name": null,
+          "attributes": 80,
+          "fork_offset": 744310,
+          "size": 602,
+          "sha256": "597cb366f652c6aee56a0eb74e7ae32976b5bc4406049acbb70e628a20b80e34"
+        },
+        {
+          "type": "boot",
+          "id": 3,
+          "name": null,
+          "attributes": 80,
+          "fork_offset": 744916,
+          "size": 4224,
+          "sha256": "b26abf76a810b079915ad2fab9981bb50368be16c7c13d8add565b9ef504481f"
+        },
+        {
+          "type": "ROvr",
+          "id": 0,
+          "name": null,
+          "attributes": 16,
+          "fork_offset": 1083778,
+          "size": 222,
+          "sha256": "34bdc1976224320e43ec8e321c4424f377935944a2c97b4db9b362a07ec8a348"
+        }
+      ]
+    }
+  ],
+  "directories": [
+    "/System 7.1.2",
+    "/System 7.1.2/Apple Menu Items",
+    "/System 7.1.2/Apple Menu Items/Recent Applications",
+    "/System 7.1.2/Apple Menu Items/Recent Documents",
+    "/System 7.1.2/Control Panels",
+    "/System 7.1.2/Extensions",
+    "/System 7.1.2/Fonts",
+    "/System 7.1.2/Preferences",
+    "/System 7.1.2/Startup Items"
+  ],
+  "tools": {
+    "rb_version": "rb-cli 2026-10-11-23-59",
+    "rb_sha256": "a009fa4d5c9b6388c0dc56174d27fdda67df47ea2f4a501537add470bc65113a",
+    "resource_reader_sha256": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9"
+  },
+  "lc_rom": {
+    "path": "C:/Workspace/Git/MacLC_MiSTer/releases/boot0.rom",
+    "bytes": 524288,
+    "sha256": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "sha1": "6bef5853ae736f3f06c2b4e79772f65910c3b7d4",
+    "header_checksum": "350eacf0",
+    "computed_word_sum": "350eacf0"
+  }
+}

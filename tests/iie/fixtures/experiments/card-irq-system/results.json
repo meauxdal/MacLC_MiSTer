@@ -1,0 +1,464 @@
+{
+  "scope": "isolated actual host-register/CPU/shared-memory RTL; candidate generic opcode02 NMI, firmware overlay and command bit5 IRQ",
+  "success_boundary": "203A before JSR2058",
+  "mask21": "retained without assigned interrupt semantics",
+  "runs": [
+    {
+      "mode": "normal",
+      "fork": 0,
+      "backend_delay_scale": 0,
+      "result": "PASS IRQ system error=0 captures=42 generic02=1 NMI=1 IRQ=1 RTI=2 pushes=6 firmware_reads=7 delay=0",
+      "new_reports": [
+        2,
+        0,
+        1
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ],
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ]
+      ],
+      "trace_sha256": "d343987d50b113e66a4361412156290a5c7af3cc892e6972d32ae2108691eb04",
+      "events_sha256": "edc185d975f3ac0cf197bd8623b06e7d8b8b1ac0d86d03dbb95be6b44ab22327"
+    },
+    {
+      "mode": "normal",
+      "fork": 0,
+      "backend_delay_scale": 2,
+      "result": "PASS IRQ system error=0 captures=42 generic02=1 NMI=1 IRQ=1 RTI=2 pushes=6 firmware_reads=7 delay=2",
+      "new_reports": [
+        2,
+        0,
+        1
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ],
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ]
+      ],
+      "trace_sha256": "d343987d50b113e66a4361412156290a5c7af3cc892e6972d32ae2108691eb04",
+      "events_sha256": "edc185d975f3ac0cf197bd8623b06e7d8b8b1ac0d86d03dbb95be6b44ab22327"
+    },
+    {
+      "mode": "normal",
+      "fork": 1,
+      "backend_delay_scale": 0,
+      "result": "PASS IRQ system error=0 captures=42 generic02=1 NMI=1 IRQ=1 RTI=2 pushes=6 firmware_reads=7 delay=0",
+      "new_reports": [
+        2,
+        0,
+        1
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ],
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ]
+      ],
+      "trace_sha256": "d343987d50b113e66a4361412156290a5c7af3cc892e6972d32ae2108691eb04",
+      "events_sha256": "edc185d975f3ac0cf197bd8623b06e7d8b8b1ac0d86d03dbb95be6b44ab22327"
+    },
+    {
+      "mode": "normal",
+      "fork": 1,
+      "backend_delay_scale": 2,
+      "result": "PASS IRQ system error=0 captures=42 generic02=1 NMI=1 IRQ=1 RTI=2 pushes=6 firmware_reads=7 delay=2",
+      "new_reports": [
+        2,
+        0,
+        1
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ],
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ]
+      ],
+      "trace_sha256": "d343987d50b113e66a4361412156290a5c7af3cc892e6972d32ae2108691eb04",
+      "events_sha256": "edc185d975f3ac0cf197bd8623b06e7d8b8b1ac0d86d03dbb95be6b44ab22327"
+    },
+    {
+      "mode": "late_sample",
+      "fork": 0,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=0 captures=42 generic02=1 NMI=1 IRQ=1 RTI=2 pushes=6 firmware_reads=7 delay=1",
+      "new_reports": [
+        2,
+        2,
+        1
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ],
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ]
+      ],
+      "trace_sha256": "6ffaff3d5c5070a660614debf1a6d0124383853955e962b134777bce773f968d",
+      "events_sha256": "578fb5489483a4b3dca5050bae513d8e448827dc39065f4311a4da56007bd8f9"
+    },
+    {
+      "mode": "late_sample",
+      "fork": 1,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=0 captures=42 generic02=1 NMI=1 IRQ=1 RTI=2 pushes=6 firmware_reads=7 delay=1",
+      "new_reports": [
+        2,
+        2,
+        1
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ],
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "35"
+        ],
+        [
+          "S",
+          "01fb",
+          "22"
+        ]
+      ],
+      "trace_sha256": "6ffaff3d5c5070a660614debf1a6d0124383853955e962b134777bce773f968d",
+      "events_sha256": "578fb5489483a4b3dca5050bae513d8e448827dc39065f4311a4da56007bd8f9"
+    },
+    {
+      "mode": "no_nmi",
+      "fork": 0,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=11 captures=39 generic02=1 NMI=0 IRQ=0 RTI=0 pushes=0 firmware_reads=0 delay=1",
+      "new_reports": [],
+      "stack_pushes": [],
+      "trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246",
+      "events_sha256": "0c41a095b4b180ff484e466c1bffbf663c15f65b582ef2f76044c9e42f546a25"
+    },
+    {
+      "mode": "no_nmi",
+      "fork": 1,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=11 captures=39 generic02=1 NMI=0 IRQ=0 RTI=0 pushes=0 firmware_reads=0 delay=1",
+      "new_reports": [],
+      "stack_pushes": [],
+      "trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246",
+      "events_sha256": "0c41a095b4b180ff484e466c1bffbf663c15f65b582ef2f76044c9e42f546a25"
+    },
+    {
+      "mode": "no_irq",
+      "fork": 0,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=12 captures=40 generic02=1 NMI=1 IRQ=0 RTI=1 pushes=3 firmware_reads=7 delay=1",
+      "new_reports": [
+        2
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ]
+      ],
+      "trace_sha256": "7d59197a155bb8c1d2850df6bf82c348c7defe9a6058818e35aac18cf85c1754",
+      "events_sha256": "846394e28bb05a566f5be823b0d0aadf705a11531b59b693c1a256f8e29ded88"
+    },
+    {
+      "mode": "no_irq",
+      "fork": 1,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=12 captures=40 generic02=1 NMI=1 IRQ=0 RTI=1 pushes=3 firmware_reads=7 delay=1",
+      "new_reports": [
+        2
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ]
+      ],
+      "trace_sha256": "7d59197a155bb8c1d2850df6bf82c348c7defe9a6058818e35aac18cf85c1754",
+      "events_sha256": "846394e28bb05a566f5be823b0d0aadf705a11531b59b693c1a256f8e29ded88"
+    },
+    {
+      "mode": "nmi_after_timeout",
+      "fork": 0,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=11 captures=39 generic02=1 NMI=0 IRQ=0 RTI=0 pushes=0 firmware_reads=0 delay=1",
+      "new_reports": [],
+      "stack_pushes": [],
+      "trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246",
+      "events_sha256": "0c41a095b4b180ff484e466c1bffbf663c15f65b582ef2f76044c9e42f546a25"
+    },
+    {
+      "mode": "nmi_after_timeout",
+      "fork": 1,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=11 captures=39 generic02=1 NMI=0 IRQ=0 RTI=0 pushes=0 firmware_reads=0 delay=1",
+      "new_reports": [],
+      "stack_pushes": [],
+      "trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246",
+      "events_sha256": "0c41a095b4b180ff484e466c1bffbf663c15f65b582ef2f76044c9e42f546a25"
+    },
+    {
+      "mode": "irq_after_timeout",
+      "fork": 0,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=12 captures=40 generic02=1 NMI=1 IRQ=0 RTI=1 pushes=3 firmware_reads=7 delay=1",
+      "new_reports": [
+        2
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ]
+      ],
+      "trace_sha256": "7d59197a155bb8c1d2850df6bf82c348c7defe9a6058818e35aac18cf85c1754",
+      "events_sha256": "846394e28bb05a566f5be823b0d0aadf705a11531b59b693c1a256f8e29ded88"
+    },
+    {
+      "mode": "irq_after_timeout",
+      "fork": 1,
+      "backend_delay_scale": 1,
+      "result": "PASS IRQ system error=12 captures=40 generic02=1 NMI=1 IRQ=0 RTI=1 pushes=3 firmware_reads=7 delay=1",
+      "new_reports": [
+        2
+      ],
+      "stack_pushes": [
+        [
+          "S",
+          "01fd",
+          "20"
+        ],
+        [
+          "S",
+          "01fc",
+          "31"
+        ],
+        [
+          "S",
+          "01fb",
+          "26"
+        ]
+      ],
+      "trace_sha256": "7d59197a155bb8c1d2850df6bf82c348c7defe9a6058818e35aac18cf85c1754",
+      "events_sha256": "846394e28bb05a566f5be823b0d0aadf705a11531b59b693c1a256f8e29ded88"
+    }
+  ],
+  "lint": {
+    "result": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)\n- Verilator: Built from 0.361 MB sources in 9 modules, into 0.701 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.122 s (elab=0.009, cvt=0.038, bld=0.000); cpu 0.059 s on 1 threads; alloced 20.539 MB",
+    "excluded_categories": [
+      "PINCONNECTEMPTY",
+      "DECLFILENAME",
+      "UNUSEDSIGNAL",
+      "BLKSEQ"
+    ]
+  },
+  "generated_sha256": {
+    "card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "card_irq_candidate.sv": "ecbd968c8de97df659048c34b61506abe5296e7c779fce57a5d86e212b5e0aed"
+  },
+  "inputs_sha256": {
+    "docs/experiments/card-irq-system/run.py": "6630e24f1d2a4d740ee1ed9f111107cb2d42173c17a9876e042263103f212b55",
+    "docs/experiments/card-irq-system/prepare.py": "102a7fce6170be3d3cc99160988ee63d21bc49004c18dba009b3026518beaf78",
+    "docs/experiments/card-irq-system/tb_card_irq.sv": "3301597489e6658623354b4090e0b85353f20c05eb8e7f1c284848dd67f7c4d4",
+    "docs/experiments/card-system-harness/card_candidate.sv": "25e2c13685ebda3e3957c5ab029f482ccbd32fa66949ebc1cffaa4038ff4c3a8",
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge.jsonl": "b2fbb5798489ae2f8ad3673b7b6180955ff0e86897432ea8d81b47bd28e3dd24",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge-result.json": "4e6f45911615d3e939bfcb5a822ddfac58f6e154aa0facf0537cd6c8f5f2e348",
+    "docs/experiments/card-interrupt-contract/test_interrupt_model.py": "f4a2d530d69de3a111bb07b3b06220d0480113cab328c57aafa4dab1681bfff9",
+    "docs/experiments/card-interrupt-contract/interrupt_model.py": "d16a49e2b2c639432e0645b0098a59a427f96009b596f204da7582f4cd251912",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "docs/experiments/startup-protocol/evidence.json": "c3ef6c513098a6d9618d605648f5837e2209a798838457d1fe2240e817098a1c",
+    "docs/experiments/firmware-memory/metadata.json": "3da43ffce1432bc5803dcddc645e08ebb294ba7e38495e3b66571d9bdfa7c955",
+    "docs/research/software-bringup/inspect_resources.py": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9"
+  }
+}

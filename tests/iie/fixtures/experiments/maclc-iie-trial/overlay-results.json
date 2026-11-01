@@ -1,0 +1,11 @@
+{
+  "scope": "Simulation of real overlay pixels with test status; not a hardware capture",
+  "result": "PASS overlay snapshot, CE, native pixels, 384/480-line placement\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-iie-trial/tb_overlay.sv:87: $finish called at 24080336000 (1ps)",
+  "preview": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\status-preview.png",
+  "preview_sha256": "17b6c313e4a4e62f24dbf4eabe6b74789f10ea4131a4fe83d293e1144a5867fd",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-trial\\tb_overlay.sv": "32ea8ca9dfdf581cddfb0d6be2efba5f7d55197f56a7982605a0b8094293c2a5",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-trial\\iie_status_overlay.sv": "6d38e9e318f135b119725856d7433e15eac54870e3edc3a8154e887d9b251715",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-trial\\check_overlay.py": "29d65286ecf45f66b03da9d4afa25f018c54da00123819bc7b2ba1e454d02f0f"
+  }
+}

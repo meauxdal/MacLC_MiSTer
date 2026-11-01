@@ -1,0 +1,76 @@
+{
+  "scope": "pinned HPS framing/handshake; extracted and transformed MacLC ingress/mux/register; actual SDRAM controller",
+  "hps_fence": "harness-only contract; existing HPS IO has no admission acknowledgment",
+  "loader_committer": "word-level producer models; full engines and ownership excluded",
+  "baseline_sources_unchanged": true,
+  "sys_period_ns": 20,
+  "mem_period_ns": 10,
+  "runs": [
+    {
+      "name": "hps",
+      "expected_failure": null,
+      "result": "PROVED wait=1 does not reserve session admission; frame close starts download\nPASS HPS framing: 2 words captured once; stop-coincident word retained; resume at byte 2\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_hps_protocol.sv:96: $finish called at 466000 (1ps)"
+    },
+    {
+      "name": "drop-on-stop",
+      "expected_failure": "stop lost offered word",
+      "result": "PROVED wait=1 does not reserve session admission; frame close starts download\nFATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_hps_protocol.sv:76: stop lost offered word\n       Time: 236000  Scope: tb_hps_protocol"
+    },
+    {
+      "name": "hps-ingress",
+      "expected_failure": null,
+      "result": "PASS HPS ingress composition: offers=3 commits=3 held_tail=30 stop_word=1 resume=1\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_hps_ingress.sv:136: $finish called at 1176000 (1ps)"
+    },
+    {
+      "name": "download-phase-2",
+      "expected_failure": null,
+      "result": "PASS download phase=2 accepted=12 posted=12 CAS=12 resets=4 cells=768 held_tail=18 drain_slots=10\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_download.sv:318: $finish called at 414742000 (1ps)"
+    },
+    {
+      "name": "download-phase-7",
+      "expected_failure": null,
+      "result": "PASS download phase=7 accepted=12 posted=12 CAS=12 resets=4 cells=768 held_tail=18 drain_slots=10\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_download.sv:318: $finish called at 414747000 (1ps)"
+    },
+    {
+      "name": "rom-override",
+      "expected_failure": "late ROM overrode locked owner",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_download.sv:140: late ROM overrode locked owner\n       Time: 82130000  Scope: tb_download"
+    },
+    {
+      "name": "wait-request",
+      "expected_failure": "backpressure flag became ROM request",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_download.sv:165: backpressure flag became ROM request after accepted word retired\n       Time: 82440000  Scope: tb_download.rom_word"
+    },
+    {
+      "name": "release-ack",
+      "expected_failure": "next accepted word consumed stale ACK",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_download.sv:302: next accepted word consumed stale ACK\n       Time: 249620000  Scope: tb_download"
+    },
+    {
+      "name": "early-init",
+      "expected_failure": "immediate init discarded posted write",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-download-quiesce/tb_download.sv:125: immediate init discarded posted write before CAS posts=1 CAS=0\n       Time: 82045000  Scope: tb_download"
+    }
+  ],
+  "lint_warnings": [
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-download-quiesce/sdram.v:370:30: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-download-quiesce/sdram.v:457:12: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits."
+  ],
+  "inputs_sha256": {
+    "docs/experiments/maclc-download-quiesce/tb_download.sv": "6044a3766501b4096100a05f406dc03bff4da2f3f165b427106da44d26dcc971",
+    "local/experiments/maclc-download-quiesce/maclc_download.sv": "447b4d3c3f210407180e1d77d56d388188a4f427270aa612f48ca54f28db78a4",
+    "local/experiments/maclc-download-quiesce/sdram.v": "2a5538f674a5b4f21ee5ebbed1146acdd8b9f086767c1b818df5e9131cbf828e",
+    "docs/experiments/card-quiesce/card_warm_reset.sv": "6dfa21c2bb06da73e7454d44745c2811568c4b448d93f06bc6720e626a62b8c6",
+    "docs/experiments/maclc-download-quiesce/tb_hps_protocol.sv": "bfcfb9b0fd155883e61d066dece0bb97339b4bfe692a3e01cafb2010d6bc84d3",
+    "local/experiments/maclc-download-quiesce/hps_protocol_source.sv": "e6efae3969b497ec4b15363590ae6fba77c24c642ce37e61df8176ddf5ecb361",
+    "docs/experiments/maclc-download-quiesce/tb_hps_ingress.sv": "8506f40085dc3f613ed1d6a1a25d34c0440dbcc8f187a7d8521fe39df3c1c9fd",
+    "docs/experiments/maclc-download-quiesce/prepare.py": "51aa6bf30e0613dd43a4e4ab1cc9fe170e83977fa523997a510bbd6b9fd08211",
+    "docs/experiments/maclc-download-quiesce/hps_prepare.py": "07c034f5aad9229fa2b0e040ffdbad0e72585450aaeb7e3e0f36a439a25f83df",
+    "docs/experiments/maclc-download-quiesce/run.py": "b97e9d83209f55f79bbf91df8f3eba92527827099065072637d296c6954691db",
+    "docs/experiments/card-quiesce/prepare.py": "ec97fe0b8110c45b01999e8a5227932489f6db61f674a2944850d2e2b9d626d5",
+    "C:/Workspace/Git/MacLC_MiSTer/MacLC.sv": "3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+    "C:/Workspace/Git/MacLC_MiSTer/sys/hps_io.sv": "fc939385b3fdd920e70de93b37e4bbde2ed759bba4f7888bde67f577814e708f",
+    "C:/Workspace/Git/MacLC_MiSTer/sys/sys_top.v": "171b9f9afc14da5d84b6721bb3e0649857f22ba9c4d2c416a73c69a21cb06b4e"
+  }
+}

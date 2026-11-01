@@ -1,0 +1,2631 @@
+{
+  "source": "docs\\research\\software-bringup\\work\\app221\\IIe Startup.rsrc",
+  "size": 401755,
+  "sha256": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+  "resources": [
+    {
+      "type": "CODE",
+      "id": 0,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 260,
+      "size": 728,
+      "sha256": "c3cd0397475579e03752766a18898c149f4b51e01c3184c14499bb4cedb084fc"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "name": "Main",
+      "attributes": 20,
+      "fork_offset": 992,
+      "size": 26716,
+      "sha256": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956"
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "name": "Init",
+      "attributes": 32,
+      "fork_offset": 27712,
+      "size": 2598,
+      "sha256": "d55c1fa48645cd2bb413c9610bb76c265e1cae207de9db774238052196a223fa"
+    },
+    {
+      "type": "CODE",
+      "id": 3,
+      "name": "Prefs",
+      "attributes": 32,
+      "fork_offset": 30314,
+      "size": 3628,
+      "sha256": "4703e6379acbed0d7422e6e77218569d12ca9edb8939651898dbd3d9ad711226"
+    },
+    {
+      "type": "CODE",
+      "id": 4,
+      "name": "Kiwi",
+      "attributes": 32,
+      "fork_offset": 33946,
+      "size": 8252,
+      "sha256": "5be9d8b69ddd366729fbc39d9c65611f07859a8d2c10e2065c05be462b787eb0"
+    },
+    {
+      "type": "CODE",
+      "id": 5,
+      "name": "A2eDRVR4",
+      "attributes": 32,
+      "fork_offset": 42202,
+      "size": 42050,
+      "sha256": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac"
+    },
+    {
+      "type": "CODE",
+      "id": 6,
+      "name": "A2eDRVR1",
+      "attributes": 32,
+      "fork_offset": 84256,
+      "size": 30166,
+      "sha256": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa"
+    },
+    {
+      "type": "CODE",
+      "id": 7,
+      "name": "%A5Init",
+      "attributes": 32,
+      "fork_offset": 114426,
+      "size": 1016,
+      "sha256": "bee472229841bd6f07ad3c29f645f62f9dd15baef92ddec1a46e43649d6ccec0"
+    },
+    {
+      "type": "LDEF",
+      "id": 2606,
+      "name": "ICONLDEF",
+      "attributes": 32,
+      "fork_offset": 115446,
+      "size": 598,
+      "sha256": "944b3c83f2c09edbb1ba11e0bf545049a9306480cfc63b36bf8bcc0ad84261e0"
+    },
+    {
+      "type": "LDEF",
+      "id": 2607,
+      "name": "PStrLDEF",
+      "attributes": 32,
+      "fork_offset": 211887,
+      "size": 152,
+      "sha256": "776c260b265c63776fee850d0cb421882dd7288432ac3f1667e651aa300e9116"
+    },
+    {
+      "type": "KIWI",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 116048,
+      "size": 2,
+      "sha256": "6249e6faa58831154f6df352c843a316a98c6b1eb57baa61a8bf4401e3726988"
+    },
+    {
+      "type": "MBAR",
+      "id": 128,
+      "name": null,
+      "attributes": 4,
+      "fork_offset": 116054,
+      "size": 8,
+      "sha256": "6f25ebb7d498375797add4bf40cf249f5f5e40630807061b9330bcb6339c9c44"
+    },
+    {
+      "type": "MENU",
+      "id": 128,
+      "name": null,
+      "attributes": 4,
+      "fork_offset": 116066,
+      "size": 46,
+      "sha256": "f64879e9c5d34cbfdc1a59355112bd781c7fa734bbb2ca80a96152dacf199403"
+    },
+    {
+      "type": "MENU",
+      "id": 129,
+      "name": null,
+      "attributes": 4,
+      "fork_offset": 116116,
+      "size": 136,
+      "sha256": "338ab37e840d14d7f9d3c87adeddf28b43e21bc6a77f8961c78b7da1f670029d"
+    },
+    {
+      "type": "MENU",
+      "id": 130,
+      "name": null,
+      "attributes": 4,
+      "fork_offset": 116256,
+      "size": 72,
+      "sha256": "d86c022dd67045bdf2b208f2e09fd0af6ca89305d09e99ddcce006b559989b93"
+    },
+    {
+      "type": "MENU",
+      "id": 20480,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 168993,
+      "size": 114,
+      "sha256": "dd63f825a4f19435760771c978b043085a72168918cf65ea272c5accd220a3e4"
+    },
+    {
+      "type": "MENU",
+      "id": 5888,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195116,
+      "size": 151,
+      "sha256": "17bdadac8f2ae24435e63392c9dbde27e15d7534cd12cbd33f68428d3751eded"
+    },
+    {
+      "type": "MENU",
+      "id": 5889,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195271,
+      "size": 103,
+      "sha256": "a7bde4688ae23a2a34ee458f36effc7bdcb02a3761b8011a7d87c215e33a47d8"
+    },
+    {
+      "type": "MENU",
+      "id": 5890,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195378,
+      "size": 50,
+      "sha256": "ed8d7ca864b74059015607c4c70dc8faa122fd9a085804184601e633e80f7c9d"
+    },
+    {
+      "type": "MENU",
+      "id": 5891,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195432,
+      "size": 96,
+      "sha256": "21a7f977c2ca7bafb86e8f051a1df034ea7bf6e97f556f54407748e6b9d73da5"
+    },
+    {
+      "type": "MENU",
+      "id": 5892,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195532,
+      "size": 39,
+      "sha256": "6764f511b37d1b843290d7f0bfca19784199e9e906f72338dc7465330cce6d29"
+    },
+    {
+      "type": "MENU",
+      "id": 5893,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195575,
+      "size": 39,
+      "sha256": "6764f511b37d1b843290d7f0bfca19784199e9e906f72338dc7465330cce6d29"
+    },
+    {
+      "type": "MENU",
+      "id": 5894,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195618,
+      "size": 46,
+      "sha256": "f3c26b498838a599e53679deff744a2385336c67ce295387af5e2f20232445b5"
+    },
+    {
+      "type": "MENU",
+      "id": 5895,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 195668,
+      "size": 66,
+      "sha256": "00469be16d277627c26d6c5feb5d33cade138739a062a2dc33e35ba7e3e54335"
+    },
+    {
+      "type": "MENU",
+      "id": 4864,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200236,
+      "size": 151,
+      "sha256": "17bdadac8f2ae24435e63392c9dbde27e15d7534cd12cbd33f68428d3751eded"
+    },
+    {
+      "type": "MENU",
+      "id": 4865,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200391,
+      "size": 103,
+      "sha256": "a7bde4688ae23a2a34ee458f36effc7bdcb02a3761b8011a7d87c215e33a47d8"
+    },
+    {
+      "type": "MENU",
+      "id": 4866,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200498,
+      "size": 50,
+      "sha256": "ed8d7ca864b74059015607c4c70dc8faa122fd9a085804184601e633e80f7c9d"
+    },
+    {
+      "type": "MENU",
+      "id": 4867,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200552,
+      "size": 96,
+      "sha256": "21a7f977c2ca7bafb86e8f051a1df034ea7bf6e97f556f54407748e6b9d73da5"
+    },
+    {
+      "type": "MENU",
+      "id": 4868,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200652,
+      "size": 39,
+      "sha256": "6764f511b37d1b843290d7f0bfca19784199e9e906f72338dc7465330cce6d29"
+    },
+    {
+      "type": "MENU",
+      "id": 4869,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200695,
+      "size": 39,
+      "sha256": "6764f511b37d1b843290d7f0bfca19784199e9e906f72338dc7465330cce6d29"
+    },
+    {
+      "type": "MENU",
+      "id": 4870,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200738,
+      "size": 46,
+      "sha256": "f3c26b498838a599e53679deff744a2385336c67ce295387af5e2f20232445b5"
+    },
+    {
+      "type": "MENU",
+      "id": 4871,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 200788,
+      "size": 66,
+      "sha256": "00469be16d277627c26d6c5feb5d33cade138739a062a2dc33e35ba7e3e54335"
+    },
+    {
+      "type": "WIND",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 116332,
+      "size": 29,
+      "sha256": "e0b599c5a0a411e1af3e99d6ebb894da73a1c46b4c67702077d35adc008987e0"
+    },
+    {
+      "type": "DITL",
+      "id": 130,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 116365,
+      "size": 180,
+      "sha256": "4aa76dad3484bbb39f03dbeb8729c8ce19f28485014825d7182b2b2de5c94e0d"
+    },
+    {
+      "type": "DITL",
+      "id": 133,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 116571,
+      "size": 134,
+      "sha256": "eb6088bf28a541ea8b1f272e10f14573bee975ba9356ca8e9a322cef7b79af27"
+    },
+    {
+      "type": "DITL",
+      "id": 137,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 118750,
+      "size": 166,
+      "sha256": "88863ba86d57411f77b8aecd664c144483daee1469d0edf5a66660f676384c4e"
+    },
+    {
+      "type": "DITL",
+      "id": 132,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 121781,
+      "size": 46,
+      "sha256": "d0a00a27c2ee2844bf630dd386c766ca1b71161aaa35001fda3478e16f77d677"
+    },
+    {
+      "type": "DITL",
+      "id": 135,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 121872,
+      "size": 212,
+      "sha256": "24c3b9c1b9066b2e3c98f4be0f74a22570b4e62fbff4d63ea103c7cbdd7d2229"
+    },
+    {
+      "type": "DITL",
+      "id": 136,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122104,
+      "size": 220,
+      "sha256": "830555c5a6d29f99640d0be3b227325757f7a3bdc12c1d1d9dae3e6784ffcc34"
+    },
+    {
+      "type": "DITL",
+      "id": 138,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122344,
+      "size": 166,
+      "sha256": "00636a92fc316d5eded3cdb3b1d7870f6235725b7475548537f56d377087d1ba"
+    },
+    {
+      "type": "DITL",
+      "id": 139,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122530,
+      "size": 64,
+      "sha256": "62845011983c4521e0588c78f15c707bb287ed4a3099278f2f9476c46b928e49"
+    },
+    {
+      "type": "DITL",
+      "id": 140,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122614,
+      "size": 80,
+      "sha256": "1b324d82f249af4ff67fd2162d2b2c4b04ab3ff57dd206c226845165c2ca357a"
+    },
+    {
+      "type": "DITL",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122714,
+      "size": 56,
+      "sha256": "5ef616192befa6daa684f0f93a78b044f744a1d141d45f3bcb063a9f468eb298"
+    },
+    {
+      "type": "DITL",
+      "id": 700,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131903,
+      "size": 16,
+      "sha256": "7c6a6e74b75d633d23779ac67bf71c559a363aca062a3a269be4937a803ce67d"
+    },
+    {
+      "type": "DITL",
+      "id": 4618,
+      "name": "SmartPort",
+      "attributes": 32,
+      "fork_offset": 151098,
+      "size": 116,
+      "sha256": "f9d27a9c227739d2728d9136ad2f323c3c0d98916f04079cc175fa882e9cd313"
+    },
+    {
+      "type": "DITL",
+      "id": 20756,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 157256,
+      "size": 122,
+      "sha256": "712977f56120ae4d0738de64fc921e7bbd00cede89191a3e0cb661e7ec7f7e91"
+    },
+    {
+      "type": "DITL",
+      "id": 20736,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 157382,
+      "size": 838,
+      "sha256": "4dc0bd354bb8364f0f0bc85882f9667a12e3e2a09989ebcf6e114e8032c470be"
+    },
+    {
+      "type": "DITL",
+      "id": 20746,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 158224,
+      "size": 354,
+      "sha256": "45713a712e985784bbcc4cc3556dd93223c56c5a3d65409125ef4bad3eaf7c10"
+    },
+    {
+      "type": "DITL",
+      "id": 20480,
+      "name": "Slots",
+      "attributes": 32,
+      "fork_offset": 169111,
+      "size": 670,
+      "sha256": "97d00530d1b82bed18ebcbf83b29963128373e2e527ab8ddeeba137385ded381"
+    },
+    {
+      "type": "DITL",
+      "id": 20481,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 169785,
+      "size": 72,
+      "sha256": "e6c9be053c821166b52fc0676de1a90269d9e85dfbfa49eaaff0134793b05615"
+    },
+    {
+      "type": "DITL",
+      "id": 20482,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 169861,
+      "size": 80,
+      "sha256": "00fac3ffa87719d68cd44f6302c14218fd695980cf8381bf93683fa2096c3cf9"
+    },
+    {
+      "type": "DITL",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 177036,
+      "size": 212,
+      "sha256": "5188d4ed762e4e3897451f845653971b1ffe16bf162c050a7812f54f220abae3"
+    },
+    {
+      "type": "DITL",
+      "id": 4352,
+      "name": "Mouse Card",
+      "attributes": 32,
+      "fork_offset": 179602,
+      "size": 348,
+      "sha256": "9937cc5c57d2d4219f3a482f62bc5c0d0bd3c46297cfc4b2c0b4f14e9f714e44"
+    },
+    {
+      "type": "DITL",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 32,
+      "fork_offset": 187605,
+      "size": 660,
+      "sha256": "13e6562759f5d80ae0a045d8ec6a8d74deb4cb354da0500f7cf1f2de6878a64b"
+    },
+    {
+      "type": "DITL",
+      "id": 5888,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 194262,
+      "size": 850,
+      "sha256": "44f4ce375ec93b7e2680ffc8c8943ca191abe7acde1a11436f9dcb79d11dae39"
+    },
+    {
+      "type": "DITL",
+      "id": 4864,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 199386,
+      "size": 846,
+      "sha256": "2c2d329bbf1420384c87ca1d551186f882ca6a2b30163907ed919d791de7eea2"
+    },
+    {
+      "type": "DITL",
+      "id": 6400,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 204786,
+      "size": 334,
+      "sha256": "d6edcbf370c48383f61c19f7249f6a06efa3b055a7c97836b5b33d6908d75594"
+    },
+    {
+      "type": "DITL",
+      "id": 4874,
+      "name": "Modem",
+      "attributes": 32,
+      "fork_offset": 243316,
+      "size": 62,
+      "sha256": "4a560c605d196801ddbb37516d7348e6bffc651b441a45f97eb25d45f8bafe5b"
+    },
+    {
+      "type": "DITL",
+      "id": 4884,
+      "name": "Modem",
+      "attributes": 32,
+      "fork_offset": 243382,
+      "size": 80,
+      "sha256": "e7ae770ece7fd6cb51cc68552fdae63cce83f0a0f2bd56ea0dbd6bcb53fc91dd"
+    },
+    {
+      "type": "DITL",
+      "id": 5898,
+      "name": "Printer",
+      "attributes": 32,
+      "fork_offset": 247775,
+      "size": 64,
+      "sha256": "c8c092ce6d0792fe67cee75aee8190043a5b6fab0b6d1b708e840b600f34d137"
+    },
+    {
+      "type": "DITL",
+      "id": 5908,
+      "name": "Printer",
+      "attributes": 32,
+      "fork_offset": 247843,
+      "size": 80,
+      "sha256": "e7ae770ece7fd6cb51cc68552fdae63cce83f0a0f2bd56ea0dbd6bcb53fc91dd"
+    },
+    {
+      "type": "DITL",
+      "id": 4106,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 252467,
+      "size": 96,
+      "sha256": "b345d60d5c4fc94f6b7896731106e1a894f939f59e937ff33b305e0146f180b6"
+    },
+    {
+      "type": "DITL",
+      "id": 6420,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 257818,
+      "size": 114,
+      "sha256": "4b6eb695f2e8e64ccea7014205a46f8f5e81f77b88441640b4473ec39ff21553"
+    },
+    {
+      "type": "DITL",
+      "id": 6430,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 257936,
+      "size": 120,
+      "sha256": "97ec75d9d460a31f0473fe77926da865af5683f0df5f4a829bb86e5a7f34c6ed"
+    },
+    {
+      "type": "DITL",
+      "id": 6440,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 258060,
+      "size": 114,
+      "sha256": "d1dffb8f3dff0deddfb8aae5bde0c80423046dc95c289edaa4f0522afc281fa8"
+    },
+    {
+      "type": "DITL",
+      "id": 6450,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 258178,
+      "size": 102,
+      "sha256": "82ab041dbfd1e3719b6dfac3c270c085d63948541efd9a4525994e17809c652f"
+    },
+    {
+      "type": "DITL",
+      "id": 6460,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 258284,
+      "size": 104,
+      "sha256": "795bb14d69032a5699e14b8154a72eaeaac72022e59e3f542cbf6fd419c50dd5"
+    },
+    {
+      "type": "DITL",
+      "id": 5249,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 259110,
+      "size": 88,
+      "sha256": "afde53d6efe6913ec13e706e4a85d816a768aab9cb843fb090909f568ca31bc8"
+    },
+    {
+      "type": "DITL",
+      "id": 5130,
+      "name": "Can't Initialize AppleShare",
+      "attributes": 32,
+      "fork_offset": 259202,
+      "size": 190,
+      "sha256": "451129d11fa38653dbe14d985f3d1fd19b22f94e4affc36622197c9e6089f81f"
+    },
+    {
+      "type": "DITL",
+      "id": 5135,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 259396,
+      "size": 90,
+      "sha256": "f4539751c8444559a3c5bdc5828902c724794e2c495ba08043568e9613da8200"
+    },
+    {
+      "type": "DITL",
+      "id": 5150,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 259490,
+      "size": 118,
+      "sha256": "82554cc131cd8058111402bb1e3c19922456deec2d821998e0365cfbcc05f849"
+    },
+    {
+      "type": "DITL",
+      "id": 5160,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 259612,
+      "size": 114,
+      "sha256": "48347696646740861c0f7d48b59909fdf85205f42221a95d4f7fcdc3e8200973"
+    },
+    {
+      "type": "nrct",
+      "id": 130,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 116549,
+      "size": 18,
+      "sha256": "24552d6312d9e80d21954e26ef13de3f13ff33233373e769301e7703fe072407"
+    },
+    {
+      "type": "nrct",
+      "id": 20736,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 158582,
+      "size": 66,
+      "sha256": "dd4974034b7ccd5f18b3cebcb4bebc0f45b335eb84e941983668d153d338f5fc"
+    },
+    {
+      "type": "nrct",
+      "id": 20480,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 169945,
+      "size": 10,
+      "sha256": "72d1ae667cb82bf587226049944dbdbb36ea078500f9ed8ef225ee9fe49e277a"
+    },
+    {
+      "type": "nrct",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 177252,
+      "size": 10,
+      "sha256": "ba31b19c20f8abf1ed4cb94969d701ca0e91f5dacc278ef699ce1863932d9a51"
+    },
+    {
+      "type": "nrct",
+      "id": 4352,
+      "name": "Mouse Card",
+      "attributes": 32,
+      "fork_offset": 179954,
+      "size": 10,
+      "sha256": "a6c9a69645079457c7f2268bec16cbb24220d847daeed173eda630e6d3232b66"
+    },
+    {
+      "type": "nrct",
+      "id": 4608,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 188269,
+      "size": 10,
+      "sha256": "72d1ae667cb82bf587226049944dbdbb36ea078500f9ed8ef225ee9fe49e277a"
+    },
+    {
+      "type": "nrct",
+      "id": 5888,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 194248,
+      "size": 10,
+      "sha256": "72d1ae667cb82bf587226049944dbdbb36ea078500f9ed8ef225ee9fe49e277a"
+    },
+    {
+      "type": "nrct",
+      "id": 4864,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 199372,
+      "size": 10,
+      "sha256": "72d1ae667cb82bf587226049944dbdbb36ea078500f9ed8ef225ee9fe49e277a"
+    },
+    {
+      "type": "nrct",
+      "id": 6400,
+      "name": "Printer Card",
+      "attributes": 32,
+      "fork_offset": 203781,
+      "size": 10,
+      "sha256": "62470256499175ae8edb18fa81f57c248b9e087a156bed3ca30427ce037299da"
+    },
+    {
+      "type": "cicn",
+      "id": 130,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 116709,
+      "size": 626,
+      "sha256": "ed8fbe635843bc56d4f388199d509b4747851281238c0647e5676aa756c8c48b"
+    },
+    {
+      "type": "cicn",
+      "id": 131,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 117339,
+      "size": 626,
+      "sha256": "b02c7364366245e688beb8c98c88ceee569c0e70cee7b34617a3532e1370a159"
+    },
+    {
+      "type": "cicn",
+      "id": 5376,
+      "name": "Clock",
+      "attributes": 32,
+      "fork_offset": 152597,
+      "size": 626,
+      "sha256": "b5b9fedc0f22f6d4b0f93bc0ae55c67fa03e79dfa8c46730413517280337689f"
+    },
+    {
+      "type": "cicn",
+      "id": 20736,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 155027,
+      "size": 898,
+      "sha256": "00cee7d14bb8566a335c756a482544cfebd227a999013b2082f1928c9ab5c436"
+    },
+    {
+      "type": "cicn",
+      "id": 20737,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 155929,
+      "size": 914,
+      "sha256": "b167c8db20b9a1eaa30c415ee8ba673e362f7bb07662464cee8e73ceeea3cc64"
+    },
+    {
+      "type": "cicn",
+      "id": 20480,
+      "name": "Slots",
+      "attributes": 32,
+      "fork_offset": 167157,
+      "size": 914,
+      "sha256": "46655d05cee1f7e035514ec2ca3a4dfa8581549736237b8a52d05d4cb8541196"
+    },
+    {
+      "type": "cicn",
+      "id": 20481,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 168075,
+      "size": 914,
+      "sha256": "b167c8db20b9a1eaa30c415ee8ba673e362f7bb07662464cee8e73ceeea3cc64"
+    },
+    {
+      "type": "cicn",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 176134,
+      "size": 898,
+      "sha256": "5193ea882a676652c7e8ce6628701c190ab915b99378ea0983a6c312fb37299b"
+    },
+    {
+      "type": "cicn",
+      "id": 4352,
+      "name": "Mouse Card",
+      "attributes": 32,
+      "fork_offset": 178700,
+      "size": 898,
+      "sha256": "543a3759ba943217213305b8a80b7dcd4e9f0c2b9fc068f7fd125beffc9910d2"
+    },
+    {
+      "type": "cicn",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 32,
+      "fork_offset": 183623,
+      "size": 906,
+      "sha256": "9bd45fed6bb7d730a3d9a88941cb2ce94dfb374daec879fc363ee70558e5d824"
+    },
+    {
+      "type": "cicn",
+      "id": 4609,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 184533,
+      "size": 626,
+      "sha256": "686503e446c29931108a0246c81e29c44f43b738e9870fdd2395aba438851cc6"
+    },
+    {
+      "type": "cicn",
+      "id": 4610,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 185163,
+      "size": 626,
+      "sha256": "27f00300525015c657d84d19028933abc827586a51d6c51353478d05d750e838"
+    },
+    {
+      "type": "cicn",
+      "id": 4611,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 185793,
+      "size": 898,
+      "sha256": "6619dc98976f6916f67aa669d3e67bfd3854047e027a07e0fafb787717dec796"
+    },
+    {
+      "type": "cicn",
+      "id": 4612,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 186695,
+      "size": 906,
+      "sha256": "a7c08d9de0af257681cc891a4082192ddab913721fafe826ab39ac5e2f780e72"
+    },
+    {
+      "type": "cicn",
+      "id": 5888,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 193618,
+      "size": 626,
+      "sha256": "f4c4cb7a2aa39accd43330fca62c2a8784951b596b6e8622b7fa60fac7cdaf4f"
+    },
+    {
+      "type": "cicn",
+      "id": 4864,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 198742,
+      "size": 626,
+      "sha256": "2cf040f3f560519e27b83086a46c7761f34c19643a653905ffbc7db33378d8e6"
+    },
+    {
+      "type": "cicn",
+      "id": 6400,
+      "name": "Printer Card",
+      "attributes": 32,
+      "fork_offset": 203868,
+      "size": 914,
+      "sha256": "b7da03cd6730a1bfa6396920d802e650a576c2e699250b751ca92a06100f9fb2"
+    },
+    {
+      "type": "cicn",
+      "id": 5632,
+      "name": "5.25\u201d Disk",
+      "attributes": 32,
+      "fork_offset": 235637,
+      "size": 634,
+      "sha256": "4a297a97be96ed67a0121e632d671ff6c0e9fe4a9b83d5da86a9aafb2edf9c70"
+    },
+    {
+      "type": "cicn",
+      "id": 5120,
+      "name": "AppleShare Card",
+      "attributes": 32,
+      "fork_offset": 258392,
+      "size": 634,
+      "sha256": "74e7c29c52413334b202304bba73e99a659e58012cedb4b227bcb981db529a34"
+    },
+    {
+      "type": "PICT",
+      "id": 800,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 117969,
+      "size": 777,
+      "sha256": "ca4d44ef3e1e0478b2d9b6d0318de5e4f61fb0b6d298f4708432ec0ed68804de"
+    },
+    {
+      "type": "PICT",
+      "id": 137,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 119137,
+      "size": 1678,
+      "sha256": "a8402e1ceab87535507164ecbe8bad869088b11b47e6ca110d767c315337f1ae"
+    },
+    {
+      "type": "PICT",
+      "id": 138,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 120819,
+      "size": 958,
+      "sha256": "1cb11ff67812ad2a02d73128279d1b324558a8ac5ca7be0c7683cc5d3ef6673d"
+    },
+    {
+      "type": "PICT",
+      "id": 700,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 132300,
+      "size": 2908,
+      "sha256": "1e99528b35a7dc8e092bc900287f3cfd20e087aac0f902bb6ed65d1d0188d53d"
+    },
+    {
+      "type": "PICT",
+      "id": 701,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 135212,
+      "size": 842,
+      "sha256": "d7750a4f0b93e128d96189895c1da0180286e7cc2e0f7b1afe1a513ec35533b2"
+    },
+    {
+      "type": "PICT",
+      "id": 702,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 136058,
+      "size": 840,
+      "sha256": "edfc525bc550b3c733e0bc584039a2e28b909f953c03d96333061e43e23dea89"
+    },
+    {
+      "type": "PICT",
+      "id": 703,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 136902,
+      "size": 412,
+      "sha256": "ddcac1a70761e7331be558a72ea833b91b97faf854d3cd2aa4e9d812d59cc132"
+    },
+    {
+      "type": "PICT",
+      "id": 704,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 137318,
+      "size": 414,
+      "sha256": "739da2a002ade110945968132a9a5b770d12be91d383aef50c175e468a364170"
+    },
+    {
+      "type": "PICT",
+      "id": 705,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 137736,
+      "size": 412,
+      "sha256": "37d5d94cd728a3dba529046e3d88ec9c91776889c4a0287fc805e0a132ab6bb6"
+    },
+    {
+      "type": "PICT",
+      "id": 706,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 138152,
+      "size": 416,
+      "sha256": "3b90feb038b1cfcba63a5bc945011975e9b2466a41aa9305c7d710438b0ab493"
+    },
+    {
+      "type": "PICT",
+      "id": 707,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 138572,
+      "size": 416,
+      "sha256": "cf9a74c782a8714d7619d3617f1e9c76df49d4d7bccd28b686e4e7985fbde1ff"
+    },
+    {
+      "type": "PICT",
+      "id": 708,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 138992,
+      "size": 416,
+      "sha256": "ce52bd78b9fb8397a57c7b1cb98ffac8c6715cf15e71964874e8937a0d50d0dc"
+    },
+    {
+      "type": "PICT",
+      "id": 709,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 139412,
+      "size": 416,
+      "sha256": "1dc918763b003b5b15fa9f89d1f7aed23be8c287b4e5380d61b0c7ee7ad7dc94"
+    },
+    {
+      "type": "PICT",
+      "id": 710,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 139832,
+      "size": 296,
+      "sha256": "c0c3698a158499dac46f410a6ab1203c639ecb5e9c5fcd2b15ceffaa527c3f89"
+    },
+    {
+      "type": "PICT",
+      "id": 711,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 140132,
+      "size": 296,
+      "sha256": "fcb98bb1f195a266875151352ce7be9848a9811bdd54ad6d7bcb6106c34162fe"
+    },
+    {
+      "type": "PICT",
+      "id": 712,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 140432,
+      "size": 296,
+      "sha256": "37c9cc33f0481722544bee46a0146821bb6ed575ca38a8587645719b38f79854"
+    },
+    {
+      "type": "PICT",
+      "id": 713,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 140732,
+      "size": 478,
+      "sha256": "d448ba3948d5598085a870b4b19c2b8077500f26b9b63f3f5d98139d50037d5f"
+    },
+    {
+      "type": "PICT",
+      "id": 714,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 141214,
+      "size": 440,
+      "sha256": "13834423f52f6fa2f8c8751caeed2b50cab69995e2d1eab84f2c76efe4285d95"
+    },
+    {
+      "type": "PICT",
+      "id": 715,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 141658,
+      "size": 440,
+      "sha256": "24e672f0105c7c9b49514bc8b706e9222725e6149e89b2fe6c1d14d289e4fb2d"
+    },
+    {
+      "type": "PICT",
+      "id": 716,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 142102,
+      "size": 442,
+      "sha256": "e2b12f595dbcf73ea05debab429e15fdaad7a14b066f32a24e1933892c4d8991"
+    },
+    {
+      "type": "PICT",
+      "id": 717,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 142548,
+      "size": 452,
+      "sha256": "e5192f37e9bed13c74c60f741cd87bb0edee0244795f6f41e68d9888d6f4aaad"
+    },
+    {
+      "type": "PICT",
+      "id": 718,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 143004,
+      "size": 420,
+      "sha256": "abfce6ea70b23a9867c3b4d2282cbb0c305959c39ff85993e354eb023503b3a4"
+    },
+    {
+      "type": "PICT",
+      "id": 719,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 143428,
+      "size": 936,
+      "sha256": "470acc2b318d584bf3703e12cd8cfef3ac4f67252ce2469d7c19a405dfd6e8da"
+    },
+    {
+      "type": "PICT",
+      "id": 720,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 144368,
+      "size": 928,
+      "sha256": "f4e5040ae77b3f9b9bdd4700dc2625f2532ae83f3b7372522d49d73df3a189cf"
+    },
+    {
+      "type": "PICT",
+      "id": 721,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 145300,
+      "size": 762,
+      "sha256": "d36d11fe09b5e73ba7fb06d46eeff1063e7c421462396a6584207129c7e994dc"
+    },
+    {
+      "type": "PICT",
+      "id": 20736,
+      "name": "=Speed=",
+      "attributes": 32,
+      "fork_offset": 156847,
+      "size": 147,
+      "sha256": "f9fe910714d780c9cadacbf19b0b090d6e6ac576f9b55efefdd31c1135ce637c"
+    },
+    {
+      "type": "PICT",
+      "id": 20480,
+      "name": "Slots Bay",
+      "attributes": 32,
+      "fork_offset": 169959,
+      "size": 744,
+      "sha256": "303c09a166984bd64e43e92443606e4b516038363cfe04d6fcc93ffad8fb1334"
+    },
+    {
+      "type": "PICT",
+      "id": 20481,
+      "name": "Spare Bay",
+      "attributes": 32,
+      "fork_offset": 170707,
+      "size": 542,
+      "sha256": "c1e2f886b0c96fc4c7f367482116ced3cbcc529c1325ecac502ee6b961d4eab8"
+    },
+    {
+      "type": "PICT",
+      "id": 20490,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 171253,
+      "size": 172,
+      "sha256": "c84390ddcddb6b177b1b188af4eb6b8156bf3a005e79ca003901c04822a49ffe"
+    },
+    {
+      "type": "PICT",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 177266,
+      "size": 89,
+      "sha256": "a11e2fd2467f4e312ab6b24e8c355c90ba500d08c5b01312a59984c3f4f83032"
+    },
+    {
+      "type": "PICT",
+      "id": 4352,
+      "name": "Mouse Card",
+      "attributes": 32,
+      "fork_offset": 179968,
+      "size": 1140,
+      "sha256": "9b001a4ae7446850046b2ed702028956af0b9de8934fc7697bc2344c572ea37f"
+    },
+    {
+      "type": "PICT",
+      "id": 4608,
+      "name": "Slot Bay",
+      "attributes": 32,
+      "fork_offset": 188283,
+      "size": 354,
+      "sha256": "d06aa4169d2d8222b3794524a29249ed253612b5ad24ebc795d4d46cfcd02652"
+    },
+    {
+      "type": "PICT",
+      "id": 4609,
+      "name": "Spare Bay",
+      "attributes": 32,
+      "fork_offset": 188641,
+      "size": 489,
+      "sha256": "33ea74b213b00490a8eb3eb0bce419ac4f8333596c1fa28cfbeaaa6f51fcf005"
+    },
+    {
+      "type": "PICT",
+      "id": 5898,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 195738,
+      "size": 172,
+      "sha256": "c84390ddcddb6b177b1b188af4eb6b8156bf3a005e79ca003901c04822a49ffe"
+    },
+    {
+      "type": "PICT",
+      "id": 4874,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 200858,
+      "size": 172,
+      "sha256": "c84390ddcddb6b177b1b188af4eb6b8156bf3a005e79ca003901c04822a49ffe"
+    },
+    {
+      "type": "DLOG",
+      "id": 137,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 118920,
+      "size": 21,
+      "sha256": "72565054642309807698d3c3ab925fe7a00f565ae5ba76d26d433e8a242b8e0f"
+    },
+    {
+      "type": "DLOG",
+      "id": 132,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 121831,
+      "size": 21,
+      "sha256": "0e63c3617602f202ef3c2916a90071595e0776e7ddd1d86cd319ae44f6a32db5"
+    },
+    {
+      "type": "DLOG",
+      "id": 700,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131923,
+      "size": 21,
+      "sha256": "f33d1ad8cfd5d4433bef3382e8ae3a3e9413a5c15eedec24633ba4cc2b769bd7"
+    },
+    {
+      "type": "DLOG",
+      "id": 20746,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 158686,
+      "size": 21,
+      "sha256": "1fcef1e5f3797f63cfd3ab9b3c75cc5d7310640b967cee258a6111ac6a723b98"
+    },
+    {
+      "type": "dctb",
+      "id": 137,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 118945,
+      "size": 8,
+      "sha256": "6186530e872ac29959a0c223aed23944f12c6b609e64a0a8bd1be20b5006a8b2"
+    },
+    {
+      "type": "pltt",
+      "id": 137,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 118957,
+      "size": 176,
+      "sha256": "c74c013c37d8e6b441d3d560817dce5241fb153fde671c3835a18138716afb47"
+    },
+    {
+      "type": "ALRT",
+      "id": 135,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 121856,
+      "size": 12,
+      "sha256": "215c8544812dbfabd60515ca254632b6ad7bc613676eb3e747628cacc787f421"
+    },
+    {
+      "type": "ALRT",
+      "id": 136,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122088,
+      "size": 12,
+      "sha256": "9a8f330f2693250c71dbe8a82ca963bf794d9fe15490215016af29f4b69211fe"
+    },
+    {
+      "type": "ALRT",
+      "id": 138,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122328,
+      "size": 12,
+      "sha256": "1f27e64be0c315db89868a1362c1eda37f4a8c6278157b7d6e1e02826c5f3d45"
+    },
+    {
+      "type": "ALRT",
+      "id": 139,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122514,
+      "size": 12,
+      "sha256": "f5b645bdabb415570e251bc565e2ac7f24c6ee244d6b69109e28be16bac30161"
+    },
+    {
+      "type": "ALRT",
+      "id": 140,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122598,
+      "size": 12,
+      "sha256": "0edee5a8750dba2ca865492ad310514860663b8b49f8977c382dc9baa25070c1"
+    },
+    {
+      "type": "ALRT",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122698,
+      "size": 12,
+      "sha256": "35e07d6b39c8ebe56e23d5ad7b98a235d245e925e0bb4db6da8b139e4b974f30"
+    },
+    {
+      "type": "ALRT",
+      "id": 4618,
+      "name": "SmartPort",
+      "attributes": 32,
+      "fork_offset": 151082,
+      "size": 12,
+      "sha256": "3ccf3e4817c77369e5102677bab15e1f2789d4d7a933de363ef3a8f86733ab4d"
+    },
+    {
+      "type": "ALRT",
+      "id": 20756,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 157240,
+      "size": 12,
+      "sha256": "3e05097040fcd77390cd870f21d26d51c34854e58a0d5cba41da82dff8ca5230"
+    },
+    {
+      "type": "ALRT",
+      "id": 20481,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 171429,
+      "size": 12,
+      "sha256": "bbb155bf22b4b902e26fffe55a8463c6f8ba0f9dcb4d5a2ca6ed29805be56f8b"
+    },
+    {
+      "type": "ALRT",
+      "id": 20482,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 171445,
+      "size": 12,
+      "sha256": "1aa8de8b19519f00bf9948fdec9ba7a3b75c97d8d2c4f363a4c1202e1c2fdaa1"
+    },
+    {
+      "type": "ALRT",
+      "id": 4874,
+      "name": "Modem",
+      "attributes": 32,
+      "fork_offset": 243284,
+      "size": 12,
+      "sha256": "29265046e6cd996551528fe00019b21aa0ea4c6b70a93ad46abcec3b1783db73"
+    },
+    {
+      "type": "ALRT",
+      "id": 4884,
+      "name": "Modem",
+      "attributes": 32,
+      "fork_offset": 243300,
+      "size": 12,
+      "sha256": "b3240ab8bf45a4eeef8af221d99a5e90a9da0a85450793ddf4e904bf2d61ad78"
+    },
+    {
+      "type": "ALRT",
+      "id": 5898,
+      "name": "Printer",
+      "attributes": 32,
+      "fork_offset": 247743,
+      "size": 12,
+      "sha256": "89a38d1537d3eaa507209ed47f160e5e8500343bdf987360512bde56b69ac017"
+    },
+    {
+      "type": "ALRT",
+      "id": 5908,
+      "name": "Printer",
+      "attributes": 32,
+      "fork_offset": 247759,
+      "size": 12,
+      "sha256": "9809784f56303db5acf7529dabb94d0b30223ddaf92d317a6c1463a9e24bb98f"
+    },
+    {
+      "type": "ALRT",
+      "id": 4106,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 252451,
+      "size": 12,
+      "sha256": "b1b07a9ed4790cb491b96b9ded150525926e12e6d54cb7bf7db6c0a5e8b14225"
+    },
+    {
+      "type": "ALRT",
+      "id": 6420,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 257738,
+      "size": 12,
+      "sha256": "7f0fe63d9c5b73b7b8aedcef022285d520a941658a611a3d15199841110d01c6"
+    },
+    {
+      "type": "ALRT",
+      "id": 6430,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 257754,
+      "size": 12,
+      "sha256": "88d330332beaf008bb24843e1b854c87338978733693bfc20e9f05cc3b268cde"
+    },
+    {
+      "type": "ALRT",
+      "id": 6440,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 257770,
+      "size": 12,
+      "sha256": "cd973b4ee5404e5ed4705b376802960fce084281f1e8620f3256871ebc2c7654"
+    },
+    {
+      "type": "ALRT",
+      "id": 6450,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 257786,
+      "size": 12,
+      "sha256": "d5116da47075d3fd08ca016c4c3eb1abf4c379407de55b254f27ed265f66b107"
+    },
+    {
+      "type": "ALRT",
+      "id": 6460,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 257802,
+      "size": 12,
+      "sha256": "01411b87997d4a89e553c891b15c255a2dc99bcba34437a9b0d1195f4bc1eb35"
+    },
+    {
+      "type": "ALRT",
+      "id": 5249,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 259030,
+      "size": 12,
+      "sha256": "9a4b7b4d89e4920338ee107ea4bb2bc5aa35408e44f9848b51a5dfda4b52dd21"
+    },
+    {
+      "type": "ALRT",
+      "id": 5130,
+      "name": "Can't Initialize AppleShare",
+      "attributes": 32,
+      "fork_offset": 259046,
+      "size": 12,
+      "sha256": "d922ae392e88ec206126085222af2cceb53282bdbe5ba10c88b0f58d8d821842"
+    },
+    {
+      "type": "ALRT",
+      "id": 5135,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 259062,
+      "size": 12,
+      "sha256": "dde94c6c90b5e068cbd73cf5eb85f3fb0b6a56c73a6b75a062d379171395d0a5"
+    },
+    {
+      "type": "ALRT",
+      "id": 5150,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 259078,
+      "size": 12,
+      "sha256": "54c27a70c7d2e75b4ea2e73250f5e40484485b8ed9ade9fcde6f301adaacabe0"
+    },
+    {
+      "type": "ALRT",
+      "id": 5160,
+      "name": "NetPrint",
+      "attributes": 32,
+      "fork_offset": 259094,
+      "size": 12,
+      "sha256": "c9efee85daa5cf8a84190e628b8dc2e9fa9b68cea87bbb41522e9a3397304d89"
+    },
+    {
+      "type": "STR#",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 122774,
+      "size": 2356,
+      "sha256": "1666bc30747b152896c41e8ce3cbef37a3c805b5cc0f8aaffc8fbb6c8b7e54ef",
+      "strings": [
+        "",
+        "The Application Memory Size is too small",
+        "There is not enough memory to run IIe Startup",
+        "IIe Startup requires 2 color or 16 color monitor mode",
+        "You must have an Apple IIe Card installed to run this application",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "An error has occured while trying to print the IIe screen",
+        "",
+        "Unable to continue because of a fatal error.  Error #",
+        "",
+        "",
+        "An error has occured while trying to save the IIe screen",
+        "",
+        "",
+        "",
+        "",
+        "Option panel missing its matching icon",
+        "There are too many option panels installed",
+        "Unable to continue because of a fatal disk error.  Error #",
+        "Preferences file is unusable",
+        "Slots option panel is missing",
+        "Can\u2019t use this panel because parts of it are missing",
+        "There is not enough memory to use this panel",
+        "The changes you have made will not take effect until restart",
+        "There is not enough memory to keep a copy of the IIe screen",
+        "Minimum video display size of 560x384 pixels is unavailable",
+        "IIe Startup does not support printing from the Finder",
+        "The selected file could not be opened",
+        "The file \u201cPRODOS\u201d could not be found in the IIe Startup folder",
+        "The \u201cBASIC.SYSTEM\u201d file could not be found in the IIe Startup folder",
+        "Files may only be opened from ProDOS disks",
+        "The pathname of the selected file is too long to open",
+        "To open the selected file, SmartPort must be installed in slot 5",
+        "To open the selected file, the ProDOS disk must be in the SmartPort configuration",
+        "The preferences file could not be created",
+        "Your preferences file is on a locked disk.  Any changes you make will not be saved",
+        "To open the selected file, you must have version 1.2 or later of the file \u201cPRODOS\u201d",
+        "Your Apple IIe Card is defective.  Problem #",
+        "Your preferences file is for a future version of IIe Startup and cannot be used",
+        "You may not change preferences files without quitting IIe Startup",
+        "The display colors could not be set.  Try quitting other applications or restarting",
+        "To use the Apple IIe Card, you must turn 32-bit addressing off in the Memory control panel",
+        "The IIe screen could not be saved because the file name is invalid",
+        "The IIe screen could not be saved because the disk is full",
+        "The IIe screen could not be saved because the disk is locked",
+        "The IIe screen could not be saved because the existing file is locked",
+        "The preferences file could not be created because the disk is locked",
+        "The preferences file could not be created because the disk is full",
+        "You may only run one copy of IIe Startup at a time"
+      ]
+    },
+    {
+      "type": "STR#",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 125215,
+      "size": 532,
+      "sha256": "ae534eee6854788ae20d036fe1dac12393530e03394a84b8c0e0a846991b7c27",
+      "strings": [
+        "General",
+        "PRODOS",
+        "BASIC.SYSTEM",
+        "Copy",
+        "Copy IIe Screen",
+        "Picture 00",
+        "Save Apple IIe screen as:",
+        "is not installed in any slot.  Any changes you make will not take effect until you install the card in the Slots panel and restart the IIe",
+        "will not be installed until you restart the IIe.  Any changes you make will not take effect until then",
+        "IIe Option Panel",
+        "Apple IIe",
+        "IIe Startup\r\rUse this application program to run Apple II programs.  This application program runs only on Macintosh computers in which the Apple IIe Card has been installed."
+      ]
+    },
+    {
+      "type": "STR#",
+      "id": 2000,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131887,
+      "size": 12,
+      "sha256": "06a55367fa7c157c3bb9927001292032f7d0ada38ea3d38cb2f134766a63222d",
+      "strings": [
+        "IIe Prefs"
+      ]
+    },
+    {
+      "type": "STR#",
+      "id": 20736,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 156998,
+      "size": 238,
+      "sha256": "e4bb7f54ab94348572257d3d6b1caaff73e050cd749cf216cfd4e3af322b4843",
+      "strings": [
+        "Color",
+        "Monochrome",
+        "None",
+        "Command-",
+        "Option-",
+        "Control-",
+        "Shift-",
+        "Tab",
+        "Return",
+        "Enter",
+        "Escape",
+        "Delete",
+        "Clear",
+        "Space",
+        "Left Arrow",
+        "Right Arrow",
+        "Down Arrow",
+        "Up Arrow",
+        "Unknown",
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "Help",
+        "Home",
+        "Page Up",
+        "Del",
+        "End",
+        "Page Down"
+      ]
+    },
+    {
+      "type": "STR#",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 177359,
+      "size": 23,
+      "sha256": "e6a3d05396ba027ca50f4dc50a2e4283a33bfef3677b9b6abf2f46a23c562700",
+      "strings": [
+        "256K",
+        "512K",
+        "768K",
+        "1024K"
+      ]
+    },
+    {
+      "type": "STR#",
+      "id": 6400,
+      "name": "Printer Card",
+      "attributes": 32,
+      "fork_offset": 203795,
+      "size": 69,
+      "sha256": "88a4b070ac77993beace3891f71a6dc1c29e2e13bff02e43a887069aacd377b0",
+      "strings": [
+        "  Type:",
+        "  Name:",
+        "  Zone:",
+        "  Port:",
+        "Modem",
+        "Printer",
+        "No printer selected."
+      ]
+    },
+    {
+      "type": "STR ",
+      "id": 20737,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 125134,
+      "size": 77,
+      "sha256": "7ac92c372d437cde3ae558834bd3c93c425912ef3491d3e2610052355b9ac8da"
+    },
+    {
+      "type": "finf",
+      "id": 2606,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 125751,
+      "size": 14,
+      "sha256": "fe0c8d2a48e5d68063ea7e784459768bc4879d7fdbf50e8fc5e24b3751555dd8"
+    },
+    {
+      "type": "clut",
+      "id": 740,
+      "name": "Apple2eColors",
+      "attributes": 0,
+      "fork_offset": 125769,
+      "size": 136,
+      "sha256": "5c5dec8b9f57f58b17e66acf2e5376ceb85c9685d5c21e4d46d7ca4bfc3b6a00"
+    },
+    {
+      "type": "KChr",
+      "id": 2606,
+      "name": "A2EUS",
+      "attributes": 32,
+      "fork_offset": 125909,
+      "size": 902,
+      "sha256": "75ab5084243088b163c8316f9413920f2d31b0bc8aa636ddaf1b5a77bca8da68"
+    },
+    {
+      "type": "KChr",
+      "id": 20736,
+      "name": "OPKey",
+      "attributes": 32,
+      "fork_offset": 158711,
+      "size": 518,
+      "sha256": "cec07addd86c73b56664b0201b747f1dac4bcfa40cb9b83772e49cec2b2f4d0b"
+    },
+    {
+      "type": "SIZE",
+      "id": -1,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 126815,
+      "size": 10,
+      "sha256": "0fc4d5990ef023f8516937f79150992e3495d8ccc6aafbeb281c135d95db9d61"
+    },
+    {
+      "type": "hfdr",
+      "id": -5696,
+      "name": null,
+      "attributes": 0,
+      "fork_offset": 126829,
+      "size": 20,
+      "sha256": "90467f61f1bb6733666cfe638f9e3cf583ef556674729a9e995ab10c6f4fead6"
+    },
+    {
+      "type": "vers",
+      "id": 1,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 126853,
+      "size": 52,
+      "sha256": "6ef7948e130eb870bc293e4edb2a8d51250e05cd89de1247bd02e3d97440bcd4",
+      "hex": "02218000000005322e322e3127322e322e312c20a9204170706c6520436f6d70757465722c20496e632e20313937372d31393933"
+    },
+    {
+      "type": "vers",
+      "id": 2,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 396497,
+      "size": 33,
+      "sha256": "c6569246b054111af8ea35191afbcf0f0a5a48e4ba069ffe5ce755f33a1aea76",
+      "hex": "02218000000005322e322e31144170706c6520494965204361726420322e322e31"
+    },
+    {
+      "type": "pdos",
+      "id": 0,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 126909,
+      "size": 48,
+      "sha256": "58a992ea20b22cb4c3b479439fe1ac9fc1510b1a117d311f436792321f2595f3"
+    },
+    {
+      "type": "BNDL",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 126961,
+      "size": 68,
+      "sha256": "68d9ee491a5873d37ed4a56ecd855c5ebd790213ba3c41ea6c28c6ad150c8472"
+    },
+    {
+      "type": "FREF",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 127033,
+      "size": 7,
+      "sha256": "6ae70fda6b5f837884e8d6de071429e82370e929a86f133fd3c2b8775a9d594b"
+    },
+    {
+      "type": "FREF",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 129308,
+      "size": 7,
+      "sha256": "bd031eeeadf8009bfebdd5555c1b8c89a2b524a8a265c64b02459971fe630043"
+    },
+    {
+      "type": "FREF",
+      "id": 303,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131583,
+      "size": 7,
+      "sha256": "c144cea3f25919a819c8e59e5282cb72c78f8731c4c92611f87aef66f98d025c"
+    },
+    {
+      "type": "FREF",
+      "id": 304,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131594,
+      "size": 7,
+      "sha256": "6730d4928e94921ab0814506fa5b17755a32c21e2320e34f928726e10d381fa3"
+    },
+    {
+      "type": "FREF",
+      "id": 305,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131605,
+      "size": 7,
+      "sha256": "3b6c64760849b580088d1684a0c64f2c74cb0051125d9863cc43798a97f708f4"
+    },
+    {
+      "type": "FREF",
+      "id": 306,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131616,
+      "size": 7,
+      "sha256": "42547fa57c318a53f1a6c21e4710980bcddc31afd0f6cab97e54506c90a4c1a4"
+    },
+    {
+      "type": "ICN#",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 127044,
+      "size": 256,
+      "sha256": "16ae688a15cbfe3735574d18e2d0a7d6103d45d7f0ee00fe23e250bc4f3a0e36"
+    },
+    {
+      "type": "ICN#",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 129319,
+      "size": 256,
+      "sha256": "86ecb3e6ef26ff06e8245042cd736a45b38a274f8c3b522610786ebc1cc581f8"
+    },
+    {
+      "type": "ICN#",
+      "id": 301,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131627,
+      "size": 256,
+      "sha256": "8ba5ba25b305eb514cb008ed472866a302227165f256a7515a6f89b67a4e4814"
+    },
+    {
+      "type": "icl8",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 127304,
+      "size": 1024,
+      "sha256": "fbc2af9b0a493c10e7b42dd01fda1abe8693761eb15289904182b339a5ef49dc"
+    },
+    {
+      "type": "icl8",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 129579,
+      "size": 1024,
+      "sha256": "b78782e7c8bb1251cd32f58f970a30164c94617ff01a8200aff66d5f7e3abdb7"
+    },
+    {
+      "type": "icl4",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 128332,
+      "size": 512,
+      "sha256": "4f6a2d9be2823eec459980ca9d7ded641baca41337b4c0522cfb9f8ffef76072"
+    },
+    {
+      "type": "icl4",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 130607,
+      "size": 512,
+      "sha256": "b5d914129630d2f52f518e95921ca84b72cb9a0e331027e977684be1ac11b79b"
+    },
+    {
+      "type": "ics#",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 128848,
+      "size": 64,
+      "sha256": "e99e22542deda672912f2a1adfd11d0a7f23fba09830f5fd78db37b61e44dde5"
+    },
+    {
+      "type": "ics#",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131123,
+      "size": 64,
+      "sha256": "7af70c01022a5d205a1c76a4c08320eb68f2e38bafe6d0641cf48147955f514c"
+    },
+    {
+      "type": "ics8",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 128916,
+      "size": 256,
+      "sha256": "9bee1d77ff26f0b9cecf9a028a18c7a8b94dd0f4ffdd5334a90cfbe32aede001"
+    },
+    {
+      "type": "ics8",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131191,
+      "size": 256,
+      "sha256": "24db17b04721dfd84aa431645a322cd71492526c3e04ec097df3ed428f90bd33"
+    },
+    {
+      "type": "ics4",
+      "id": 128,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 129176,
+      "size": 128,
+      "sha256": "33a939737820134f3d94f2a46d4208f24fe580ceb401f1f3c14873cb7923301f"
+    },
+    {
+      "type": "ics4",
+      "id": 129,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131451,
+      "size": 128,
+      "sha256": "bc36aaab04952f9452245079ce61e4ce576c3801543aa2f996bc0876e4b5c59c"
+    },
+    {
+      "type": "PAT#",
+      "id": 700,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 131948,
+      "size": 66,
+      "sha256": "c6507a30bbbe69a60076ea89d01f54fc0a7b48ab5c89df8bcc309c6e80492899"
+    },
+    {
+      "type": "Anim",
+      "id": 700,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 132018,
+      "size": 278,
+      "sha256": "02c04db35fa10033139011cf5f2d2c3768df299dfe0f9b38113027fd4666e42b"
+    },
+    {
+      "type": "CNmc",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 48,
+      "fork_offset": 146066,
+      "size": 2336,
+      "sha256": "261a16912bfe13a5e15114592eb9d7bf358d5b9cbf869e59800f9700a9194ebb"
+    },
+    {
+      "type": "CNmc",
+      "id": 5376,
+      "name": "AppleClock",
+      "attributes": 48,
+      "fork_offset": 151218,
+      "size": 1110,
+      "sha256": "7f032e3f79c88786be3ac52a89bf4e14b7130f98b46b97b29854884578a99690"
+    },
+    {
+      "type": "CNmc",
+      "id": 24576,
+      "name": "IntlKeyDriver",
+      "attributes": 32,
+      "fork_offset": 211583,
+      "size": 300,
+      "sha256": "10044e55662e5525ea7c852bec864464227dd28b9a067034d600cb518f18651c"
+    },
+    {
+      "type": "CNmc",
+      "id": 5632,
+      "name": "Slot6",
+      "attributes": 48,
+      "fork_offset": 233201,
+      "size": 126,
+      "sha256": "404efd092362f4cf365058f9aaa3ee868c18b628e57a84fe093879c265d20ff5"
+    },
+    {
+      "type": "CNmc",
+      "id": 4352,
+      "name": "MouseCard",
+      "attributes": 48,
+      "fork_offset": 236275,
+      "size": 2038,
+      "sha256": "37c6049cb232ddcafdf71a6230c8ace0c4520186acb489bcc0976390236279b2"
+    },
+    {
+      "type": "CNmc",
+      "id": 4864,
+      "name": "Modem",
+      "attributes": 48,
+      "fork_offset": 239009,
+      "size": 2184,
+      "sha256": "e8b234e1ed4e17c1722c1e099f80d09730f3d39f0623e2ebbde32cf13303d49d"
+    },
+    {
+      "type": "CNmc",
+      "id": 5888,
+      "name": "Printer",
+      "attributes": 48,
+      "fork_offset": 243466,
+      "size": 2186,
+      "sha256": "0be87589d0d3b7b73a9829b67601bfdb8e1e7d42ae9fcffa94d33df9bca52ada"
+    },
+    {
+      "type": "CNmc",
+      "id": 4096,
+      "name": "Slinky",
+      "attributes": 48,
+      "fork_offset": 247927,
+      "size": 672,
+      "sha256": "1b6401092a9b44b2fddcdf2dbed31d573b2df4340a1cf09432dab4b45d8a66b9"
+    },
+    {
+      "type": "CNmc",
+      "id": 6400,
+      "name": "NetPrint",
+      "attributes": 48,
+      "fork_offset": 252567,
+      "size": 3080,
+      "sha256": "eb0c86eee98fe1be88c54429bf9cdc45a42d0601e2d45d9589c6c8c6f93b6436"
+    },
+    {
+      "type": "CNmc",
+      "id": 5120,
+      "name": "ATLK_Card",
+      "attributes": 32,
+      "fork_offset": 324135,
+      "size": 39136,
+      "sha256": "0f2ad068ee706713bd63ba0a39c394573c30cfb8919d766f5f3f259f56e4e71e"
+    },
+    {
+      "type": "DCLK",
+      "id": 4608,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 148406,
+      "size": 372,
+      "sha256": "868b3a8fe20f5fdd8168cfc8ff893154e623026a03086b071c0a5ceab1afe9a6"
+    },
+    {
+      "type": "CNxx",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 48,
+      "fork_offset": 148782,
+      "size": 256,
+      "sha256": "c4cd59de43da8bf178bd7d20b5640e479c02a7443f3ac3c54b429b643732d78b"
+    },
+    {
+      "type": "CNxx",
+      "id": 5376,
+      "name": "AppleClock",
+      "attributes": 48,
+      "fork_offset": 152332,
+      "size": 256,
+      "sha256": "75e659a4214e97762470970108da111fdd516aa882ef72009ae08a03bbec62c4"
+    },
+    {
+      "type": "CNxx",
+      "id": 5632,
+      "name": "5.25\u201d Disk",
+      "attributes": 48,
+      "fork_offset": 233331,
+      "size": 256,
+      "sha256": "da1b85c81ffe26b104b1d2af9912abd114c4799ddee4eabbf01692efea9892c8"
+    },
+    {
+      "type": "CNxx",
+      "id": 4352,
+      "name": "MouseCard",
+      "attributes": 48,
+      "fork_offset": 238317,
+      "size": 256,
+      "sha256": "9fa413413c2c7958c06c61082e195804717ad55a0cff2b0fcfc6702bc2c29d0d"
+    },
+    {
+      "type": "CNxx",
+      "id": 4864,
+      "name": "Modem",
+      "attributes": 48,
+      "fork_offset": 241197,
+      "size": 256,
+      "sha256": "2946d0bbd82b621c18b110f5c0f16ce56cf237b61fa703f047ac3ccdbd35b177"
+    },
+    {
+      "type": "CNxx",
+      "id": 5888,
+      "name": "Printer",
+      "attributes": 48,
+      "fork_offset": 245656,
+      "size": 256,
+      "sha256": "2946d0bbd82b621c18b110f5c0f16ce56cf237b61fa703f047ac3ccdbd35b177"
+    },
+    {
+      "type": "CNxx",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 48,
+      "fork_offset": 248603,
+      "size": 1792,
+      "sha256": "28d86431032b9fd266cc24873af6c5330c64b66ea72361ded12aaba5488350bb"
+    },
+    {
+      "type": "CNxx",
+      "id": 6400,
+      "name": "NetPrint",
+      "attributes": 48,
+      "fork_offset": 255651,
+      "size": 256,
+      "sha256": "2946d0bbd82b621c18b110f5c0f16ce56cf237b61fa703f047ac3ccdbd35b177"
+    },
+    {
+      "type": "CNxx",
+      "id": 5120,
+      "name": "ATLK_Card",
+      "attributes": 48,
+      "fork_offset": 363275,
+      "size": 1792,
+      "sha256": "f7750e503770e7a893b9e05f10f9e55e0ed26493b48620e140e9135fd5c81a19"
+    },
+    {
+      "type": "C8xx",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 48,
+      "fork_offset": 149042,
+      "size": 2036,
+      "sha256": "9968d7a7ed0d0d9cc337faa6b78a2ff83c39f778e333c20be25fa9b90ad54bd1"
+    },
+    {
+      "type": "C8xx",
+      "id": 5376,
+      "name": "AppleClock",
+      "attributes": 48,
+      "fork_offset": 152592,
+      "size": 1,
+      "sha256": "8d33f520a3c4cef80d2453aef81b612bfe1cb44c8b2025630ad38662763f13d3"
+    },
+    {
+      "type": "C8xx",
+      "id": 4352,
+      "name": "MouseCard",
+      "attributes": 48,
+      "fork_offset": 238577,
+      "size": 428,
+      "sha256": "f0c3c734b2b598e099714e5b32b5bbc3a210525db548bc88253fa45b698eaa5c"
+    },
+    {
+      "type": "C8xx",
+      "id": 4864,
+      "name": "Modem",
+      "attributes": 48,
+      "fork_offset": 241457,
+      "size": 1823,
+      "sha256": "901f8d350c2670717daa6686f57eb7988e98096ea1ae848c95d0de3f62cab558"
+    },
+    {
+      "type": "C8xx",
+      "id": 5888,
+      "name": "Printer",
+      "attributes": 48,
+      "fork_offset": 245916,
+      "size": 1823,
+      "sha256": "901f8d350c2670717daa6686f57eb7988e98096ea1ae848c95d0de3f62cab558"
+    },
+    {
+      "type": "C8xx",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 48,
+      "fork_offset": 250399,
+      "size": 2048,
+      "sha256": "9ca5ea460c97a3fe5ad9168e253463b7586b80d9ee9e64a75c2f49d53ca7b5cc"
+    },
+    {
+      "type": "C8xx",
+      "id": 6400,
+      "name": "NetPrint",
+      "attributes": 48,
+      "fork_offset": 255911,
+      "size": 1823,
+      "sha256": "901f8d350c2670717daa6686f57eb7988e98096ea1ae848c95d0de3f62cab558"
+    },
+    {
+      "type": "C8xx",
+      "id": 5120,
+      "name": "ATLK_Card",
+      "attributes": 48,
+      "fork_offset": 365071,
+      "size": 2048,
+      "sha256": "fd99c436f4868af22b95967e6e81fce4a49f8f96f7aefdf3eb164987928b0ddb"
+    },
+    {
+      "type": "FONT",
+      "id": 25736,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 153227,
+      "size": 1202,
+      "sha256": "9192ec00494a6fdebf49e8a9b037522ecafdef9fa383fb0338319cc8b48c72ab"
+    },
+    {
+      "type": "FOND",
+      "id": 201,
+      "name": "Apple2E",
+      "attributes": 32,
+      "fork_offset": 154433,
+      "size": 66,
+      "sha256": "461ff7a583aa0062c80a0edf943b8121e95c0b52ad04a66c8f0b2f292810c76d"
+    },
+    {
+      "type": "cnod",
+      "id": 20736,
+      "name": "General",
+      "attributes": 0,
+      "fork_offset": 154503,
+      "size": 32,
+      "sha256": "e0bec65e43729d5fb0b4e02b1ad9e70c1506aef701450a00d43ba17901dfb986"
+    },
+    {
+      "type": "cnod",
+      "id": 20480,
+      "name": "Slots",
+      "attributes": 0,
+      "fork_offset": 166651,
+      "size": 16,
+      "sha256": "5852b1a635ad7f70e9bfd71c355e0260d5f51b3f855f0b8ee69c451d9b2b09f8"
+    },
+    {
+      "type": "cnod",
+      "id": 5888,
+      "name": "Serial Card",
+      "attributes": 0,
+      "fork_offset": 193592,
+      "size": 22,
+      "sha256": "c130ab8a67c5d8936ca8ec09d406363462e18882264d16addffd7b02a6566c82"
+    },
+    {
+      "type": "cnod",
+      "id": 4864,
+      "name": "Serial Card",
+      "attributes": 0,
+      "fork_offset": 198716,
+      "size": 22,
+      "sha256": "9639b2135ff45d4632c411e465980fa6a82fd2ceefb082535a5ad729de7f417e"
+    },
+    {
+      "type": "Help",
+      "id": 20736,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 154539,
+      "size": 484,
+      "sha256": "760264cef75c4213462fb86307f81a72b17f7366d7d3ef9076943af450d2f948"
+    },
+    {
+      "type": "Help",
+      "id": 20480,
+      "name": "Slots",
+      "attributes": 32,
+      "fork_offset": 166671,
+      "size": 482,
+      "sha256": "31102767701a5bc323d0d7ae3f8bdcbc41f3e9b01e3480c6ec688120698dbd05"
+    },
+    {
+      "type": "Help",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 175701,
+      "size": 429,
+      "sha256": "73c6c5cc3f0859bf473e631a9bba0420e0e84b5b89d8196d3cae291ffe8f2ef0"
+    },
+    {
+      "type": "Help",
+      "id": 4352,
+      "name": "Mouse Card",
+      "attributes": 32,
+      "fork_offset": 178522,
+      "size": 174,
+      "sha256": "1a14fa7599ee611c973ec04f5afeacbf1387194d47ee438b91a970bf4bbf77e0"
+    },
+    {
+      "type": "Help",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 32,
+      "fork_offset": 183302,
+      "size": 317,
+      "sha256": "d599f91243faff378dbf017891fddd68400440c6475172989010b70cddf21013"
+    },
+    {
+      "type": "Help",
+      "id": 5888,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 193056,
+      "size": 532,
+      "sha256": "a14451b49507fa6cb7e1b84d6cc0224d373e1ea37a16db2146fd2218188b736b"
+    },
+    {
+      "type": "Help",
+      "id": 4864,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 198182,
+      "size": 530,
+      "sha256": "4dd5c444fd764bf6cae8d32e02eb7e57cffbbb73b94b576ecf0d02bda0f5f22f"
+    },
+    {
+      "type": "Help",
+      "id": 6400,
+      "name": "Printer Card",
+      "attributes": 32,
+      "fork_offset": 203302,
+      "size": 475,
+      "sha256": "bf184917078453d05e806fd9afaae219297c2bbc5ae76f7ac73ca91607c84451"
+    },
+    {
+      "type": "CNTL",
+      "id": 20736,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 158652,
+      "size": 30,
+      "sha256": "592789827e4fcf3aa9319f16039f4458fec5c95bd030cf1652bd5779a66b41bd"
+    },
+    {
+      "type": "snd ",
+      "id": 2606,
+      "name": "Apple IIe Beep",
+      "attributes": 32,
+      "fork_offset": 159233,
+      "size": 2362,
+      "sha256": "c43abbc4f0f6c50a6a95e4a436222ec475b73d7fcbd5b8d9b1e46cfdc1ac630f"
+    },
+    {
+      "type": "ODEV",
+      "id": 20736,
+      "name": "General",
+      "attributes": 32,
+      "fork_offset": 161599,
+      "size": 5048,
+      "sha256": "a68561a8f4464df5ef2dbfc9d662521c49b254961926d0ea79f1107470430fc7"
+    },
+    {
+      "type": "ODEV",
+      "id": 20480,
+      "name": "Slots",
+      "attributes": 32,
+      "fork_offset": 171461,
+      "size": 4236,
+      "sha256": "d5b4857f35ba8422fbd6bd28b8a418d3745ab7aabe144f7dda98cf085d061363"
+    },
+    {
+      "type": "ODEV",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 32,
+      "fork_offset": 177386,
+      "size": 1132,
+      "sha256": "888f145e6b59ce69a72e958dc9ea41f2e26294cb2487518083823afd64ce210f"
+    },
+    {
+      "type": "ODEV",
+      "id": 4352,
+      "name": "Mouse Card",
+      "attributes": 32,
+      "fork_offset": 181112,
+      "size": 1060,
+      "sha256": "cba4a89a9a7c1be2a10052ed597f07904f70b62b4b8b90ccf52d7c46e44622ad"
+    },
+    {
+      "type": "ODEV",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 32,
+      "fork_offset": 189134,
+      "size": 3918,
+      "sha256": "d86d5d40ce42b8c5040c21ce60ff17f32b2afc534674d4ef7e4d11105e7967a8"
+    },
+    {
+      "type": "ODEV",
+      "id": 5888,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 195914,
+      "size": 2264,
+      "sha256": "e04e475035cec9203b49bc9fc9eb0aa232593b49c0b43e9d4b17c70a013ca323"
+    },
+    {
+      "type": "ODEV",
+      "id": 4864,
+      "name": "Serial Card",
+      "attributes": 32,
+      "fork_offset": 201034,
+      "size": 2264,
+      "sha256": "2164457ad5efdbc9f602261d16b95048b70890edef2832f502e8687fb2d931b6"
+    },
+    {
+      "type": "ODEV",
+      "id": 6400,
+      "name": "Printer Card",
+      "attributes": 32,
+      "fork_offset": 205124,
+      "size": 2960,
+      "sha256": "b415c88b77f41e6633c11ecc2ac264956225e064f4784d30d2ff7e768c5aafb0"
+    },
+    {
+      "type": "ASM2",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 32,
+      "fork_offset": 182176,
+      "size": 1122,
+      "sha256": "aec5566491c3526823644f19dc52392de48f2c1a5e9cb29e8b10f37f380f2ad9"
+    },
+    {
+      "type": "FKEY",
+      "id": 3,
+      "name": "DumpFKEY",
+      "attributes": 32,
+      "fork_offset": 208088,
+      "size": 1320,
+      "sha256": "453d8becdf8a6550063f2f2fede6580d7baaaef0c48c33599d71f0e90544beb4"
+    },
+    {
+      "type": "Conf",
+      "id": 1001,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 209412,
+      "size": 581,
+      "sha256": "8a180d9c3339ea2d50eccc83fed71df0989563e38c491e38bce5850a10629390"
+    },
+    {
+      "type": "Conf",
+      "id": 1002,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 209997,
+      "size": 12,
+      "sha256": "81b61721e961eaa4c4fef48a3f699144fc37be84cc5ad1704226b8464ac91757"
+    },
+    {
+      "type": "Conf",
+      "id": 1003,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 210013,
+      "size": 12,
+      "sha256": "08e5f1fe0fe706bdbc54f8d8f434c943a2867c980a24597891f5bd145f64adb9"
+    },
+    {
+      "type": "Conf",
+      "id": 1004,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 210029,
+      "size": 12,
+      "sha256": "dd9204464407086528ec42763058d3e919040739d729402c061f24f068df0824"
+    },
+    {
+      "type": "Conf",
+      "id": 1000,
+      "name": "ConfTest",
+      "attributes": 32,
+      "fork_offset": 210045,
+      "size": 1534,
+      "sha256": "32770b79591f67559f451a8760adb2f77205c1b1dcf0dede67216370d578b1a6"
+    },
+    {
+      "type": "MDEF",
+      "id": 128,
+      "name": "mdefproc",
+      "attributes": 32,
+      "fork_offset": 212043,
+      "size": 3638,
+      "sha256": "969c79a5bcfd074a106151bdc727f61468a7fd386a6ed921027fa9d053f44863"
+    },
+    {
+      "type": "Monx",
+      "id": 2606,
+      "name": "A2EMonitorROM",
+      "attributes": 32,
+      "fork_offset": 215685,
+      "size": 16390,
+      "sha256": "e753940fbde914bed5fe5d4090239db8d087cfab9b628ffc11e46e3b84e41f11"
+    },
+    {
+      "type": "Monx",
+      "id": 2607,
+      "name": "D1 NMI-IRQ Rcvr",
+      "attributes": 32,
+      "fork_offset": 232079,
+      "size": 108,
+      "sha256": "56fb339f23b1a104a7967fcbadf8efd3ef2923f2f6a01cc6eb80aeb829d675eb"
+    },
+    {
+      "type": "Monx",
+      "id": 2608,
+      "name": "D2 NMI-IRQ Rcvr",
+      "attributes": 32,
+      "fork_offset": 232191,
+      "size": 108,
+      "sha256": "76594697ce8d44a562dbf2e66505bf348d00352e11757842788d0df988843a6c"
+    },
+    {
+      "type": "Monx",
+      "id": 2609,
+      "name": "D1 INTCX",
+      "attributes": 32,
+      "fork_offset": 232303,
+      "size": 429,
+      "sha256": "d1ff3ca4ba82c47854acee7349a40e1a8b810171ea15d35073894c11a904e7e9"
+    },
+    {
+      "type": "Monx",
+      "id": 2610,
+      "name": "D2 INTCX",
+      "attributes": 32,
+      "fork_offset": 232736,
+      "size": 429,
+      "sha256": "9edb0c563d6fe71998ca5ba9ef7f90338e27c4f6d753115eabc1a3cd5f70e0f4"
+    },
+    {
+      "type": "Monx",
+      "id": 2611,
+      "name": "D1 Vectors",
+      "attributes": 32,
+      "fork_offset": 233169,
+      "size": 12,
+      "sha256": "86308b3ddafd7f4e0d57a4301f27910177963cf85ef5d7ba081e69e5abc63f68"
+    },
+    {
+      "type": "Monx",
+      "id": 2612,
+      "name": "D2 Vectors",
+      "attributes": 32,
+      "fork_offset": 233185,
+      "size": 12,
+      "sha256": "79e95fd4fa8bdc67e3f76d86ea9ed5b18849c396d8567bb072127d895009d4be"
+    },
+    {
+      "type": "Monx",
+      "id": 5632,
+      "name": "5.25\u201d Disk",
+      "attributes": 48,
+      "fork_offset": 233591,
+      "size": 2042,
+      "sha256": "df369ce2fee1f002e80fa3af0452816f5a3b1170d43bf06acf4ae86421e74c03"
+    },
+    {
+      "type": "Monx",
+      "id": 5120,
+      "name": "PFI Bank 0",
+      "attributes": 48,
+      "fork_offset": 367123,
+      "size": 9478,
+      "sha256": "c6b13680d61b37a8d9ac14b6f6eade2d726301a78fc924dd717d3bfb9717df7a"
+    },
+    {
+      "type": "Monx",
+      "id": 5121,
+      "name": "PFI Bank 1",
+      "attributes": 48,
+      "fork_offset": 376605,
+      "size": 9478,
+      "sha256": "a41481c614d0e62e391749c0d02dbd863c95ccaa8c242b33d151c2722fbff486"
+    },
+    {
+      "type": "BBLK",
+      "id": 5120,
+      "name": "Apple //e Boot Blocks",
+      "attributes": 0,
+      "fork_offset": 259730,
+      "size": 35243,
+      "sha256": "2aa4c28731498918ae5315b0af771698686d2e4b2181bb614d439c17be9f2e22"
+    },
+    {
+      "type": "IWEM",
+      "id": 1810,
+      "name": "NetPrint",
+      "attributes": 0,
+      "fork_offset": 294977,
+      "size": 29154,
+      "sha256": "0e51232e31e98af58d6e80b3a8951ef00f7fed18b7a80f6fd94547a4e2b3da86"
+    },
+    {
+      "type": "DRVR",
+      "id": 42,
+      "name": ".PAP",
+      "attributes": 16,
+      "fork_offset": 386087,
+      "size": 10406,
+      "sha256": "00e30401324fe899b6dce600a04a6d968e94e2ce83099f45a311121862281a85"
+    }
+  ]
+}

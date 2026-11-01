@@ -1,0 +1,223 @@
+{
+  "scope": "Injected original driver subset; zero Macintosh sound volume",
+  "runs": [
+    {
+      "driver": 5,
+      "service": 1,
+      "state": "ack=true service=1 pc=202830 sp=3f0000",
+      "dispatch_resource_offsets": [
+        "281C",
+        "2820",
+        "2824",
+        "2828",
+        "282C",
+        "2830",
+        "2832",
+        "2836",
+        "2838",
+        "2C26",
+        "135E",
+        "1362",
+        "1366",
+        "1576",
+        "1C9A",
+        "1C9C",
+        "1CA0",
+        "1CA4",
+        "1CA8",
+        "1CAA",
+        "1CB8",
+        "1D28",
+        "1D2C",
+        "1D30",
+        "1D5E",
+        "1CAE",
+        "1CB2",
+        "136A",
+        "281C"
+      ],
+      "transactions_through_ack": [
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          1
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ]
+      ],
+      "loaded_code_sha256": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+      "trace_sha256": "528eec1c29054471d79828a93b48b0de911e898b8e02dbb3dc5f5d9ac545211f",
+      "bus_sha256": "000d9aeb045a801a89b124cb77b90c49d2181da1312c8b30bced6d2e17d81024"
+    },
+    {
+      "driver": 6,
+      "service": 1,
+      "state": "ack=true service=1 pc=202830 sp=3f0000",
+      "dispatch_resource_offsets": [
+        "281C",
+        "2820",
+        "2824",
+        "2828",
+        "282C",
+        "2830",
+        "2832",
+        "2836",
+        "2838",
+        "2C26",
+        "135E",
+        "1362",
+        "1366",
+        "1576",
+        "1C9A",
+        "1C9C",
+        "1CA0",
+        "1CA4",
+        "1CA8",
+        "1CAA",
+        "1CB8",
+        "1D28",
+        "1D2C",
+        "1D30",
+        "1D5E",
+        "1CAE",
+        "1CB2",
+        "136A",
+        "281C"
+      ],
+      "transactions_through_ack": [
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          1
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ]
+      ],
+      "loaded_code_sha256": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+      "trace_sha256": "528eec1c29054471d79828a93b48b0de911e898b8e02dbb3dc5f5d9ac545211f",
+      "bus_sha256": "000d9aeb045a801a89b124cb77b90c49d2181da1312c8b30bced6d2e17d81024"
+    },
+    {
+      "driver": 5,
+      "service": 0,
+      "state": "ack=true service=0 pc=20282c sp=3f0000",
+      "dispatch_resource_offsets": [
+        "281C",
+        "2820",
+        "2824",
+        "2828",
+        "282C",
+        "2830",
+        "2832",
+        "2836",
+        "2838",
+        "2C26",
+        "135E",
+        "1362",
+        "1366",
+        "1576",
+        "1C9A",
+        "1C9C",
+        "1CA0",
+        "1CA4",
+        "1CA8",
+        "1CAA",
+        "1CB4",
+        "1CD4",
+        "1CAE",
+        "1CB2",
+        "136A",
+        "281C"
+      ],
+      "transactions_through_ack": [
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          0
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ]
+      ],
+      "loaded_code_sha256": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+      "trace_sha256": "25ac5cd4b4be85ca420082fb1d41d72ce16581f6f28a76dff4185eea85662b22",
+      "bus_sha256": "867d367434464e6618debdbe314fd0a0383a94524945da1abdcee7f99df26073"
+    }
+  ],
+  "inputs_sha256": {
+    "docs\\experiments\\card-runtime-dispatch\\run.py": "81bc969bcd3c4ba1e5ac9a2d0485ca210374b16a7ad9d5c64a4e12d40bc304c6",
+    "docs\\experiments\\card-runtime-dispatch\\execute.lua": "0d68f1ae405eee90cef7540b60fe10561dde5ba8abe6d48b111a66487212696b",
+    "local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b"
+  },
+  "mame_sha256": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3"
+}

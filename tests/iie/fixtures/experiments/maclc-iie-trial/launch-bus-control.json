@@ -1,0 +1,36 @@
+{
+  "scope": "Actual TG68K and exact trial card frontend; synthetic launch prefix and host ROM",
+  "output": [
+    "PDS address=fe00000d rw=1 uds=1 lds=0 data=ff00",
+    "PDS address=fe00000d rw=0 uds=1 lds=0 data=0000",
+    "PDS address=fe000020 rw=0 uds=0 lds=0 data=0802",
+    "PDS address=fe000004 rw=1 uds=0 lds=0 data=0000",
+    "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-iie-trial/tb_launch_bus.sv:51: launch bus card error address=fe00000c uds=0 lds=1 rw=1 fault=0 error=1 offset=0c word=0 data=0000",
+    "       Time: 2330676  Scope: tb_launch_bus"
+  ],
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-trial\\tb_launch_bus.sv": "fa9b4307fbdbb52f321fb5a1901be99d64e43be67ae8e681e1f9526d09d72e17",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_platform.sv": "3ced920b18912da8f9e8324588fc4cb936575d362ff5f9076cc822b1444fdd1b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_pds_candidate.sv": "70cb6e2bce2e19c4b0bffb6c72f9e370e58eea8934032cd44b431fa9d2cc019c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\launch-rmw-card-control.sv": "0e51b4d4b5e186d973f383feb1e5da9361b638fc339cb33b5de1368e16253b78",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_iwm_frontend.sv": "15b96b598dd717e22ca5b17097c0516ca28ec05c376f27c68f395c116e5e3787",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\tg68k\\TG68K_Pack.sv": "285e4a68b411d33759f6c63300aa5ae24f33a60798b2733657a3df18d234f97e",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\tg68k\\TG68K_ALU.v": "e4d9aa3563449d1e759b92cb3322c463655e364e074ed675e298b6108789628f",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\tg68k\\TG68KdotC_Kernel.v": "219a9fab81611570f9e8733e7ee5aaf683b03d60dfd75426ab5f55c738043406",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\tg68k\\tg68k.v": "262b972c8136e0351bc44e41b8cb1a72224a37e4a8da6a444f7a97464f32f195",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\Conf_1000.bin": "32770b79591f67559f451a8760adb2f77205c1b1dcf0dede67216370d578b1a6",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\resources.json": "16d9aa44d8c90dca9680784af35b590e71df0a28f1dff6a5d9739c3913184dfc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\launch-program.hex": "9ab5bacc30bae006afdb6a48678d0448ba2cb04f011551cd9a5d7dba000c43ff",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-trial\\check_launch_bus.py": "911ac9099d97e561cce28322503218493d6d947a73569c0992cbaeec7185a9f6"
+  },
+  "control": true
+}

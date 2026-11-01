@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "interactive two-request pipe and early EOF",
+    "139 recorded original-host transactions",
+    "39 actual RTL captures",
+    "STOP and full 256 KiB dump at $202F",
+    "invalid sequence and unsupported register errors"
+  ],
+  "final_memory_sha256": "0c3b81523f6684bc0e121de389b20c2aafb6ecaeaf66484f81ac8637b5114420",
+  "inputs_sha256": {
+    "docs/experiments/card-rtl-service/test_service.py": "17d3bcd69e303d7d0164e2612d7bb6357400991f8a5cce5c851190319d3ebc44",
+    "docs/experiments/card-rtl-service/card_rtl_service.sv": "d6f315a949e07cf0dc4dca7abfd6f3c435f0b588538cdab770cad01eb0942013",
+    "docs/experiments/card-rtl-service/prepare.py": "1d026742636455fed78c623e9d0bca2be00090bd48fd0db85ba07e9bfc34baaf",
+    "local/experiments/host-execution/diagnostic-bridge-01/card-memory.bin": "ada9d9fc0ac0b07fb63dde692e2e25171990e650695421cf02efd6565a7967b6",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge.jsonl": "b2fbb5798489ae2f8ad3673b7b6180955ff0e86897432ea8d81b47bd28e3dd24",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge-result.json": "4e6f45911615d3e939bfcb5a822ddfac58f6e154aa0facf0537cd6c8f5f2e348",
+    "local/experiments/card-system-harness/expected0.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94"
+  }
+}

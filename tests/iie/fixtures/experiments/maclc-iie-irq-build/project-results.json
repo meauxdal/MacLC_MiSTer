@@ -1,0 +1,31 @@
+{
+  "project": "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe_IRQ.qpf",
+  "boundary": "203A before JSR2058",
+  "full_quartus_build_run": false,
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-irq-build\\prepare.py": "819467b929bbc80e03bc44ddb2c6acdb0e0084dffbbc1ad90cd78d6be9a7a86d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-irq-system\\prepare.py": "102a7fce6170be3d3cc99160988ee63d21bc49004c18dba009b3026518beaf78",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-system-harness\\card_candidate.sv": "25e2c13685ebda3e3957c5ab029f482ccbd32fa66949ebc1cffaa4038ff4c3a8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-host-rtl\\card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-rtl\\card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-platform\\card_platform.sv": "64002ab0ccb5fb08634dae5c7c41bdc9b8f7df20b3804a44ac8d2f0bf3d49d44",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-system-harness\\card_pds_candidate.sv": "30f823ebbac4f4125e4bfa534edf85190962df1c80b010a32911443c21be5ee3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_platform.qip": "8a6916d18bb5e6fa0aad0bfde72a5099bd9f15710eb54add96f1a5d755ea0fa8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\files.qip": "9520d79a1989cd39c3940a2f2b2eede76e5daf002ccaee3f45111bd1d63245fb",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe.qsf": "044b80baab81db8bf75388f4d3d17b02079412b0d3ecfd1af5f0d295d40e129e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-build\\maclc_iie_binding.sv": "1d93ae690a5f032badc15f343a2e294a9e03992c53850c505fff3cb157093b9f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\MacLC_IIe.sv": "97c03e2a6592775b618e78d80567e6a9202a2c91fbc6ebedb69d002ab0364556",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb"
+  },
+  "generated_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_irq_candidate.sv": "ecbd968c8de97df659048c34b61506abe5296e7c779fce57a5d86e212b5e0aed",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.qip": "929fb95212571ff44ca4ca6e73306d3c201fe458504b0aa7715fbb36b9723702",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\files.qip": "4b0158da8e524c11f1e568077ff06bbde6b03c09c5a01e03f0aa169121cd7c4d",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe_IRQ.qsf": "c9c12dc867afcac5f85e2da97d26c660accfd317e1d7335de42bbc3d25563ca7",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe_IRQ.qpf": "d61eab413d3db3d72b0936feb00341767e9b0725b9180251e5edbb8dc967dbfb"
+  }
+}

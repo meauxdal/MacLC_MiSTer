@@ -1,0 +1,279 @@
+{
+  "resource_fork_bytes": 251330,
+  "resource_fork_sha256": "31b26a51ee52d026a945b4ecc52efeb8cdf0a5a921f3e77398210bb717374799",
+  "resource_count": 229,
+  "version_string": "1.0",
+  "resources": [
+    {
+      "type": "CODE",
+      "id": 0,
+      "name": "",
+      "fork_offset": 260,
+      "bytes": 144,
+      "sha256": "94fe361c30e581e08d3bb948667a80f357d201ae294549ac0c343817574e31b5"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "name": "Main",
+      "fork_offset": 408,
+      "bytes": 23756,
+      "sha256": "4bb5addb1df4b423a56f2ae128136845cd9c7211dfc026f827a02df53ed553f7"
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "name": "A2eDRVR4",
+      "fork_offset": 24168,
+      "bytes": 44388,
+      "sha256": "ae5e59bbe3d635af6b0c0e9d9611931a003795635bdd03a7840b5393f6e807f5"
+    },
+    {
+      "type": "CODE",
+      "id": 3,
+      "name": "A2eDRVR1",
+      "fork_offset": 68560,
+      "bytes": 30048,
+      "sha256": "c902bfece4c2460076837cdf8068b1226b9eb62b1649f4f8ee09b62db272ede0"
+    },
+    {
+      "type": "CODE",
+      "id": 4,
+      "name": "Initialize",
+      "fork_offset": 98612,
+      "bytes": 160,
+      "sha256": "4333474e7edef62daadc87c8ba373443c35f032a950558633df12fad400438b4"
+    },
+    {
+      "type": "CODE",
+      "id": 5,
+      "name": "%A5Init",
+      "fork_offset": 98776,
+      "bytes": 520,
+      "sha256": "ffba0c8f8140a032a57b415f741abf14dc661178ed90b63fcb60783d84373013"
+    },
+    {
+      "type": "vers",
+      "id": 1,
+      "name": "",
+      "fork_offset": 109014,
+      "bytes": 48,
+      "sha256": "067afde66ab9bcaed29782ea9cb50e1549cbf4b68a7e7d31478fb897ee76ba46"
+    },
+    {
+      "type": "vers",
+      "id": 2,
+      "name": "",
+      "fork_offset": 246779,
+      "bytes": 29,
+      "sha256": "0bc10b1919455238e125e2eb6f0be436420204aade487646ee3fb9371f5249fc"
+    },
+    {
+      "type": "CNmc",
+      "id": 4608,
+      "name": "SmartPort",
+      "fork_offset": 114616,
+      "bytes": 2098,
+      "sha256": "d8de2f8b41b471e3d80a7e55759a22387a86b0da0da4407e1bb1be748337e8df"
+    },
+    {
+      "type": "CNmc",
+      "id": 5376,
+      "name": "AppleClock",
+      "fork_offset": 119507,
+      "bytes": 1110,
+      "sha256": "afa47792b6f0d280c1dc53ff41cc17b4a14a3fb5b801a20521cdb529b4e00a97"
+    },
+    {
+      "type": "CNmc",
+      "id": 24576,
+      "name": "KeyDriver",
+      "fork_offset": 172457,
+      "bytes": 116,
+      "sha256": "a0f3c7872fbf605d239c72d29896f2235f71a7c9d9db3ee78686ec6498749b5f"
+    },
+    {
+      "type": "CNmc",
+      "id": 5632,
+      "name": "Slot6",
+      "fork_offset": 193885,
+      "bytes": 222,
+      "sha256": "d24a467cde1a3789c9188b452714fab13fee1b85a1728dde084ca9233651ddaf"
+    },
+    {
+      "type": "CNmc",
+      "id": 4352,
+      "name": "MouseCard",
+      "fork_offset": 196677,
+      "bytes": 1576,
+      "sha256": "b4f9f163c44950923ac33f75944ccc78d72a02ee32c10793955f5f6330fe2743"
+    },
+    {
+      "type": "CNmc",
+      "id": 4864,
+      "name": "Modem",
+      "fork_offset": 198949,
+      "bytes": 2154,
+      "sha256": "e9f5f7ede404d17bc9ea5a2584e025c3f5890edcf940c7136dba0b1dad4c9880"
+    },
+    {
+      "type": "CNmc",
+      "id": 5888,
+      "name": "Printer",
+      "fork_offset": 203376,
+      "bytes": 2156,
+      "sha256": "d01b3770c48a3acfb3abec56f2c6f17e8a5e325db723a0fdda5beab93cea5ed7"
+    },
+    {
+      "type": "CNmc",
+      "id": 4096,
+      "name": "Slinky",
+      "fork_offset": 207807,
+      "bytes": 604,
+      "sha256": "0ae88e81692ac1c4b08c9928085b91600e532482be671401a764a839d8b890ce"
+    },
+    {
+      "type": "CNmc",
+      "id": 6144,
+      "name": "NetPrint",
+      "fork_offset": 212379,
+      "bytes": 2560,
+      "sha256": "602a758db8318658ff2b52dbc0cfc428c4e83abb969b262e0d84fdd1f235291a"
+    },
+    {
+      "type": "Monx",
+      "id": 2606,
+      "name": "A2EMonitorROM",
+      "fork_offset": 176369,
+      "bytes": 16390,
+      "sha256": "87b96058962687472ffd7be980d59fdf752286ee767b3d61a5ac73dcfe1a8a49"
+    },
+    {
+      "type": "Monx",
+      "id": 2607,
+      "name": "D1 NMI-IRQ Rcvr",
+      "fork_offset": 192763,
+      "bytes": 108,
+      "sha256": "56fb339f23b1a104a7967fcbadf8efd3ef2923f2f6a01cc6eb80aeb829d675eb"
+    },
+    {
+      "type": "Monx",
+      "id": 2608,
+      "name": "D2 NMI-IRQ Rcvr",
+      "fork_offset": 192875,
+      "bytes": 108,
+      "sha256": "76594697ce8d44a562dbf2e66505bf348d00352e11757842788d0df988843a6c"
+    },
+    {
+      "type": "Monx",
+      "id": 2609,
+      "name": "D1 INTCX",
+      "fork_offset": 192987,
+      "bytes": 429,
+      "sha256": "d1ff3ca4ba82c47854acee7349a40e1a8b810171ea15d35073894c11a904e7e9"
+    },
+    {
+      "type": "Monx",
+      "id": 2610,
+      "name": "D2 INTCX",
+      "fork_offset": 193420,
+      "bytes": 429,
+      "sha256": "9edb0c563d6fe71998ca5ba9ef7f90338e27c4f6d753115eabc1a3cd5f70e0f4"
+    },
+    {
+      "type": "Monx",
+      "id": 2611,
+      "name": "D1 Vectors",
+      "fork_offset": 193853,
+      "bytes": 12,
+      "sha256": "86308b3ddafd7f4e0d57a4301f27910177963cf85ef5d7ba081e69e5abc63f68"
+    },
+    {
+      "type": "Monx",
+      "id": 2612,
+      "name": "D2 Vectors",
+      "fork_offset": 193869,
+      "bytes": 12,
+      "sha256": "79e95fd4fa8bdc67e3f76d86ea9ed5b18849c396d8567bb072127d895009d4be"
+    },
+    {
+      "type": "Monx",
+      "id": 5632,
+      "name": "5.25\u201d Disk",
+      "fork_offset": 194371,
+      "bytes": 2042,
+      "sha256": "5f174c9fe687e5a9f6a6c78c32656f22e01c3a17a58c687cbd66f3c6e7063bdf"
+    }
+  ],
+  "instruction_windows": [
+    {
+      "type": "CODE",
+      "id": 1,
+      "offset": "0x4c",
+      "hex": "4e ba 35 cc 2b 40 f2 cc 54 8f 66 0e"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "offset": "0x3666",
+      "hex": "20 3c fe e0 00 00 32 2d f0 c0 0c 41 00 11 67 12"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "offset": "0x38a2",
+      "hex": "4e 56 00 00 22 6d f2 cc 08 e9 00 03 00 0d 33 6e 00 0e 00 1c 32 2e 00 12 20 2e 00 08 20 40 53 41 13 58 00 10 51 c9 ff fa 34 3c 0a 2e"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "offset": "0x3906",
+      "hex": "22 6d f2 cc 33 40 00 1c 08 e9 00 03 00 0d 53 41 42 29 00 10 13 7c 00 ea 00 10 53 41 51 c9 ff f2 4e 75"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "offset": "0x3968",
+      "hex": "22 6d f2 cc 12 29 00 0d 00 01 00 08 13 41 00 0d 32 2a 00 02 e1 59 33 41 00 1c 32 2a 00 04 e1 59 53 41 13 58 00 10 51 c9 ff fa 32 2a 00 02 e1 59 33 41 00 1c 20 4a 5c 88 32 2a 00 04 e1 59 53 41 10 18 b0 29"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "offset": "0x3a92",
+      "hex": "4e 56 00 00 20 6d f2 cc 42 68 00 20 30 3c a0 a0 08 e8 00 03 00 0d 42 68 00 1c 22 3c 00 00 ff ff 31 40 00 10 51 c9 ff fa 08 a8 00 03 00 0d 42 68 00 1c 22 3c 00 00 ff ff 31 40 00 10 51 c9 ff fa 4e 5e"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "offset": "0xaca",
+      "hex": "4e 56 00 00 48 e7 07 18 26 6e 00 0c 59 8f 2f 2e 00 08 4e ba 4c 50 2c 1f 20 6e 00 08 28 50 70 00 10 13 2a 00 7e 01 60 10 10 33 78 00 b1 1c 52 87 ba 87 6c 02 7e 01 53 86 4a 86 6e ec 4c ee 18 e0 ff ec 4e 5e 4e 75"
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "offset": "0x476",
+      "hex": "2f 0c 28 6d f2 cc 39 7c 08 02 00 20 12 2c 00 0c 42 2c 00 0c 22 3c 00 00 03 e8 30 2c 00 20 51 c9 ff fa 42 2d f4 e8 61 00 fe b6 3b 6d"
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "offset": "0x1728",
+      "hex": "28 6d f2 cc 3b 7c 00 c8 f4 7e 72 00 20 2d fb 72 10 2c 00 01 20 2d fb 72 10 2c 00 01 66 1e 53 6d f4 7e 6a f4 42 6d f5 0c 4e ba f0 92 72 00 32 2d f5 0c 0c 01 00 02 64 1e"
+    }
+  ],
+  "monitor": {
+    "transform": "repeating XOR DoubleX, starting at resource byte 0",
+    "decoded_header": "00 c0 00 00 00 40",
+    "decoded_resource_sha256": "cdf8d160b98c7027cac5af09d9e2c284d08f628ad1a631da736f9720368d7dbe",
+    "payload_bytes": 16384,
+    "payload_sha256": "d4822e537a6d7fc15cca52da832e9094d63573b793f0e9f7de91833c8a842fa5",
+    "speed_mask_pattern_payload_offset": "0x5a8",
+    "speed_mask_pattern_hex": "a9 04 2c 2b c0",
+    "identification_under_C000_mapping": {
+      "0xfbb3": "0x6",
+      "0xfbc0": "0xe0",
+      "0xfbdd": "0x2",
+      "0xfbbe": "0x0"
+    }
+  }
+}

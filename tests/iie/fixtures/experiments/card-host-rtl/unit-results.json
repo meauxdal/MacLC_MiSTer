@@ -1,0 +1,9 @@
+{
+  "result": "PASS denied lanes, wrap, read snapshots, decoded strobes, unsupported accesses, response stalls\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-host-rtl/tb_faults.sv:123: $finish called at 1690000 (1ps)",
+  "lint": "Verilator -Wall clean",
+  "inputs_sha256": {
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-host-rtl/tb_faults.sv": "6e0b5c5e07d77ad8091c420274a906dc24b21345bd8c127a6dd9aa01c3bbfca1",
+    "docs/experiments/card-host-rtl/test_faults.py": "6ed15ee3818cf49f6c19eb71397b43b8d6909f1f7569d667faf23f62de2b7839"
+  }
+}

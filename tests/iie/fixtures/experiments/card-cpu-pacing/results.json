@@ -1,0 +1,86 @@
+{
+  "clock_hz": 65000000,
+  "normal_hz": 1020000,
+  "fast_hz": 1900000,
+  "unit_tests": [
+    "PASS fractional rates, overdue hold, no catch-up, speed boundary, reset\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-pacing/tb_pacer.sv:45: $finish called at 21290000 (1ps)",
+    "PASS buffered response data and reset cancellation\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-pacing/tb_response_reset.sv:33: $finish called at 1060000 (1ps)"
+  ],
+  "runs": [
+    {
+      "fast": 0,
+      "fork": 0,
+      "delay": 0,
+      "result": "PASS cycles=10327 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic0.sv:77: $finish called at 158870568 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fast": 0,
+      "fork": 0,
+      "delay": 1,
+      "result": "PASS cycles=37589 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic0.sv:77: $finish called at 578269176 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fast": 0,
+      "fork": 1,
+      "delay": 0,
+      "result": "PASS cycles=10327 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic0.sv:77: $finish called at 158870568 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fast": 0,
+      "fork": 1,
+      "delay": 1,
+      "result": "PASS cycles=37589 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic0.sv:77: $finish called at 578269176 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fast": 1,
+      "fork": 0,
+      "delay": 0,
+      "result": "PASS cycles=5546 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic1.sv:77: $finish called at 85319664 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fast": 1,
+      "fork": 0,
+      "delay": 1,
+      "result": "PASS cycles=33652 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic1.sv:77: $finish called at 517702368 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fast": 1,
+      "fork": 1,
+      "delay": 0,
+      "result": "PASS cycles=5546 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic1.sv:77: $finish called at 85319664 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fast": 1,
+      "fork": 1,
+      "delay": 1,
+      "result": "PASS cycles=33652 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-pacing/tb_diagnostic1.sv:77: $finish called at 517702368 (1ps)",
+      "capture_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    }
+  ],
+  "full_memory_bytes_compared_per_run": 262144,
+  "inputs_sha256": {
+    "docs\\experiments\\card-cpu-pacing\\run.py": "baf007fb1342d141baa735313eca7450a1b001b717a1599453cf615acc5f0dcb",
+    "docs\\experiments\\card-cpu-rtl\\run.py": "947f5f96891c4598ac0f806b0ed5cc65274b91d576f4154aab5ac55ebafb5509",
+    "docs\\experiments\\card-cpu-rtl\\card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs\\experiments\\card-cpu-rtl\\tb_diagnostic.sv": "7cb5d709a2fdfa5719e3766c748169459968d862685234407c1db33f4405f930",
+    "local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "docs\\experiments\\card-cpu-rtl\\results.json": "15fe1e82dc5be729a1031edbc2193fa3cbdc7614c51691f59b54f9a79ff2f0e9",
+    "docs\\experiments\\card-cpu-pacing\\tb_pacer.sv": "9f9aa2583ca1ca8251ef749c9ec6c1aea6f0bd3832d6d7df99daf2b4503937d1",
+    "docs\\experiments\\card-cpu-pacing\\tb_response_reset.sv": "aedad6ba2d672a38526980df5fbf14b874add64d814d04a345cbb38730e3ef26",
+    "local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local\\experiments\\card-cpu-rtl\\image0.hex": "e7b2cd99c69c01a0ca11a29fa62bd95e893d6a04570d0d2413745b526e0cc53d",
+    "local\\experiments\\startup-runtime\\startup\\IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "local\\experiments\\card-cpu-rtl\\image1.hex": "e7b2cd99c69c01a0ca11a29fa62bd95e893d6a04570d0d2413745b526e0cc53d",
+    "docs\\experiments\\card-cpu-pacing\\card_cycle_pacer.sv": "3cbb73790d931bc64fb459bd917e0d939546c01ed943d2a665b5c065596d8fba",
+    "docs\\experiments\\card-cpu-pacing\\card_paced_cpu_bus.sv": "6ee3ff8aa24a9df08f49955ae1f8ba52f79096841eae89a11358f08ce8f5f62c"
+  },
+  "lint": "%Warning-PINCONNECTEMPTY: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/card_cpu_bus.sv:31:37: Cell pin connected by name with empty reference: 'int_seq'\n   31 |         .vector_pull(vector_pull), .int_seq(), .rti_done(),\n      |                                     ^~~~~~~\n                          ... For warning description see https://verilator.org/warn/PINCONNECTEMPTY?v=5.032\n                          ... Use \"/* verilator lint_off PINCONNECTEMPTY */\" and lint_on around source to disable this message.\n%Warning-PINCONNECTEMPTY: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/card_cpu_bus.sv:31:49: Cell pin connected by name with empty reference: 'rti_done'\n   31 |         .vector_pull(vector_pull), .int_seq(), .rti_done(),\n      |                                                 ^~~~~~~~\n%Warning-PINCONNECTEMPTY: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/card_cpu_bus.sv:33:61: Cell pin connected by name with empty reference: 'ss_rdata'\n   33 |         .ss_addr(10'b0), .ss_wdata(64'b0), .ss_wren(1'b0), .ss_rdata()\n      |                                                             ^~~~~~~~\n%Warning-DECLFILENAME: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/card_cpu_bus.sv:44:8: Filename 'card_cpu_bus' does not match MODULE name: 'iie_banking'\n   44 | module iie_banking (\n      |        ^~~~~~~~~~~\n%Warning-DECLFILENAME: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-rtl/source/cpu_65c02.sv:29:8: Filename 'cpu_65c02' does not match MODULE name: 'wdc65c02'\n   29 | module wdc65c02\n      |        ^~~~~~~~\n%Warning-DECLFILENAME: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-cpu-rtl/source/cpu_alu.sv:14:8: Filename 'cpu_alu' does not match MODULE name: 'wdc65c02_alu'\n   14 | module wdc65c02_alu\n      |        ^~~~~~~~~~~~"
+}

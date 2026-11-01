@@ -1,0 +1,29 @@
+{
+  "scope": "isolated actual WDC and PDS endpoint stop/drain",
+  "runs": [
+    {
+      "top": "tb_endpoint_stop",
+      "result": "PASS actual WDC capture stop/resume, stalled CPU offer, exact response advance, PDS stop and host abort\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-quiesce/tb_endpoint_stop.sv:186: $finish called at 1206000 (1ps)",
+      "lint": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)\n- Verilator: Built from 0.577 MB sources in 12 modules, into 0.733 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.126 s (elab=0.005, cvt=0.029, bld=0.000); cpu 0.055 s on 1 threads; alloced 20.812 MB"
+    },
+    {
+      "top": "tb_pds_stop_order",
+      "result": "PASS actual WDC capture-dependent PDS ACK drains before CPU stop (60 clocks)\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-quiesce/tb_pds_stop_order.sv:101: $finish called at 1566000 (1ps)",
+      "lint": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)\n- Verilator: Built from 0.577 MB sources in 12 modules, into 0.679 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.126 s (elab=0.005, cvt=0.028, bld=0.000); cpu 0.054 s on 1 threads; alloced 20.422 MB"
+    }
+  ],
+  "inputs_sha256": {
+    "docs/experiments/card-quiesce/test_endpoints.py": "a7b6d2e3be7a51614cb6afadc929e734200204dba0433fe41e7616ab0dca4408",
+    "docs/experiments/card-quiesce/endpoints_prepare.py": "5371f6465dcefe7d4b3d8c431cf6442d0ec46dc1af3723344879a7e62d515f58",
+    "docs/experiments/card-quiesce/tb_endpoint_stop.sv": "e6836b398c92f9c51e79c4f99af4b10f867018aad6f0ecb373aee532b40d3af4",
+    "local/experiments/card-quiesce/endpoints/card_candidate.sv": "dddfeba0d925853e518711751f1f7742dd760fc7e06326de9617a0b1243e1d0a",
+    "local/experiments/card-quiesce/endpoints/card_pds_adapter.sv": "442eaad61fb854d00e7d122ad580d832f67fefbeed529fae4d9b58ae24dbd893",
+    "local/experiments/card-quiesce/endpoints/card_pds_candidate.sv": "6e50c9f1e4da02a53fc7e39acea54057cb4cc80bdc84fc41fdc978e5b07947bf",
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "docs/experiments/card-quiesce/tb_pds_stop_order.sv": "db218999de4049ca6b4bbffb2677cdf49647ad2a58b95a775718f305b4cc09fc"
+  }
+}

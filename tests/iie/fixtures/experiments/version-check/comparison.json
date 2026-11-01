@@ -1,0 +1,224 @@
+{
+  "inputs": {
+    "2.2.1": [
+      "local/experiments/firmware-memory/app221/IIe Startup.rsrc",
+      "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9"
+    ],
+    "2.2.2d1": [
+      "local/experiments/startup-runtime/startup/IIe Startup.rsrc",
+      "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+    ]
+  },
+  "total_resources": 277,
+  "identical_resources": 252,
+  "unidasm_sha256": "5d27d3c7bc349d63d3511d86d9eb30ce348eb4f0e61f2bd2609f87aa5a5a98e0",
+  "resources": [
+    {
+      "type": "CODE",
+      "id": 0,
+      "identical": false,
+      "old_bytes": 728,
+      "new_bytes": 648,
+      "old_sha256": "c3cd0397475579e03752766a18898c149f4b51e01c3184c14499bb4cedb084fc",
+      "new_sha256": "f8b65ea7c110045e376f4a366cbd1d729030e77a14d6cabf9fc2348488a2d493"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "identical": false,
+      "old_bytes": 26716,
+      "new_bytes": 26028,
+      "old_sha256": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+      "new_sha256": "1632b3d802b20edc4aa0158e12b6b489606dfe79514309c8ca0956900ba2e323"
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "identical": false,
+      "old_bytes": 2598,
+      "new_bytes": 2576,
+      "old_sha256": "d55c1fa48645cd2bb413c9610bb76c265e1cae207de9db774238052196a223fa",
+      "new_sha256": "79b869350d094338dc3eb132dfdc8e74f5a3fdddb99e0520011811f63bc053d5"
+    },
+    {
+      "type": "CODE",
+      "id": 3,
+      "identical": false,
+      "old_bytes": 3628,
+      "new_bytes": 3620,
+      "old_sha256": "4703e6379acbed0d7422e6e77218569d12ca9edb8939651898dbd3d9ad711226",
+      "new_sha256": "da93b2659be0d84838eb8a680279adbb4d7d9d5cf37e1ca9502c066781b0af93"
+    },
+    {
+      "type": "CODE",
+      "id": 4,
+      "identical": false,
+      "old_bytes": 8252,
+      "new_bytes": 8316,
+      "old_sha256": "5be9d8b69ddd366729fbc39d9c65611f07859a8d2c10e2065c05be462b787eb0",
+      "new_sha256": "43d783ad2404a35c4b1b4f61ff2bc4bb825ea70ef42706c0e223bb6637da1e52"
+    },
+    {
+      "type": "CODE",
+      "id": 5,
+      "identical": false,
+      "old_bytes": 42050,
+      "new_bytes": 42050,
+      "old_sha256": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+      "new_sha256": "1da2e28ee5b27fe43ed5f9ab5c96406667527fa56224ac8c660ecc29d47e539f"
+    },
+    {
+      "type": "CODE",
+      "id": 6,
+      "identical": false,
+      "old_bytes": 30166,
+      "new_bytes": 30166,
+      "old_sha256": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+      "new_sha256": "2d54d89f300e06d09e94ba3b9adb6742c1807de4bf142b8f453b0d4c18e7c7f4"
+    },
+    {
+      "type": "CODE",
+      "id": 7,
+      "identical": false,
+      "old_bytes": 1016,
+      "new_bytes": 936,
+      "old_sha256": "bee472229841bd6f07ad3c29f645f62f9dd15baef92ddec1a46e43649d6ccec0",
+      "new_sha256": "9288f82c6acfa79a1d7d0dad0d5156eb35a23ba623dabcb9696652b17a211ec9"
+    },
+    {
+      "type": "Conf",
+      "id": 1000,
+      "identical": true,
+      "old_bytes": 1534,
+      "new_bytes": 1534,
+      "old_sha256": "32770b79591f67559f451a8760adb2f77205c1b1dcf0dede67216370d578b1a6",
+      "new_sha256": "32770b79591f67559f451a8760adb2f77205c1b1dcf0dede67216370d578b1a6"
+    },
+    {
+      "type": "Conf",
+      "id": 1001,
+      "identical": true,
+      "old_bytes": 581,
+      "new_bytes": 581,
+      "old_sha256": "8a180d9c3339ea2d50eccc83fed71df0989563e38c491e38bce5850a10629390",
+      "new_sha256": "8a180d9c3339ea2d50eccc83fed71df0989563e38c491e38bce5850a10629390"
+    },
+    {
+      "type": "Conf",
+      "id": 1002,
+      "identical": true,
+      "old_bytes": 12,
+      "new_bytes": 12,
+      "old_sha256": "81b61721e961eaa4c4fef48a3f699144fc37be84cc5ad1704226b8464ac91757",
+      "new_sha256": "81b61721e961eaa4c4fef48a3f699144fc37be84cc5ad1704226b8464ac91757"
+    },
+    {
+      "type": "Conf",
+      "id": 1003,
+      "identical": true,
+      "old_bytes": 12,
+      "new_bytes": 12,
+      "old_sha256": "08e5f1fe0fe706bdbc54f8d8f434c943a2867c980a24597891f5bd145f64adb9",
+      "new_sha256": "08e5f1fe0fe706bdbc54f8d8f434c943a2867c980a24597891f5bd145f64adb9"
+    },
+    {
+      "type": "Conf",
+      "id": 1004,
+      "identical": true,
+      "old_bytes": 12,
+      "new_bytes": 12,
+      "old_sha256": "dd9204464407086528ec42763058d3e919040739d729402c061f24f068df0824",
+      "new_sha256": "dd9204464407086528ec42763058d3e919040739d729402c061f24f068df0824"
+    },
+    {
+      "type": "Monx",
+      "id": 2606,
+      "identical": true,
+      "old_bytes": 16390,
+      "new_bytes": 16390,
+      "old_sha256": "e753940fbde914bed5fe5d4090239db8d087cfab9b628ffc11e46e3b84e41f11",
+      "new_sha256": "e753940fbde914bed5fe5d4090239db8d087cfab9b628ffc11e46e3b84e41f11"
+    },
+    {
+      "type": "Monx",
+      "id": 2607,
+      "identical": true,
+      "old_bytes": 108,
+      "new_bytes": 108,
+      "old_sha256": "56fb339f23b1a104a7967fcbadf8efd3ef2923f2f6a01cc6eb80aeb829d675eb",
+      "new_sha256": "56fb339f23b1a104a7967fcbadf8efd3ef2923f2f6a01cc6eb80aeb829d675eb"
+    },
+    {
+      "type": "Monx",
+      "id": 2608,
+      "identical": true,
+      "old_bytes": 108,
+      "new_bytes": 108,
+      "old_sha256": "76594697ce8d44a562dbf2e66505bf348d00352e11757842788d0df988843a6c",
+      "new_sha256": "76594697ce8d44a562dbf2e66505bf348d00352e11757842788d0df988843a6c"
+    },
+    {
+      "type": "Monx",
+      "id": 2609,
+      "identical": true,
+      "old_bytes": 429,
+      "new_bytes": 429,
+      "old_sha256": "d1ff3ca4ba82c47854acee7349a40e1a8b810171ea15d35073894c11a904e7e9",
+      "new_sha256": "d1ff3ca4ba82c47854acee7349a40e1a8b810171ea15d35073894c11a904e7e9"
+    },
+    {
+      "type": "Monx",
+      "id": 2610,
+      "identical": true,
+      "old_bytes": 429,
+      "new_bytes": 429,
+      "old_sha256": "9edb0c563d6fe71998ca5ba9ef7f90338e27c4f6d753115eabc1a3cd5f70e0f4",
+      "new_sha256": "9edb0c563d6fe71998ca5ba9ef7f90338e27c4f6d753115eabc1a3cd5f70e0f4"
+    },
+    {
+      "type": "Monx",
+      "id": 2611,
+      "identical": true,
+      "old_bytes": 12,
+      "new_bytes": 12,
+      "old_sha256": "86308b3ddafd7f4e0d57a4301f27910177963cf85ef5d7ba081e69e5abc63f68",
+      "new_sha256": "86308b3ddafd7f4e0d57a4301f27910177963cf85ef5d7ba081e69e5abc63f68"
+    },
+    {
+      "type": "Monx",
+      "id": 2612,
+      "identical": true,
+      "old_bytes": 12,
+      "new_bytes": 12,
+      "old_sha256": "79e95fd4fa8bdc67e3f76d86ea9ed5b18849c396d8567bb072127d895009d4be",
+      "new_sha256": "79e95fd4fa8bdc67e3f76d86ea9ed5b18849c396d8567bb072127d895009d4be"
+    },
+    {
+      "type": "Monx",
+      "id": 5120,
+      "identical": true,
+      "old_bytes": 9478,
+      "new_bytes": 9478,
+      "old_sha256": "c6b13680d61b37a8d9ac14b6f6eade2d726301a78fc924dd717d3bfb9717df7a",
+      "new_sha256": "c6b13680d61b37a8d9ac14b6f6eade2d726301a78fc924dd717d3bfb9717df7a"
+    },
+    {
+      "type": "Monx",
+      "id": 5121,
+      "identical": true,
+      "old_bytes": 9478,
+      "new_bytes": 9478,
+      "old_sha256": "a41481c614d0e62e391749c0d02dbd863c95ccaa8c242b33d151c2722fbff486",
+      "new_sha256": "a41481c614d0e62e391749c0d02dbd863c95ccaa8c242b33d151c2722fbff486"
+    },
+    {
+      "type": "Monx",
+      "id": 5632,
+      "identical": true,
+      "old_bytes": 2042,
+      "new_bytes": 2042,
+      "old_sha256": "df369ce2fee1f002e80fa3af0452816f5a3b1170d43bf06acf4ae86421e74c03",
+      "new_sha256": "df369ce2fee1f002e80fa3af0452816f5a3b1170d43bf06acf4ae86421e74c03"
+    }
+  ]
+}

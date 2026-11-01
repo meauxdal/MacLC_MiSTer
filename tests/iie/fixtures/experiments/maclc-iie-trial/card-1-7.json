@@ -1,0 +1,30 @@
+{
+  "fork": 1,
+  "phase_ns": 7,
+  "control": false,
+  "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2051\nPASS PDS=2128 backend=3230 stores=1230 captures=64 cpu_cycles=910 ticks=388504 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=777059 native commits=1230 early_acks=1230 backend_responses=3230 host=18672 floppy_window=6731 writeback=6753 refresh=2531 max_backend_ticks=46\nPASS full LC address decode and debug counters\nPASS final report consumed; original word reset clears card/IWM state\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-trial/tb_trial.sv:509: $finish called at 11954890480 (1ps)",
+  "capture_sha256": "59eebe991b30119fbe24b7707735a7f48c3d598ac4a045ee309a98a1d0cdfd10",
+  "scope": "Assisted original final diagnostic with full LC addresses; actual trial closure; not unmodified hardware Startup",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-trial\\check_card.py": "f58fc1cb2a1340a2a1f3481e2bc2338db24a4b5c85303561f37e936c70a51427",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\tb_trial.sv": "42291904b7dc8b5322e4d5e2cf96021c93b59cdff0e4a9082b161ea396a7058c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\maclc_iie_binding.sv": "c9733a074b8d2bea309b5e3954230cfd9f62e8a1268a56763f8e9c913c29b03f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_platform.sv": "3ced920b18912da8f9e8324588fc4cb936575d362ff5f9076cc822b1444fdd1b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_pds_candidate.sv": "70cb6e2bce2e19c4b0bffb6c72f9e370e58eea8934032cd44b431fa9d2cc019c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_irq_candidate.sv": "db5eeba941a1e051dd57c4dd55e56a3e4c4548728a4e8684291823627b4ea02e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-trial\\card_iwm_frontend.sv": "15b96b598dd717e22ca5b17097c0516ca28ec05c376f27c68f395c116e5e3787",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-diagnostic-final\\results.json": "f4366b2637a6a4a5f48efcc01b7b06e6ae608438a82434f3d19460833dbbb6cb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-firmware-overlay\\stimulus1.txt": "131e475c850551d69b46fb146428aa89485327624c2043c88af44c312c76ce02",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-diagnostic-final\\expected1.hex": "eb6a3cf289c063746bdf60c19d2383dd61a4bbf13e676475005935d4f0de046b"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "compiler": "Icarus Verilog version 12.0 (stable) ()",
+  "runs": [
+    {
+      "profile": "off",
+      "mode": "00",
+      "result": "PASS mode=00 accesses=262144 invalid=262144 display=0 io=476",
+      "expected_sha256": "3e28d9f00d69b37e48135c57516a2fd17ccbeab2f2abc9b2c55c1b807c4d8651"
+    },
+    {
+      "profile": "text1",
+      "mode": "80",
+      "result": "PASS mode=80 accesses=262144 invalid=262144 display=960 io=476",
+      "expected_sha256": "37f0f6ff2fb195ce171de497818e3459d650e17d29074de686b6bd7e9b38d231"
+    },
+    {
+      "profile": "text2",
+      "mode": "c0",
+      "result": "PASS mode=c0 accesses=262144 invalid=262144 display=960 io=476",
+      "expected_sha256": "2927404deb11e9ed6c8d8cf543ef83eb8359f8ca9a0c64b834cee5c5ac9265e6"
+    },
+    {
+      "profile": "text1_80col",
+      "mode": "88",
+      "result": "PASS mode=88 accesses=262144 invalid=262144 display=1920 io=476",
+      "expected_sha256": "5cf4beda0b2f98b0eaa21a677e00bed81b09762a14a85693ae0cc6e5e59a0496"
+    },
+    {
+      "profile": "text2_80col",
+      "mode": "c8",
+      "result": "PASS mode=c8 accesses=262144 invalid=262144 display=1920 io=476",
+      "expected_sha256": "1697b89fe2b61ab60bcdd4b3a6e9e0d09f83d6fd11291a9144ebb94f0b210ae1"
+    },
+    {
+      "profile": "aux_text_full_graphics",
+      "mode": "8c",
+      "result": "PASS mode=8c accesses=262144 invalid=262144 display=960 io=476",
+      "expected_sha256": "37f0f6ff2fb195ce171de497818e3459d650e17d29074de686b6bd7e9b38d231"
+    },
+    {
+      "profile": "hires1",
+      "mode": "20",
+      "result": "PASS mode=20 accesses=262144 invalid=262144 display=7680 io=476",
+      "expected_sha256": "b1019bde3daf1755c91525d954206b7c36784f2bd4a1207d53834172c4182318"
+    },
+    {
+      "profile": "hires2",
+      "mode": "30",
+      "result": "PASS mode=30 accesses=262144 invalid=262144 display=7680 io=476",
+      "expected_sha256": "935d7f2c433ed942d424dfe51eceb05bfbcf3b42c56b385f66e76f5f98fd687c"
+    },
+    {
+      "profile": "double_hires1",
+      "mode": "22",
+      "result": "PASS mode=22 accesses=262144 invalid=262144 display=15360 io=476",
+      "expected_sha256": "afaa933a5ebc6d680a4ad759bf8d9c73cf798ad9dc99d57e1062643f5be3b161"
+    },
+    {
+      "profile": "double_hires2",
+      "mode": "32",
+      "result": "PASS mode=32 accesses=262144 invalid=262144 display=15360 io=476",
+      "expected_sha256": "868f3c2b4f44dafe28e277947c7019a8ee68d16f091fd73fe3c0e3b629cbe0e9"
+    },
+    {
+      "profile": "mixed_pages",
+      "mode": "ea",
+      "result": "PASS mode=ea accesses=262144 invalid=262144 display=17280 io=476",
+      "expected_sha256": "73162eb4137a0af8385318cfedafd5ef8c4a8e4120d91a7ab3998b75608e7683"
+    },
+    {
+      "profile": "full_graphics_double_hires",
+      "mode": "ae",
+      "result": "PASS mode=ae accesses=262144 invalid=262144 display=16320 io=476",
+      "expected_sha256": "ab36ea8eabd64266e6cc681823714bb544fb505678e24025025650572adfd44f"
+    },
+    {
+      "profile": "motor_off",
+      "mode": "aa",
+      "result": "PASS mode=aa accesses=262144 invalid=262144 display=17280 io=476",
+      "expected_sha256": "c1a74930656e74bb6518c3914fb8ade92863f4fe02170a1e18a471af9c62ee87"
+    },
+    {
+      "profile": "motor_on",
+      "mode": "ab",
+      "result": "PASS mode=ab accesses=262144 invalid=262144 display=0 io=476",
+      "expected_sha256": "3e28d9f00d69b37e48135c57516a2fd17ccbeab2f2abc9b2c55c1b807c4d8651"
+    }
+  ],
+  "accesses": 3670016,
+  "invalid_checks": 3670016,
+  "lint": "PASS verilator --lint-only -Wall",
+  "inputs_sha256": {
+    "docs/experiments/card-video/run.py": "90dd86471ffca64e51c7593b5920ed4727fef33e06f1074789e17d8a0726bdac",
+    "docs/experiments/card-video/card_trap_decode.sv": "52e4621a6ae00aa8a738f79643f9112daf074b769d686af20b6a67faff69dc3f",
+    "docs/experiments/card-video/tb_card_trap_decode.sv": "7c3732b7407054b3572edbadb51b8436803c61e471dbf0d63b09526038579b27",
+    "docs/experiments/trap-model/trap_model.py": "184fe8ecc110cecd45fde4c13a2da013f8c847e9141b36fa5fb182734624137f",
+    "docs/research/card-architecture/REPORT.md": "67ca1798f128d8788138d8218f8b02de97672523b066c99b566a1bc59f78b919"
+  }
+}

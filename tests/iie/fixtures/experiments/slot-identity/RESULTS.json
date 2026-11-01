@@ -1,0 +1,334 @@
+{
+  "date": "2026-10-22",
+  "engine": "MAME 0.289",
+  "machine": "maclc",
+  "ram": "4M",
+  "pds": "empty",
+  "run": {
+    "source_sha256_before": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "source_sha256_after": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "mame_exit_code": 0,
+    "mame_wall_seconds": 2.6563134,
+    "emulated_seconds": 20,
+    "run_name": "verified-final"
+  },
+  "rom_card_directory": 11006510,
+  "rom_type_address": 11006542,
+  "rom_name_address": 11006602,
+  "rom_type_tuple": [
+    10,
+    21,
+    1,
+    1
+  ],
+  "rom_name": "CPU_AppleII_AppleIIe_FeatureCard",
+  "probe_helper_address": 10796720,
+  "probe_helper_bytes": 164,
+  "probe_helper_sha256": "0306e574836b8ebbbd404b906eb930fe211886533ddcb04d25b90abcaddd9b47",
+  "built_records": 30,
+  "built_card": {
+    "frame": 311,
+    "pc": 10510718,
+    "d0": 0,
+    "record": 17940,
+    "key": 15663104,
+    "type_hi": 655381,
+    "type_lo": 65537,
+    "source": 11006510,
+    "flags": 0
+  },
+  "deleted_card": {
+    "frame": 316,
+    "record": 17236,
+    "key": 15663104,
+    "type_hi": 655381,
+    "type_lo": 65537
+  },
+  "probe_events": [
+    {
+      "frame": 316,
+      "pc": 10795498,
+      "d0": 0,
+      "d1": 40974,
+      "d2": 10551295,
+      "a3": 18052,
+      "sr": 9988,
+      "mmu": 0,
+      "vector8": 10495728
+    },
+    {
+      "frame": 316,
+      "pc": 10796194,
+      "d0": 65192,
+      "d1": 40974,
+      "d2": 10551295,
+      "a3": 1358061568,
+      "sr": 10008,
+      "mmu": 0,
+      "vector8": 10495728
+    },
+    {
+      "frame": 316,
+      "pc": 10796238,
+      "d0": 65192,
+      "d1": 40974,
+      "d2": 10551295,
+      "a3": 1358061568,
+      "sr": 10008,
+      "mmu": 0,
+      "vector8": 10495728
+    },
+    {
+      "frame": 316,
+      "pc": 10796720,
+      "d0": 65192,
+      "d1": 40974,
+      "d2": 10551295,
+      "a3": 1358061568,
+      "sr": 10008,
+      "mmu": 0,
+      "vector8": 10495728
+    },
+    {
+      "frame": 316,
+      "pc": 10796762,
+      "d0": 0,
+      "d1": 0,
+      "d2": 0,
+      "a3": 4261412864,
+      "sr": 10004,
+      "mmu": 1,
+      "vector8": 10796814
+    },
+    {
+      "frame": 316,
+      "pc": 10796766,
+      "d0": 0,
+      "d1": 0,
+      "d2": 0,
+      "a3": 4261412864,
+      "sr": 10004,
+      "mmu": 1,
+      "vector8": 10796814
+    },
+    {
+      "frame": 316,
+      "pc": 10796772,
+      "d0": 0,
+      "d1": 1,
+      "d2": 0,
+      "a3": 4261412864,
+      "sr": 9984,
+      "mmu": 1,
+      "vector8": 10796814
+    },
+    {
+      "frame": 316,
+      "pc": 10796776,
+      "d0": 0,
+      "d1": 1,
+      "d2": 0,
+      "a3": 4261412864,
+      "sr": 9984,
+      "mmu": 1,
+      "vector8": 10796814
+    },
+    {
+      "frame": 316,
+      "pc": 10796804,
+      "d0": 1,
+      "d1": 1,
+      "d2": 0,
+      "a3": 4261412864,
+      "sr": 10000,
+      "mmu": 0,
+      "vector8": 10495728
+    },
+    {
+      "frame": 316,
+      "pc": 10796808,
+      "d0": 1,
+      "d1": 4,
+      "d2": 0,
+      "a3": 4261412864,
+      "sr": 9993,
+      "mmu": 0,
+      "vector8": 10495728
+    },
+    {
+      "frame": 316,
+      "pc": 10796244,
+      "d0": 65192,
+      "d1": 40974,
+      "d2": 10551295,
+      "a3": 1358061568,
+      "sr": 9993,
+      "mmu": 0,
+      "vector8": 10495728
+    }
+  ],
+  "bus_events": [
+    {
+      "frame": 316,
+      "pc": 10796766,
+      "address": 2147483676,
+      "size": 16,
+      "data": 0
+    },
+    {
+      "frame": 316,
+      "pc": 10796770,
+      "address": 2147483664,
+      "size": 16,
+      "data": 0
+    },
+    {
+      "frame": 316,
+      "pc": 10796776,
+      "address": 2147483676,
+      "size": 16,
+      "data": 0
+    }
+  ],
+  "final_root": 17212,
+  "final_records": [
+    {
+      "record": 17212,
+      "key": 15728640,
+      "type_hi": 655364,
+      "type_lo": 24,
+      "source": 11005574,
+      "flags": 0
+    },
+    {
+      "record": 17236,
+      "key": 10878977,
+      "type_hi": 196609,
+      "type_lo": 65562,
+      "source": 11006290,
+      "flags": 0
+    },
+    {
+      "record": 17260,
+      "key": 917504,
+      "type_hi": 65536,
+      "type_lo": 0,
+      "source": 11005372,
+      "flags": 0
+    }
+  ],
+  "probe_model": {
+    "scope": "fixed word-read increment, observational index reads, no bus errors",
+    "initial_indices_per_step": 65536,
+    "counts": {
+      "0": {
+        "accepted": 1,
+        "sole_accepted_index": 65532
+      },
+      "1": {
+        "accepted": 65536,
+        "sole_accepted_index": null
+      },
+      "2": {
+        "accepted": 1,
+        "sole_accepted_index": 65532
+      }
+    },
+    "observed_cardless_case": {
+      "first_equal": false,
+      "final_equal": false,
+      "d1": 4,
+      "d2": 0,
+      "word_reads": 1
+    },
+    "constant_index_counterexample": {
+      "first_equal": false,
+      "final_equal": true,
+      "d1": 0,
+      "d2": 0,
+      "word_reads": 1
+    }
+  },
+  "tool_hashes": {
+    "mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3",
+    "unidasm.exe": "5d27d3c7bc349d63d3511d86d9eb30ce348eb4f0e61f2bd2609f87aa5a5a98e0",
+    "chdman.exe": "8a74468e3b0879698835b57c3b58e88e5a51e4de73bee6ef755c28530b5b040f"
+  },
+  "artifacts": [
+    {
+      "path": "local/experiments/system-baseline/roms/maclc/350eacf0.rom",
+      "bytes": 524288,
+      "sha256": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b"
+    },
+    {
+      "path": "local/hardfiles/Apple-II_100MB.hda",
+      "bytes": 104906752,
+      "sha256": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60"
+    },
+    {
+      "path": "local/experiments/system-baseline/roms/egret/341s0850.bin",
+      "bytes": 4352,
+      "sha256": "3287874a6eec75a7a1dae09faaeb6ccb73e29b07e9429663a326f1a43e5390fa"
+    },
+    {
+      "path": "local/experiments/system-baseline/roms/egret/341s0851.bin",
+      "bytes": 4352,
+      "sha256": "77f5fb2baaca55a5921423b041e60257a864d79d734872991fa607fa33784d88"
+    },
+    {
+      "path": "local/experiments/system-baseline/roms/egret/344s0100.bin",
+      "bytes": 4352,
+      "sha256": "e02ae917464691e62b957785f534af9cf57d8fead1dcd3106a5393241aad6463"
+    },
+    {
+      "path": "local/experiments/slot-identity/verified-final/run.json",
+      "bytes": 313,
+      "sha256": "069aa4bfafc91d06a2e41795fc1b874448737df835ec63ac030d7dbe5ce143a0"
+    },
+    {
+      "path": "local/experiments/slot-identity/verified-final/mame.log",
+      "bytes": 8778,
+      "sha256": "8f1c7ca915816905e6cd85ac3c0d066970fdc8799f5c627146e8520143a57cd4"
+    },
+    {
+      "path": "local/experiments/slot-identity/verified-final/build.txt",
+      "bytes": 1811242,
+      "sha256": "43e77d76a7bf8d218baf65e36e5620a80da41676115c84bf4956d8d5b3423e8c"
+    },
+    {
+      "path": "local/experiments/slot-identity/verified-final/primary.txt",
+      "bytes": 302028,
+      "sha256": "dc936e8d8187a916d0cd02e60c454779d477ebf72d45f654a361937b0d604d38"
+    },
+    {
+      "path": "local/experiments/slot-identity/verified-final/ram.bin",
+      "bytes": 4194304,
+      "sha256": "ab07f2455950ddf81380acdbb08ee4e26d7cb3645088ee02b3d98af17866acfe"
+    },
+    {
+      "path": "docs/experiments/slot-identity/trace.lua",
+      "bytes": 2485,
+      "sha256": "a222c386886274c26168f4c183a2754ec195e69eefb299a09c582db8282a36ba"
+    },
+    {
+      "path": "docs/experiments/slot-identity/run.ps1",
+      "bytes": 2131,
+      "sha256": "8228167a125b0a24f1f47b04fe439b8e8f78801f33a712d86a8e3f7f055bfdb8"
+    },
+    {
+      "path": "docs/experiments/slot-identity/debug.cmd",
+      "bytes": 2,
+      "sha256": "768c71d785bf6bbbf8c4d6af6582041f2659027140a962cd0c55b11eddfd5e3d"
+    },
+    {
+      "path": "docs/experiments/slot-identity/probe_model.py",
+      "bytes": 1300,
+      "sha256": "dcd8d2b8ae16235d76b7ef9fe2ec44838f7282e31099ce5a4cf3bf452a4a8def"
+    },
+    {
+      "path": "docs/experiments/slot-identity/analyze.py",
+      "bytes": 7051,
+      "sha256": "69ab5c999324969b3797a4c36f09d563f19e4097c0adb272e24dddfe010df0ff"
+    }
+  ]
+}

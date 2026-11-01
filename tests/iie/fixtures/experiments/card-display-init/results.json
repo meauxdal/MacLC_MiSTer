@@ -1,0 +1,66 @@
+{
+  "runs": [
+    {
+      "driver": 5,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900",
+      "state": "pc=2842f2 sp=3f0000 a6=33445566 d3=11220003 d4=11220004 d5=11220005 d6=11220006 d7=11220007",
+      "scope": "original PixMap helper and initializer; modeled A81F NIL result",
+      "world_bytes_compared": 23625,
+      "generated_HGR_table_bytes": 4096,
+      "hashes": {
+        "code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+        "loaded.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+        "low.bin": "0bb404b255c8235d6d5113cc3e49262a99c374b16f16cd6bf2380052b091c876",
+        "main-after.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "main-loaded.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "mame.log": "a2b7a8fc26904fb32cc39a75550a1834d641ce8ba11c1bab1871089fb09dfcc6",
+        "resource-file.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "resource-stack.bin": "d3b722483e3e96ca7a1d5f89cae6a0546ac64e74a462bb5fa3bdad1da395f320",
+        "state.txt": "11368fbc936722c43c40611396fe7bd9b08fbec1423b23fa6a8a1ff41d27e591",
+        "trace.txt": "cf844978b809ec79b5de219c942fa263bcfe597eab884e96c82599dad1931695",
+        "world.bin": "758007972c6069183ea91820113960656faaa05175517002d2ce8034c14b4cca"
+      }
+    },
+    {
+      "driver": 6,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200",
+      "state": "pc=2842f2 sp=3f0000 a6=33445566 d3=11220003 d4=11220004 d5=11220005 d6=11220006 d7=11220007",
+      "scope": "original PixMap helper and initializer; modeled A81F NIL result",
+      "world_bytes_compared": 23625,
+      "generated_HGR_table_bytes": 4096,
+      "hashes": {
+        "code-after.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+        "loaded.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+        "low.bin": "0bb404b255c8235d6d5113cc3e49262a99c374b16f16cd6bf2380052b091c876",
+        "main-after.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "main-loaded.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "mame.log": "898d41078b672b8622f4ce03da55a8f4c19458dff758a83165cfe548a02d61c3",
+        "resource-file.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "resource-stack.bin": "d3b722483e3e96ca7a1d5f89cae6a0546ac64e74a462bb5fa3bdad1da395f320",
+        "state.txt": "11368fbc936722c43c40611396fe7bd9b08fbec1423b23fa6a8a1ff41d27e591",
+        "trace.txt": "1bbff801475f022c66000c974fbfccf68d39d21ed23fd2ebcdc03301737da38a",
+        "world.bin": "559653231aaf923e38b58551eada75672da73e5f52fd40546f7ca15f4124397e"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "control": "unmasked_PixMap_rowBytes",
+      "rejected": "independent full-world oracle",
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959117736973700"
+    }
+  ],
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_1.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-dispatch\\results.json": "219a798ef6944454bd260215cdffc8778e64afc963a037b878931facdf3d26ec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-slot3-recovery\\results.json": "ddcd6700ac0235cef70ff950bb14656942e0d12235c9087b32d0111d5dde57f3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\resources.json": "16d9aa44d8c90dca9680784af35b590e71df0a28f1dff6a5d9739c3913184dfc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\research\\software-bringup\\inspect_resources.py": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\run.py": "85d4b804db79cf160a4cc3b401e8b1aea230290e0bad998b10d2e60769b53cde",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\execute.lua": "6754688f87f78a20fd7ab4418fa461967996d63cbf32875b7b45b8dbaf8c5261"
+  }
+}

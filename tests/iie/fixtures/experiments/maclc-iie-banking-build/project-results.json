@@ -1,0 +1,38 @@
+{
+  "project": "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe_Banking.qpf",
+  "boundary": "2040 before softswitch tests",
+  "full_quartus_build_run": false,
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-banking-build\\prepare.py": "56e5974d1480b39ede934767b60698a51154f3f6e57c06ba7121683ee964d42b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-banking-system\\prepare.py": "6934ea87f7b9342213c25a0b5125ead8f79491789bce63d20fb85a7ea90abb3e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-irq-system\\prepare.py": "102a7fce6170be3d3cc99160988ee63d21bc49004c18dba009b3026518beaf78",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.qip": "929fb95212571ff44ca4ca6e73306d3c201fe458504b0aa7715fbb36b9723702",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\files.qip": "4b0158da8e524c11f1e568077ff06bbde6b03c09c5a01e03f0aa169121cd7c4d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\MacLC_IIe_IRQ.qsf": "c9c12dc867afcac5f85e2da97d26c660accfd317e1d7335de42bbc3d25563ca7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-build\\maclc_iie_binding.sv": "1d93ae690a5f032badc15f343a2e294a9e03992c53850c505fff3cb157093b9f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\MacLC_IIe.sv": "97c03e2a6592775b618e78d80567e6a9202a2c91fbc6ebedb69d002ab0364556",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_irq_candidate.sv": "47ff8c0d862452ee5785a2ac2877be6f56fb80ba3572b1e7910d66b4e1973836",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7"
+  },
+  "generated_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_irq_candidate.sv": "47ff8c0d862452ee5785a2ac2877be6f56fb80ba3572b1e7910d66b4e1973836",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\maclc_iie_binding.sv": "40eda71b69557af047946d0adcbab195268fa0689c5ee20c165f9aa719da1054",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\MacLC_IIe.sv": "7d94805553176a03b916cae4b2977e9cf5b0e241efa888b628d6210af90fb2d1",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_platform.qip": "a6aa9afc3acf0a0755b48ca6939675a4aee94c6fdbc9e005edb8667b647691ce",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\files.qip": "4a8ca3d6f37f25ad5c9d8039880cc695f2d91a22b70bb1b3bd0545ed547ebb8a",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe_Banking.qsf": "1a31d910ef6bb22e15b67a43708a1e65bab4c89e6aa4caab9080eeac5bef219e",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe_Banking.qpf": "7e521d96a9ca5d73653a9b5849eacee2ee3c9071cacdffef562259c67f4b62e5"
+  }
+}

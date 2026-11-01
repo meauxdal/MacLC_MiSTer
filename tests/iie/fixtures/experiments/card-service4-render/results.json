@@ -1,0 +1,342 @@
+{
+  "scope": "Original mode-zero lores rendering with checked initializer snapshots; pixels gate service4 ACK",
+  "runs": [
+    {
+      "driver": 5,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\code5-1792959804289693100",
+      "transactions": [
+        [
+          false,
+          8,
+          33,
+          252
+        ],
+        [
+          true,
+          8,
+          33,
+          32
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          1
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          4
+        ],
+        [
+          false,
+          8,
+          33,
+          32
+        ],
+        [
+          false,
+          8,
+          33,
+          32
+        ],
+        [
+          false,
+          8,
+          33,
+          32
+        ],
+        [
+          false,
+          8,
+          33,
+          32
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ]
+      ],
+      "state": "ack=true service=4 pc=20281c sp=3f0000",
+      "cache_pairs": 168,
+      "rendered_cells": 160,
+      "dirty_holes": 8,
+      "world_bytes_compared": 23625,
+      "pixels_checked": 307200,
+      "rtl_result": [
+        "MONITOR report PC=c07d status=e0 data=01 opcode_PC=0000fbdd service=00000001 CPU=1392",
+        "READY",
+        "REPLY 1 252",
+        "REPLY 2 32",
+        "REPLY 3 224",
+        "REPLY 4 224",
+        "REPLY 5 49277",
+        "REPLY 6 1",
+        "REPLY 7 0",
+        "REPLY 8 224",
+        "REPLY 9 224",
+        "REPLY 10 49277",
+        "REPLY 11 4",
+        "REPLY 12 32",
+        "REPLY 13 32",
+        "REPLY 14 32",
+        "REPLY 15 32",
+        "REPLY 16 0",
+        "MAPPING Cx_reads=12412 slot3_reads=1 CFFF_reads=1 text_bytes=960 aux_bytes=960",
+        "PASS service4 rendered fast=1 next_PC=fb65 service=4 CPU=18052 writes=1388 backend=19325 min_gap=17"
+      ],
+      "hashes": {
+        "trace.txt": "3b883fad966142df0401b41006595e6612735d3ab01d9d1bfb263eff16838477",
+        "bus.jsonl": "ffbd2e524ca83f57e29b26c0db30e2a063cb77651d91b571b2b144bab55c60d0",
+        "captures.txt": "3673ddc32a08ece2778d93e0fcdfdde032500a2f4e5a5963af5e483aa26d6a63",
+        "instructions.txt": "ff228df2430b52821e11461bade68ffd273a4c312364882e035e76be7c9b706a",
+        "loaded.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+        "world.bin": "492f6ddd804272d3db43364233bb667b14d78282e9763dd65d88fd4e1935aded",
+        "preack-world.bin": "492f6ddd804272d3db43364233bb667b14d78282e9763dd65d88fd4e1935aded",
+        "frame.bin": "c02276a410821502fc78c9bfebf5e70098d7c389dcee2759bd74b5ba84a63e12",
+        "code-after.bin": "03a43b0f2e6a5d742099cf75a78a0e53d6ac2fac77aacbcdc437cb20952913f6",
+        "state.txt": "604a02e0412aa3597620e33792fa71848654c2d008d74ced0e9cd972fa5605ff"
+      }
+    },
+    {
+      "driver": 6,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\code6-1792959817767914800",
+      "transactions": [
+        [
+          false,
+          8,
+          33,
+          255
+        ],
+        [
+          true,
+          8,
+          33,
+          35
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          1
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          4
+        ],
+        [
+          false,
+          8,
+          33,
+          35
+        ],
+        [
+          false,
+          8,
+          33,
+          35
+        ],
+        [
+          false,
+          8,
+          33,
+          35
+        ],
+        [
+          false,
+          8,
+          33,
+          35
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ]
+      ],
+      "state": "ack=true service=4 pc=20281c sp=3f0000",
+      "cache_pairs": 168,
+      "rendered_cells": 160,
+      "dirty_holes": 8,
+      "world_bytes_compared": 23625,
+      "pixels_checked": 307200,
+      "rtl_result": [
+        "MONITOR report PC=c07d status=e0 data=01 opcode_PC=0000fbdd service=00000001 CPU=1392",
+        "READY",
+        "REPLY 1 255",
+        "REPLY 2 35",
+        "REPLY 3 224",
+        "REPLY 4 224",
+        "REPLY 5 49277",
+        "REPLY 6 1",
+        "REPLY 7 0",
+        "REPLY 8 224",
+        "REPLY 9 224",
+        "REPLY 10 49277",
+        "REPLY 11 4",
+        "REPLY 12 35",
+        "REPLY 13 35",
+        "REPLY 14 35",
+        "REPLY 15 35",
+        "REPLY 16 0",
+        "MAPPING Cx_reads=12412 slot3_reads=1 CFFF_reads=1 text_bytes=960 aux_bytes=960",
+        "PASS service4 rendered fast=1 next_PC=fb65 service=4 CPU=18052 writes=1388 backend=19325 min_gap=17"
+      ],
+      "hashes": {
+        "trace.txt": "c77ee1fc47ba4bdb2ed1d47fedf0cfd61eed82145b8772fc8f45c3a2b1de2625",
+        "bus.jsonl": "c781b69acb5a5ba71cd57269f1e7322d66bf6829b27eee70aaadc168ccc8ce21",
+        "captures.txt": "3673ddc32a08ece2778d93e0fcdfdde032500a2f4e5a5963af5e483aa26d6a63",
+        "instructions.txt": "ff228df2430b52821e11461bade68ffd273a4c312364882e035e76be7c9b706a",
+        "loaded.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+        "world.bin": "7585db836c71a6e7a9788861ad089d96e00f4b48b35eb32f5d5d545f02925a52",
+        "preack-world.bin": "7585db836c71a6e7a9788861ad089d96e00f4b48b35eb32f5d5d545f02925a52",
+        "frame.bin": "b593c3a669376f7da546e2088741beb3e1a41ce000fbc0696b733f2e3d8fe81d",
+        "code-after.bin": "4d17ea4dcfd7ffdec02dd3855bc7af7515ba7e36e284b349835ac8b5a73f2bda",
+        "state.txt": "604a02e0412aa3597620e33792fa71848654c2d008d74ced0e9cd972fa5605ff"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "control": "destination_plus_one_byte",
+      "rejected": "pixel oracle before second ACK",
+      "forwarded_transactions": 15,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\code5-1792959831167386600",
+      "frame_sha256": "5eed2aeb0fb5a42bbb0409d78f5ab2a557e97202b35d564469ac1ec57a2375fa"
+    }
+  ],
+  "lint": "card/binding -Wall passes with inherited exclusions",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-mask\\results.json": "4dd7a53c166368732e0996868439b308221a4386cd83a2477e3b40aac44c2455",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-mask\\tb_mask.sv": "c6b14d9f5aee70accd9fdc9f29cbe840bd1c15498ff56e259a2a9bd735f9807c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\card_irq_candidate.sv": "926ffde3eb70b04d6e37f1b51ba917a51b7ea896d37bb954351a2a56ab114af9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-mask\\execute.lua": "c0e3c1cc24c652b8705d8a9825aeac2c98155f129eeb59500d02d1d3d4194464",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\initial.hex": "bb1e1fd467296f2a8551cd799fb445fcc76d62188c127a2e87aa66ae4902b44b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-cache\\prepare.py": "67b767959c80ee97d5e72d8ada1d06df4a290471dfdb60af4ccf0d6229095496",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-cache\\bridge.lua": "e403a9868fe390920b8dfebdb8c7058d0a03e208bd8bc72302759816c615532a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\execute.lua": "aeaf72de9d7fae1c94ca8ce20c02828dcfa83b2028fae5319acd67fdac4d2ae8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-render\\prepare.py": "737be66ecf8ac7ebe68d38b8fe6128bbd87a0225b065d65ae24e106770b81cbd",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-render\\bridge.lua": "db64ca68edbbdae72738597d5ae6c320216ed388cd46aa57e49764d6d709b1ae",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-cache\\results.json": "9454a2dd1b5bf20973f55d522dc85a29f037dcef07c296dcda2812bf44585467",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\results.json": "1e126ce3f3edb1c92121fc38899bf58e9c462326e6f286d5306648b556284589",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\world.bin": "758007972c6069183ea91820113960656faaa05175517002d2ce8034c14b4cca",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\world.bin": "559653231aaf923e38b58551eada75672da73e5f52fd40546f7ca15f4124397e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\code-after.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\results.json": "40e9b6f818cd4fe07a49197e025c923cb38ac87201bf2828c1941660c505a222",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code5-1792958730280862100\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code6-1792958736705527900\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-render\\run.py": "53cae3a0e613d1643e01d3c937c8e0a921483c6324877873266404685056ed0c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\tb_cache.sv": "9a69f97f02c7759a39326c37622e2084b2cbc987f3667e4fcd17d5910dae49a2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\maclc_iie_binding.sv": "40eda71b69557af047946d0adcbab195268fa0689c5ee20c165f9aa719da1054",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\card_irq_candidate.sv": "283fe121ef29c5beda49569a01957e36c732408fd3c4c03511890000aeedecdc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-mask\\card_irq_host_registers.sv": "a83f1d659744e152c7664892317cdeef302e1c1b237338b0f57e5a8bf9dcb65d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\card_irq_cpu_bus.sv": "7b6b7460f3c86fa5df0531f0b24fbd5f3d5917f8ac22d527e4b64a20a8a5865c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-state\\card_display_state.sv": "75a3d1d065b0794a6c52234dbc2afda6d942750f8f9158f8d7f80d95af419fc5",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-video\\card_trap_decode.sv": "52e4621a6ae00aa8a738f79643f9112daf074b769d686af20b6a67faff69dc3f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-pacing\\card_cycle_pacer.sv": "3cbb73790d931bc64fb459bd917e0d939546c01ed943d2a665b5c065596d8fba",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b"
+  }
+}

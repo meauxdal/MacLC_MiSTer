@@ -1,0 +1,39 @@
+{
+  "cases": 1038,
+  "original_spans": [
+    {
+      "fork": "local/experiments/firmware-memory/app221/IIe Startup.rsrc",
+      "start": "00E6",
+      "end": "0106",
+      "sha256": "92d2f741c7d137490ec2788d9089ada266a66e1a4116f06ded4d64c15ed01a8d"
+    },
+    {
+      "fork": "local/experiments/firmware-memory/app221/IIe Startup.rsrc",
+      "start": "0300",
+      "end": "033A",
+      "sha256": "f357fa2f6b3c3af3c4eb7bd7cbc6b13f55dc7c6091bd5d63d4b54405d64b176e"
+    },
+    {
+      "fork": "local/experiments/startup-runtime/startup/IIe Startup.rsrc",
+      "start": "00E6",
+      "end": "0106",
+      "sha256": "92d2f741c7d137490ec2788d9089ada266a66e1a4116f06ded4d64c15ed01a8d"
+    },
+    {
+      "fork": "local/experiments/startup-runtime/startup/IIe Startup.rsrc",
+      "start": "0300",
+      "end": "033A",
+      "sha256": "f357fa2f6b3c3af3c4eb7bd7cbc6b13f55dc7c6091bd5d63d4b54405d64b176e"
+    }
+  ],
+  "checks": "ordered success, all nonzero statuses, all final data, aggregate failures, every timeout, cleanup",
+  "inputs_sha256": {
+    "docs/experiments/card-host-tail/run.py": "25c454bbeba393dd5c2105ea6f6746cdde85b537e9cf1eb5dccef3fbfb5ef472",
+    "docs/experiments/card-host-tail/diagnostic_tail.py": "90820b23c6e3739ac3f71d078187a93f82cad6bc6ca96c7b2cc811c222959381",
+    "docs/experiments/host-harness/diagnostic_model.py": "00b9bb0e9de66b5907a98bfba3203059f51314d75b63adfc1347b9b70b42566c",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "docs/research/software-bringup/inspect_resources.py": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+  }
+}

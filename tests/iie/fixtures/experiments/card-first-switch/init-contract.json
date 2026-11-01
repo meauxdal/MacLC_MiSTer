@@ -1,0 +1,53 @@
+{
+  "scope": "static original-byte checks; renderer initialization not executed",
+  "drivers": [
+    {
+      "driver": 5,
+      "E0_target": "135E",
+      "08_target": "0B10",
+      "C00E_target": "1630",
+      "initialization_target": "004A",
+      "zero_mode_renderer": "4360",
+      "renderer_windows": {
+        "0AB2": "610038ac4e75",
+        "4360": "226df7a2",
+        "4080": "3c2df778",
+        "4088": "24352520ef9e"
+      }
+    },
+    {
+      "driver": 6,
+      "E0_target": "135E",
+      "08_target": "0B10",
+      "C00E_target": "1630",
+      "initialization_target": "004A",
+      "zero_mode_renderer": "4146",
+      "renderer_windows": {
+        "0AB2": "610036924e75",
+        "4146": "226df7a2",
+        "3F1E": "3c2df778",
+        "3F26": "e98ac4c6"
+      }
+    }
+  ],
+  "driver_windows": {
+    "00A6": "41edd7ee2b48ef9a41edc7ee2b48ef96",
+    "02A6": "426df68e426df68c",
+    "0A7E": "082d0006f68c6632082d0005f68c6640"
+  },
+  "CODE1_42D4_window": "226dedf82269000222513029000402403fff3b40f778206df7a64ea80004",
+  "renderer_prerequisites": {
+    "A5_minus_085E": "display destination from driver initialization",
+    "A5_minus_0888": "row stride from original PixMap setup",
+    "A5_minus_1062": "CODE5 lores row offsets; CODE6 computes row*16*stride directly",
+    "A5_minus_0974": "resolved display mode, not an arbitrary zero default"
+  },
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_1.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-dispatch\\results.json": "219a798ef6944454bd260215cdffc8778e64afc963a037b878931facdf3d26ec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-slot3-recovery\\results.json": "ddcd6700ac0235cef70ff950bb14656942e0d12235c9087b32d0111d5dde57f3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-first-switch\\analyze_init.py": "d7c3a7dcf8ba79b10fc6a02f859d25da41544934ef58530d00d051dbb4fbc620"
+  }
+}

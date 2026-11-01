@@ -1,0 +1,154 @@
+{
+  "scope": "static original-byte contract; no live register exchange",
+  "mappings": [
+    {
+      "register": "A",
+      "cpu_address": 49272,
+      "a5_displacement": -2196,
+      "write_table": 5474,
+      "write_handler": 7262,
+      "read_table": 6590,
+      "read_handler": 7214
+    },
+    {
+      "register": "X",
+      "cpu_address": 49273,
+      "a5_displacement": -2195,
+      "write_table": 5478,
+      "write_handler": 7274,
+      "read_table": 6594,
+      "read_handler": 7222
+    },
+    {
+      "register": "Y",
+      "cpu_address": 49274,
+      "a5_displacement": -2194,
+      "write_table": 5482,
+      "write_handler": 7286,
+      "read_table": 6598,
+      "read_handler": 7230
+    },
+    {
+      "register": "P",
+      "cpu_address": 49275,
+      "a5_displacement": -2193,
+      "write_table": 5486,
+      "write_handler": 7298,
+      "read_table": 6602,
+      "read_handler": 7238
+    },
+    {
+      "register": "SP",
+      "cpu_address": 49276,
+      "a5_displacement": -2192,
+      "write_table": 5490,
+      "write_handler": 7310,
+      "read_table": 6606,
+      "read_handler": 7246
+    }
+  ],
+  "code_windows": {
+    "135E": "322c00040241007f4ebb141a",
+    "17BA": "322c00040241007f4ebb141a",
+    "1C9A": "7000102c000c1b40f7710c00000864044ebb0408422c000c4e75",
+    "1CC4": "4efa01f6",
+    "1EBC": "45faff56323c00a7224a10110000008012c051c9fff6343c00a87600363c06504ebae6a0",
+    "1EE0": "1b7c0009f76e4e75",
+    "1C5E": "1b6c000cf76c422c000c4e75",
+    "1C2E": "196df76c00194e75",
+    "1C6A": "1b6c000cf76d422c000c4e75",
+    "1C36": "196df76d00194e75",
+    "1C76": "1b6c000cf76e422c000c4e75",
+    "1C3E": "196df76e00194e75",
+    "1C82": "1b6c000cf76f422c000c4e75",
+    "1C46": "196df76f00194e75",
+    "1C8E": "1b6c000cf770422c000c4e75",
+    "1C4E": "196df77000194e75"
+  },
+  "receiver_windows": {
+    "D01C": "8d78c08e79c08c7ac0ba8e7cc0bd01018d7bc0",
+    "D052": "ae7cc09aad7bc09d0101ac7ac0ae79c0ad78c040"
+  },
+  "monitor_windows": {
+    "FB60": "2058fc0204b909ff990e0488d0f760",
+    "FF0A": "c1f0f0ece5a0afafe5"
+  },
+  "banner": {
+    "saved_y": 9,
+    "stores": [
+      {
+        "y": 9,
+        "source": 65298,
+        "destination": 1047,
+        "data": 229
+      },
+      {
+        "y": 8,
+        "source": 65297,
+        "destination": 1046,
+        "data": 175
+      },
+      {
+        "y": 7,
+        "source": 65296,
+        "destination": 1045,
+        "data": 175
+      },
+      {
+        "y": 6,
+        "source": 65295,
+        "destination": 1044,
+        "data": 160
+      },
+      {
+        "y": 5,
+        "source": 65294,
+        "destination": 1043,
+        "data": 229
+      },
+      {
+        "y": 4,
+        "source": 65293,
+        "destination": 1042,
+        "data": 236
+      },
+      {
+        "y": 3,
+        "source": 65292,
+        "destination": 1041,
+        "data": 240
+      },
+      {
+        "y": 2,
+        "source": 65291,
+        "destination": 1040,
+        "data": 240
+      },
+      {
+        "y": 1,
+        "source": 65290,
+        "destination": 1039,
+        "data": 193
+      }
+    ],
+    "text_low_7_bits": "Apple //e"
+  },
+  "controls": {
+    "saved_y_0_store_count": 256,
+    "saved_y_8_store_count": 8,
+    "result": "both differ from original nine-byte banner"
+  },
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-dispatch\\results.json": "219a798ef6944454bd260215cdffc8778e64afc963a037b878931facdf3d26ec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-monitor-entry\\results-1.json": "866ce1c6122d9ca008bc3e7cad6a7adf020c273a48820c2febdf4c576a0a36a2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\decoded\\Monx_2606.payload.bin": "c92e4db8d40298b759d756a23e51e8d99086cb625e4fbe8074c8c9b2a6bad554",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\decoded\\Monx_2607.payload.bin": "1a10fef980104793981f34d82a0e6e5ac13480fadf016aed0cea5575a6e749c3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-saved-register-return\\analyze.py": "d9e63d734b7918bda584505f3eebabbbce4fddca2fa1862b16308a3de07fb201",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-monitor-entry\\prepare.py": "ab417a519bae36a9d58f8a42a822b89d3d06da9689baf5563812afdac1557886"
+  },
+  "captures_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-saved-register-return\\banner-cases.json": "68d97f52305579019468ef82238a2575cb433e9afca612e9d73ff9f43b97ede8"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "scope": "synthetic replay of Conf resources matching Startup 2.2.1",
+  "source_fork": "local/experiments/startup-runtime/startup/IIe Startup.rsrc",
+  "source_fork_sha256": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+  "checks_passed": 7,
+  "uploads": {
+    "transactions": 1184,
+    "sha256": "a2faa37673b94d8b51ddf72fd7db8501c738945c25bc559d13d2623b72316947",
+    "counts": {
+      "R8:+08": 5,
+      "R8:+0D": 3,
+      "W8:+0D": 3,
+      "W8:+10": 593,
+      "W8:+11": 575,
+      "W16:+1C": 5
+    }
+  },
+  "prelude": {
+    "transactions": 787650,
+    "sha256": "3b0a80338b26804c237e9dd7097f4882bb9d6a83ccdc7ca5d1f3c3cf3223a935",
+    "counts": {
+      "R8:+08": 17,
+      "R8:+0D": 5,
+      "R8:+10": 262144,
+      "R8:+11": 262144,
+      "R16:+04": 1,
+      "W8:+0C": 1,
+      "W8:+0D": 6,
+      "W8:+10": 593,
+      "W8:+11": 575,
+      "W8:+20": 1,
+      "W8:+21": 1,
+      "W16:+10": 262144,
+      "W16:+1C": 17,
+      "W16:+20": 1
+    }
+  },
+  "missing_resources": {
+    "1001": "upload fails; main Conf branch returns zero",
+    "1002": "upload fails; main Conf branch returns zero",
+    "1003": "upload fails; main Conf branch returns zero",
+    "1004": "upload fails; main Conf branch returns zero"
+  },
+  "alias_cases": {
+    "independent": {
+      "conf_ram_error": 0,
+      "signature_first_mismatch": null
+    },
+    "index_bit_0_alias": {
+      "conf_ram_error": 0,
+      "signature_first_mismatch": {
+        "context": 0,
+        "lane": 0,
+        "index": 0,
+        "shift": 0,
+        "expected": 0,
+        "actual": 1
+      }
+    },
+    "index_bit_15_alias": {
+      "conf_ram_error": 0,
+      "signature_first_mismatch": {
+        "context": 0,
+        "lane": 0,
+        "index": 0,
+        "shift": 8,
+        "expected": 0,
+        "actual": 128
+      }
+    },
+    "lane_alias": {
+      "conf_ram_error": 0,
+      "signature_first_mismatch": {
+        "context": 0,
+        "lane": 0,
+        "index": 0,
+        "shift": 16,
+        "expected": 0,
+        "actual": 1
+      }
+    },
+    "context_alias": {
+      "conf_ram_error": 0,
+      "signature_first_mismatch": {
+        "context": 0,
+        "lane": 0,
+        "index": 0,
+        "shift": 16,
+        "expected": 0,
+        "actual": 2
+      }
+    }
+  },
+  "elapsed_seconds": 3.353
+}

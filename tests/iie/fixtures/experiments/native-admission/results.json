@@ -1,0 +1,56 @@
+{
+  "scope": "optional source-pinned native admission patch; command model, not hardware timing proof",
+  "runs": [
+    {
+      "fair": 0,
+      "result": "PASS legacy negative control: held completed OE denies native for600ticks; withdrawal releases it\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/native-admission/tb_native_admission.sv:200: $finish called at 88256000 (1ps)"
+    },
+    {
+      "fair": 1,
+      "result": "PASS fair admission: CPU=169 native=64 floppy=23 download=34 refresh=12 maxnativewait=42 maxrefreshgap=348; unbounded guard denies1100ticks\ncontested CPU grants=7 native grants=16\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/native-admission/tb_native_admission.sv:239: $finish called at 131026000 (1ps)"
+    }
+  ],
+  "icache_seam": [
+    {
+      "fair": 0,
+      "stale_done_negative": false,
+      "result": "PASS",
+      "checks": 107,
+      "errors": 0,
+      "stale_done_violations": 0
+    },
+    {
+      "fair": 0,
+      "stale_done_negative": true,
+      "result": "expected FAIL",
+      "checks": 107,
+      "errors": 3,
+      "stale_done_violations": 3
+    },
+    {
+      "fair": 1,
+      "stale_done_negative": false,
+      "result": "PASS",
+      "checks": 107,
+      "errors": 0,
+      "stale_done_violations": 0
+    },
+    {
+      "fair": 1,
+      "stale_done_negative": true,
+      "result": "expected FAIL",
+      "checks": 107,
+      "errors": 3,
+      "stale_done_violations": 3
+    }
+  ],
+  "scratch_sha256": "72a7a794aa2caa3d3b226340a9fdffa7506d33ed32742e44c8b1bfe22afc785d",
+  "inputs_sha256": {
+    "docs\\experiments\\native-admission\\run.py": "24589756156bf2581e0c4047bb98bef37c25fda6ff8b3992157c8d5ad2651d76",
+    "docs\\experiments\\native-admission\\tb_native_admission.sv": "88c6bf0fa802c35d59f85fb386666e90bc91feb32c5df2dfd45f24757e11b62c",
+    "docs\\experiments\\native-admission\\fair-native.patch": "0fa495a610df487721b7921a51aab52019a1ae59e48bbe7e0f51bde21711c6fd",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\verilator\\tb_icache_seam.v": "7bc1100fe37055e41cd51d23e77bce730065699fd48b48b5fe90988bdc9296a2",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\verilator\\altddio_out_stub.v": "8cd4e08b2977406895a6a99ddfa0cc5056b5b5d30a75b3a6ffbe42372513b349"
+  }
+}

@@ -1,0 +1,65 @@
+--- a/rtl/sdram.v
++++ b/rtl/sdram.v
+@@ -21,3 +21,3 @@
+ 
+-module sdram 
++module sdram #(parameter FAIR_NATIVE_ADMISSION = 0)
+ (
+@@ -254,2 +254,3 @@
+                          // gates cpu_done / cpu_dout, which only the CPU may touch
++reg        prefer_native;
+ reg        src_eth;      // running access belongs to the ethernet DMA engine:
+@@ -350,4 +351,5 @@
+ // for its clk_sys consumer.
+-wire req_eth   = eth_req && !eth_ack && !(oe || we) && !flp_win && !flp_guard
++wire req_eth   = eth_req && !eth_ack && (FAIR_NATIVE_ADMISSION || !(oe || we)) && !flp_win && !flp_guard
+                  && t[0] && (ref_due < REF_FORCE);
++wire grant_cpu = req_cpu && (!FAIR_NATIVE_ADMISSION || !req_eth || !prefer_native);
+ 
+@@ -372,2 +374,3 @@
+ 		src_eth    <= 0;
++		prefer_native <= 0;
+ 		// init ladder, one command slot per chipset cycle (~123ns apart):
+@@ -465,6 +468,5 @@
+ 			if (ref_cnt == 3'd4) ref_busy <= 0;   // 5 clk_64 = 77 ns > tRFC
+-		end else if (req_flp || req_dl || req_cpu || req_eth) begin
+-			// start priority: floppy window > download > CPU > ethernet DMA
+-			// (req_eth already excludes any live CPU level, so the eth leg of
+-			// these muxes can only be reached with the other three false)
++		end else if (req_flp || req_dl || grant_cpu || req_eth) begin
++			// Floppy/download retain priority; optional CPU/native round robin.
++			if (!req_flp && !req_dl) prefer_native <= grant_cpu;
+ 			sd_cmd  <= CMD_ACTIVE;
+@@ -472,11 +474,11 @@
+ 			           req_dl  ? { 1'b0, dl_addr[19:8]  } :
+-			           req_cpu ? { 1'b0, addr[19:8] }     : { 1'b0, eth_addr[19:8] };
++			           grant_cpu ? { 1'b0, addr[19:8] }     : { 1'b0, eth_addr[19:8] };
+ 			sd_ba   <= req_flp ? flp_addr[21:20]          :
+ 			           req_dl  ? dl_addr[21:20]           :
+-			           req_cpu ? addr[21:20]              : eth_addr[21:20];
+-			din_q   <= req_dl ? dl_din : req_cpu ? din : eth_din;
+-			ds_q    <= req_dl ? 2'b11  : req_cpu ? ds  : 2'b11;
++			           grant_cpu ? addr[21:20]              : eth_addr[21:20];
++			din_q   <= req_dl ? dl_din : grant_cpu ? din : eth_din;
++			ds_q    <= req_dl ? 2'b11  : grant_cpu ? ds  : 2'b11;
+ 			col_q   <= req_flp ? { flp_addr[22], flp_addr[7:0] } :
+ 			           req_dl  ? { dl_addr[22],  dl_addr[7:0]  } :
+-			           req_cpu ? { addr[22],     addr[7:0] }
++			           grant_cpu ? { addr[22],     addr[7:0] }
+ 			                   : { eth_addr[22], eth_addr[7:0] };
+@@ -484,6 +486,6 @@
+ 			seq_busy <= 1;
+-			src_cpu  <= !req_flp && !req_dl && req_cpu;
+-			src_eth  <= !req_flp && !req_dl && !req_cpu && req_eth;
+-			we_latch <= req_flp ? 1'b0 : req_dl ? 1'b1 : req_cpu ? we : eth_we;
+-			oe_latch <= req_flp ? 1'b1 : req_dl ? 1'b0 : req_cpu ? oe : !eth_we;
++			src_cpu  <= !req_flp && !req_dl && grant_cpu;
++			src_eth  <= !req_flp && !req_dl && !grant_cpu && req_eth;
++			we_latch <= req_flp ? 1'b0 : req_dl ? 1'b1 : grant_cpu ? we : eth_we;
++			oe_latch <= req_flp ? 1'b1 : req_dl ? 1'b0 : grant_cpu ? oe : !eth_we;
+ 			if (req_flp) begin
+@@ -493,3 +495,3 @@
+ 				dl_ack    <= 1;          // ★ never touches cpu_done
+-			end else if (req_cpu) begin
++			end else if (grant_cpu) begin
+ 				if (we) cpu_done <= 1;   // posted write: ack at ACTIVE; din/ds

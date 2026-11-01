@@ -1,0 +1,97 @@
+{
+  "scope": "real WDC/PDS/floppy mailbox endpoints; actual controller; external MacLC producers idle",
+  "baseline_controller_unchanged": true,
+  "lint_warnings": [
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/sdram.v:370:30: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/sdram.v:457:12: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits."
+  ],
+  "runs": [
+    {
+      "case": 0,
+      "fork": 0,
+      "sys_half_ns": 7,
+      "sys_phase_ns": 1,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=160743 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=225040 native commits=1192 early_acks=1192 backend_responses=2580 host=0 floppy_window=0 writeback=1047 refresh=687 max_backend_ticks=31\nPASS real-endpoint-warm-reset case=0 resets=2 full_memory=262144\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv:433: $finish called at 2250403000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "case": 1,
+      "fork": 1,
+      "sys_half_ns": 11,
+      "sys_phase_ns": 3,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=143363 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=315399 native commits=1192 early_acks=1192 backend_responses=2580 host=0 floppy_window=0 writeback=1005 refresh=987 max_backend_ticks=28\nPASS real-endpoint-warm-reset case=1 resets=2 full_memory=262144\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv:433: $finish called at 3153989000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "case": 2,
+      "fork": 0,
+      "sys_half_ns": 7,
+      "sys_phase_ns": 1,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=161063 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=225488 native commits=1192 early_acks=1192 backend_responses=2580 host=0 floppy_window=0 writeback=1051 refresh=689 max_backend_ticks=31\nPASS real-endpoint-warm-reset case=2 resets=2 full_memory=262144\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv:433: $finish called at 2254883000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "case": 3,
+      "fork": 1,
+      "sys_half_ns": 11,
+      "sys_phase_ns": 3,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=143246 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=315141 native commits=1192 early_acks=1192 backend_responses=2580 host=0 floppy_window=0 writeback=1004 refresh=987 max_backend_ticks=28\nPASS real-endpoint-warm-reset case=3 resets=2 full_memory=262144\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv:433: $finish called at 3151415000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "case": 4,
+      "fork": 0,
+      "sys_half_ns": 7,
+      "sys_phase_ns": 1,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=161045 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=225463 native commits=1192 early_acks=1192 backend_responses=2580 host=0 floppy_window=0 writeback=1051 refresh=688 max_backend_ticks=31\nPASS real-endpoint-warm-reset case=4 resets=2 full_memory=262144\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv:433: $finish called at 2254631000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "case": 5,
+      "fork": 1,
+      "sys_half_ns": 11,
+      "sys_phase_ns": 3,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=143363 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=315399 native commits=1192 early_acks=1192 backend_responses=2580 host=0 floppy_window=0 writeback=1005 refresh=987 max_backend_ticks=28\nPASS real-endpoint-warm-reset case=5 resets=2 full_memory=262144\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv:433: $finish called at 3153989000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "case": 6,
+      "fork": 0,
+      "sys_half_ns": 7,
+      "sys_phase_ns": 1,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=160965 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=225351 native commits=1192 early_acks=1192 backend_responses=2580 host=0 floppy_window=0 writeback=1050 refresh=689 max_backend_ticks=31\nPASS real-endpoint-warm-reset case=6 resets=2 full_memory=262144\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv:433: $finish called at 2253511000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    }
+  ],
+  "inputs_sha256": {
+    "local/experiments/card-quiesce/endpoints/tb_endpoint_platform.sv": "c35da888d2a663ca21d439544140effc54568da9656ad2548dcdedfa38397150",
+    "docs/experiments/card-quiesce/card_warm_reset.sv": "6dfa21c2bb06da73e7454d44745c2811568c4b448d93f06bc6720e626a62b8c6",
+    "docs/experiments/card-quiesce/card_floppy_stop.sv": "5497e965568f4af0984ed3660c4ed59beb78aa272738ec2a73319ad568c0c2c3",
+    "local/experiments/card-quiesce/endpoints/card_platform.sv": "330e0087788470a68f28fca47fcb7fa06266afcf8a8ad2bfa4000724db01b38c",
+    "docs/experiments/card-memory-cdc/card_memory_cdc.sv": "148e09202f8ee7043fff6b146624ce1ebf764696025c0977181cf5b428b4264e",
+    "local/experiments/card-quiesce/endpoints/card_pds_candidate.sv": "6e50c9f1e4da02a53fc7e39acea54057cb4cc80bdc84fc41fdc978e5b07947bf",
+    "local/experiments/card-quiesce/endpoints/card_pds_adapter.sv": "442eaad61fb854d00e7d122ad580d832f67fefbeed529fae4d9b58ae24dbd893",
+    "local/experiments/card-quiesce/endpoints/card_candidate.sv": "dddfeba0d925853e518711751f1f7742dd760fc7e06326de9617a0b1243e1d0a",
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "docs/experiments/native-memory-harness/card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "docs/experiments/native-memory-harness/card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "local/experiments/card-quiesce/endpoints/sdram.v": "3357264626b4c890d7d6f6a66855da4fea3d7e9c6af8a742350e490642d88b3a",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+    "docs/experiments/card-platform/card_platform.qip": "29f3c8e362630e01631bdfed36d868c1542df8caa84dcd674367e4ea89b2cc85",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge-result.json": "4e6f45911615d3e939bfcb5a822ddfac58f6e154aa0facf0537cd6c8f5f2e348",
+    "docs/experiments/card-quiesce/endpoints_prepare.py": "5371f6465dcefe7d4b3d8c431cf6442d0ec46dc1af3723344879a7e62d515f58",
+    "docs/experiments/card-quiesce/platform_prepare.py": "418c7bbdb3b2632d5fbc94b3fa701303a2b1b28bf84b5c694b0413368c8c159a",
+    "docs/experiments/card-quiesce/endpoints_bench.py": "a4310e6f6b486988459ce08934294153ae864cfabca158aa29121bfe28241570",
+    "docs/experiments/card-quiesce/prepare.py": "ec97fe0b8110c45b01999e8a5227932489f6db61f674a2944850d2e2b9d626d5",
+    "docs/experiments/card-quiesce/run.py": "c76fb571a49cdca93339d13f227eccdd6d919caa1ddb04ef08e0de1348657403",
+    "docs/experiments/card-quiesce/run_endpoint_platform.py": "0eb8f16d19ca501bf6ef4eee4569e50cd6781fa65a1ffd3abe42dedccf36c9fd",
+    "local/experiments/card-system-harness/stimulus0.txt": "ae4bc144b3775fd2ba83dab112e47f21c06962351c487202c9a96534cd8d3640",
+    "local/experiments/card-system-harness/expected0.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94",
+    "local/experiments/card-system-harness/stimulus1.txt": "ae4bc144b3775fd2ba83dab112e47f21c06962351c487202c9a96534cd8d3640",
+    "local/experiments/card-system-harness/expected1.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94"
+  }
+}

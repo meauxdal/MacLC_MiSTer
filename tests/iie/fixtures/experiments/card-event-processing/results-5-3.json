@@ -1,0 +1,16 @@
+{
+  "driver": 5,
+  "event_type": 3,
+  "control": false,
+  "writes": [
+    "00e00018 41000000 ff000000"
+  ],
+  "result": "card write observed",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-event-processing\\execute.lua": "2f169310affed6d77913abec4b48a8037a45a98483e6a798501f95fa884ee6ce",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-event-processing\\run.py": "9588c6d803f33d764ff06f25334bf697a5f04142599a3f218423e5a953751423"
+  }
+}

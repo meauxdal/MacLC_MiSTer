@@ -1,0 +1,139 @@
+{
+  "runs": [
+    {
+      "case": "wai_masked_irq",
+      "result": "PASS case=0 fast=0 accepted=21 completed=21 IRQ=0 NMI=0 ticks=26 writes0400=0"
+    },
+    {
+      "case": "wai_irq",
+      "result": "PASS case=1 fast=0 accepted=39 completed=39 IRQ=1 NMI=0 ticks=44 writes0400=0"
+    },
+    {
+      "case": "wai_nmi",
+      "result": "PASS case=2 fast=0 accepted=39 completed=39 IRQ=0 NMI=1 ticks=45 writes0400=0"
+    },
+    {
+      "case": "read_irq",
+      "result": "PASS case=3 fast=0 accepted=41 completed=41 IRQ=1 NMI=0 ticks=48 writes0400=0"
+    },
+    {
+      "case": "write_irq",
+      "result": "PASS case=4 fast=0 accepted=41 completed=41 IRQ=1 NMI=0 ticks=48 writes0400=1"
+    },
+    {
+      "case": "read_nmi",
+      "result": "PASS case=5 fast=0 accepted=41 completed=41 IRQ=0 NMI=1 ticks=48 writes0400=0"
+    },
+    {
+      "case": "write_nmi",
+      "result": "PASS case=6 fast=0 accepted=41 completed=41 IRQ=0 NMI=1 ticks=48 writes0400=1"
+    },
+    {
+      "case": "stp_reset",
+      "result": "PASS case=7 fast=0 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=2"
+    },
+    {
+      "case": "reset_held_read",
+      "result": "PASS case=8 fast=0 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=0"
+    },
+    {
+      "case": "reset_held_write",
+      "result": "PASS case=9 fast=0 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=1"
+    },
+    {
+      "case": "reset_buffered_read",
+      "result": "PASS case=10 fast=0 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=0"
+    },
+    {
+      "case": "reset_buffered_write",
+      "result": "PASS case=11 fast=0 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=2"
+    },
+    {
+      "case": "wai_unsampled_nmi",
+      "result": "PASS case=12 fast=0 accepted=39 completed=39 IRQ=0 NMI=1 ticks=49 writes0400=0"
+    },
+    {
+      "case": "wai_unmasked_nmi",
+      "result": "PASS case=13 fast=0 accepted=39 completed=39 IRQ=0 NMI=1 ticks=45 writes0400=0"
+    },
+    {
+      "case": "wai_one_sample_nmi",
+      "result": "PASS case=14 fast=0 accepted=39 completed=39 IRQ=0 NMI=1 ticks=45 writes0400=0"
+    },
+    {
+      "case": "wai_masked_irq",
+      "result": "PASS case=0 fast=1 accepted=21 completed=21 IRQ=0 NMI=0 ticks=26 writes0400=0"
+    },
+    {
+      "case": "wai_irq",
+      "result": "PASS case=1 fast=1 accepted=39 completed=39 IRQ=1 NMI=0 ticks=44 writes0400=0"
+    },
+    {
+      "case": "wai_nmi",
+      "result": "PASS case=2 fast=1 accepted=39 completed=39 IRQ=0 NMI=1 ticks=45 writes0400=0"
+    },
+    {
+      "case": "read_irq",
+      "result": "PASS case=3 fast=1 accepted=41 completed=41 IRQ=1 NMI=0 ticks=48 writes0400=0"
+    },
+    {
+      "case": "write_irq",
+      "result": "PASS case=4 fast=1 accepted=41 completed=41 IRQ=1 NMI=0 ticks=48 writes0400=1"
+    },
+    {
+      "case": "read_nmi",
+      "result": "PASS case=5 fast=1 accepted=41 completed=41 IRQ=0 NMI=1 ticks=48 writes0400=0"
+    },
+    {
+      "case": "write_nmi",
+      "result": "PASS case=6 fast=1 accepted=41 completed=41 IRQ=0 NMI=1 ticks=48 writes0400=1"
+    },
+    {
+      "case": "stp_reset",
+      "result": "PASS case=7 fast=1 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=2"
+    },
+    {
+      "case": "reset_held_read",
+      "result": "PASS case=8 fast=1 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=0"
+    },
+    {
+      "case": "reset_held_write",
+      "result": "PASS case=9 fast=1 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=1"
+    },
+    {
+      "case": "reset_buffered_read",
+      "result": "PASS case=10 fast=1 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=0"
+    },
+    {
+      "case": "reset_buffered_write",
+      "result": "PASS case=11 fast=1 accepted=23 completed=23 IRQ=0 NMI=0 ticks=23 writes0400=2"
+    },
+    {
+      "case": "wai_unsampled_nmi",
+      "result": "PASS case=12 fast=1 accepted=39 completed=39 IRQ=0 NMI=1 ticks=49 writes0400=0"
+    },
+    {
+      "case": "wai_unmasked_nmi",
+      "result": "PASS case=13 fast=1 accepted=39 completed=39 IRQ=0 NMI=1 ticks=45 writes0400=0"
+    },
+    {
+      "case": "wai_one_sample_nmi",
+      "result": "PASS case=14 fast=1 accepted=39 completed=39 IRQ=0 NMI=1 ticks=45 writes0400=0"
+    }
+  ],
+  "lint": "PASS -Wall with frozen filename/empty-pin exclusions",
+  "negative_control": {
+    "name": "no_wai_tick",
+    "failure": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-wait/tb_card_wait_cpu_bus.sv:27: timeout case=0 pc=2003"
+  },
+  "inputs_sha256": {
+    "docs/experiments/card-cpu-wait/run.py": "466fa2ce21e4e01c958ebbd628f686e2eda8d7c8105e0314d7676832b2b28383",
+    "docs/experiments/card-cpu-wait/tb_card_wait_cpu_bus.sv": "70af654ad8d0b35221b43fdea1510a23fc5539c6672537c02c5435fd37686816",
+    "docs/experiments/card-cpu-rtl/results.json": "15fe1e82dc5be729a1031edbc2193fa3cbdc7614c51691f59b54f9a79ff2f0e9",
+    "docs/experiments/card-cpu-wait/card_wait_cpu_bus.sv": "41c403a9bbbd60a91e98ec89b43320159d0b16f734113c069d28b1dcbe303936",
+    "docs/experiments/card-cpu-pacing/card_cycle_pacer.sv": "3cbb73790d931bc64fb459bd917e0d939546c01ed943d2a665b5c065596d8fba",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7"
+  }
+}

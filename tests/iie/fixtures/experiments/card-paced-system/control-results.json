@@ -1,0 +1,44 @@
+{
+  "irq_loop_runs": [
+    {
+      "fast": 0,
+      "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1468 backend=2843 stores=1208 captures=62 cpu_cycles=518 ticks=381556 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=763162 native commits=1208 early_acks=1208 backend_responses=2843 host=18325 floppy_window=6608 writeback=6642 refresh=2485 max_backend_ticks=46\nPACE fast=0 min_gap=31 completions=518 CPU_mem=457 held_response_ticks=6197 early_response_ticks=6197 softswitches=16 extra_status_polls=5\nLOOP loads=6 branches=7\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-paced-system/tb_controls.sv:521: $finish called at 11740480120 (1ps)",
+      "counter_loads": 6,
+      "branches": 7
+    },
+    {
+      "fast": 1,
+      "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1463 backend=2864 stores=1208 captures=62 cpu_cycles=539 ticks=381501 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=763052 native commits=1208 early_acks=1208 backend_responses=2864 host=18330 floppy_window=6609 writeback=6640 refresh=2485 max_backend_ticks=42\nPACE fast=1 min_gap=17 completions=539 CPU_mem=478 held_response_ticks=401 early_response_ticks=401 softswitches=16 extra_status_polls=0\nLOOP loads=9 branches=10\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-paced-system/tb_controls.sv:521: $finish called at 11738791968 (1ps)",
+      "counter_loads": 9,
+      "branches": 10
+    }
+  ],
+  "extra_fast_loops": 3,
+  "extra_fast_cpu_cycles": 21,
+  "negative_control": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-paced-system/tb_controls.sv:407: CPU completion bypassed pacer\n       Time: 1690367335  Scope: tb_card_platform",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-paced-system\\check_controls.py": "1bc26885ff8714a6ff078a786539a0d1e04f6cda6a75f025e6c6dd6b9e190173",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-paced-system\\prepare.py": "f1cabbb6ba3cc69474999a0923eaa90375cd50f25e20b7d1f22f43ff2107aef2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-paced-system\\run.py": "5a8a696909de738fdf39ecf7de5986c8b8b3dbd22989723c47fc83de79f03636",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-paced-system\\results.json": "141e3bef39b8a552c027380a3bcb297ef0d993ec2d78a9f2b5f541aeb59a71ad",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-paced-system\\tb_binding.sv": "7b9845c440fc359b0acab29383caf3d1ad47f71116dd23ecd81638e326763267",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-paced-system\\tb_controls.sv": "aea987b922b389a457c987cf43889b8a130f0221802d5fcb6c9660904e7e1921",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\maclc_iie_binding.sv": "40eda71b69557af047946d0adcbab195268fa0689c5ee20c165f9aa719da1054",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\stimulus0.txt": "bbf3a67464a5e6d5ce67089c7539e97bcf05571b4727502e7eb9a8baea77587a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\expected0.hex": "81c333432cd2dc56726dd956ff589d91fe0bc59c2a67069b85cecb13edcdc71b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-paced-system\\card_irq_candidate.sv": "96356afe291955c9be015b72e0cccacfd217d8d9aaea3e7dde516929d93ba6ff",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-pacing\\card_cycle_pacer.sv": "3cbb73790d931bc64fb459bd917e0d939546c01ed943d2a665b5c065596d8fba"
+  }
+}

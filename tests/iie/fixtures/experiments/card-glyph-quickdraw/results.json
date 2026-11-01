@@ -1,0 +1,35 @@
+{
+  "scope": "Original glyph routine in a live Startup resource context; scheduled invocation after discovery",
+  "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-glyph-quickdraw\\1793375389419983000",
+  "draw_calls": 128,
+  "inverse_writes": 1024,
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\hardfiles\\Apple-II_100MB.hda": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\v221\\Apple IIe Card 2.2.1.image": "5b180cb6d959b44106ecdc1fa9c5ec6e06ddf5f96edfaefa6ad3658355a69537",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_2.bin": "d55c1fa48645cd2bb413c9610bb76c265e1cae207de9db774238052196a223fa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\rb\\rb-cli.exe": "a009fa4d5c9b6388c0dc56174d27fdda67df47ea2f4a501537add470bc65113a",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\chdman.exe": "8a74468e3b0879698835b57c3b58e88e5a51e4de73bee6ef755c28530b5b040f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-glyph-quickdraw\\run.py": "76b54fef3c6b3542c454600afd69e3fab8ae8fcd4b2afc3850b790a3552ed1f2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-glyph-quickdraw\\execute.lua": "426a277463996bcb18c81d017ceb249f6a48f6ef50c847fdf182abe2b47f3e46",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\results.json": "1e126ce3f3edb1c92121fc38899bf58e9c462326e6f286d5306648b556284589",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\world.bin": "758007972c6069183ea91820113960656faaa05175517002d2ce8034c14b4cca",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\world.bin": "559653231aaf923e38b58551eada75672da73e5f52fd40546f7ca15f4124397e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\code-after.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\results.json": "40e9b6f818cd4fe07a49197e025c923cb38ac87201bf2828c1941660c505a222",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code5-1792958730280862100\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code6-1792958736705527900\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\world.bin": "c994894ad10c39f7799544e1b960eb30d171c6c94a97455706dcf6207fc709eb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\font.bin": "9192ec00494a6fdebf49e8a9b037522ecafdef9fa383fb0338319cc8b48c72ab",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-glyph\\results.json": "70f6b5cd53c3f975b1d275c5b1f37c5af4ee3c08c8323810241471db7de8253e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b"
+  },
+  "capture_sha256": {
+    "caller.bin": "612a8083b90ee391a49bda9bb5fde1845aee3baf171c7e1d302014a5a80b2275",
+    "code-after.bin": "d55c1fa48645cd2bb413c9610bb76c265e1cae207de9db774238052196a223fa",
+    "code-before.bin": "d55c1fa48645cd2bb413c9610bb76c265e1cae207de9db774238052196a223fa",
+    "glyph.bin": "53c396ac7bfff0cd8cff812b8653d7ab07fbb5df17cb87d9277aa7cdfd2895b0",
+    "result.bin": "ffae771c8e89710406540b6d21a3b8187091da56687ba8f56076cb8626065310"
+  }
+}

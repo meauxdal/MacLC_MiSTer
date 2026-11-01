@@ -1,0 +1,62 @@
+{
+  "scope": "isolated original logical CPU image; candidate opcode02 NMI and host IRQ pins, not integrated card mapping",
+  "runs": [
+    {
+      "fork": 0,
+      "candidate_interrupts": false,
+      "delay": 0,
+      "result": "PASS CPU baseline: opcode02 consumes operand, no interrupts/reports, original counter loop; delay=0"
+    },
+    {
+      "fork": 0,
+      "candidate_interrupts": false,
+      "delay": 1,
+      "result": "PASS CPU baseline: opcode02 consumes operand, no interrupts/reports, original counter loop; delay=1"
+    },
+    {
+      "fork": 0,
+      "candidate_interrupts": true,
+      "delay": 0,
+      "result": "PASS CPU candidate: NMI return=2031 report2, IRQ return=2035 report=00, main report1, two RTIs; delay=0"
+    },
+    {
+      "fork": 0,
+      "candidate_interrupts": true,
+      "delay": 1,
+      "result": "PASS CPU candidate: NMI return=2031 report2, IRQ return=2035 report=00, main report1, two RTIs; delay=1"
+    },
+    {
+      "fork": 1,
+      "candidate_interrupts": false,
+      "delay": 0,
+      "result": "PASS CPU baseline: opcode02 consumes operand, no interrupts/reports, original counter loop; delay=0"
+    },
+    {
+      "fork": 1,
+      "candidate_interrupts": false,
+      "delay": 1,
+      "result": "PASS CPU baseline: opcode02 consumes operand, no interrupts/reports, original counter loop; delay=1"
+    },
+    {
+      "fork": 1,
+      "candidate_interrupts": true,
+      "delay": 0,
+      "result": "PASS CPU candidate: NMI return=2031 report2, IRQ return=2035 report=00, main report1, two RTIs; delay=0"
+    },
+    {
+      "fork": 1,
+      "candidate_interrupts": true,
+      "delay": 1,
+      "result": "PASS CPU candidate: NMI return=2031 report2, IRQ return=2035 report=00, main report1, two RTIs; delay=1"
+    }
+  ],
+  "inputs_sha256": {
+    "docs/experiments/card-interrupt-contract/run_cpu.py": "69e464ef423a3e86b9c7f8235776681b84694859897902cbccd913878f95b61f",
+    "docs/experiments/card-interrupt-contract/tb_interrupt_cpu.sv": "f1c042ff9a3ac295847fb90fff58df46a9d3f3db846e79b062c18754e07a49d2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+  }
+}

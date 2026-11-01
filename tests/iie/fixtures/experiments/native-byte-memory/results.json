@@ -1,0 +1,47 @@
+{
+  "baseline_controller_sha256": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+  "patch_applies": true,
+  "baseline_unchanged": true,
+  "runs": [
+    {
+      "name": "byte-enabled",
+      "expected_failure": false,
+      "result": "PASS native-byte-memory accepted=63 completed=63 backend=63 commits=38 early_posted_acks=38\nhost=6 floppy=6 refresh=15 chip_reads=44 chip_writes=38 max_normal_ticks=56 max_all_ticks=533\nEXPECTED_STARVATION held_host_ticks=512; card recovered after host release\nDQM low=9 high=10 word=19 native_writeback=6\nfront_contention host=8 card=8\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/native-byte-memory/tb_native_byte_memory.sv:362: $finish called at 104170000 (1ps)"
+    },
+    {
+      "name": "high-bit-alias",
+      "expected_failure": false,
+      "result": "PASS native-byte-memory accepted=63 completed=63 backend=63 commits=38 early_posted_acks=38\nhost=6 floppy=6 refresh=15 chip_reads=44 chip_writes=38 max_normal_ticks=56 max_all_ticks=533\nEXPECTED_STARVATION held_host_ticks=512; card recovered after host release\nDQM low=9 high=10 word=19 native_writeback=6\nfront_contention host=8 card=8\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/native-byte-memory/tb_native_byte_memory.sv:362: $finish called at 104170000 (1ps)"
+    },
+    {
+      "name": "default-off",
+      "expected_failure": false,
+      "result": "PASS native-byte-memory accepted=41 completed=41 backend=41 commits=19 early_posted_acks=19\nhost=6 floppy=6 refresh=13 chip_reads=41 chip_writes=19 max_normal_ticks=56 max_all_ticks=533\nEXPECTED_STARVATION held_host_ticks=512; card recovered after host release\nDQM low=0 high=0 word=19 native_writeback=6\nfront_contention host=0 card=0\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/native-byte-memory/tb_native_byte_memory.sv:362: $finish called at 98770000 (1ps)"
+    },
+    {
+      "name": "wrong-byte-enable",
+      "expected_failure": true,
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/native-byte-memory/tb_native_byte_memory.sv:217: response 0034 expected 12ab\n       Time: 83030000  Scope: tb_native_byte_memory.transaction"
+    },
+    {
+      "name": "composed-fair-enabled",
+      "expected_failure": false,
+      "result": "PASS native-byte-memory accepted=63 completed=63 backend=63 commits=38 early_posted_acks=38\nhost=6 floppy=6 refresh=15 chip_reads=44 chip_writes=38 max_normal_ticks=54 max_all_ticks=54\nEXPECTED_NATIVE_PROGRESS held_host_ticks=512\nDQM low=9 high=10 word=19 native_writeback=6\nfront_contention host=8 card=8\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/native-byte-memory/tb_native_byte_memory.sv:362: $finish called at 103810000 (1ps)"
+    }
+  ],
+  "baseline_lint_warnings": [
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/native-byte-memory/sdram_byte.v:364:30: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/native-byte-memory/sdram_byte.v:451:12: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits."
+  ],
+  "inputs_sha256": {
+    "docs/experiments/native-byte-memory/card_byte_memory_arbiter.sv": "53c99bcad24886cce20a0b3e532882eed99f633b618b557d7025fbeae86dac55",
+    "docs/experiments/native-byte-memory/card_byte_native_adapter.sv": "c792d013cb9ea970743e6d5ba78432b6d02be4d2eac321392271bd0cc7a872a9",
+    "docs/experiments/native-byte-memory/card_byte_native_port_mux.sv": "eb360569d5be7d542bb3c2d558b83b68f1f4b2927b335f34c875c6ac76c50504",
+    "docs/experiments/native-byte-memory/tb_native_byte_memory.sv": "0a8bb1dc8929f51e45cbb714689350ec1ca33c16a6fdbdc24185a438e71d1608",
+    "docs/experiments/native-byte-memory/prepare.py": "c42d5efc8a96aef1b08f86866c69ddba29d378be108a444696fdad354a5371ea",
+    "docs/experiments/native-byte-memory/run.py": "195f77db3c66655a921f9af9d0b709cefeaeb6ee096ae74c1613a1dc869c8800",
+    "docs/experiments/native-byte-memory/native-byte-enable.patch": "d425202b2f62640e64145eaa768250defa1817402e39904f269be5d3be4f2d3d",
+    "docs/experiments/native-admission/run.py": "8e810485b52e29eceeb018f3b166361a059b31ba668d205e7e32869b33b7ff75",
+    "local/experiments/native-byte-memory/sdram_byte_fair.v": "7a678dbbab69f931f1d949c3cd115fa7557622ed1a98e414dcc4a3e400ea864d"
+  }
+}

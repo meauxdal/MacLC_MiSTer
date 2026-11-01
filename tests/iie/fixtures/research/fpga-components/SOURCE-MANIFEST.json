@@ -1,0 +1,266 @@
+{
+  "inspected_date": "2026-10-22",
+  "note": "Metadata only. No implementation sources imported. Git blob hashes identify source bytes; license observations are in REPORT.md.",
+  "repositories": [
+    {
+      "repository": "MiSTer-devel/Apple-II_MiSTer",
+      "revision": "c701e64099d633a26cb1de002edfae07fb16a8fa",
+      "files": [
+        {
+          "path": "files.qip",
+          "git_blob_sha1": "104582960845f1fbb2f4a9666c061eed76730503",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/files.qip"
+        },
+        {
+          "path": "Apple-II.sv",
+          "git_blob_sha1": "9825f29d6b41235cd370d462a805484d2aa29192",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/Apple-II.sv"
+        },
+        {
+          "path": "Apple-II.qsf",
+          "git_blob_sha1": "b60ed09e5dee5874268b504275e7daa12fcfaa61",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/Apple-II.qsf"
+        },
+        {
+          "path": "Apple-II.sdc",
+          "git_blob_sha1": "56d5d4de5f888f27d076490d9c52e7c4ae7cf1ba",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/Apple-II.sdc"
+        },
+        {
+          "path": "rtl/apple2.v",
+          "git_blob_sha1": "8ab8f1ae0a3bb5df370325f9af6b63d1dfe24a13",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/apple2.v"
+        },
+        {
+          "path": "rtl/apple2_top.v",
+          "git_blob_sha1": "f8477c9c46310eb7dbed1e497fdb4bcb72962aef",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/apple2_top.v"
+        },
+        {
+          "path": "rtl/cpu/wdc65c02/README.md",
+          "git_blob_sha1": "79f7c1075469ae73d0115152d240077e2ad11cee",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/cpu/wdc65c02/README.md"
+        },
+        {
+          "path": "rtl/cpu/wdc65c02/cpu_65c02.sv",
+          "git_blob_sha1": "f515d7734fb6a86860cfb8bcc53d94d9443498df",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/cpu/wdc65c02/cpu_65c02.sv"
+        },
+        {
+          "path": "rtl/cpu/wdc65c02/cpu_alu.sv",
+          "git_blob_sha1": "b0b5ec48bc5375cb65359609d1be1cb3f69652b3",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/cpu/wdc65c02/cpu_alu.sv"
+        },
+        {
+          "path": "rtl/timing_generator.v",
+          "git_blob_sha1": "88229ee8a18dccd5cba956edd06bc088edd44122",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/timing_generator.v"
+        },
+        {
+          "path": "rtl/video_generator.v",
+          "git_blob_sha1": "df5fd84a0d4b6deec6b44f1573ea4eec090b97fc",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/video_generator.v"
+        },
+        {
+          "path": "rtl/ramcard.v",
+          "git_blob_sha1": "a38231209aa80caf5ccc80540fe7695640bae6cf",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/ramcard.v"
+        },
+        {
+          "path": "rtl/rom.v",
+          "git_blob_sha1": "47ecff178d501593dc2017641059560ff385f411",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/rom.v"
+        },
+        {
+          "path": "rtl/spram.vhd",
+          "git_blob_sha1": "c06a4bdf820fe4d0d967c23ca1c4259978f103bd",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/spram.vhd"
+        },
+        {
+          "path": "rtl/dpram.vhd",
+          "git_blob_sha1": "0a7feaa89c4abbe523b1d33695b131f05595921c",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/dpram.vhd"
+        },
+        {
+          "path": "rtl/video/video_pipeline.sv",
+          "git_blob_sha1": "f6baa8567def828585c725d70e3353e5ee80531e",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/video/video_pipeline.sv"
+        },
+        {
+          "path": "rtl/woz/disk_ii_woz.sv",
+          "git_blob_sha1": "b2bd08b252c2616af73a87fb7bb471eab043efd0",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/woz/disk_ii_woz.sv"
+        },
+        {
+          "path": "rtl/woz/flux_drive.v",
+          "git_blob_sha1": "c027fb7c008b2c0d7b8436f6e8e9f067defaf490",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/woz/flux_drive.v"
+        },
+        {
+          "path": "rtl/woz/woz_floppy_controller.sv",
+          "git_blob_sha1": "13c7eb04504a5fb22ecf68fe526506b970e6d917",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/woz/woz_floppy_controller.sv"
+        },
+        {
+          "path": "rtl/woz/woz_bram.sv",
+          "git_blob_sha1": "70e7f59aaeeab473f48cdadda40c46e45b3e16c4",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/woz/woz_bram.sv"
+        },
+        {
+          "path": "rtl/woz/woz_cell525.sv",
+          "git_blob_sha1": "705818b5dcbb4e321b5ff279c466058ced336785",
+          "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/woz/woz_cell525.sv"
+        },
+        {
+          "path": "rtl/pll/pll_0002.v",
+          "git_blob_sha1": "97636f78d2697995d5b667e194b5363194f91b93",
+        "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/pll/pll_0002.v"
+      },
+      {
+        "path": "rtl/woz/disk_ii_rom.v",
+        "git_blob_sha1": "b82db1983c4851a27da7f10d179cad58f66b363c",
+        "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/woz/disk_ii_rom.v"
+      },
+      {
+        "path": "rtl/apple2_font_rom.v",
+        "git_blob_sha1": "0c133f188edd969a81d5b6f28086cb9ed4b21435",
+        "url": "https://github.com/MiSTer-devel/Apple-II_MiSTer/blob/c701e64099d633a26cb1de002edfae07fb16a8fa/rtl/apple2_font_rom.v"
+      }
+      ]
+    },
+    {
+      "repository": "mist-devel/T65",
+      "revision": "7027ad169553911b1d55ce6d220364e7c8595b94",
+      "files": [
+        {
+          "path": "README",
+          "git_blob_sha1": "42e62f154679dc86180edb337aa470c57272f3b5",
+          "url": "https://github.com/mist-devel/T65/blob/7027ad169553911b1d55ce6d220364e7c8595b94/README"
+        },
+        {
+          "path": "T65.vhd",
+          "git_blob_sha1": "c41fe73660eb8de7b30885b6fc4d1c5b3802b85c",
+          "url": "https://github.com/mist-devel/T65/blob/7027ad169553911b1d55ce6d220364e7c8595b94/T65.vhd"
+        },
+        {
+          "path": "T65_ALU.vhd",
+          "git_blob_sha1": "63b27bfb826daa8102e376ff30ed3905a019ab2b",
+          "url": "https://github.com/mist-devel/T65/blob/7027ad169553911b1d55ce6d220364e7c8595b94/T65_ALU.vhd"
+        },
+        {
+          "path": "T65_MCode.vhd",
+          "git_blob_sha1": "a0500dfebfd7c0069f2a5d17d6612303f2de4887",
+          "url": "https://github.com/mist-devel/T65/blob/7027ad169553911b1d55ce6d220364e7c8595b94/T65_MCode.vhd"
+        },
+        {
+          "path": "T65_Pack.vhd",
+          "git_blob_sha1": "f56c343cd0a37bd6e1da1fe8d939b23979b93e5c",
+          "url": "https://github.com/mist-devel/T65/blob/7027ad169553911b1d55ce6d220364e7c8595b94/T65_Pack.vhd"
+        }
+      ]
+    },
+    {
+      "repository": "gyurco/apple2efpga",
+      "revision": "518f05fba289fa7effe9d7a46a38a856d01c06e0",
+      "files": [
+        {
+          "path": "R65Cx2.vhd",
+          "git_blob_sha1": "093036eda3cdec47c33c0f006b583d1e37c3c473",
+          "url": "https://github.com/gyurco/apple2efpga/blob/518f05fba289fa7effe9d7a46a38a856d01c06e0/R65Cx2.vhd"
+        },
+        {
+          "path": "disk_ii.vhd",
+          "git_blob_sha1": "88c70d30045e4d289152cd8c2cf2f9a6ce4b12bf",
+          "url": "https://github.com/gyurco/apple2efpga/blob/518f05fba289fa7effe9d7a46a38a856d01c06e0/disk_ii.vhd"
+        }
+      ]
+    },
+    {
+      "repository": "Arlet/verilog-65C02-microcode",
+      "revision": "46aaeb8e01e49d49bbc9918eabe17eee50620b2a",
+      "files": [
+        {
+          "path": "README.md",
+          "git_blob_sha1": "899408938ae59442b5976359503014101742d93a",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/README.md"
+        },
+        {
+          "path": "generic/README.md",
+          "git_blob_sha1": "ddab428735910448e48fade5a96f503ad6e6ab90",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/README.md"
+        },
+        {
+          "path": "generic/abh.v",
+          "git_blob_sha1": "2fc77dd950e890c6975e604794504d049dbbb264",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/abh.v"
+        },
+        {
+          "path": "generic/abl.v",
+          "git_blob_sha1": "d09107b757aa63f0b8c67a1eda22128137d293ab",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/abl.v"
+        },
+        {
+          "path": "generic/alu.v",
+          "git_blob_sha1": "993a7e6db8676d3522571cd06c5b0356f220830d",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/alu.v"
+        },
+        {
+          "path": "generic/cpu.v",
+          "git_blob_sha1": "d63e1c110d600f55dfb5ba67f0cbf878f66ee9cc",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/cpu.v"
+        },
+        {
+          "path": "generic/ctl.v",
+          "git_blob_sha1": "87c5b0057d992ba9ef2f5b090932efcf0f6d5d87",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/ctl.v"
+        },
+        {
+          "path": "generic/regfile.v",
+          "git_blob_sha1": "cb4f5cc723cee6577c37d1a285fb641769918ec1",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/regfile.v"
+        },
+        {
+          "path": "generic/microcode.v",
+          "git_blob_sha1": "3f36ecf6a9b89a0d99e93bcd4b6cda9526aa30d6",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/microcode.v"
+        },
+        {
+          "path": "generic/fsm/README.md",
+          "git_blob_sha1": "b254d13d9c95aa58eaee284af9b3ed583eff0e6e",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/generic/fsm/README.md"
+        },
+        {
+          "path": "spartan6/README.md",
+          "git_blob_sha1": "3392a1f8b3b620de825e557373ce4cb2c58f93a0",
+          "url": "https://github.com/Arlet/verilog-65C02-microcode/blob/46aaeb8e01e49d49bbc9918eabe17eee50620b2a/spartan6/README.md"
+        }
+      ]
+    },
+    {
+      "repository": "hoglet67/CoPro6502",
+      "revision": "3c796eacb5b4b5d56c9ad074a309deea7b8cf823",
+      "files": [
+        {
+          "path": "src/Arlet/README",
+          "git_blob_sha1": "dc2056b25704e23369669a9d6a21fe0e551d6113",
+          "url": "https://github.com/hoglet67/CoPro6502/blob/3c796eacb5b4b5d56c9ad074a309deea7b8cf823/src/Arlet/README"
+        },
+        {
+          "path": "src/Arlet/cpu_65c02.v",
+          "git_blob_sha1": "a0f0c73110aa5471be3b816d1833228c495ef968",
+          "url": "https://github.com/hoglet67/CoPro6502/blob/3c796eacb5b4b5d56c9ad074a309deea7b8cf823/src/Arlet/cpu_65c02.v"
+        },
+        {
+          "path": "src/Arlet/ALU.v",
+          "git_blob_sha1": "8d05fc03b0f982a556e5fb8ef9b22d0b8de1ee5a",
+          "url": "https://github.com/hoglet67/CoPro6502/blob/3c796eacb5b4b5d56c9ad074a309deea7b8cf823/src/Arlet/ALU.v"
+        },
+        {
+          "path": "LICENSE.txt",
+          "git_blob_sha1": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+          "url": "https://github.com/hoglet67/CoPro6502/blob/3c796eacb5b4b5d56c9ad074a309deea7b8cf823/LICENSE.txt"
+        }
+      ]
+    }
+  ]
+}

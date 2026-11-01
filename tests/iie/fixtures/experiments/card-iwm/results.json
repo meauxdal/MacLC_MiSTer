@@ -1,0 +1,81 @@
+{
+  "scope": "IWM register frontend; actual CPU original subroutine; no flux/media implementation claim",
+  "archive_disk_inventory": [
+    "Apple-II_MiSTer-master/rtl/roms/diskii.hex",
+    "Apple-II_MiSTer-master/rtl/woz/",
+    "Apple-II_MiSTer-master/rtl/woz/disk_ii_rom.v",
+    "Apple-II_MiSTer-master/rtl/woz/disk_ii_woz.sv",
+    "Apple-II_MiSTer-master/rtl/woz/flux_drive.v",
+    "Apple-II_MiSTer-master/rtl/woz/woz_bram.sv",
+    "Apple-II_MiSTer-master/rtl/woz/woz_cell525.sv",
+    "Apple-II_MiSTer-master/rtl/woz/woz_floppy_controller.sv"
+  ],
+  "original_spans": [
+    {
+      "fork_sha256": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+      "diagnostic_2163_2198_sha256": "872721fd64b5d3e5288f34c8b4cf80107b7ff6aec9f07cea96601fd1d648febb"
+    },
+    {
+      "fork_sha256": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+      "diagnostic_2163_2198_sha256": "872721fd64b5d3e5288f34c8b4cf80107b7ff6aec9f07cea96601fd1d648febb"
+    }
+  ],
+  "unit_result": "PASS held completion, switch decode, mode/status, data/handshake, selection, reset\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-iwm/tb_iwm.sv:98: $finish called at 18130000 (1ps)",
+  "runs": [
+    {
+      "fork": 0,
+      "delay": 0,
+      "result": "PASS original IWM diagnostic X=00 cycles=83 io=12 stack_writes=2 clocks=87\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-iwm/tb_diagnostic.sv:62: $finish called at 870000 (1ps)",
+      "io_sha256": "7c0bddf4eb5dc995ed48d0832706a18db0c26a5beb86b0c669eb440f61c968b4"
+    },
+    {
+      "fork": 0,
+      "delay": 1,
+      "result": "PASS original IWM diagnostic X=00 cycles=83 io=12 stack_writes=2 clocks=561\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-iwm/tb_diagnostic.sv:62: $finish called at 5610000 (1ps)",
+      "io_sha256": "7c0bddf4eb5dc995ed48d0832706a18db0c26a5beb86b0c669eb440f61c968b4"
+    },
+    {
+      "fork": 1,
+      "delay": 0,
+      "result": "PASS original IWM diagnostic X=00 cycles=83 io=12 stack_writes=2 clocks=87\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-iwm/tb_diagnostic.sv:62: $finish called at 870000 (1ps)",
+      "io_sha256": "7c0bddf4eb5dc995ed48d0832706a18db0c26a5beb86b0c669eb440f61c968b4"
+    },
+    {
+      "fork": 1,
+      "delay": 1,
+      "result": "PASS original IWM diagnostic X=00 cycles=83 io=12 stack_writes=2 clocks=561\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-iwm/tb_diagnostic.sv:62: $finish called at 5610000 (1ps)",
+      "io_sha256": "7c0bddf4eb5dc995ed48d0832706a18db0c26a5beb86b0c669eb440f61c968b4"
+    }
+  ],
+  "negative_controls": [
+    {
+      "fault": "frozen_mode",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-iwm/tb_diagnostic.sv:55: original IWM diagnostic failed X=81\n       Time: 4610000  Scope: tb_diagnostic"
+    },
+    {
+      "fault": "stuck_bit",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-iwm/tb_diagnostic.sv:55: original IWM diagnostic failed X=81\n       Time: 4610000  Scope: tb_diagnostic"
+    }
+  ],
+  "memory_bytes_compared_per_run": 262144,
+  "lint": "frontend Verilator -Wall passes without exclusions",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-iwm\\run.py": "d7107e65148f11c711d13bd438110be9f5edd7e633928f1000b60a1fe6485b7d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-rtl\\results.json": "15fe1e82dc5be729a1031edbc2193fa3cbdc7614c51691f59b54f9a79ff2f0e9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\Apple-II_MiSTer\\Apple-II_MiSTer-master.zip": "c474744878f2e41865d08eccc8b1f4f7d2b3db6a34ba13d75f3424a839825a9d",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\swim.v": "9ec8b5afceaf6b135d8b8de75c26b9aa47e8279b047eed39bf5cbb3742e362fe",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-iwm\\card_iwm_frontend.sv": "15b96b598dd717e22ca5b17097c0516ca28ec05c376f27c68f395c116e5e3787",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-iwm\\tb_iwm.sv": "df7230b8320f7e89eaafb7943fd5331c044ddaf3fbf78aed6dfa3884f9bbcb1f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-iwm\\tb_diagnostic.sv": "235fdcabd2620301a3000951f9f6ec5635a732bb00f2acb4313f45b44faa9249",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-iwm\\source\\disk_ii_woz.sv": "a4b09c8013eea8b94ef59e08fa6db07d76a068a5a41d8886d7a7b8fd1e548507",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-iwm\\source\\flux_drive.v": "b2c7438d09bf103d4fac90908e469ed684517fb09742e76e57e1fc5aa6359f33",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-iwm\\source\\woz_floppy_controller.sv": "384c90489370406f8ba435a1645e283fa0a0358bd995d81bbea60ee69ccf146a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-rtl\\card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-iwm\\image0.hex": "e7b2cd99c69c01a0ca11a29fa62bd95e893d6a04570d0d2413745b526e0cc53d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\startup-runtime\\startup\\IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-iwm\\image1.hex": "e7b2cd99c69c01a0ca11a29fa62bd95e893d6a04570d0d2413745b526e0cc53d"
+  }
+}

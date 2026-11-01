@@ -1,0 +1,69 @@
+{
+  "scope": "bounded host-register/WDC CPU/shared-memory RTL candidate, original uploads",
+  "boundary": "202F before NOP/IRQ",
+  "runs": [
+    {
+      "fork": 0,
+      "delay_scale": 0,
+      "result": "PASS host=1325 backend=2578 stores=1192 captures=39 cpu_cycles=250 ticks=100616\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_card_candidate.sv:171: $finish called at 1006160000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 0,
+      "delay_scale": 1,
+      "result": "PASS host=1325 backend=2578 stores=1192 captures=39 cpu_cycles=250 ticks=109364\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_card_candidate.sv:171: $finish called at 1093640000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 0,
+      "delay_scale": 2,
+      "result": "PASS host=1325 backend=2578 stores=1192 captures=39 cpu_cycles=250 ticks=117043\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_card_candidate.sv:171: $finish called at 1170430000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 0,
+      "result": "PASS host=1325 backend=2578 stores=1192 captures=39 cpu_cycles=250 ticks=100616\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_card_candidate.sv:171: $finish called at 1006160000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 1,
+      "result": "PASS host=1325 backend=2578 stores=1192 captures=39 cpu_cycles=250 ticks=109364\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_card_candidate.sv:171: $finish called at 1093640000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 2,
+      "result": "PASS host=1325 backend=2578 stores=1192 captures=39 cpu_cycles=250 ticks=117043\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_card_candidate.sv:171: $finish called at 1170430000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    }
+  ],
+  "lint": {
+    "tool": "Verilator -Wall",
+    "excluded_categories": [
+      "PINCONNECTEMPTY",
+      "DECLFILENAME",
+      "UNUSEDSIGNAL",
+      "BLKSEQ"
+    ],
+    "result": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)\n- Verilator: Built from 0.358 MB sources in 9 modules, into 0.710 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.128 s (elab=0.008, cvt=0.053, bld=0.000); cpu 0.073 s on 1 threads; alloced 20.207 MB"
+  },
+  "inputs_sha256": {
+    "docs/experiments/card-system-harness/card_candidate.sv": "25e2c13685ebda3e3957c5ab029f482ccbd32fa66949ebc1cffaa4038ff4c3a8",
+    "docs/experiments/card-system-harness/tb_card_candidate.sv": "9ba2dda20c2bb652ea58d7ab143b697e77e050124717d78080ef6209f9a8cd0d",
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "docs/experiments/card-system-harness/run.py": "a3cd4561337f37ef940ad31311ca94c20e8155d7bfd21f2f662eb7a854ae1571",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge.jsonl": "b2fbb5798489ae2f8ad3673b7b6180955ff0e86897432ea8d81b47bd28e3dd24",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge-result.json": "4e6f45911615d3e939bfcb5a822ddfac58f6e154aa0facf0537cd6c8f5f2e348",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "docs/experiments/card-system-harness/tb_candidate_guards.sv": "bb1310e3e5aa19ba544bb00d1e44de603e73646c5437a37d0fe60af3da62ddd0"
+  },
+  "capture_control_checks": "PASS capture controls: sticky suspension, snapshotted release, single commit, reset cancellation\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_card_candidate.sv:150: $finish called at 533230000 (1ps)",
+  "unsupported_access_checks": "PASS candidate guards: 9 unsupported/halted cases, 3 capture data responses, no native requests\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-system-harness/tb_candidate_guards.sv:132: $finish called at 956000 (1ps)"
+}

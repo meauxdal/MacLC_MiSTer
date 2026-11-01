@@ -1,0 +1,5 @@
+/local/
+/tmp/
+/snap/
+__pycache__/
+!fixtures/**/*.csv

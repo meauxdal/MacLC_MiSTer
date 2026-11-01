@@ -1,0 +1,63 @@
+{
+  "scope": "real loader behind retained mount admission; tested download arbiter; actual SDRAM controller and warm reset coordinator",
+  "sd_service": "modeled; retains accepted image backing until load completion",
+  "hps_fence": "harness-only contract; transport fence remains unimplemented",
+  "deferred_capacity": "one event; overflow sticky and inhibits stopped; cold reset only",
+  "runs": [
+    {
+      "name": "loader",
+      "phase_ns": 2,
+      "expected_failure": null,
+      "result": "PASS loader phase=2 words=4440 posted=4440 CAS=4440 resets=9 blocks=18 images=9 cells=10240 tails=16 overflow=1\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-loader-quiesce/tb_loader.sv:325: $finish called at 1644742000 (1ps)"
+    },
+    {
+      "name": "loader",
+      "phase_ns": 7,
+      "expected_failure": null,
+      "result": "PASS loader phase=7 words=4440 posted=4440 CAS=4440 resets=9 blocks=18 images=9 cells=10240 tails=16 overflow=1\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-loader-quiesce/tb_loader.sv:325: $finish called at 1644827000 (1ps)"
+    },
+    {
+      "name": "raw-mount",
+      "phase_ns": 2,
+      "expected_failure": "active mount metadata overwritten",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-loader-quiesce/tb_loader.sv:168: active mount metadata overwritten\n       Time: 82052000  Scope: tb_loader"
+    },
+    {
+      "name": "live-base",
+      "phase_ns": 2,
+      "expected_failure": "write outside retained allocation",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-loader-quiesce/tb_loader.sv:138: write outside retained allocation\n       Time: 87440000  Scope: tb_loader"
+    },
+    {
+      "name": "word-idle",
+      "phase_ns": 2,
+      "expected_failure": "reinit before whole loader drain",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-loader-quiesce/tb_loader.sv:156: reinit before whole loader drain\n       Time: 82085000  Scope: tb_loader"
+    },
+    {
+      "name": "release-ack",
+      "phase_ns": 2,
+      "expected_failure": "reinit before whole loader drain",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-loader-quiesce/tb_loader.sv:156: reinit before whole loader drain\n       Time: 868055000  Scope: tb_loader"
+    }
+  ],
+  "lint_warnings": [
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-download-quiesce/sdram.v:370:30: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-download-quiesce/sdram.v:457:12: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits."
+  ],
+  "inputs_sha256": {
+    "docs/experiments/maclc-loader-quiesce/tb_loader.sv": "c0f6fbd5bdcbc7caff4f3b667b1edda9f5f9a20b4a5a10b5e8b8fe3df104fbb6",
+    "docs/experiments/maclc-loader-quiesce/loader_admission.sv": "238f87503df9a617aaa7eb560ea2c1dc05488c712e1a4661829096c20e00d0d7",
+    "local/experiments/maclc-loader-quiesce/loader.sv": "416c2e16dcbdd0f6149306ba4fbf40d3da46f9d899c8bd3cda27d662c8430f55",
+    "local/experiments/maclc-download-quiesce/maclc_download.sv": "447b4d3c3f210407180e1d77d56d388188a4f427270aa612f48ca54f28db78a4",
+    "local/experiments/maclc-download-quiesce/sdram.v": "2a5538f674a5b4f21ee5ebbed1146acdd8b9f086767c1b818df5e9131cbf828e",
+    "docs/experiments/card-quiesce/card_warm_reset.sv": "6dfa21c2bb06da73e7454d44745c2811568c4b448d93f06bc6720e626a62b8c6",
+    "docs/experiments/maclc-loader-quiesce/prepare.py": "a2d6f5f16f2699338d77360d9eb26771c35cb0734459e5590250d8b87d360940",
+    "docs/experiments/maclc-loader-quiesce/run.py": "adc116d3d8f78fc45101fae5e1499b02521ea88fd0d6ce8d8c20c916e4a7fb8b",
+    "docs/experiments/maclc-download-quiesce/prepare.py": "51aa6bf30e0613dd43a4e4ab1cc9fe170e83977fa523997a510bbd6b9fd08211",
+    "docs/experiments/card-quiesce/prepare.py": "ec97fe0b8110c45b01999e8a5227932489f6db61f674a2944850d2e2b9d626d5",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/floppy_sd.v": "511ab0548c7f4f2d712bdc737b6442b006264ecaca75f01a5383ce3fa0424988",
+    "C:/Workspace/Git/MacLC_MiSTer/MacLC.sv": "3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04"
+  }
+}

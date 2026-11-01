@@ -1,0 +1,7 @@
+{
+  "baseline_sha256": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+  "default_enabled": false,
+  "patched_sha256": "38ec14c630061cc41e693fa2336aaf34e1296194619a37da94b7937c1e643a54",
+  "patch_sha256": "d425202b2f62640e64145eaa768250defa1817402e39904f269be5d3be4f2d3d",
+  "generator_sha256": "c42d5efc8a96aef1b08f86866c69ddba29d378be108a444696fdad354a5371ea"
+}

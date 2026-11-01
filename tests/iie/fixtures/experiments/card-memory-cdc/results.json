@@ -1,0 +1,71 @@
+{
+  "scope": "one-outstanding bundled toggle mailbox; coordinated quiescent cold reset",
+  "runs": [
+    {
+      "width": 17,
+      "source_half_period_ns": 5,
+      "destination_half_period_ns": 7,
+      "destination_phase_ns": 3,
+      "result": "PASS CDC width=17 clocks=5/7 phase=3 requests=257 responses=257"
+    },
+    {
+      "width": 17,
+      "source_half_period_ns": 7,
+      "destination_half_period_ns": 3,
+      "destination_phase_ns": 2,
+      "result": "PASS CDC width=17 clocks=7/3 phase=2 requests=257 responses=257"
+    },
+    {
+      "width": 17,
+      "source_half_period_ns": 2,
+      "destination_half_period_ns": 11,
+      "destination_phase_ns": 1,
+      "result": "PASS CDC width=17 clocks=2/11 phase=1 requests=257 responses=257"
+    },
+    {
+      "width": 17,
+      "source_half_period_ns": 11,
+      "destination_half_period_ns": 2,
+      "destination_phase_ns": 5,
+      "result": "PASS CDC width=17 clocks=11/2 phase=5 requests=257 responses=257"
+    },
+    {
+      "width": 24,
+      "source_half_period_ns": 5,
+      "destination_half_period_ns": 7,
+      "destination_phase_ns": 3,
+      "result": "PASS CDC width=24 clocks=5/7 phase=3 requests=257 responses=257"
+    },
+    {
+      "width": 24,
+      "source_half_period_ns": 7,
+      "destination_half_period_ns": 3,
+      "destination_phase_ns": 2,
+      "result": "PASS CDC width=24 clocks=7/3 phase=2 requests=257 responses=257"
+    },
+    {
+      "width": 24,
+      "source_half_period_ns": 2,
+      "destination_half_period_ns": 11,
+      "destination_phase_ns": 1,
+      "result": "PASS CDC width=24 clocks=2/11 phase=1 requests=257 responses=257"
+    },
+    {
+      "width": 24,
+      "source_half_period_ns": 11,
+      "destination_half_period_ns": 2,
+      "destination_phase_ns": 5,
+      "result": "PASS CDC width=24 clocks=11/2 phase=5 requests=257 responses=257"
+    }
+  ],
+  "total_requests": 2056,
+  "total_responses": 2056,
+  "verilator_lint": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.027 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.039 s (elab=0.009, cvt=0.007, bld=0.000); cpu 0.017 s on 1 threads; alloced 7.910 MB",
+  "iverilog_version": "Icarus Verilog version 12.0 (stable) ()",
+  "verilator_version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+  "inputs_sha256": {
+    "docs/experiments/card-memory-cdc/run.py": "922089508fda3fffd43c18e488b57072045880736b547d0f9c821fa8763f95a0",
+    "docs/experiments/card-memory-cdc/card_memory_cdc.sv": "148e09202f8ee7043fff6b146624ce1ebf764696025c0977181cf5b428b4264e",
+    "docs/experiments/card-memory-cdc/tb_card_memory_cdc.sv": "310c2a42bcabb7af29592384422e37c2bfb5340bc6836e13e75ed22abdb3c0da"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "scope": "Candidate host register geometry against original prelude and complete address signatures",
+  "runs": [
+    {
+      "name": "prelude221",
+      "trace": {
+        "transactions": 787650,
+        "sha256": "3b0a80338b26804c237e9dd7097f4882bb9d6a83ccdc7ca5d1f3c3cf3223a935",
+        "counts": {
+          "R8:+08": 17,
+          "R8:+0D": 5,
+          "R8:+10": 262144,
+          "R8:+11": 262144,
+          "R16:+04": 1,
+          "W8:+0C": 1,
+          "W8:+0D": 6,
+          "W8:+10": 593,
+          "W8:+11": 575,
+          "W8:+20": 1,
+          "W8:+21": 1,
+          "W16:+10": 262144,
+          "W16:+1C": 17,
+          "W16:+20": 1
+        }
+      },
+      "result": "PASS transactions=787650 memory_ops=1049744 side_effects=50 cycles=9580453 index=4000 control=00\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-host-rtl/tb_host.sv:106: $finish called at 95804530000 (1ps)",
+      "memory_sha256": "ada9d9fc0ac0b07fb63dde692e2e25171990e650695421cf02efd6565a7967b6"
+    },
+    {
+      "name": "prelude222d1",
+      "trace": {
+        "transactions": 787650,
+        "sha256": "3b0a80338b26804c237e9dd7097f4882bb9d6a83ccdc7ca5d1f3c3cf3223a935",
+        "counts": {
+          "R8:+08": 17,
+          "R8:+0D": 5,
+          "R8:+10": 262144,
+          "R8:+11": 262144,
+          "R16:+04": 1,
+          "W8:+0C": 1,
+          "W8:+0D": 6,
+          "W8:+10": 593,
+          "W8:+11": 575,
+          "W8:+20": 1,
+          "W8:+21": 1,
+          "W16:+10": 262144,
+          "W16:+1C": 17,
+          "W16:+20": 1
+        }
+      },
+      "result": "PASS transactions=787650 memory_ops=1049744 side_effects=50 cycles=9580453 index=4000 control=00\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-host-rtl/tb_host.sv:106: $finish called at 95804530000 (1ps)",
+      "memory_sha256": "ada9d9fc0ac0b07fb63dde692e2e25171990e650695421cf02efd6565a7967b6"
+    },
+    {
+      "name": "signatures",
+      "trace": {
+        "transactions": 1572988,
+        "sha256": "dd16b26e2fac9a0f9b1465db29f28cdc5b8bcc1e6894fe4a07bb0cc58108d700",
+        "counts": {
+          "R8:+08": 24,
+          "R8:+0D": 12,
+          "R8:+10": 393216,
+          "R8:+11": 393216,
+          "R16:+10": 10,
+          "R16:+1C": 10,
+          "W8:+0D": 14,
+          "W8:+10": 393216,
+          "W8:+11": 393216,
+          "W16:+10": 10,
+          "W16:+1C": 44
+        }
+      },
+      "result": "PASS transactions=1572988 memory_ops=1572904 side_effects=104 cycles=16122646 index=0000 control=08\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-host-rtl/tb_host.sv:106: $finish called at 161226460000 (1ps)",
+      "memory_sha256": "820b9f3be7bc6042b8a9d35bd03b767da6aab6274e0a923b829b7a7601d10509"
+    }
+  ],
+  "inputs_sha256": {
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-host-rtl/tb_host.sv": "4b9b4db0e791951141872804a981e17ce6888c7b637b7793221049ac6b857fa3",
+    "docs/experiments/card-host-rtl/run.py": "b1af7572b553fd2315a8b8533e00c30192840dafea6a7f42aa0c98ee9a0814a0",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+  }
+}

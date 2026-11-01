@@ -1,0 +1,81 @@
+{
+  "scope": "original LC ROM/installed Startup diagnostics through live PDS/WDC/CDC/native-SDRAM RTL",
+  "run": {
+    "source_sha256_before": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "source_sha256_after": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "mame_exit_code": 0,
+    "mame_wall_seconds": 12.9406308,
+    "emulated_seconds_limit": 85,
+    "run_name": "rtl-bridge-01",
+    "diagnostic_bridge": true,
+    "rtl_bridge": true
+  },
+  "prelude": {
+    "transactions": 787657,
+    "sha256": "d2d8e89dd7c340fb9de55f5bf97eecf4563699e4f0d3403c92a6b4e4f3d9f975",
+    "counts": {
+      "R8:+08": 17,
+      "R8:+0D": 5,
+      "R8:+10": 262144,
+      "R8:+11": 262144,
+      "R16:+04": 1,
+      "R16:+10": 4,
+      "R16:+1C": 3,
+      "W8:+0C": 1,
+      "W8:+0D": 6,
+      "W8:+10": 593,
+      "W8:+11": 575,
+      "W8:+20": 1,
+      "W8:+21": 1,
+      "W16:+10": 262144,
+      "W16:+1C": 17,
+      "W16:+20": 1
+    }
+  },
+  "diagnostic": {
+    "transactions": 139,
+    "sha256": "c08f4bfff9eca0cc716989beaee240de296e235a2c1fe1f7e3009f9af8ad5b5a",
+    "counts": {
+      "R8:+01": 76,
+      "R8:+09": 2,
+      "R8:+0C": 6,
+      "R8:+0D": 4,
+      "R16:+04": 9,
+      "W8:+0C": 30,
+      "W8:+0D": 6,
+      "W8:+18": 1,
+      "W8:+19": 1,
+      "W8:+20": 3,
+      "W8:+21": 1
+    }
+  },
+  "captures": 39,
+  "boundary": "202F before NOP/IRQ",
+  "full_memory_bytes_compared": 262144,
+  "final_memory_sha256": "0c3b81523f6684bc0e121de389b20c2aafb6ecaeaf66484f81ac8637b5114420",
+  "rtl_source_hashes_verified": 16,
+  "inputs_sha256": {
+    "docs/experiments/host-harness/analyze_rtl_bridge.py": "ba79890c93a58fb6dc5c0813bfceb6d327cb1331bd76c96170808bc50b25f5d3",
+    "docs/experiments/card-rtl-service/prepare-results.json": "468f2bdfaed3a967d1437c7070369eec4229dce159a1edae965175d9146edd38",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "local/experiments/card-rtl-service/service.vvp": "07cdf338f316c1b4faa6dbea9149897f8dd494d92c8c09e7bfcf7d5279269c9f",
+    "docs/experiments/host-harness/execute.ps1": "6ff1236d9db40431540f06af794067fb8449e45b98a18303d23a12040da685c7",
+    "docs/experiments/host-harness/execute.lua": "965c5cbb1abc5f59c2c6cfc96ac8d75e143f8f1ac04f5eebd6b0459c251538a9",
+    "docs/experiments/host-harness/diagnostic_bridge.lua": "9b342e90ab229f3cdd3a873515103dc3ea5d04692acbea2e2425283d92788d1e",
+    "docs/experiments/host-harness/rtl_bridge_server.py": "fca61461f46e487457677a5225b1ecf06ab021f9fe5594c755a76e0a762f90ae",
+    "docs/experiments/host-harness/bridge_server.py": "6e2f1bd560652c69f0aa9f294e8b38af23e21b6a781883f95d12c18a90f8a0f7",
+    "docs/experiments/host-harness/diagnostic_cpu.py": "e52e33d96abc13d3e864b322f43efd61117f393697efa80695701249e0eebc45",
+    "docs/experiments/host-harness/diagnostic_model.py": "00b9bb0e9de66b5907a98bfba3203059f51314d75b63adfc1347b9b70b42566c",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "local/experiments/host-execution/rtl-bridge-01/run.json": "1032f5b703d3561a5f7b5ca2926271fc3a1a9ee7cefcbb1025185bd240d7dfd7",
+    "local/experiments/host-execution/rtl-bridge-01/mame.log": "68f2266156c274ade9253e3600b82d02feacf37628e32c48e8816846eb83d697",
+    "local/experiments/host-execution/rtl-bridge-01/bus.jsonl": "8beab37590247c86cfadf2816d015ea69d8664892f0ca452f915e95ce385d454",
+    "local/experiments/host-execution/rtl-bridge-01/bridge.jsonl": "b2fbb5798489ae2f8ad3673b7b6180955ff0e86897432ea8d81b47bd28e3dd24",
+    "local/experiments/host-execution/rtl-bridge-01/bridge-result.json": "1a6ddd7c8e48c487e51cbe9029fd9096f78603e99084bf673efbabf1094340ba",
+    "local/experiments/host-execution/rtl-bridge-01/card-memory.bin": "ada9d9fc0ac0b07fb63dde692e2e25171990e650695421cf02efd6565a7967b6",
+    "local/experiments/host-execution/rtl-bridge-01/rtl-input.hex": "8afe1052a47d674c9eea0b80df8ffc7be594eb44fff6a36f4d8899153c4de883",
+    "local/experiments/host-execution/rtl-bridge-01/rtl-final.hex": "5c1a586a6d8e839f0332854e50b780a107d92da93ada2e101e024ba95f002504",
+    "local/experiments/host-execution/rtl-bridge-01/rtl-service.log": "4f16726e008a2bcf583a50af77d4f7e3bd4e4ac23fbea0f19c6cad11850ed800",
+    "local/experiments/host-execution/rtl-bridge-01/handoff.txt": "c529ee6239011f4fb72f75b0855faf0a0b5ca86147f41aae35635109a85bf0f1"
+  }
+}

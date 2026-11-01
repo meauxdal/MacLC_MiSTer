@@ -1,0 +1,56 @@
+{
+  "scope": "Original settings-derived glyph bank and full PAGE2 text pixels; modeled handle lock/copy/unlock and card control register; injected settings, mode and caches",
+  "runs": [
+    {
+      "driver": 6,
+      "mode": 74,
+      "setting": 65535,
+      "glyph_bank": 128,
+      "control": false,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-glyph-bank-producer\\6-4a-ffff-0-1793027747783529800",
+      "host_shutdown": "exited_zero",
+      "pixels_checked": 307200,
+      "hashes": {
+        "card-control.bin": "fe1dcd3abfcd6b1655a026e60a05d03a7f71e4b6070f36e6c7e9c4b6f3d3bf1b",
+        "code-after.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+        "code-input.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+        "copy.bin": "14c2cfaebf7247ffb678de9e964da70e8ebda58e3e5017feab49f8ffce09ff39",
+        "font.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "frame.bin": "bc5d9267ed840144b751990dcc00e8b9bebfdeebeceeea869bdd7cf349ab122e",
+        "handles.bin": "024483c81fc2207f2765c72a993665f1a7a1f8a5688961be480be8c8457ce269",
+        "lock.bin": "4671042ab02a19589d4596e2830c968285a3a8226a71c7fe1761c093c5e5a92d",
+        "main-after.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "mame.log": "69eb42138c302deab12f4a5f9427ee6ca2e06f93e613e510e958335f3d009e6d",
+        "settings-after.bin": "a93e2ae1035092b1989c2b54e9a7c3244a29686532dd78d39199be3d63568502",
+        "settings.bin": "a93e2ae1035092b1989c2b54e9a7c3244a29686532dd78d39199be3d63568502",
+        "state.bin": "1ecdd28723f3026f5b483232ac93bd37427a4641c3432a08a15e5769fec9f74e",
+        "trace.txt": "897db279f5dce9f4d508b2a47ae4fc2d6f53b59f0d3d85612977892a22bf0551",
+        "unlock.bin": "4671042ab02a19589d4596e2830c968285a3a8226a71c7fe1761c093c5e5a92d",
+        "world-input.bin": "33208cc1048f13f4234c17c611f3f17519c13faf0571257611def3385ab443a6",
+        "world.bin": "c087992b0b0be7011bce146547a9226a81aa69f28666e21af4863a4c60dae57d"
+      }
+    }
+  ],
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\results.json": "1e126ce3f3edb1c92121fc38899bf58e9c462326e6f286d5306648b556284589",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\world.bin": "758007972c6069183ea91820113960656faaa05175517002d2ce8034c14b4cca",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\world.bin": "559653231aaf923e38b58551eada75672da73e5f52fd40546f7ca15f4124397e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\code-after.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\results.json": "40e9b6f818cd4fe07a49197e025c923cb38ac87201bf2828c1941660c505a222",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code5-1792958730280862100\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code6-1792958736705527900\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\world.bin": "c994894ad10c39f7799544e1b960eb30d171c6c94a97455706dcf6207fc709eb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\font.bin": "9192ec00494a6fdebf49e8a9b037522ecafdef9fa383fb0338319cc8b48c72ab",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-glyph\\results.json": "70f6b5cd53c3f975b1d275c5b1f37c5af4ee3c08c8323810241471db7de8253e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-glyph-bank-producer\\run.py": "642fa598389e1c6c93d515c632de7fb25529333c71c1623f8f87156e7bdebc3b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-glyph-bank-producer\\execute.lua": "b3e5329660aaa100bd1c47e2d38342853d7c958679bc991d5b988c5e873b3649",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-text80\\run.py": "92fb600b2905cb9d8464b71bf76a8a6920065171b976611ecbe7fda12b9f28da",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-hires-color\\run.py": "942edc93b4367c2db9d45e800c7c5e9b095b5d251753b8bd84a7429897cdb435",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_1.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3"
+  }
+}

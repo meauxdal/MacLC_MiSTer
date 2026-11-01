@@ -1,0 +1,55 @@
+{
+  "scope": "independent CPU sampling with paced PDS/native-SDRAM service; no hardware timing claim",
+  "cpu_clock_hz": 32500000,
+  "memory_clock_hz": 65000000,
+  "rates_hz": [
+    1020000,
+    1900000
+  ],
+  "boundary": "2043",
+  "runs": [
+    {
+      "fast": 1,
+      "fork": 1,
+      "phase_ns": 2,
+      "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1463 backend=2857 stores=1208 captures=62 cpu_cycles=532 ticks=381496 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=763042 native commits=1208 early_acks=1208 backend_responses=2857 host=18328 floppy_window=6608 writeback=6626 refresh=2485 max_backend_ticks=46\nPACE fast=1 min_gap=17 completions=532 CPU_mem=471 held_response_ticks=2769 early_response_ticks=2769 softswitches=16 extra_status_polls=0\nSAMPLE waits=18560 traps=18321\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-reset-system/tb_binding.sv:528: $finish called at 11738633920 (1ps)",
+      "capture_sha256": "9ee567237c53ddfb86723752dce2075d1f292002599baae0982326680bcab0cc"
+    }
+  ],
+  "memory_bytes_compared_per_run": 262144,
+  "lint": "binding/card -Wall passes with existing filename/unused/unconnected exclusions",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-softswitch\\results.json": "116b69e3955727a5531d2d9a61dc3e08698b35db7f8ac4fa9829018e081f0075",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_platform.qip": "a6aa9afc3acf0a0755b48ca6939675a4aee94c6fdbc9e005edb8667b647691ce",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_candidate.sv": "2ad6335d346915f5bbed142b672bfe5a1a1b520bc0aefaeb0d1cb83bb61b0c29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-pacing\\card_cycle_pacer.sv": "3cbb73790d931bc64fb459bd917e0d939546c01ed943d2a665b5c065596d8fba",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-sampled-system\\prepare.py": "40f30e4a8f29adb189744407fc371d6dd8113025ada3bfe734f5abcab741b1e8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-paced-system\\prepare.py": "f1cabbb6ba3cc69474999a0923eaa90375cd50f25e20b7d1f22f43ff2107aef2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-paced-system\\run.py": "5a8a696909de738fdf39ecf7de5986c8b8b3dbd22989723c47fc83de79f03636",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reset-system\\prepare.py": "ff670dbe1b750c29ede9b1cbe3d1e85cf75d458da3ba499bd0e2db135529c756",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-sampled-system\\results.json": "5694253f9c274edf0ff9e43628e22dea114e7e5e0bec6e008c16595e6786f69b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reset-system\\regression.py": "538e6ac4ff3e0217296c73fb61ba8f358579883328b50bf00eeba19ed5d4aefb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-sampled-system\\run.py": "bc635c5745ad2f6afcaf1a78310b2654eb28797cb19694aa12019dca34bcc164",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\tb_binding.sv": "c284126a1c043b6340c937796714f5019ed28410192d114663cc46631c2900d8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-reset-system\\tb_binding.sv": "d6ea46b3dfd4d8154470a5caf070e31ad6e428aafe184be47747e979f738a782",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\maclc_iie_binding.sv": "40eda71b69557af047946d0adcbab195268fa0689c5ee20c165f9aa719da1054",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-reset-system\\card_irq_candidate.sv": "b6de1a37a611819791ac6e47fa3c627252a902fdab39e866ca43d5d76c03739d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-reset-system\\card_irq_cpu_bus.sv": "7b6b7460f3c86fa5df0531f0b24fbd5f3d5917f8ac22d527e4b64a20a8a5865c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\stimulus1.txt": "bbf3a67464a5e6d5ce67089c7539e97bcf05571b4727502e7eb9a8baea77587a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\expected1.hex": "81c333432cd2dc56726dd956ff589d91fe0bc59c2a67069b85cecb13edcdc71b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\stimulus1.txt": "560258376e3b62d8c735fdd6e10eabf6b7ce00b6e753ac81711a530b61a0deec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\expected1.hex": "566f82e6dc32af8431fc8dc57abd6bed9485bb4ccc5eafe565953170727819c4"
+  }
+}

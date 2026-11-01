@@ -1,0 +1,225 @@
+{
+  "image": {
+    "bytes": 104906752,
+    "sha256": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60"
+  },
+  "files": [
+    {
+      "path": "/IIe Startup",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 400928,
+      "resource_sha256": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+      "versions": [
+        {
+          "id": 1,
+          "hex": "02222001000007322e322e32643129322e322e3264312c20a9204170706c6520436f6d70757465722c20496e632e20313937372d31393933",
+          "short": "2.2.2d1"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/System",
+      "data_bytes": 924,
+      "data_sha256": "958f8f9f3798c770d5aca73222f0cd48dc0e26100c4bea1d4ed4f8cca0b6d82b",
+      "resource_bytes": 1121615,
+      "resource_sha256": "1545cc6c5d4ce6c8d3b3ccc11f6aebe856627e1b7a5b2b1b5e72b002336d6acc",
+      "versions": [
+        {
+          "id": 2,
+          "hex": "07128000000005372e312e321553797374656d20536f66747761726520372e312e32",
+          "short": "7.1.2"
+        },
+        {
+          "id": 1,
+          "hex": "07128000000005372e312e3225372e312e322c20a9204170706c6520436f6d707574657220496e632e2c20313938332d3934",
+          "short": "7.1.2"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Finder",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 453425,
+      "resource_sha256": "2d91bcf15305508ab1a0bf7a2b8e4bc881e0ed740bafbe3a3f89c3c9c534c2ff",
+      "versions": [
+        {
+          "id": 2,
+          "hex": "07148000000005372e312e340c46696e64657220372e312e34",
+          "short": "7.1.4"
+        },
+        {
+          "id": 1,
+          "hex": "07148000000005372e312e3427372e312e342c20a9204170706c6520436f6d70757465722c20496e632e20313938332d31393934",
+          "short": "7.1.4"
+        }
+      ]
+    },
+    {
+      "path": "/System 7.1.2/Extensions/ProDOS File System",
+      "data_bytes": 0,
+      "data_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "resource_bytes": 148697,
+      "resource_sha256": "61f52b911ac3afa5e4716a75e31a33156b06afcfd2faf99c5e03b67e8dde1818",
+      "versions": [
+        {
+          "id": 1,
+          "hex": "01218000000005312e322e3125312e322e312c20a9204170706c6520436f6d70757465722c20496e632e20313938382d3933",
+          "short": "1.2.1"
+        },
+        {
+          "id": 2,
+          "hex": "02218000000005322e322e31144170706c6520494965204361726420322e322e31",
+          "short": "2.2.1"
+        }
+      ]
+    }
+  ],
+  "startup_changed_resources": [
+    {
+      "type": "CODE",
+      "id": 0,
+      "installed_bytes": 648,
+      "old_bytes": 728
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "installed_bytes": 26028,
+      "old_bytes": 26716
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "installed_bytes": 2576,
+      "old_bytes": 2598
+    },
+    {
+      "type": "CODE",
+      "id": 3,
+      "installed_bytes": 3620,
+      "old_bytes": 3628
+    },
+    {
+      "type": "CODE",
+      "id": 4,
+      "installed_bytes": 8316,
+      "old_bytes": 8252
+    },
+    {
+      "type": "CODE",
+      "id": 5,
+      "installed_bytes": 42050,
+      "old_bytes": 42050
+    },
+    {
+      "type": "CODE",
+      "id": 6,
+      "installed_bytes": 30166,
+      "old_bytes": 30166
+    },
+    {
+      "type": "CODE",
+      "id": 7,
+      "installed_bytes": 936,
+      "old_bytes": 1016
+    },
+    {
+      "type": "DITL",
+      "id": 137,
+      "installed_bytes": 168,
+      "old_bytes": 166
+    },
+    {
+      "type": "PICT",
+      "id": 800,
+      "installed_bytes": 779,
+      "old_bytes": 777
+    },
+    {
+      "type": "vers",
+      "id": 1,
+      "installed_bytes": 56,
+      "old_bytes": 52
+    },
+    {
+      "type": "pdos",
+      "id": 0,
+      "installed_bytes": 50,
+      "old_bytes": 48
+    },
+    {
+      "type": "CNmc",
+      "id": 4608,
+      "installed_bytes": 2336,
+      "old_bytes": 2336
+    },
+    {
+      "type": "CNmc",
+      "id": 4864,
+      "installed_bytes": 2184,
+      "old_bytes": 2184
+    },
+    {
+      "type": "CNmc",
+      "id": 5888,
+      "installed_bytes": 2186,
+      "old_bytes": 2186
+    },
+    {
+      "type": "CNmc",
+      "id": 5120,
+      "installed_bytes": 39144,
+      "old_bytes": 39136
+    },
+    {
+      "type": "ODEV",
+      "id": 20736,
+      "installed_bytes": 5046,
+      "old_bytes": 5048
+    },
+    {
+      "type": "ODEV",
+      "id": 4096,
+      "installed_bytes": 1132,
+      "old_bytes": 1132
+    },
+    {
+      "type": "ODEV",
+      "id": 4352,
+      "installed_bytes": 1060,
+      "old_bytes": 1060
+    },
+    {
+      "type": "ODEV",
+      "id": 5888,
+      "installed_bytes": 2264,
+      "old_bytes": 2264
+    },
+    {
+      "type": "ODEV",
+      "id": 4864,
+      "installed_bytes": 2264,
+      "old_bytes": 2264
+    },
+    {
+      "type": "ODEV",
+      "id": 6400,
+      "installed_bytes": 2960,
+      "old_bytes": 2960
+    },
+    {
+      "type": "FKEY",
+      "id": 3,
+      "installed_bytes": 1328,
+      "old_bytes": 1320
+    },
+    {
+      "type": "DRVR",
+      "id": 42,
+      "installed_bytes": 10418,
+      "old_bytes": 10406
+    }
+  ]
+}

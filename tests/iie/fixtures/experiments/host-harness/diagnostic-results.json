@@ -1,0 +1,19 @@
+{
+  "scope": "synthetic Conf polling/reset-sync/handshake/display/report/C0Ex/C0A0/keyboard/vblank replay",
+  "checks_passed": 7,
+  "forks_checked": 2,
+  "nonzero_status_values": 255,
+  "tested_read_positions": 1001,
+  "timeout_status_reads": 1002,
+  "inputs_sha256": {
+    "docs/experiments/host-harness/test_diagnostic_model.py": "77cb15e61424cd8cd7a6d45668a6505be59a720fc8bde6d31fe1ed2d71576b1e",
+    "docs/experiments/host-harness/diagnostic_model.py": "00b9bb0e9de66b5907a98bfba3203059f51314d75b63adfc1347b9b70b42566c",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "docs/research/software-bringup/inspect_resources.py": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9",
+    "docs/experiments/startup-protocol/evidence.json": "c3ef6c513098a6d9618d605648f5837e2209a798838457d1fe2240e817098a1c",
+    "docs/experiments/firmware-memory/metadata.json": "3da43ffce1432bc5803dcddc645e08ebb294ba7e38495e3b66571d9bdfa7c955",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+  },
+  "elapsed_seconds": 0.085
+}

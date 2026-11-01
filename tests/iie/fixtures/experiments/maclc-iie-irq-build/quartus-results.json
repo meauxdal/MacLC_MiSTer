@@ -1,0 +1,15 @@
+{
+  "tool": "Quartus Prime 17.0.2 Analysis & Elaboration",
+  "project": "C:\\Workspace\\Git\\MacLC_MiSTer\\MacLC_IIe_IRQ.qpf",
+  "status": "successful",
+  "errors": 0,
+  "warnings": 174,
+  "elapsed_seconds": 69,
+  "full_compile_run": false,
+  "fitter_run": false,
+  "timing_run": false,
+  "log_sha256": "e347174c8790cb2156a6b3ffe2b215bed817452a65f154e90acc699cb72d7a6b",
+  "generated_qsf_sha256": "c9c12dc867afcac5f85e2da97d26c660accfd317e1d7335de42bbc3d25563ca7",
+  "quartus_expanded_qsf_sha256": "c547b2a4a321b5e79688cd84c1cbe5f4b8bffa67ff5f8f812f195ce4c859ed06",
+  "generated_project_restored_after_quartus_expansion": true
+}

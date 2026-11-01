@@ -1,0 +1,187 @@
+--- a/MacLC.sv
++++ b/MacLC.sv
+@@ -712,6 +712,19 @@
+ 	// RAM/ROM
+ 	wire _romOE;
+ 	wire _ramOE, _ramWE;
++
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++	// Dormant seams only. No card instance or live activation is provided.
++	wire iie_card_claim_raw = 1'b0;
++	wire iie_card_claim = iie_card_claim_raw && !_cpuAS && cpuFC != 3'b111;
++	wire iie_card_dtack_n = 1'b1;
++	wire iie_card_error = 1'b0;
++	wire [15:0] iie_card_read_data = 16'hFFFF;
++	wire iie_rom_oe_raw, iie_ram_oe_raw, iie_ram_we_raw;
++	assign _romOE = iie_rom_oe_raw || iie_card_claim;
++	assign _ramOE = iie_ram_oe_raw || iie_card_claim;
++	assign _ramWE = iie_ram_we_raw || iie_card_claim;
++`endif
+ 	wire _memoryUDS, _memoryLDS;
+ 	wire dioBusControl;
+ 	wire cpuBusControl;
+@@ -861,8 +874,17 @@
+ 		end
+ 	end
+ 
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++	assign      _cpuVPA = fc7_iack ? 1'b0 : ((fc7_berr || slot_space || iie_card_claim) ? 1'b1 : ~(!_cpuAS && cpuAddr[23:21] == 3'b111 && !selectVRAM && !selectSCSIDMA));
++`else
+ 	assign      _cpuVPA = fc7_iack ? 1'b0 : ((fc7_berr || slot_space) ? 1'b1 : ~(!_cpuAS && cpuAddr[23:21] == 3'b111 && !selectVRAM && !selectSCSIDMA));
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
+ 	assign      _cpuDTACK = fc7_berr ? 1'b1 :
++	                        iie_card_claim ? (iie_card_error ? 1'b1 : iie_card_dtack_n) :
++`else
++	assign      _cpuDTACK = fc7_berr ? 1'b1 :
++`endif
+ 	                        icache_hit ? 1'b0 :        // fetch-cache hit answers now
+ 	                        (slot_space && !_cpuAS) ? 1'b0 :
+ 	                        selectSCSIDMA ? ~scsiDREQ :
+@@ -970,7 +992,11 @@
+ 	// return $FFFF (NuBus open-bus convention — LBMacTwo.sv nubus_no_card):
+ 	// value-checking probes ($A4BEB0 reads $FE000010/$1C) see a dead slot
+ 	// instead of phantom-card garbage, and nothing depends on TG68 berr.
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++	wire cpu_berr = (fc7_berr && !_cpuAS) || sdma_berr || (iie_card_claim && iie_card_error);
++`else
+ 	wire cpu_berr = (fc7_berr && !_cpuAS) || sdma_berr;
++`endif
+ 
+ 	// ── Fetch cache (ported 2026-08-18, HW-validated 2026-08-19) ────────────
+ 	// ★ Fed the EARLY address (tg68_a_early = the kernel's combinational
+@@ -1006,8 +1032,16 @@
+ 		.as_n       ( _cpuAS ),
+ 		.rw         ( _cpuRW ),
+ 		.fc         ( cpuFC ),
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.cacheable  ( !iie_card_claim && (selectRAM || selectROM) ),
++`else
+ 		.cacheable  ( selectRAM || selectROM ),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.snoopable  ( !iie_card_claim && selectRAM ),
++`else
+ 		.snoopable  ( selectRAM ),
++`endif
+ 		.mem_din    ( dataControllerDataOut ),
+ 		.hit        ( icache_hit ),
+ 		.hit_data   ( icache_data ),
+@@ -1045,7 +1079,12 @@
+ 	                       (cpuAddr[23:21] == 3'b111) && !selectVRAM && !selectSCSIDMA;
+ 	reg [15:0] periph_din_reg;
+ 	always @(posedge clk_sys) periph_din_reg <= dataControllerDataOut;
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++	wire [15:0] cpu_din_muxed = iie_card_claim ? iie_card_read_data :
++	                            slot_space     ? 16'hFFFF :
++`else
+ 	wire [15:0] cpu_din_muxed = slot_space     ? 16'hFFFF :
++`endif
+ 	                            icache_hit     ? icache_data :
+ 	                            vpa_periph_read ? periph_din_reg :
+ 	                                              dataControllerDataOut;
+@@ -1123,7 +1162,11 @@
+ 		._cpuRW(_cpuRW),
+ 		._cpuAS(_cpuAS),
+ 		.cpuFC(cpuFC),
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.pds_claim(iie_card_claim),
++`else
+ 		.pds_claim(1'b0),
++`endif
+ 		.ram_config(pvia_ram_config_out),
+ 		.ram_config_phys(configRAMSize),   // PHYSICAL SIMM size — was unconnected (=0),
+ 		                                   // so the 10MB SIMM was invisible and the Mac
+@@ -1133,9 +1176,21 @@
+ 		.memoryLatch(memoryLatch),
+ 		._memoryUDS(_memoryUDS),
+ 		._memoryLDS(_memoryLDS),
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		._romOE(iie_rom_oe_raw),
++`else
+ 		._romOE(_romOE),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		._ramOE(iie_ram_oe_raw),
++`else
+ 		._ramOE(_ramOE),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		._ramWE(iie_ram_we_raw),
++`else
+ 		._ramWE(_ramWE),
++`endif
+ 		.dioBusControl(dioBusControl),
+ 		.cpuBusControl(cpuBusControl),
+ 		.flp_guard(flp_guard),
+@@ -2130,6 +2185,18 @@
+ 	wire        flp_int_sdw_busy;
+ 	wire        flp_sdw_wr;
+ 	wire        flp_mem_req, flp_mem_ack;
++
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++	// Native pass-through until a reviewed card_platform binding exists.
++	wire iie_native_req = flp_mem_req;
++	wire iie_native_we = 1'b0;
++	wire [23:0] iie_native_addr = flp_mem_addr;
++	wire [15:0] iie_native_din = 16'b0;
++	wire iie_native_ack;
++	wire [15:0] iie_native_dout;
++	assign flp_mem_ack = iie_native_ack;
++	assign flp_mem_dout = iie_native_dout;
++`endif
+ 	wire [23:0] flp_mem_addr;
+ 	wire [15:0] flp_mem_dout;
+ 	floppy_sd_writer floppy_sd_writer_int
+@@ -2529,12 +2596,36 @@
+ 		.dl_ack         ( sdram_dl_ack             ),
+ 
+ 		// Floppy image writeback reads through the SDRAM DMA port.
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.eth_req        ( iie_native_req ),
++`else
+ 		.eth_req        ( flp_mem_req ),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.eth_we         ( iie_native_we ),
++`else
+ 		.eth_we         ( 1'b0 ),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.eth_addr       ( iie_native_addr ),
++`else
+ 		.eth_addr       ( flp_mem_addr ),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.eth_din        ( iie_native_din ),
++`else
+ 		.eth_din        ( 16'd0 ),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.eth_ack        ( iie_native_ack ),
++`else
+ 		.eth_ack        ( flp_mem_ack ),
++`endif
++`ifdef APPLE_IIE_CARD_DORMANT_SEAMS
++		.eth_dout       ( iie_native_dout ),
++`else
+ 		.eth_dout       ( flp_mem_dout ),
++`endif
+ 
+ 		.cpu_done       ( sdram_cpu_done           ),
+ 		.cpu_dout       ( sdram_cpu_dout           )
+--- a/files.qip
++++ b/files.qip
+@@ -36,3 +36,12 @@
+ set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_alu.sv
+ set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret/m68hc05_core.sv
+ set_global_assignment -name SYSTEMVERILOG_FILE MacLC.sv
++
++# Review seams only. Live card activation is intentionally blocked.
++if {[info exists ::env(APPLE_IIE_CARD_ENABLE)]} {
++    error "IIe Card activation blocked: resolve reset, allocation, SDC, admission and diagnostic gates"
++}
++if {0} {
++    set_global_assignment -name VERILOG_MACRO APPLE_IIE_CARD_DORMANT_SEAMS
++    set_global_assignment -name QIP_FILE [file join $::quartus(qip_path) ../Apple-IIe-Card/fixtures/experiments/card-platform/card_platform.qip]
++}

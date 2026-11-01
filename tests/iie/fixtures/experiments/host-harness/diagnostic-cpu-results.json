@@ -1,0 +1,1141 @@
+{
+  "scope": "py65 original diagnostic prefix; hypothetical host trap adapter",
+  "display_report_hypothesis": "$98 display address reads release stores; reports require ACK",
+  "checks_passed_per_fork": 11,
+  "forks_checked": 2,
+  "py65_version": "1.2.0",
+  "py65_source_tree_sha256": "59b87bdce6cef962d5ac01a358f052fb01ff3dff74fa5ae78863fa9aee96966a",
+  "py65_source_files": 29,
+  "results": [
+    {
+      "fork": "local/experiments/firmware-memory/app221/IIe Startup.rsrc",
+      "mappings": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              }
+            ]
+          }
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              }
+            ]
+          }
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              }
+            ]
+          }
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              }
+            ]
+          }
+        }
+      ],
+      "host_display_and_c0e9": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        }
+      ],
+      "host_display_reports": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        }
+      ],
+      "host_keyboard_and_vblank": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        }
+      ]
+    },
+    {
+      "fork": "local/experiments/startup-runtime/startup/IIe Startup.rsrc",
+      "mappings": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              }
+            ]
+          }
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              }
+            ]
+          }
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              }
+            ]
+          }
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "reset_reads": [
+            "FFFC",
+            "FFFD"
+          ],
+          "retired_pcs": [
+            "2000",
+            "200B",
+            "200E",
+            "2011",
+            "2124",
+            "2127",
+            "212A",
+            "212D",
+            "2130",
+            "2133",
+            "2136",
+            "2139",
+            "213C",
+            "213F",
+            "2142"
+          ],
+          "stop_pc": "2014",
+          "handshake_error": 0,
+          "display": {
+            "stack_writes": [
+              "01FF:20",
+              "01FE:13"
+            ],
+            "return_pc": "2014",
+            "display_writes": [
+              {
+                "address": "0400",
+                "mapped": "00400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "00800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "02000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "04000",
+                "data": 165
+              },
+              {
+                "address": "0400",
+                "mapped": "10400",
+                "data": 165
+              },
+              {
+                "address": "0800",
+                "mapped": "10800",
+                "data": 165
+              },
+              {
+                "address": "2000",
+                "mapped": "12000",
+                "data": 165
+              },
+              {
+                "address": "4000",
+                "mapped": "14000",
+                "data": 165
+              }
+            ]
+          }
+        }
+      ],
+      "host_display_and_c0e9": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0A",
+            "2A",
+            "0C",
+            "2C",
+            "02",
+            "22",
+            "04",
+            "24"
+          ],
+          "c0e9_statuses": [
+            "38",
+            "38"
+          ],
+          "stop_pc": "201A",
+          "display_error": 0,
+          "c0e9_error": 0
+        }
+      ],
+      "host_display_reports": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "display_statuses": [
+            "0B",
+            "2B",
+            "0D",
+            "2D",
+            "03",
+            "23",
+            "05",
+            "25"
+          ],
+          "reports": 8,
+          "helper_error": 0,
+          "stop_pc": "201D"
+        }
+      ],
+      "host_keyboard_and_vblank": [
+        {
+          "lane": 0,
+          "vector_base": "3FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        },
+        {
+          "lane": 0,
+          "vector_base": "7FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        },
+        {
+          "lane": 1,
+          "vector_base": "3FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        },
+        {
+          "lane": 1,
+          "vector_base": "7FFA",
+          "c0e8_statuses": [
+            "28",
+            "28"
+          ],
+          "c0a0_statuses": [
+            "08",
+            "09"
+          ],
+          "keyboard_reports": [
+            160,
+            128,
+            32,
+            0
+          ],
+          "vblank_reports": [
+            128,
+            0
+          ],
+          "stop_pc": "202F"
+        }
+      ]
+    }
+  ],
+  "inputs_sha256": {
+    "docs/experiments/host-harness/test_diagnostic_cpu.py": "446f82747b58f001e42a4aef480d4e7c3ca0ac06ba5a20b2e53eac4e583a73eb",
+    "docs/experiments/host-harness/diagnostic_cpu.py": "e52e33d96abc13d3e864b322f43efd61117f393697efa80695701249e0eebc45",
+    "docs/experiments/host-harness/diagnostic_model.py": "00b9bb0e9de66b5907a98bfba3203059f51314d75b63adfc1347b9b70b42566c",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "docs/research/software-bringup/inspect_resources.py": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9",
+    "docs/experiments/startup-protocol/evidence.json": "c3ef6c513098a6d9618d605648f5837e2209a798838457d1fe2240e817098a1c",
+    "docs/experiments/firmware-memory/metadata.json": "3da43ffce1432bc5803dcddc645e08ebb294ba7e38495e3b66571d9bdfa7c955",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+  },
+  "elapsed_seconds": 0.123
+}

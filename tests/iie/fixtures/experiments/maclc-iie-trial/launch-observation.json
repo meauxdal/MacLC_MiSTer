@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-30",
+  "before": {
+    "pc": 0,
+    "flags": 0,
+    "capture": 0,
+    "status": 0,
+    "data": 0,
+    "cpu_bus": 272,
+    "captures": 0,
+    "cpu_completed": 0,
+    "pds_completed": 55,
+    "last_pds_address": "FE00001C",
+    "last_pds_data": "0004"
+  },
+  "after": {
+    "pc": 0,
+    "flags": 8,
+    "capture": 0,
+    "status": 0,
+    "data": 0,
+    "cpu_bus": 272,
+    "captures": 0,
+    "cpu_completed": 0,
+    "pds_completed": 59,
+    "last_pds_address": "FE000004",
+    "last_pds_data": "0000"
+  },
+  "interpretation": "Four Conf prefix accesses complete; the following TG68K CLR.B data-latch read is rejected before an ACK. Reproduced with original Conf bytes and the exact trial frontend.",
+  "screenshots_sha256": {
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\scratch\\trial\\20261030_111727-screen.png": "844986b28b6b6075f394682fd0629f4ad1de0d922d7f4715529b28f26578e9fb",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\scratch\\trial\\20261030_111733-screen.png": "12b29b588be0f6666996ab94e98ebe10975fcec2ff15cdeb6e055b7d060d393f"
+  }
+}

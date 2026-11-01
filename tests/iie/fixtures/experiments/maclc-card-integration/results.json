@@ -1,0 +1,19 @@
+{
+  "baseline": "07770d622facce6215dc98daa197511286817825",
+  "mode": "dormant only",
+  "patch_applies": true,
+  "scratch_matches_transform": true,
+  "baseline_unchanged": true,
+  "guard_off_nonblank_source_identical": true,
+  "activation_available": false,
+  "baseline_sha256": {
+    "MacLC.sv": "3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0",
+    "files.qip": "2dfeea36a23f868d079b2361ffc2507f654bd584a530839b8a4155f6234d303d"
+  },
+  "patch_sha256": "d84fa4cdcac622948e8f200b8287dbe0fb57930f41ba4693bfff2dd780f88f21",
+  "patched_sha256": {
+    "MacLC.sv": "20129fb7230eba62839e7f31e89e9d9248653e9f2f8ee0e28f6dd69d1a38bc07",
+    "files.qip": "d6a16ff218b502ebf91f8b9c05abf807816879a3584ddb70c2bdef9ef714112d"
+  },
+  "generator_sha256": "c40fe78391cf063c8a8deab72f51008d0ec35568382cc5d52218c0c6015f8f3d"
+}

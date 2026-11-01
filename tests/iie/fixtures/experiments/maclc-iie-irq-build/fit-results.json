@@ -1,0 +1,55 @@
+{
+  "scope": "user-run full compile; offline report review; IRQ hardware behavior unverified",
+  "fit_status": "Fitter Status : Successful - Fri Oct 23 19:02:47 2026",
+  "resources": {
+    "alms": 24215,
+    "alms_capacity": 41910,
+    "alms_delta_from_baseline_card": 135,
+    "registers": 24116,
+    "ram_blocks": 482,
+    "ram_blocks_capacity": 553,
+    "dsps": 45,
+    "plls": 4
+  },
+  "timing_minima": {
+    "Setup": {
+      "slack_ns": 0.487,
+      "check": "Slow 1100mV -40C Model Setup 'pll_hdmi|pll_hdmi_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk'"
+    },
+    "Hold": {
+      "slack_ns": 0.113,
+      "check": "Fast 1100mV -40C Model Hold 'pll_hdmi|pll_hdmi_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk'"
+    },
+    "Recovery": {
+      "slack_ns": 4.327,
+      "check": "Slow 1100mV 100C Model Recovery 'pll_hdmi|pll_hdmi_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk'"
+    },
+    "Removal": {
+      "slack_ns": 0.369,
+      "check": "Fast 1100mV -40C Model Removal 'FPGA_CLK2_50'"
+    },
+    "Minimum Pulse Width": {
+      "slack_ns": 0.709,
+      "check": "Slow 1100mV 100C Model Minimum Pulse Width 'emu|pllv|altera_pll_i|cyclonev_pll|fpll_0|fpll|vcoph[0]'"
+    }
+  },
+  "all_summary_tns_zero": true,
+  "unconstrained": {
+    "Clocks": 0,
+    "Input Ports": 4,
+    "Output Ports": 50
+  },
+  "unconstrained_port_sets_match_baseline": true,
+  "verified_rtl_source_count": 16,
+  "rbf": "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe_IRQ\\MacLC_IIe_IRQ.rbf",
+  "rbf_bytes": 4059340,
+  "rbf_sha256": "51afde188053ebb976ccef10a7efccf8cbf0404409bff71b1bc59115d3363e4a",
+  "report_sha256": {
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe_IRQ\\MacLC_IIe_IRQ.fit.summary": "c7464f8c255bcb34604c1549d373c180e60fa68f3379c2a76028edb74b05cbc4",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe_IRQ\\MacLC_IIe_IRQ.fit.rpt": "71e961fbd64957b9ba9fa8235b461ae6e2701872e9e8b8294f2fd76eeaae6c3b",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe_IRQ\\MacLC_IIe_IRQ.sta.summary": "fe45c1da63327f8315079455f254e2af60d5e184bb426d5a936f65a6bbbcbc35",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe_IRQ\\MacLC_IIe_IRQ.sta.rpt": "8a8848e826d846c0b53df8553048c585ec7015de972fbc5151b5b18469797dfc",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe_IRQ\\MacLC_IIe_IRQ.asm.rpt": "3f3a819968065571ad292c99798bfcb70096922394ec42ea0d0d2b82db5830f2",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe_IRQ\\MacLC_IIe_IRQ.flow.rpt": "c7282b2271d350b257b2617b4a54ed95f473fc22d20118674f6f49c992b4cd99"
+  }
+}

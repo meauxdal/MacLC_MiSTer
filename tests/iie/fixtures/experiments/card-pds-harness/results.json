@@ -1,0 +1,14 @@
+{
+  "scope": "standalone synthetic alias PDS-to-host transaction adapter; no MacLC integration",
+  "simulation": "PASS PDS adapter: 18 lane transfers, 22 requests drained\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-pds-harness/tb_card_pds_adapter.sv:213: $finish called at 3856000 (1ps)",
+  "verilator_lint": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.012 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 7.914 MB",
+  "iverilog_version": "Icarus Verilog version 12.0 (stable) ()",
+  "verilator_version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+  "inputs_sha256": {
+    "Apple-IIe-Card/docs/experiments/card-pds-harness/run.py": "09cc178b7bc7943caa4a80fa8326531ae198d06765a7640cd5fe345655123e63",
+    "Apple-IIe-Card/docs/experiments/card-pds-harness/card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "Apple-IIe-Card/docs/experiments/card-pds-harness/tb_card_pds_adapter.sv": "306ce2d8f4b992754cbf170e720523c01d1ab168fe1d2780dd7f2a8f25a7187f",
+    "MacLC_MiSTer/MacLC.sv": "3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0",
+    "MacLC_MiSTer/rtl/addrController_top.v": "b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78"
+  }
+}

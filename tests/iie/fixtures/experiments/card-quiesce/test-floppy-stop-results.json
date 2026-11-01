@@ -1,0 +1,18 @@
+{
+  "scope": "source-side floppy stop unit test; hand-driven mailbox, no controller or CDC proof",
+  "checks": [
+    "stalled offer remains valid with frozen address during stop",
+    "REQ high retains response ACK during stop",
+    "REQ low consumes response once",
+    "response-valid and mailbox-drained tails both delay stop",
+    "new request blocked while stopped",
+    "resume accepts exactly one request",
+    "REQ released before response still drains"
+  ],
+  "result": "PASS floppy stop: accepted=2 responses=2 stalled-offer held-ACK tail blocked-request resume\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-quiesce/tb_floppy_stop.sv:106: $finish called at 340000 (1ps)",
+  "inputs_sha256": {
+    "docs/experiments/card-quiesce/test_floppy_stop.py": "b4e9f52ac58eba49f0a5c618902a60049fabb9318f56d143e929ebebb578b0bc",
+    "docs/experiments/card-quiesce/card_floppy_stop.sv": "5497e965568f4af0984ed3660c4ed59beb78aa272738ec2a73319ad568c0c2c3",
+    "docs/experiments/card-quiesce/tb_floppy_stop.sv": "3b43f49e6815559b4a4bf56b8af74e44da34f0af22d3685c91a538324ad6d8d9"
+  }
+}

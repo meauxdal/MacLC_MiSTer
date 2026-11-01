@@ -1,0 +1,30 @@
+--- a/rtl/sdram.v
++++ b/rtl/sdram.v
+@@ -19,7 +19,9 @@
+ // along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ //
+ 
+-module sdram 
++module sdram #(
++    parameter NATIVE_BYTE_ENABLE = 0
++)
+ (
+ 	// interface to the MT48LC16M16 chip
+ 	output              sd_clk,
+@@ -128,6 +130,7 @@
+ 	// starve and cannot be starved in any way that matters.
+ 	input               eth_req,    // LEVEL: held by pds_enet until eth_ack seen
+ 	input               eth_we,
++	input [1:0]         eth_ds,     // used only with NATIVE_BYTE_ENABLE
+ 	input  [23:0]       eth_addr,   // SDRAM word address (pre-translated V8 map)
+ 	input  [15:0]       eth_din,
+ 	output reg          eth_ack,    // LEVEL: read = data valid in eth_dout,
+@@ -475,7 +478,7 @@
+ 			           req_dl  ? dl_addr[21:20]           :
+ 			           req_cpu ? addr[21:20]              : eth_addr[21:20];
+ 			din_q   <= req_dl ? dl_din : req_cpu ? din : eth_din;
+-			ds_q    <= req_dl ? 2'b11  : req_cpu ? ds  : 2'b11;
++			ds_q    <= req_dl ? 2'b11  : req_cpu ? ds  : (NATIVE_BYTE_ENABLE ? eth_ds : 2'b11);
+ 			col_q   <= req_flp ? { flp_addr[22], flp_addr[7:0] } :
+ 			           req_dl  ? { dl_addr[22],  dl_addr[7:0]  } :
+ 			           req_cpu ? { addr[22],     addr[7:0] }

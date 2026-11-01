@@ -1,0 +1,68 @@
+{
+  "scope": "Original diagnostic through $201D with actual local WDC CPU; candidate bus services",
+  "license_gate": "CPU/ALU/apple2.v have no explicit reuse grant; extracted only to ignored local storage",
+  "tools": {
+    "iverilog": "Icarus Verilog version 12.0 (stable) ()",
+    "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)"
+  },
+  "lint": "No errors; PINCONNECTEMPTY and DECLFILENAME warnings only",
+  "unit_runs": {
+    "tb_banking": "PASS banking checks=29 plus LC sequence and 1002-cycle uncommitted switch\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_banking.sv:77: $finish called at 10452000 (1ps)",
+    "tb_cancel": "PASS reset cancels held write; restart commits once\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_cancel.sv:65: $finish called at 10810000 (1ps)"
+  },
+  "runs": [
+    {
+      "fork": 0,
+      "delay_scale": 0,
+      "result": "PASS cycles=166 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_diagnostic.sv:77: $finish called at 1660000 (1ps)",
+      "trace_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fork": 0,
+      "delay_scale": 1,
+      "result": "PASS cycles=29648 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_diagnostic.sv:77: $finish called at 296480000 (1ps)",
+      "trace_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fork": 0,
+      "delay_scale": 2,
+      "result": "PASS cycles=59130 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_diagnostic.sv:77: $finish called at 591300000 (1ps)",
+      "trace_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 0,
+      "result": "PASS cycles=166 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_diagnostic.sv:77: $finish called at 1660000 (1ps)",
+      "trace_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 1,
+      "result": "PASS cycles=29648 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_diagnostic.sv:77: $finish called at 296480000 (1ps)",
+      "trace_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 2,
+      "result": "PASS cycles=59130 completed=162 captures=29 writes=34 SP=fd\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-cpu-rtl/tb_diagnostic.sv:77: $finish called at 591300000 (1ps)",
+      "trace_sha256": "e77852bd478a649c798b67d9d304277878328f30b8b1688dd94f2a9fe5e2064f"
+    }
+  ],
+  "inputs_sha256": {
+    "local/Apple-II_MiSTer/Apple-II_MiSTer-master.zip": "c474744878f2e41865d08eccc8b1f4f7d2b3db6a34ba13d75f3424a839825a9d",
+    "archive:rtl/cpu/wdc65c02/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "archive:rtl/cpu/wdc65c02/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "archive:rtl/apple2.v": "5e1c70be40b2033fd5d12ea5f991c4327b6cc16572da4defb98f116a25afec9b",
+    "local/experiments/firmware-memory/app221/IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/card-cpu-rtl/tb_banking.sv": "5d3cfd9d74b3ed462d18d0f945e2e95cb01b9c8b7cd0f4bcdb48ab434387a056",
+    "docs/experiments/card-cpu-rtl/tb_cancel.sv": "fb6cb22cc3643d2b0b933f93562566744aa3d655ecadb4df065ef5835e5dfa89",
+    "docs/experiments/card-cpu-rtl/tb_diagnostic.sv": "7cb5d709a2fdfa5719e3766c748169459968d862685234407c1db33f4405f930",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "docs/research/software-bringup/inspect_resources.py": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9",
+    "docs/experiments/startup-protocol/evidence.json": "c3ef6c513098a6d9618d605648f5837e2209a798838457d1fe2240e817098a1c",
+    "docs/experiments/firmware-memory/metadata.json": "3da43ffce1432bc5803dcddc645e08ebb294ba7e38495e3b66571d9bdfa7c955",
+    "docs/experiments/card-cpu-rtl/run.py": "947f5f96891c4598ac0f806b0ed5cc65274b91d576f4154aab5ac55ebafb5509"
+  }
+}

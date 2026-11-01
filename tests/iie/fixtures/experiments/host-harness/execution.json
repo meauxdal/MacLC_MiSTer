@@ -1,0 +1,85 @@
+{
+  "scope": "Original LC ROM and installed Startup with synthetic register responses",
+  "run": {
+    "source_sha256_before": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "source_sha256_after": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "mame_exit_code": 0,
+    "mame_wall_seconds": 9.8377637,
+    "emulated_seconds_limit": 85,
+    "run_name": "measured"
+  },
+  "probe": {
+    "transactions": 7,
+    "sha256": "b08a4243b7d515f32ef51219e0524f5b003c68416ccc5a78e7d87e147cc13a96",
+    "counts": {
+      "R16:+10": 4,
+      "R16:+1C": 3
+    }
+  },
+  "startup": {
+    "transactions": 787650,
+    "sha256": "3b0a80338b26804c237e9dd7097f4882bb9d6a83ccdc7ca5d1f3c3cf3223a935",
+    "counts": {
+      "R8:+08": 17,
+      "R8:+0D": 5,
+      "R8:+10": 262144,
+      "R8:+11": 262144,
+      "R16:+04": 1,
+      "W8:+0C": 1,
+      "W8:+0D": 6,
+      "W8:+10": 593,
+      "W8:+11": 575,
+      "W8:+20": 1,
+      "W8:+21": 1,
+      "W16:+10": 262144,
+      "W16:+1C": 17,
+      "W16:+20": 1
+    }
+  },
+  "restored_card": {
+    "record": 17260,
+    "key": 15663104,
+    "type_hi": 655381,
+    "type_lo": 65537,
+    "source": 11006510,
+    "flags": 0
+  },
+  "slot_return": {
+    "pc": 3725058,
+    "d0": 0,
+    "a0": 3753186
+  },
+  "discovery_return": {
+    "pc": 3724520,
+    "d0": 4276092928,
+    "a5": 3776184
+  },
+  "conf_call": {
+    "pc": 3724612,
+    "base": 4276092928
+  },
+  "final_memory_sha256": "ada9d9fc0ac0b07fb63dde692e2e25171990e650695421cf02efd6565a7967b6",
+  "boundary": "First unmodeled byte read at +01; subsequent execution excluded",
+  "tools": {
+    "mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3",
+    "chdman.exe": "8a74468e3b0879698835b57c3b58e88e5a51e4de73bee6ef755c28530b5b040f"
+  },
+  "artifacts": {
+    "docs/experiments/host-harness/analyze_execution.py": "5e4477699fdf84e52f923d58137ee13a2d48a38f1b2108d3e13a7fe278a650cb",
+    "docs/experiments/host-harness/execute.lua": "79f52a11a66658cf0d339b5e401f11f98b7516f44bda2cf7c869048c12051093",
+    "docs/experiments/host-harness/execute.ps1": "5c4596961f9ba575d8c513b78d793ad0e0c8281752b2d31a7e25d64837062668",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "docs/experiments/startup-discovery/trace.lua": "4b1bc129c33559f717521c803d5d86aea66ae7dc2025868eefcda4f603e941f5",
+    "docs/experiments/startup-discovery/debug.cmd": "768c71d785bf6bbbf8c4d6af6582041f2659027140a962cd0c55b11eddfd5e3d",
+    "local/experiments/system-baseline/roms/maclc/350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "local/experiments/system-baseline/roms/egret/341s0850.bin": "3287874a6eec75a7a1dae09faaeb6ccb73e29b07e9429663a326f1a43e5390fa",
+    "local/experiments/system-baseline/roms/egret/341s0851.bin": "77f5fb2baaca55a5921423b041e60257a864d79d734872991fa607fa33784d88",
+    "local/experiments/system-baseline/roms/egret/344s0100.bin": "e02ae917464691e62b957785f534af9cf57d8fead1dcd3106a5393241aad6463",
+    "local/experiments/host-execution/measured/mame.log": "70d766e1ddf3e7f92c1cf365280f0f86dbb6211f7deb9edc40fe6ccd7e23a16c",
+    "local/experiments/host-execution/measured/bus.jsonl": "5ec92541a6303763037b23a710bfc2acf2c3bbc58fd0122cebc92962c6d65109",
+    "local/experiments/host-execution/measured/ram.bin": "4adfa206e56b0c73c686c9c83fece76edfe4958fa619ca2554bed1607ea735cf",
+    "local/experiments/host-execution/measured/instructions.txt": "1176b4a5228eb81e63eec2904554e36302b77a2cbcff42e044b190c5855faa81",
+    "local/experiments/host-execution/measured/run.json": "ced767ecb4019e75e7865b192ad59dae89723ff919cdbeac7e90cdb1e16bf305"
+  }
+}

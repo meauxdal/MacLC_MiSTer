@@ -1,0 +1,123 @@
+{
+  "scope": "Identical absolute demand-window finite timing comparison",
+  "runs": [
+    {
+      "variant": "backend_baseline",
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=144885 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=289788 native commits=1192 early_acks=1192 backend_responses=2580 host=2200 floppy_window=2200 writeback=1100 refresh=924 max_backend_ticks=47\nLATENCY ordinary=201 max_read_cycles=32 max_write_cycles=33\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-timing/tb_card_memory_timing.sv:456: $finish called at 4458098592 (1ps)",
+      "ordinary": {
+        "read": {
+          "count": 193,
+          "median_ns": 461.549,
+          "max_ns": 984.639,
+          "over_1_02mhz": 1,
+          "over_1_9mhz": 39
+        },
+        "write": {
+          "count": 8,
+          "median_ns": 984.639,
+          "max_ns": 1015.409,
+          "over_1_02mhz": 8,
+          "over_1_9mhz": 8
+        }
+      },
+      "latency_trace_sha256": "eaeb6437cd6de90601611b3d7098a6e02f630a5bcaf422f8fd3d7268ad3e38b8",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "variant": "frontend_baseline",
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=128118 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=256252 native commits=1192 early_acks=1192 backend_responses=2580 host=1938 floppy_window=1938 writeback=969 refresh=811 max_backend_ticks=46\nLATENCY ordinary=201 max_read_cycles=48 max_write_cycles=50\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-timing/tb_card_memory_timing.sv:456: $finish called at 3942180768 (1ps)",
+      "ordinary": {
+        "read": {
+          "count": 193,
+          "median_ns": 261.529,
+          "max_ns": 738.433,
+          "over_1_02mhz": 0,
+          "over_1_9mhz": 24
+        },
+        "write": {
+          "count": 8,
+          "median_ns": 738.433,
+          "max_ns": 769.201,
+          "over_1_02mhz": 0,
+          "over_1_9mhz": 7
+        }
+      },
+      "latency_trace_sha256": "3b6804fe5f03b061d2766983a9fa40fdded7158af6e5bd6ac53b9d22f7b60b55",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "variant": "frontend_byte",
+      "result": "PASS PDS=1325 backend=1388 stores=1192 captures=39 cpu_cycles=250 ticks=128054 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=256124 native commits=1192 early_acks=1192 backend_responses=1388 host=1937 floppy_window=1937 writeback=969 refresh=815 max_backend_ticks=45\nLATENCY ordinary=201 max_read_cycles=48 max_write_cycles=41\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-timing/tb_card_memory_timing.sv:456: $finish called at 3940211616 (1ps)",
+      "ordinary": {
+        "read": {
+          "count": 193,
+          "median_ns": 261.529,
+          "max_ns": 738.433,
+          "over_1_02mhz": 0,
+          "over_1_9mhz": 25
+        },
+        "write": {
+          "count": 8,
+          "median_ns": 338.449,
+          "max_ns": 630.745,
+          "over_1_02mhz": 0,
+          "over_1_9mhz": 1
+        }
+      },
+      "latency_trace_sha256": "a833084c5d6f3a2b354bd45a20df95371878fd083ac52820f86639ef20c10957",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "variant": "frontend_byte_fair",
+      "result": "PASS PDS=1325 backend=1388 stores=1192 captures=39 cpu_cycles=250 ticks=120694 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=241404 native commits=1192 early_acks=1192 backend_responses=1388 host=1822 floppy_window=1822 writeback=911 refresh=766 max_backend_ticks=43\nLATENCY ordinary=201 max_read_cycles=45 max_write_cycles=18\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-timing/tb_card_memory_timing.sv:456: $finish called at 3713759136 (1ps)",
+      "ordinary": {
+        "read": {
+          "count": 193,
+          "median_ns": 246.145,
+          "max_ns": 692.281,
+          "over_1_02mhz": 0,
+          "over_1_9mhz": 22
+        },
+        "write": {
+          "count": 8,
+          "median_ns": 269.221,
+          "max_ns": 276.913,
+          "over_1_02mhz": 0,
+          "over_1_9mhz": 0
+        }
+      },
+      "latency_trace_sha256": "ff76ac08fe11809149e9534d93998704b44efc6f9e51ba9259fa25009dfb9acc",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    }
+  ],
+  "inputs_sha256": {
+    "docs/experiments/card-memory-timing/tb_card_memory_timing.sv": "59627e82a5678209d640ac8d8e93827ee548c5d632868dfde1d77c8ba408236b",
+    "docs/experiments/card-platform/card_platform.sv": "64002ab0ccb5fb08634dae5c7c41bdc9b8f7df20b3804a44ac8d2f0bf3d49d44",
+    "docs/experiments/card-memory-cdc/card_memory_cdc.sv": "148e09202f8ee7043fff6b146624ce1ebf764696025c0977181cf5b428b4264e",
+    "docs/experiments/card-pds-system-harness/card_pds_candidate.sv": "30f823ebbac4f4125e4bfa534edf85190962df1c80b010a32911443c21be5ee3",
+    "docs/experiments/card-pds-harness/card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "docs/experiments/card-system-harness/card_candidate.sv": "25e2c13685ebda3e3957c5ab029f482ccbd32fa66949ebc1cffaa4038ff4c3a8",
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "docs/experiments/native-memory-harness/card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "docs/experiments/native-memory-harness/card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "docs/experiments/card-clock-placement/card_host_cdc.sv": "b4c85dff8e9f9a119bd2e9d48ab7f9cbfc19dc8c84179e60524bde71a4b097a7",
+    "docs/experiments/card-clock-placement/card_frontend_platform.sv": "2d901e028a26046c365b1402b936a144b6b67341aeba6b053f59b4ab2ce44fee",
+    "local/experiments/card-memory-timing/card_byte_candidate.sv": "c5372991d7bed73683f38242629996b8098f70431b23c2d3a771ac5797d4d716",
+    "local/experiments/card-memory-timing/card_byte_frontend_platform.sv": "c0bc35983c1d37252c32e5d8873981d76b4e0ba20316791d6b35f966ac768938",
+    "docs/experiments/native-byte-memory/card_byte_memory_arbiter.sv": "53c99bcad24886cce20a0b3e532882eed99f633b618b557d7025fbeae86dac55",
+    "docs/experiments/native-byte-memory/card_byte_native_adapter.sv": "c792d013cb9ea970743e6d5ba78432b6d02be4d2eac321392271bd0cc7a872a9",
+    "docs/experiments/native-byte-memory/card_byte_native_port_mux.sv": "eb360569d5be7d542bb3c2d558b83b68f1f4b2927b335f34c875c6ac76c50504",
+    "local/experiments/card-memory-timing/sdram.v": "7a678dbbab69f931f1d949c3cd115fa7557622ed1a98e414dcc4a3e400ea864d",
+    "docs/experiments/card-memory-timing/run.py": "7ad550ebef226c65e9fd9612e9477aaaf4c3ca61f903cc677e113a04d70470cc",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+    "docs/experiments/native-byte-memory/prepare.py": "c42d5efc8a96aef1b08f86866c69ddba29d378be108a444696fdad354a5371ea",
+    "docs/experiments/native-admission/run.py": "24589756156bf2581e0c4047bb98bef37c25fda6ff8b3992157c8d5ad2651d76",
+    "docs/experiments/card-platform/card_platform.qip": "29f3c8e362630e01631bdfed36d868c1542df8caa84dcd674367e4ea89b2cc85",
+    "local/experiments/card-system-harness/stimulus0.txt": "ae4bc144b3775fd2ba83dab112e47f21c06962351c487202c9a96534cd8d3640",
+    "local/experiments/card-system-harness/expected0.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94"
+  }
+}

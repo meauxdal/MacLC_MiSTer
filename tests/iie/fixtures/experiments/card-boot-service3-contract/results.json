@@ -1,0 +1,65 @@
+{
+  "scope": "static original-byte service3 contract; no guest execution",
+  "windows": {
+    "1D8A": "122da7ec6710122df76c0c0100c4661e422da7ec602c302df7940200000f0c0000016612122df76c0c4100c0675408ad0001f76f4e75",
+    "1DC0": "5500000000c0b02df76c66ec598f2f3c535452203f3c5101a9a0201f672e",
+    "1DDE": "2f002040a02922507400141924490c4200796502747822020019008051c9fffa7600363c06004ebae778205fa02a08ed0001f76f4e75"
+  },
+  "initial_profiles": [
+    {
+      "profile": "slot6",
+      "initial_a": 197,
+      "first_p_action": "clear bit 1",
+      "first_signature_read": 50437,
+      "matching_a": 196,
+      "conditional_call_number": 2,
+      "matching_path": "STR 5101"
+    },
+    {
+      "profile": "slot8",
+      "initial_a": 199,
+      "first_p_action": "clear bit 1",
+      "first_signature_read": 50949,
+      "matching_a": 192,
+      "conditional_call_number": 8,
+      "matching_path": "set bit 1 without resource"
+    },
+    {
+      "profile": "override",
+      "initial_a": 197,
+      "first_p_action": "clear bit 1",
+      "first_signature_read": 50437,
+      "matching_a": 196,
+      "conditional_call_number": 2,
+      "matching_path": "clear flag then STR 5101"
+    }
+  ],
+  "resource": {
+    "type": "STR ",
+    "id": 20737,
+    "fork_offset": 125134,
+    "size": 77,
+    "prefix_length": 76,
+    "sha256": "7ac92c372d437cde3ae558834bd3c93c425912ef3491d3e2610052355b9ac8da",
+    "transform_bytes_after_prefix": 77,
+    "bytes_past_resource": 1,
+    "logical_display_address": 1536
+  },
+  "controls": {
+    "skipped_clear_when_p_25": "inert",
+    "wrong_set_when_p_25": "differs"
+  },
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-boot-service3-contract\\analyze.py": "e2c67969aa030fcf5e22c4a8fab17126f5f0663e54556b4b9225e23c53ac9941",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-boot-contract\\results.json": "04a451ba7d568e761ce0a7c874fb6753cad20a5ab542fa522f1541dc6e377630",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\decoded\\Monx_2606.payload.bin": "c92e4db8d40298b759d756a23e51e8d99086cb625e4fbe8074c8c9b2a6bad554",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-callback\\results-5-4a.json": "95b7909f3f2f9c898941b5d4d95f1f362cc70d759d0e4358301e6f9113b22347",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\resources.json": "16d9aa44d8c90dca9680784af35b590e71df0a28f1dff6a5d9739c3913184dfc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9"
+  },
+  "captures_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-boot-service3-contract\\STR_5101.bin": "7ac92c372d437cde3ae558834bd3c93c425912ef3491d3e2610052355b9ac8da"
+  }
+}

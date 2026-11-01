@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-22",
+  "engine": "MAME 0.289",
+  "machine": "maclc",
+  "repository_head": "0cc0600ae13700b68d2935da888cc4a74e38b267",
+  "startup": "2.2.2d1",
+  "ram": "4M",
+  "pds": "empty",
+  "run": {
+    "source_sha256_before": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "source_sha256_after": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+    "mame_exit_code": 0,
+    "mame_wall_seconds": 10.351184,
+    "emulated_seconds": 85,
+    "run_name": "verified"
+  },
+  "slot_enter": {
+    "frame": 3677,
+    "pc": 10513942,
+    "d0": 21,
+    "a0": 3753186,
+    "a5": 3776184,
+    "a6": 3753252,
+    "code2": 3722600,
+    "mach": 19,
+    "processor": 3
+  },
+  "slot_return": {
+    "pc": 3725058,
+    "d0": 65192,
+    "a0": 3753186
+  },
+  "result_signed_word": -344,
+  "error": "smNoMoresRsrcs",
+  "pb_before": {
+    "hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000a0015000100000100000000000000",
+    "spsPointer": 0,
+    "spParamData": 0,
+    "spCategory": 10,
+    "spCType": 21,
+    "spDrvrSW": 1,
+    "spDrvrHW": 0,
+    "spTBMask": 1,
+    "spSlot": 0,
+    "spID": 0,
+    "spExtDev": 0
+  },
+  "pb_after": {
+    "hex": "000000000000433c0000000000000000000000000000000000000004000000000000000000000000000a0015000100000100f00000000000",
+    "spsPointer": 17212,
+    "spParamData": 4,
+    "spCategory": 10,
+    "spCType": 21,
+    "spDrvrSW": 1,
+    "spDrvrHW": 0,
+    "spTBMask": 1,
+    "spSlot": 0,
+    "spID": 240,
+    "spExtDev": 0
+  },
+  "srt_candidates": [
+    {
+      "record": 17260,
+      "key": 917504,
+      "type_hi": 65536,
+      "type_lo": 0
+    },
+    {
+      "record": 17236,
+      "key": 10878977,
+      "type_hi": 196609,
+      "type_lo": 65562
+    },
+    {
+      "record": 17212,
+      "key": 15728640,
+      "type_hi": 655364,
+      "type_lo": 24
+    }
+  ],
+  "discovery_return": {
+    "pc": 3724520,
+    "d0": 0,
+    "a5": 3776184
+  },
+  "absent_dialog": {
+    "pc": 3724536,
+    "message": 5,
+    "base": 0
+  },
+  "live_code2_bytes_identical": 2576,
+  "conf_call_hits": 0,
+  "candidate_window_hits": 0,
+  "trace_instruction_lines": 483,
+  "mame_sha256": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3",
+  "artifacts": [
+    {
+      "path": "local/hardfiles/Apple-II_100MB.hda",
+      "bytes": 104906752,
+      "sha256": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60"
+    },
+    {
+      "path": "local/experiments/startup-runtime/startup/IIe Startup.rsrc",
+      "bytes": 400928,
+      "sha256": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+    },
+    {
+      "path": "local/experiments/system-baseline/roms/maclc/350eacf0.rom",
+      "bytes": 524288,
+      "sha256": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b"
+    },
+    {
+      "path": "local/experiments/system-baseline/roms/egret/341s0850.bin",
+      "bytes": 4352,
+      "sha256": "3287874a6eec75a7a1dae09faaeb6ccb73e29b07e9429663a326f1a43e5390fa"
+    },
+    {
+      "path": "local/experiments/system-baseline/roms/egret/341s0851.bin",
+      "bytes": 4352,
+      "sha256": "77f5fb2baaca55a5921423b041e60257a864d79d734872991fa607fa33784d88"
+    },
+    {
+      "path": "local/experiments/system-baseline/roms/egret/344s0100.bin",
+      "bytes": 4352,
+      "sha256": "e02ae917464691e62b957785f534af9cf57d8fead1dcd3106a5393241aad6463"
+    },
+    {
+      "path": "local/experiments/startup-discovery/verified/mame.log",
+      "bytes": 1612,
+      "sha256": "fdf9192bc2c3a44688ead6b0376fda497c651ac1f35243d7397480f6143af422"
+    },
+    {
+      "path": "local/experiments/startup-discovery/verified/instructions.txt",
+      "bytes": 14116,
+      "sha256": "3fd2847a21533a3e566e90353f4a919dff1824f5e18c4af2285e0188516692d1"
+    },
+    {
+      "path": "local/experiments/startup-discovery/verified/ram.bin",
+      "bytes": 4194304,
+      "sha256": "669fbb5650c20243c539122252a25f69226f299e13bae17085191a982d3d4ee7"
+    },
+    {
+      "path": "local/experiments/startup-discovery/verified/capture/discovery.png",
+      "bytes": 6289,
+      "sha256": "35c32102105366c3a555b1c51183e3450b916e4f87fcdc6b7a1509cec569ed5e"
+    },
+    {
+      "path": "local/experiments/startup-discovery/verified/run.json",
+      "bytes": 307,
+      "sha256": "9b8290ebd8754959101f606356da34a3b427f199cbd235e8cbbbdd397e285150"
+    },
+    {
+      "path": "docs/experiments/startup-discovery/trace.lua",
+      "bytes": 3244,
+      "sha256": "4b1bc129c33559f717521c803d5d86aea66ae7dc2025868eefcda4f603e941f5"
+    },
+    {
+      "path": "docs/experiments/startup-discovery/run.ps1",
+      "bytes": 2253,
+      "sha256": "4ea9236aede17b4e5f9eb8d39c23d722361d66934b59ed0621a3835e1733458b"
+    },
+    {
+      "path": "docs/experiments/startup-discovery/debug.cmd",
+      "bytes": 2,
+      "sha256": "768c71d785bf6bbbf8c4d6af6582041f2659027140a962cd0c55b11eddfd5e3d"
+    },
+    {
+      "path": "docs/experiments/startup-discovery/analyze.py",
+      "bytes": 6524,
+      "sha256": "5c3723857b7f658c6ce2e938ff40e8a981c093400bc80673d04163299e1b7cc7"
+    }
+  ]
+}

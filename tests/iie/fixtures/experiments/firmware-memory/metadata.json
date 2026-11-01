@@ -1,0 +1,884 @@
+{
+  "resource_fork_sha256": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+  "resource_fork_bytes": 401755,
+  "a5_initialization": {
+    "size_below_a5": 22878,
+    "packed_offset": 450,
+    "relocation_offset": 1002,
+    "packed_end": 1002,
+    "relocation_a5_offsets": [
+      -284,
+      -280,
+      -268
+    ],
+    "copy_records": [
+      {
+        "code7_offset": 452,
+        "a5_offset": -22878,
+        "count": 8
+      },
+      {
+        "code7_offset": 465,
+        "a5_offset": -4564,
+        "count": 1
+      },
+      {
+        "code7_offset": 468,
+        "a5_offset": -4560,
+        "count": 2
+      },
+      {
+        "code7_offset": 471,
+        "a5_offset": -4556,
+        "count": 2
+      },
+      {
+        "code7_offset": 476,
+        "a5_offset": -4288,
+        "count": 2
+      },
+      {
+        "code7_offset": 481,
+        "a5_offset": -2436,
+        "count": 4
+      },
+      {
+        "code7_offset": 489,
+        "a5_offset": -2273,
+        "count": 1
+      },
+      {
+        "code7_offset": 493,
+        "a5_offset": -2221,
+        "count": 1
+      },
+      {
+        "code7_offset": 497,
+        "a5_offset": -2209,
+        "count": 1
+      },
+      {
+        "code7_offset": 501,
+        "a5_offset": -2203,
+        "count": 1
+      },
+      {
+        "code7_offset": 505,
+        "a5_offset": -2147,
+        "count": 1
+      },
+      {
+        "code7_offset": 511,
+        "a5_offset": -2143,
+        "count": 3
+      },
+      {
+        "code7_offset": 515,
+        "a5_offset": -2126,
+        "count": 2
+      },
+      {
+        "code7_offset": 521,
+        "a5_offset": -1524,
+        "count": 98
+      },
+      {
+        "code7_offset": 620,
+        "a5_offset": -1424,
+        "count": 12
+      },
+      {
+        "code7_offset": 635,
+        "a5_offset": -1409,
+        "count": 1
+      },
+      {
+        "code7_offset": 638,
+        "a5_offset": -1406,
+        "count": 5
+      },
+      {
+        "code7_offset": 645,
+        "a5_offset": -1399,
+        "count": 3
+      },
+      {
+        "code7_offset": 650,
+        "a5_offset": -1393,
+        "count": 2
+      },
+      {
+        "code7_offset": 654,
+        "a5_offset": -1389,
+        "count": 1
+      },
+      {
+        "code7_offset": 656,
+        "a5_offset": -1384,
+        "count": 4
+      },
+      {
+        "code7_offset": 661,
+        "a5_offset": -1366,
+        "count": 4
+      },
+      {
+        "code7_offset": 667,
+        "a5_offset": -1306,
+        "count": 2
+      },
+      {
+        "code7_offset": 671,
+        "a5_offset": -1300,
+        "count": 98
+      },
+      {
+        "code7_offset": 770,
+        "a5_offset": -1200,
+        "count": 12
+      },
+      {
+        "code7_offset": 785,
+        "a5_offset": -1185,
+        "count": 1
+      },
+      {
+        "code7_offset": 788,
+        "a5_offset": -1182,
+        "count": 5
+      },
+      {
+        "code7_offset": 795,
+        "a5_offset": -1175,
+        "count": 3
+      },
+      {
+        "code7_offset": 800,
+        "a5_offset": -1169,
+        "count": 2
+      },
+      {
+        "code7_offset": 804,
+        "a5_offset": -1165,
+        "count": 1
+      },
+      {
+        "code7_offset": 806,
+        "a5_offset": -1160,
+        "count": 4
+      },
+      {
+        "code7_offset": 811,
+        "a5_offset": -1142,
+        "count": 4
+      },
+      {
+        "code7_offset": 818,
+        "a5_offset": -1081,
+        "count": 1
+      },
+      {
+        "code7_offset": 821,
+        "a5_offset": -1076,
+        "count": 70
+      },
+      {
+        "code7_offset": 895,
+        "a5_offset": -388,
+        "count": 83
+      },
+      {
+        "code7_offset": 980,
+        "a5_offset": -297,
+        "count": 3
+      },
+      {
+        "code7_offset": 985,
+        "a5_offset": -290,
+        "count": 9
+      },
+      {
+        "code7_offset": 996,
+        "a5_offset": -274,
+        "count": 4
+      }
+    ]
+  },
+  "key_a5_offset": -22878,
+  "key": "DoubleX",
+  "resources": [
+    {
+      "type": "CODE",
+      "id": 0,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 260,
+      "size": 728,
+      "sha256": "c3cd0397475579e03752766a18898c149f4b51e01c3184c14499bb4cedb084fc"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "name": "Main",
+      "attributes": 20,
+      "fork_offset": 992,
+      "size": 26716,
+      "sha256": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956"
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "name": "Init",
+      "attributes": 32,
+      "fork_offset": 27712,
+      "size": 2598,
+      "sha256": "d55c1fa48645cd2bb413c9610bb76c265e1cae207de9db774238052196a223fa"
+    },
+    {
+      "type": "CODE",
+      "id": 3,
+      "name": "Prefs",
+      "attributes": 32,
+      "fork_offset": 30314,
+      "size": 3628,
+      "sha256": "4703e6379acbed0d7422e6e77218569d12ca9edb8939651898dbd3d9ad711226"
+    },
+    {
+      "type": "CODE",
+      "id": 4,
+      "name": "Kiwi",
+      "attributes": 32,
+      "fork_offset": 33946,
+      "size": 8252,
+      "sha256": "5be9d8b69ddd366729fbc39d9c65611f07859a8d2c10e2065c05be462b787eb0"
+    },
+    {
+      "type": "CODE",
+      "id": 5,
+      "name": "A2eDRVR4",
+      "attributes": 32,
+      "fork_offset": 42202,
+      "size": 42050,
+      "sha256": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac"
+    },
+    {
+      "type": "CODE",
+      "id": 6,
+      "name": "A2eDRVR1",
+      "attributes": 32,
+      "fork_offset": 84256,
+      "size": 30166,
+      "sha256": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa"
+    },
+    {
+      "type": "CODE",
+      "id": 7,
+      "name": "%A5Init",
+      "attributes": 32,
+      "fork_offset": 114426,
+      "size": 1016,
+      "sha256": "bee472229841bd6f07ad3c29f645f62f9dd15baef92ddec1a46e43649d6ccec0"
+    },
+    {
+      "type": "CNmc",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 48,
+      "fork_offset": 146066,
+      "size": 2336,
+      "sha256": "261a16912bfe13a5e15114592eb9d7bf358d5b9cbf869e59800f9700a9194ebb"
+    },
+    {
+      "type": "CNmc",
+      "id": 5376,
+      "name": "AppleClock",
+      "attributes": 48,
+      "fork_offset": 151218,
+      "size": 1110,
+      "sha256": "7f032e3f79c88786be3ac52a89bf4e14b7130f98b46b97b29854884578a99690"
+    },
+    {
+      "type": "CNmc",
+      "id": 24576,
+      "name": "IntlKeyDriver",
+      "attributes": 32,
+      "fork_offset": 211583,
+      "size": 300,
+      "sha256": "10044e55662e5525ea7c852bec864464227dd28b9a067034d600cb518f18651c"
+    },
+    {
+      "type": "CNmc",
+      "id": 5632,
+      "name": "Slot6",
+      "attributes": 48,
+      "fork_offset": 233201,
+      "size": 126,
+      "sha256": "404efd092362f4cf365058f9aaa3ee868c18b628e57a84fe093879c265d20ff5"
+    },
+    {
+      "type": "CNmc",
+      "id": 4352,
+      "name": "MouseCard",
+      "attributes": 48,
+      "fork_offset": 236275,
+      "size": 2038,
+      "sha256": "37c6049cb232ddcafdf71a6230c8ace0c4520186acb489bcc0976390236279b2"
+    },
+    {
+      "type": "CNmc",
+      "id": 4864,
+      "name": "Modem",
+      "attributes": 48,
+      "fork_offset": 239009,
+      "size": 2184,
+      "sha256": "e8b234e1ed4e17c1722c1e099f80d09730f3d39f0623e2ebbde32cf13303d49d"
+    },
+    {
+      "type": "CNmc",
+      "id": 5888,
+      "name": "Printer",
+      "attributes": 48,
+      "fork_offset": 243466,
+      "size": 2186,
+      "sha256": "0be87589d0d3b7b73a9829b67601bfdb8e1e7d42ae9fcffa94d33df9bca52ada"
+    },
+    {
+      "type": "CNmc",
+      "id": 4096,
+      "name": "Slinky",
+      "attributes": 48,
+      "fork_offset": 247927,
+      "size": 672,
+      "sha256": "1b6401092a9b44b2fddcdf2dbed31d573b2df4340a1cf09432dab4b45d8a66b9"
+    },
+    {
+      "type": "CNmc",
+      "id": 6400,
+      "name": "NetPrint",
+      "attributes": 48,
+      "fork_offset": 252567,
+      "size": 3080,
+      "sha256": "eb0c86eee98fe1be88c54429bf9cdc45a42d0601e2d45d9589c6c8c6f93b6436"
+    },
+    {
+      "type": "CNmc",
+      "id": 5120,
+      "name": "ATLK_Card",
+      "attributes": 32,
+      "fork_offset": 324135,
+      "size": 39136,
+      "sha256": "0f2ad068ee706713bd63ba0a39c394573c30cfb8919d766f5f3f259f56e4e71e"
+    },
+    {
+      "type": "CNxx",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 48,
+      "fork_offset": 148782,
+      "size": 256,
+      "sha256": "c4cd59de43da8bf178bd7d20b5640e479c02a7443f3ac3c54b429b643732d78b"
+    },
+    {
+      "type": "CNxx",
+      "id": 5376,
+      "name": "AppleClock",
+      "attributes": 48,
+      "fork_offset": 152332,
+      "size": 256,
+      "sha256": "75e659a4214e97762470970108da111fdd516aa882ef72009ae08a03bbec62c4"
+    },
+    {
+      "type": "CNxx",
+      "id": 5632,
+      "name": "5.25\u201d Disk",
+      "attributes": 48,
+      "fork_offset": 233331,
+      "size": 256,
+      "sha256": "da1b85c81ffe26b104b1d2af9912abd114c4799ddee4eabbf01692efea9892c8"
+    },
+    {
+      "type": "CNxx",
+      "id": 4352,
+      "name": "MouseCard",
+      "attributes": 48,
+      "fork_offset": 238317,
+      "size": 256,
+      "sha256": "9fa413413c2c7958c06c61082e195804717ad55a0cff2b0fcfc6702bc2c29d0d"
+    },
+    {
+      "type": "CNxx",
+      "id": 4864,
+      "name": "Modem",
+      "attributes": 48,
+      "fork_offset": 241197,
+      "size": 256,
+      "sha256": "2946d0bbd82b621c18b110f5c0f16ce56cf237b61fa703f047ac3ccdbd35b177"
+    },
+    {
+      "type": "CNxx",
+      "id": 5888,
+      "name": "Printer",
+      "attributes": 48,
+      "fork_offset": 245656,
+      "size": 256,
+      "sha256": "2946d0bbd82b621c18b110f5c0f16ce56cf237b61fa703f047ac3ccdbd35b177"
+    },
+    {
+      "type": "CNxx",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 48,
+      "fork_offset": 248603,
+      "size": 1792,
+      "sha256": "28d86431032b9fd266cc24873af6c5330c64b66ea72361ded12aaba5488350bb"
+    },
+    {
+      "type": "CNxx",
+      "id": 6400,
+      "name": "NetPrint",
+      "attributes": 48,
+      "fork_offset": 255651,
+      "size": 256,
+      "sha256": "2946d0bbd82b621c18b110f5c0f16ce56cf237b61fa703f047ac3ccdbd35b177"
+    },
+    {
+      "type": "CNxx",
+      "id": 5120,
+      "name": "ATLK_Card",
+      "attributes": 48,
+      "fork_offset": 363275,
+      "size": 1792,
+      "sha256": "f7750e503770e7a893b9e05f10f9e55e0ed26493b48620e140e9135fd5c81a19"
+    },
+    {
+      "type": "C8xx",
+      "id": 4608,
+      "name": "SmartPort",
+      "attributes": 48,
+      "fork_offset": 149042,
+      "size": 2036,
+      "sha256": "9968d7a7ed0d0d9cc337faa6b78a2ff83c39f778e333c20be25fa9b90ad54bd1"
+    },
+    {
+      "type": "C8xx",
+      "id": 5376,
+      "name": "AppleClock",
+      "attributes": 48,
+      "fork_offset": 152592,
+      "size": 1,
+      "sha256": "8d33f520a3c4cef80d2453aef81b612bfe1cb44c8b2025630ad38662763f13d3"
+    },
+    {
+      "type": "C8xx",
+      "id": 4352,
+      "name": "MouseCard",
+      "attributes": 48,
+      "fork_offset": 238577,
+      "size": 428,
+      "sha256": "f0c3c734b2b598e099714e5b32b5bbc3a210525db548bc88253fa45b698eaa5c"
+    },
+    {
+      "type": "C8xx",
+      "id": 4864,
+      "name": "Modem",
+      "attributes": 48,
+      "fork_offset": 241457,
+      "size": 1823,
+      "sha256": "901f8d350c2670717daa6686f57eb7988e98096ea1ae848c95d0de3f62cab558"
+    },
+    {
+      "type": "C8xx",
+      "id": 5888,
+      "name": "Printer",
+      "attributes": 48,
+      "fork_offset": 245916,
+      "size": 1823,
+      "sha256": "901f8d350c2670717daa6686f57eb7988e98096ea1ae848c95d0de3f62cab558"
+    },
+    {
+      "type": "C8xx",
+      "id": 4096,
+      "name": "Memory Card",
+      "attributes": 48,
+      "fork_offset": 250399,
+      "size": 2048,
+      "sha256": "9ca5ea460c97a3fe5ad9168e253463b7586b80d9ee9e64a75c2f49d53ca7b5cc"
+    },
+    {
+      "type": "C8xx",
+      "id": 6400,
+      "name": "NetPrint",
+      "attributes": 48,
+      "fork_offset": 255911,
+      "size": 1823,
+      "sha256": "901f8d350c2670717daa6686f57eb7988e98096ea1ae848c95d0de3f62cab558"
+    },
+    {
+      "type": "C8xx",
+      "id": 5120,
+      "name": "ATLK_Card",
+      "attributes": 48,
+      "fork_offset": 365071,
+      "size": 2048,
+      "sha256": "fd99c436f4868af22b95967e6e81fce4a49f8f96f7aefdf3eb164987928b0ddb"
+    },
+    {
+      "type": "Conf",
+      "id": 1001,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 209412,
+      "size": 581,
+      "sha256": "8a180d9c3339ea2d50eccc83fed71df0989563e38c491e38bce5850a10629390",
+      "descriptor_hex": "00 20 00 20 3f 02",
+      "tag": 8192,
+      "destination": 8192,
+      "count": 575,
+      "end_inclusive": 8766,
+      "decoded_sha256": "8a180d9c3339ea2d50eccc83fed71df0989563e38c491e38bce5850a10629390",
+      "payload_sha256": "be92f64ba3939861abc240a656860a076406bb2602cf1963cc1bfccab9eedef3",
+      "available_payload_bytes": 575,
+      "length_delta": 0
+    },
+    {
+      "type": "Conf",
+      "id": 1002,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 209997,
+      "size": 12,
+      "sha256": "81b61721e961eaa4c4fef48a3f699144fc37be84cc5ad1704226b8464ac91757",
+      "descriptor_hex": "00 d0 00 50 06 00",
+      "tag": 53248,
+      "destination": 20480,
+      "count": 6,
+      "end_inclusive": 20485,
+      "decoded_sha256": "81b61721e961eaa4c4fef48a3f699144fc37be84cc5ad1704226b8464ac91757",
+      "payload_sha256": "5a7fc2623bdaf597f3302f7eba9ff03049914b86a51cdfb69f0c0f0f869d4ce8",
+      "available_payload_bytes": 6,
+      "length_delta": 0,
+      "vector_words_le": [
+        681,
+        32141,
+        16576
+      ]
+    },
+    {
+      "type": "Conf",
+      "id": 1003,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 210013,
+      "size": 12,
+      "sha256": "08e5f1fe0fe706bdbc54f8d8f434c943a2867c980a24597891f5bd145f64adb9",
+      "descriptor_hex": "fa ff fa 7f 06 00",
+      "tag": 65530,
+      "destination": 32762,
+      "count": 6,
+      "end_inclusive": 32767,
+      "decoded_sha256": "08e5f1fe0fe706bdbc54f8d8f434c943a2867c980a24597891f5bd145f64adb9",
+      "payload_sha256": "3beba73dcf58181f60bd7958c85f8f70c85115b1a1a90aaee8a1ed2e25bafb6b",
+      "available_payload_bytes": 6,
+      "length_delta": 0,
+      "vector_words_le": [
+        53248,
+        8192,
+        8195
+      ]
+    },
+    {
+      "type": "Conf",
+      "id": 1004,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 210029,
+      "size": 12,
+      "sha256": "dd9204464407086528ec42763058d3e919040739d729402c061f24f068df0824",
+      "descriptor_hex": "fa ff fa 3f 06 00",
+      "tag": 65530,
+      "destination": 16378,
+      "count": 6,
+      "end_inclusive": 16383,
+      "decoded_sha256": "dd9204464407086528ec42763058d3e919040739d729402c061f24f068df0824",
+      "payload_sha256": "3beba73dcf58181f60bd7958c85f8f70c85115b1a1a90aaee8a1ed2e25bafb6b",
+      "available_payload_bytes": 6,
+      "length_delta": 0,
+      "vector_words_le": [
+        53248,
+        8192,
+        8195
+      ]
+    },
+    {
+      "type": "Conf",
+      "id": 1000,
+      "name": "ConfTest",
+      "attributes": 32,
+      "fork_offset": 210045,
+      "size": 1534,
+      "sha256": "32770b79591f67559f451a8760adb2f77205c1b1dcf0dede67216370d578b1a6"
+    },
+    {
+      "type": "Monx",
+      "id": 2606,
+      "name": "A2EMonitorROM",
+      "attributes": 32,
+      "fork_offset": 215685,
+      "size": 16390,
+      "sha256": "e753940fbde914bed5fe5d4090239db8d087cfab9b628ffc11e46e3b84e41f11",
+      "descriptor_hex": "00 c0 00 00 00 40",
+      "tag": 49152,
+      "destination": 0,
+      "count": 16384,
+      "end_inclusive": 16383,
+      "decoded_sha256": "3550ddd5da7b2929f4365762ccfa8a9f916bdcb7f5a3fe07930c3f71fcb53fed",
+      "payload_sha256": "c92e4db8d40298b759d756a23e51e8d99086cb625e4fbe8074c8c9b2a6bad554",
+      "available_payload_bytes": 16384,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 0,
+      "duplicate_bitmap_bit": 0,
+      "tail_vector_words_le": [
+        1019,
+        64098,
+        50170
+      ]
+    },
+    {
+      "type": "Monx",
+      "id": 2607,
+      "name": "D1 NMI-IRQ Rcvr",
+      "attributes": 32,
+      "fork_offset": 232079,
+      "size": 108,
+      "sha256": "56fb339f23b1a104a7967fcbadf8efd3ef2923f2f6a01cc6eb80aeb829d675eb",
+      "descriptor_hex": "00 d0 00 50 66 00",
+      "tag": 53248,
+      "destination": 20480,
+      "count": 102,
+      "end_inclusive": 20581,
+      "decoded_sha256": "b5a994c096245a5a82cfaef64363bb29836c1b341369b8c112b5661e7bacaf49",
+      "payload_sha256": "1a10fef980104793981f34d82a0e6e5ac13480fadf016aed0cea5575a6e749c3",
+      "available_payload_bytes": 102,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 80,
+      "duplicate_bitmap_bit": 0
+    },
+    {
+      "type": "Monx",
+      "id": 2608,
+      "name": "D2 NMI-IRQ Rcvr",
+      "attributes": 32,
+      "fork_offset": 232191,
+      "size": 108,
+      "sha256": "76594697ce8d44a562dbf2e66505bf348d00352e11757842788d0df988843a6c",
+      "descriptor_hex": "00 d0 00 90 66 00",
+      "tag": 53248,
+      "destination": 36864,
+      "count": 102,
+      "end_inclusive": 36965,
+      "decoded_sha256": "c72aedaede86a9af2e7b434480ad7d8b775b465492ff29285754ca6598f5f5c3",
+      "payload_sha256": "6257fc71abbc14f133b4211da8543ed8b16a09cfe4ff9edb7db4cac3695df12e",
+      "available_payload_bytes": 102,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 144,
+      "duplicate_bitmap_bit": 0
+    },
+    {
+      "type": "Monx",
+      "id": 2609,
+      "name": "D1 INTCX",
+      "attributes": 32,
+      "fork_offset": 232303,
+      "size": 429,
+      "sha256": "d1ff3ca4ba82c47854acee7349a40e1a8b810171ea15d35073894c11a904e7e9",
+      "descriptor_hex": "fa c3 fa 43 a7 01",
+      "tag": 50170,
+      "destination": 17402,
+      "count": 423,
+      "end_inclusive": 17824,
+      "decoded_sha256": "7ae243b238ad76d1f5c3a606e7471378eae65b0c0d1bc8cac9a87b80ef1f156f",
+      "payload_sha256": "bb3d55f6aedbc42489f4561e415de0ffb7cdcfb5565b0d7ff9530d01b1118b35",
+      "available_payload_bytes": 423,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 67,
+      "duplicate_bitmap_bit": 7
+    },
+    {
+      "type": "Monx",
+      "id": 2610,
+      "name": "D2 INTCX",
+      "attributes": 32,
+      "fork_offset": 232736,
+      "size": 429,
+      "sha256": "9edb0c563d6fe71998ca5ba9ef7f90338e27c4f6d753115eabc1a3cd5f70e0f4",
+      "descriptor_hex": "fa c3 fa 83 a7 01",
+      "tag": 50170,
+      "destination": 33786,
+      "count": 423,
+      "end_inclusive": 34208,
+      "decoded_sha256": "b475d5911613cbcaeca8ad67172b54740bba7181c963a3dcad9be1f46a6793d1",
+      "payload_sha256": "bb3d55f6aedbc42489f4561e415de0ffb7cdcfb5565b0d7ff9530d01b1118b35",
+      "available_payload_bytes": 423,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 131,
+      "duplicate_bitmap_bit": 7
+    },
+    {
+      "type": "Monx",
+      "id": 2611,
+      "name": "D1 Vectors",
+      "attributes": 32,
+      "fork_offset": 233169,
+      "size": 12,
+      "sha256": "86308b3ddafd7f4e0d57a4301f27910177963cf85ef5d7ba081e69e5abc63f68",
+      "descriptor_hex": "fa ff fa 7f 06 00",
+      "tag": 65530,
+      "destination": 32762,
+      "count": 6,
+      "end_inclusive": 32767,
+      "decoded_sha256": "20bc473be17b17367c2d60ff6c3da07c484b4753e42c20de8deda4f0b9163d39",
+      "payload_sha256": "3261538d0bbec108adc2e1b93bd153e55bdd3d5f79339f57472803f2bfd4ab0c",
+      "available_payload_bytes": 6,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 127,
+      "duplicate_bitmap_bit": 7,
+      "vector_words_le": [
+        53248,
+        64098,
+        53251
+      ]
+    },
+    {
+      "type": "Monx",
+      "id": 2612,
+      "name": "D2 Vectors",
+      "attributes": 32,
+      "fork_offset": 233185,
+      "size": 12,
+      "sha256": "79e95fd4fa8bdc67e3f76d86ea9ed5b18849c396d8567bb072127d895009d4be",
+      "descriptor_hex": "fa ff fa bf 06 00",
+      "tag": 65530,
+      "destination": 49146,
+      "count": 6,
+      "end_inclusive": 49151,
+      "decoded_sha256": "e490eec901aef146cdd4bcb3e641291c0370abdc369886cd117ab523b17d81a4",
+      "payload_sha256": "3261538d0bbec108adc2e1b93bd153e55bdd3d5f79339f57472803f2bfd4ab0c",
+      "available_payload_bytes": 6,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 191,
+      "duplicate_bitmap_bit": 7,
+      "vector_words_le": [
+        53248,
+        64098,
+        53251
+      ]
+    },
+    {
+      "type": "Monx",
+      "id": 5632,
+      "name": "5.25\u201d Disk",
+      "attributes": 48,
+      "fork_offset": 233591,
+      "size": 2042,
+      "sha256": "df369ce2fee1f002e80fa3af0452816f5a3b1170d43bf06acf4ae86421e74c03",
+      "descriptor_hex": "00 c8 00 f0 00 08",
+      "tag": 51200,
+      "destination": 61440,
+      "count": 2048,
+      "end_inclusive": 63487,
+      "decoded_sha256": "eb4fd022f2d45761753a4ad3c405be00290f1086348c19424c8c81d84852c89c",
+      "payload_sha256": "cf700294f3d2ebf43d92e41da911d51cbe1315eb9286b7059b703ed45ca1e138",
+      "available_payload_bytes": 2036,
+      "length_delta": -12,
+      "duplicate_bitmap_byte": 240,
+      "duplicate_bitmap_bit": 0
+    },
+    {
+      "type": "Monx",
+      "id": 5120,
+      "name": "PFI Bank 0",
+      "attributes": 48,
+      "fork_offset": 367123,
+      "size": 9478,
+      "sha256": "c6b13680d61b37a8d9ac14b6f6eade2d726301a78fc924dd717d3bfb9717df7a",
+      "descriptor_hex": "00 d4 00 54 00 25",
+      "tag": 54272,
+      "destination": 21504,
+      "count": 9472,
+      "end_inclusive": 30975,
+      "decoded_sha256": "6639e8d801039aaa9063b4c78d3ceea04c2aef97a9b81ed0326afafc3f63e23d",
+      "payload_sha256": "e2cf31d76754a0b7140ad5a7a643cc5ac10135a89cda25c3bceea754fe8d58fa",
+      "available_payload_bytes": 9472,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 84,
+      "duplicate_bitmap_bit": 0
+    },
+    {
+      "type": "Monx",
+      "id": 5121,
+      "name": "PFI Bank 1",
+      "attributes": 48,
+      "fork_offset": 376605,
+      "size": 9478,
+      "sha256": "a41481c614d0e62e391749c0d02dbd863c95ccaa8c242b33d151c2722fbff486",
+      "descriptor_hex": "00 d4 00 94 00 25",
+      "tag": 54272,
+      "destination": 37888,
+      "count": 9472,
+      "end_inclusive": 47359,
+      "decoded_sha256": "13a0c87fcf109accae31a3963acf7b3ad900bd1f371b7e43638ebc48185edcc4",
+      "payload_sha256": "ab708b04959d31bddfb4553559289fe5c6681df50a19804f624490b14267615a",
+      "available_payload_bytes": 9472,
+      "length_delta": 0,
+      "duplicate_bitmap_byte": 148,
+      "duplicate_bitmap_bit": 0
+    }
+  ],
+  "provenance": [
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\software\\Apple-IIe-Card-221-image.sit",
+      "bytes": 1108423,
+      "sha256": "ecb99f5450de3b39f363ee23072730e497e1ed0b51c367f60462d9cd01437c92"
+    },
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\v221\\Apple IIe Card 2.2.1.image",
+      "bytes": 1474644,
+      "sha256": "5b180cb6d959b44106ecdc1fa9c5ec6e06ddf5f96edfaefa6ad3658355a69537"
+    },
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc",
+      "bytes": 401755,
+      "sha256": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9"
+    },
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\firmware-memory\\inspect_firmware.py",
+      "bytes": 6839,
+      "sha256": "7014a8747975a6fa8b2e04033900daf686a289b73ce9e933ac9abeaf76e29dfa"
+    },
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\firmware-memory\\reproduce.ps1",
+      "bytes": 2287,
+      "sha256": "be2ab375d9e0737aeb13cc1b2ef8c6d58091c3d582aa305de5ba296aa636e7ae"
+    },
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\research\\software-bringup\\inspect_resources.py",
+      "bytes": 3073,
+      "sha256": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9"
+    },
+    {
+      "path": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\rb\\rb-cli.exe",
+      "bytes": 44097024,
+      "sha256": "a009fa4d5c9b6388c0dc56174d27fdda67df47ea2f4a501537add470bc65113a"
+    },
+    {
+      "path": "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\unidasm.exe",
+      "bytes": 7337984,
+      "sha256": "5d27d3c7bc349d63d3511d86d9eb30ce348eb4f0e61f2bd2609f87aa5a5a98e0"
+    }
+  ]
+}

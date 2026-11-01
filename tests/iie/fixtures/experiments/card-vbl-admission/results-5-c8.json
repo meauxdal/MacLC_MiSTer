@@ -1,0 +1,898 @@
+{
+  "scope": "Original VBL installer, installed callback cadence and polling admission after live reload/service4; modeled VBL/Time Manager traps, zero device countdowns and injected callback delivery; no event handler or timed text flashing",
+  "runs": [
+    {
+      "driver": 5,
+      "mode": 200,
+      "control": false,
+      "rejected": null,
+      "settings_sequence": [
+        0,
+        1,
+        0
+      ],
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-vbl-admission\\5-c8-0-1793039229195478900",
+      "callback_resource": "CNmc 6400 NetPrint",
+      "transactions": [
+        [
+          false,
+          8,
+          13,
+          161
+        ],
+        [
+          true,
+          8,
+          13,
+          162
+        ],
+        [
+          false,
+          8,
+          13,
+          162
+        ],
+        [
+          true,
+          8,
+          13,
+          162
+        ],
+        [
+          false,
+          8,
+          13,
+          162
+        ],
+        [
+          true,
+          8,
+          13,
+          162
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          1
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49277
+        ],
+        [
+          false,
+          8,
+          12,
+          4
+        ],
+        [
+          false,
+          8,
+          33,
+          40
+        ],
+        [
+          false,
+          8,
+          33,
+          40
+        ],
+        [
+          false,
+          8,
+          33,
+          40
+        ],
+        [
+          false,
+          8,
+          33,
+          40
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          234
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          8,
+          0
+        ],
+        [
+          true,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          1,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          8,
+          0
+        ],
+        [
+          true,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          1,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          8,
+          0
+        ],
+        [
+          true,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          1,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          8,
+          0
+        ],
+        [
+          true,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          1,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          8,
+          0
+        ],
+        [
+          true,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          1,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          8,
+          0
+        ],
+        [
+          true,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          1,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          8,
+          0
+        ],
+        [
+          true,
+          16,
+          28,
+          48879
+        ],
+        [
+          false,
+          8,
+          13,
+          170
+        ],
+        [
+          true,
+          8,
+          13,
+          170
+        ],
+        [
+          false,
+          8,
+          1,
+          0
+        ]
+      ],
+      "acks_forwarded": 2,
+      "framebuffer_checks": 4,
+      "host_shutdown": "exited_zero",
+      "rtl_result": [
+        "MONITOR report PC=c07d status=e0 data=01 opcode_PC=0000fbdd service=00000001 CPU=1392",
+        "READY",
+        "MAPPING Cx_reads=12412 slot3_reads=1 CFFF_reads=1 text_bytes=960 aux_bytes=960",
+        "PASS VBL admission fast=1 next_PC=fb65 service=4 CPU=18052 writes=1388 backend=19325 min_gap=17"
+      ],
+      "hashes": {
+        "0-alert.bin": "39f01ebae1681b2b5b163ffcfc98857bc1e19785146e2f8d9e9e061248e35599",
+        "0-card-control.bin": "0a43b22d89fa2499be5c7704c9bf273260b0ca9588e4cd1897cd80f9c96cd97a",
+        "0-code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+        "0-converted.bin": "def68074aeabb82091d0ad482a50c8347ca944cef756f589afbe0ff4c33ca5f8",
+        "0-descriptor.bin": "46f7167982354c68fc9abfbc484d6c640d54f6c368a748f544d07dc1e037526d",
+        "0-device.bin": "eb0c86eee98fe1be88c54429bf9cdc45a42d0601e2d45d9589c6c8c6f93b6436",
+        "0-font.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "0-frame.bin": "ec705ce924106a06d0a2532339c7230513c68356e21bce42809a8487409f78aa",
+        "0-handles.bin": "024483c81fc2207f2765c72a993665f1a7a1f8a5688961be480be8c8457ce269",
+        "0-main-after.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "0-network-settings.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "0-registers.bin": "0607fbf65159de255b4d3becd5ddc32a2e2c9f0101dadb8cd19c34d07b08591d",
+        "0-resource-handles.bin": "03c4aa8da4406f295ac32ec795b33c0cf733876225a39765488dd43f17f2e3ed",
+        "0-settings-after.bin": "b7939ad0be912cc12e734a92b4d5c580e22dc9e47cba953e29cc3fb01f3f727f",
+        "0-state.bin": "1ecdd28723f3026f5b483232ac93bd37427a4641c3432a08a15e5769fec9f74e",
+        "0-traps.bin": "9d11af6c4a0d3aabc415c5cd7bcb4ff96fe6b88cad747c2a70ca99073a004581",
+        "0-world.bin": "043c1c9005aa680bf971ccdd1df0406f92cce28481413e4e5837f8afa7bb863c",
+        "1-alert.bin": "dcd4e78b5b69e8a5080611da26d169b21047fac05294b2f6fbab0341abf0eeb1",
+        "1-card-control.bin": "0a43b22d89fa2499be5c7704c9bf273260b0ca9588e4cd1897cd80f9c96cd97a",
+        "1-code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+        "1-converted.bin": "f96496b562d0b0dc1c426446d2ac84358029c4b3ec61f46fa33ba02ee718ce8e",
+        "1-descriptor.bin": "a04f18337decbe3eeabdb88a1577a072b87b9f9e2e8ead94cafc7e5b6ea9f6c0",
+        "1-device.bin": "eb0c86eee98fe1be88c54429bf9cdc45a42d0601e2d45d9589c6c8c6f93b6436",
+        "1-font.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "1-frame.bin": "828cf548646985b987cfb5c3d4db4391c505978ab4209ce48c941f54c5fbd607",
+        "1-handles.bin": "024483c81fc2207f2765c72a993665f1a7a1f8a5688961be480be8c8457ce269",
+        "1-main-after.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "1-network-settings.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "1-registers.bin": "4c6bc9a811841226dde51e7b88d14452899c85cc2ea4d694a16957a9e03ee95b",
+        "1-resource-handles.bin": "03c4aa8da4406f295ac32ec795b33c0cf733876225a39765488dd43f17f2e3ed",
+        "1-settings-after.bin": "01b90ae4ebb548163744ba4921e6141847412d63bc8cd278fc35f782f9f0360c",
+        "1-state.bin": "932b13a34743de3b315dc99b80d70da9fc07f249989e078d086756347b0f1bbe",
+        "1-traps.bin": "9d11af6c4a0d3aabc415c5cd7bcb4ff96fe6b88cad747c2a70ca99073a004581",
+        "1-world.bin": "3151ff202a5cede755c3c6db8217493f0e273950f2864c7dbf5085dbb42c4115",
+        "2-alert.bin": "dcd4e78b5b69e8a5080611da26d169b21047fac05294b2f6fbab0341abf0eeb1",
+        "2-card-control.bin": "0a43b22d89fa2499be5c7704c9bf273260b0ca9588e4cd1897cd80f9c96cd97a",
+        "2-code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+        "2-converted.bin": "f96496b562d0b0dc1c426446d2ac84358029c4b3ec61f46fa33ba02ee718ce8e",
+        "2-descriptor.bin": "a04f18337decbe3eeabdb88a1577a072b87b9f9e2e8ead94cafc7e5b6ea9f6c0",
+        "2-device.bin": "eb0c86eee98fe1be88c54429bf9cdc45a42d0601e2d45d9589c6c8c6f93b6436",
+        "2-font.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "2-frame.bin": "ec705ce924106a06d0a2532339c7230513c68356e21bce42809a8487409f78aa",
+        "2-handles.bin": "024483c81fc2207f2765c72a993665f1a7a1f8a5688961be480be8c8457ce269",
+        "2-main-after.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "2-network-settings.bin": "3a103a4e5729ad68c02a678ae39accfbc0ae208096437401b7ceab63cca0622f",
+        "2-registers.bin": "4c6bc9a811841226dde51e7b88d14452899c85cc2ea4d694a16957a9e03ee95b",
+        "2-resource-handles.bin": "03c4aa8da4406f295ac32ec795b33c0cf733876225a39765488dd43f17f2e3ed",
+        "2-settings-after.bin": "b7939ad0be912cc12e734a92b4d5c580e22dc9e47cba953e29cc3fb01f3f727f",
+        "2-state.bin": "e984852190da3b85f131accffd78667ea95be2cadd93d2683b62b0334b4b49c7",
+        "2-traps.bin": "9d11af6c4a0d3aabc415c5cd7bcb4ff96fe6b88cad747c2a70ca99073a004581",
+        "2-world.bin": "d1f70a643cd978a361425f711ded0e10245424487376dcaccf77945f66b09e77",
+        "alert-call.bin": "bd14dcaf4e44b0a87dce79c4862da6850b17d3fcb6a4937a5c58a934e49d5214",
+        "alert.bin": "cd973b4ee5404e5ed4705b376802960fce084281f1e8620f3256871ebc2c7654",
+        "allocation.bin": "cce0d1a8880697667200c5de17cabe4bf46c7847f0f72025216ef99f672efa81",
+        "callback-target.bin": "874a97b2d04dab3a7f930a182c01eac229268a7b63e71b34d8fbd1f0c2c75a84",
+        "captures.txt": "3673ddc32a08ece2778d93e0fcdfdde032500a2f4e5a5963af5e483aa26d6a63",
+        "code-input.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+        "copy.bin": "14c2cfaebf7247ffb678de9e964da70e8ebda58e3e5017feab49f8ffce09ff39",
+        "device.bin": "eb0c86eee98fe1be88c54429bf9cdc45a42d0601e2d45d9589c6c8c6f93b6436",
+        "final-state.bin": "6eaae826fb8c264d9f3479a495edcebeeba64119daef77f5103a779cf179136e",
+        "final-world.bin": "830fd995b9942e017208e76fef898b605632bc5138dfbf78106cd50dbee1b69d",
+        "get-resource.bin": "f28b3cdcb9adc2adb5081f4e1636603ab0d95a5462255df667dc24e8b65d4f77",
+        "install-state.bin": "d72f786d90daab9a03c55f1485138b2e751e26546101d23993210bc76a4a7e85",
+        "install-timer.bin": "db833abaa9d4188b28dae2c5c5719e2205416d457c8b1441603425d990df1741",
+        "install-vbl.bin": "f4739d41dcf08a6d62da24a05fa8df64f0d42b0ab7467d82d1cf5d66c1f85136",
+        "install-world.bin": "dda25e718d09248cc90db97bbb9a92c6a4ad041dc9f6f42cb45e4f7f7f0c8ee4",
+        "instructions.txt": "ff228df2430b52821e11461bade68ffd273a4c312364882e035e76be7c9b706a",
+        "lock.bin": "4671042ab02a19589d4596e2830c968285a3a8226a71c7fe1761c093c5e5a92d",
+        "mame.log": "b9341f6d8ee952a72de47c938cfa00038494c19aa050138289132e3e80ce08ca",
+        "poll-1-state.bin": "8da8b1c923cf01ec7ae7e67944de9775cee7017b17ca83d8723401127279da26",
+        "poll-1-world.bin": "b69bdfa8318db418d2e86343d61a82ee49c0fb1b08b7d232bbffd85c0d4ec41c",
+        "poll-2-state.bin": "8da8b1c923cf01ec7ae7e67944de9775cee7017b17ca83d8723401127279da26",
+        "poll-2-world.bin": "6fb8427e68b1407721de5172f39bd05be73f262ac1cb4e8cf996c1a7cc93335c",
+        "poll-3-state.bin": "8da8b1c923cf01ec7ae7e67944de9775cee7017b17ca83d8723401127279da26",
+        "poll-3-world.bin": "eaace5622021ceb6c83c434ea6609e83c7fc6c27730d6e2259a0060c3d062401",
+        "poll-4-state.bin": "170c65762ec0a42ef16fb233007a2d765798b484ba00dcfe5ef31a070ba5ad59",
+        "poll-4-world.bin": "8e9e8930ffe2ca2881d31bda6d8d4f8dc8fc3c0d5a47f5d496d2c90eaaaf5c84",
+        "poll-5-state.bin": "8da8b1c923cf01ec7ae7e67944de9775cee7017b17ca83d8723401127279da26",
+        "poll-5-world.bin": "876e4a2835c91288505eae65a23848f8625279b1677ef32d189c35e2654fe6d3",
+        "poll-6-state.bin": "8da8b1c923cf01ec7ae7e67944de9775cee7017b17ca83d8723401127279da26",
+        "poll-6-world.bin": "2f30b0e65503f772a5077bf7f28922aaf01c586361453693ab89e766703dee42",
+        "poll-7-state.bin": "170c65762ec0a42ef16fb233007a2d765798b484ba00dcfe5ef31a070ba5ad59",
+        "poll-7-world.bin": "9ea5d12af4c439a6143d4857a678240089318675679f41ef59c011277045fc33",
+        "prime-1.bin": "37c295bde023d7a92750746babd903e07447e312b44dbfbcfd753e6d5714c5c0",
+        "prime-2.bin": "37c295bde023d7a92750746babd903e07447e312b44dbfbcfd753e6d5714c5c0",
+        "prime-3.bin": "37c295bde023d7a92750746babd903e07447e312b44dbfbcfd753e6d5714c5c0",
+        "prime-4.bin": "37c295bde023d7a92750746babd903e07447e312b44dbfbcfd753e6d5714c5c0",
+        "prime-5.bin": "37c295bde023d7a92750746babd903e07447e312b44dbfbcfd753e6d5714c5c0",
+        "prime-6.bin": "37c295bde023d7a92750746babd903e07447e312b44dbfbcfd753e6d5714c5c0",
+        "prime-7.bin": "37c295bde023d7a92750746babd903e07447e312b44dbfbcfd753e6d5714c5c0",
+        "purge-handle.bin": "8054916feb7cee7491786546dba8377f37a5c005eea29875b5250f175a4d7491",
+        "request-1.txt": "8f4258569e702e225715f2e743d2d8771c1b7a84e6a53d64e278c613daaf73ac",
+        "request-10.txt": "3ddd8c7a7fcdc6e71ce717846a6f36da17268bdace6008e4e14c7febf7699d50",
+        "request-11.txt": "b22c0d1a96685acce48f5e9b6bf7407bffbc8c2a34dfdd98dd9f99866aee83b8",
+        "request-12.txt": "27aa953adb77301a9d2b83357e6bca3445b3447c7afa094d8e79a82c15679ce4",
+        "request-13.txt": "c703a9b3181b7d655c4f93be46524c859bb9b238aa38ee7ea465f8893d38e475",
+        "request-14.txt": "ce9a416eb9f0cf3156b808a8dc36d7ee4d4f47b8723e275a406bf2abdf8db693",
+        "request-15.txt": "8c8446bae72302178dd07392830979a2c75952d7307868934178a8bb6e0523ba",
+        "request-16.txt": "61ed58a2ccf0d3d748a2f4f291f59b8af0b73c09770f2f26d385d48b45c47dd1",
+        "request-17.txt": "86a63318d3dbb6842f562293dc1477824f88b40426fe4d8a53af0d46029b6bab",
+        "request-18.txt": "1dcd0731e8897a054857acc2a19a117499870c21687726d958f0c983c4bfcae3",
+        "request-19.txt": "18df0badf4afbe90ecaeb99c5cf3475d5b80f2298c697100804b29e679939251",
+        "request-2.txt": "2c1c4cefc900034ab3a83f92e76c35af1240a2f149ca84556d3a2a795afe6712",
+        "request-20.txt": "f14d9ef099e7745a9aa49f9e9e254daf622be5f195cff0ad527618316d65dce0",
+        "request-21.txt": "f0411fc02198e5ab1ff703a38a3d8c100004d1a6a8d054a206010c6d3380f2a0",
+        "request-22.txt": "4ebe28d306dc71c7ce9265d0b2ddd5381b0dfd877bef6c81f1407fb715c7afd4",
+        "request-23.txt": "1993508c299c4b5e672099cfb614af071f4eeec89ea8a261be7b15c6f0f89836",
+        "request-24.txt": "b8fe76d52d1bf3aa17b24ae6cb0cb760dbd8f2008b012638d5aee72d9fdb3d9c",
+        "request-25.txt": "32d0970c1f23dfc80debe4c95a0b7d72f48f29c0e54026ebddad35ba272f7806",
+        "request-26.txt": "4d43928caba7ad74280bdd2218bd4238aa6997da7edb50b7d8d500f546167079",
+        "request-27.txt": "82a6d0bb305477f0aa2f8018c4e04cf41ab2e3645302c8fe82ad6b4b11fea0b9",
+        "request-28.txt": "473ec8cf115225bb498e219329393719107df4a145e389dbbc66e28f09e1fe32",
+        "request-29.txt": "ee79b0dd82ac1aafeb1aa211cf0d2f0169458ddcf0901c7c905e475bf9d3efb1",
+        "request-3.txt": "2a0075a4232aa124f88ff1fbcb5f1dcdeb0ed5cb635ea77e80e8877056d7c116",
+        "request-30.txt": "0b688cf85fd283ea364ca8029a6bd824e1c707dec079a7804018c61aa3c40504",
+        "request-31.txt": "078b080015e91ae626aba031cf7210bfa4aff0944fed172c3fab8edea907d9ba",
+        "request-32.txt": "f9fc1ddf1b8471615ccb3a9277b9e9bd5584206d9db396be3ce2d6d44534c8a9",
+        "request-33.txt": "9f26e5bad1381d403b801baee3adca1833872fc7dd7614e9438638259a52eb87",
+        "request-34.txt": "ebef2a292fdf8dee4ba2ed533c2d110c58b3532769a3b40603112d13fa742bda",
+        "request-35.txt": "312972837e20dcd2de6f19f87aeff0e7e613314aed4c81b3d5801b985a431633",
+        "request-36.txt": "897c0bd2e8fca15c3601d188148b099356e1a01ee9e40096afe07e74681c4aae",
+        "request-37.txt": "bd09a54c4f7aff9c38ddb13bdaf940b8f0853eb4d115deeeff21583ea9f04fb4",
+        "request-38.txt": "37d0cc45da98859a47f4ab82069865da8bcc71232c6b33260f6d642a9d4409ab",
+        "request-39.txt": "fda3ffae4dc1ebeb1fb2503c57267a8a71449cfb2dd10f16bf062f863daf5afb",
+        "request-4.txt": "f39407d3e34571a36f03ec396efbe1755dba5c82e336199c54ea535ab5c2fb98",
+        "request-40.txt": "f86207fa9443af118b22c402e0c8942573a04d9ff951c120be5c6c266140cd47",
+        "request-41.txt": "e237e62d9546868a0255976a40923a7f5e1f6ae747070da74fde8f6044ab8841",
+        "request-42.txt": "2650041368389f8889d0870ff4c153eb754c6b97b0f006231b700b38d285cf49",
+        "request-43.txt": "f6348082d3124b0efb56f0daf063cd4f8b1a606b03e3855010bb24d7f0c0d581",
+        "request-44.txt": "2eb5a44c65157c76a23b753ea2b7739c075eea4582837d13c418f6c28c8f633f",
+        "request-45.txt": "9f97fde8512f9ceb99c7f9fe4c38bba18bc00dfa2bad6f04ae9031f2f369211c",
+        "request-46.txt": "8a2015bcfe3c89d6823dc1a3672c88903cc0e7af68f214797c000b767d2b54be",
+        "request-47.txt": "086777cb7df25bd1c32c9f607d95ddae8e31b63575fa29b6cb623ac6b048463e",
+        "request-48.txt": "2d3783a404ca2c81a473c84f3aad35ffc3c5e99b4faf4055258e1f064b700a5c",
+        "request-49.txt": "300d36d9d78f843f8e084b5d417060aeb596e729dc70bc73cb1a258df8ada3ba",
+        "request-5.txt": "bcb472a1dd4ed4a058661541f04c0fefa1a72569314bc892d25258ed4affadae",
+        "request-50.txt": "c9e563bf5b7db02e6ad5bb78c7d6285ecb48dad5d36c5c189e1f83564ec9d73b",
+        "request-51.txt": "27953cd77d621915913f82438f3e2e1ad29cb11a02724a170748eb8dbb7f9692",
+        "request-52.txt": "c6e715a16bf0b5ae8546eaaf422fb8570853691eb0883ea071699e86fcd09240",
+        "request-53.txt": "a59e53441e407d0ba4de61ec7920b4903b07ef6b7068450189119fa80b2f22f3",
+        "request-54.txt": "34a0e3a2fafc121c847ea7307e5480ecc4cd4bf29f2850ffef4ae5a0309d0096",
+        "request-55.txt": "0aab90c429d194a1548ff33f04f388800466cde8a34d9328f1c34b546ca4e49b",
+        "request-56.txt": "9f7e14489f5c5190f29b07945502d008cdb3872bc817f255535ab0e94598d563",
+        "request-57.txt": "7ce4d0eaf1c9e923dbd9bd69bc97c485ea689d3cf9ab8900519e25054f3fc65d",
+        "request-58.txt": "633f55dac6cf3b3ce77704b21ede24f6fe34ab1bb20e9e31a923974d49e314db",
+        "request-59.txt": "4b648d51bec6c41454f654edd9b2127bc3ef2070a69a1dbf6cb81271b25cfef1",
+        "request-6.txt": "5a237397d1e6872854687efc960f0e259bfa26c1ee38d8a8275141ce1ab6a48f",
+        "request-60.txt": "e9ac7fcd4907f1dab87f5cb124a44c4c58827607858f861407009e69536f265b",
+        "request-61.txt": "5fcf7f7e95fdd2d10aa23b4d26dd92ec0aa0dcb13b6719a78ee0e90c8ff8c5c7",
+        "request-62.txt": "b3f4130d19becc6e3fc25aaca1e9e0aab99bcdc60c3302073060fbed8a750374",
+        "request-63.txt": "75d6a7944cc8abc0689fed003e652d151ac1590c44769ae7cfa2d3ff485b6e03",
+        "request-64.txt": "241a7e1d5094a641ec3d26f0743aa877d7cd451f846742da42e8bb5099aaba41",
+        "request-65.txt": "6bcedb99fc1a7e508ea837414bff14ad158245118562dac27668c9fa14b78a29",
+        "request-66.txt": "be27a9097ef94280b3401e837a114d9a5a209d9fa8ead4dd40f5d3ebbaf0bf2c",
+        "request-67.txt": "af0df8249aac8c43d8c2ce144d5c610af2914b3a2eb1284eb9663a21fc0c5f34",
+        "request-68.txt": "6e600b9f5f58a78817dd757b8ed48d3907802357c28a54111efce4bd88d3139d",
+        "request-69.txt": "3cbdae6f73dcaeede453d4a8e367327ff960ea525bba06bcbe78f74833acb083",
+        "request-7.txt": "70bb006108c96b3c4fbc2f20ca504df05a5b3aa148e1da03bdcfc1e8c0e18540",
+        "request-70.txt": "11399e557e1112db0b1195989c6029342a50ac84d41055505c30f9c0fe178534",
+        "request-71.txt": "0e7bf4852ff3f5dc50c550ff3e4608fe00265ced11067da72c7452cc643949f4",
+        "request-72.txt": "b3426844213fe9c7c1255d6a252ec9b48e908e838581c268c13519ee4937c9e6",
+        "request-73.txt": "62df8fddb43154ba4d38e30117b8febd1fed7bedc8ee82c51e1f27cca3b1d397",
+        "request-74.txt": "f0a6a8de06c593b0590131857a36cc816d352dd23c772635d5730472498e33b0",
+        "request-75.txt": "7e16ff03427bea6323bd1ca3bd315d962d522921efb22b9b5c3ab437f3e9f5b2",
+        "request-76.txt": "ed79dbc14777892dd429084e0fe86cd18e1e8169c76c5cfd3bd2d004088a9395",
+        "request-77.txt": "39722e17fafff565a16f9ae78cb7b7d3be119e0ebefef0daa947de43b85f59db",
+        "request-78.txt": "1b2bfe760055584f67e21a141fc81868fe39b8100c4537c42fbe87946f45e534",
+        "request-79.txt": "05fbc54398afee4e109a52c15ae243982da3eab5f16ca658f057d33d1d7803bd",
+        "request-8.txt": "2f56edd902f4a6d060915e16a5c9934a4e239a339fb94b6e8330ea8677410d72",
+        "request-80.txt": "f5f653b054fb6799979026e3886f19abd631e106a6808e45ed111b3100e80f5a",
+        "request-81.txt": "c7c1d19d123a9d2beeb19964ff71b911f40a2b8a7f6357c549f8b44aaaa4b9e3",
+        "request-82.txt": "4ba49a0435b5d9f632a8fb60938a87049f4daa25e42051660725719c4b65f311",
+        "request-83.txt": "ca7d80b0015e4e0c02df7f64df9c9be95cdd6cf8a779463ec6d79794dddcb1bf",
+        "request-9.txt": "2e5f41b80f48153f49ac595aaed50861701712e0da1d90c9f85ca92d2d96294e",
+        "response-1.txt": "d67c6694164d4d9f77a989872bd556d64b239b09b73debd4b254bb9532e2f9e7",
+        "response-10.txt": "e9feb1e1dade292640b2067396ab0e7b22c1a6a19c9ecbecae6b01563dfb8af8",
+        "response-11.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-12.txt": "6a3bbeb8d380a0871d30eb7a86bfd739af747ee58b961b8cb88a7b9518b667d4",
+        "response-13.txt": "6a3bbeb8d380a0871d30eb7a86bfd739af747ee58b961b8cb88a7b9518b667d4",
+        "response-14.txt": "6a2330286e56ec454d7ebec1badeec6bea3d9ca9fb3d91349a4f0767f55e3cf3",
+        "response-15.txt": "8ef503d14d109c0d3188e684c470cc548357f57d829c0d2a2be9350adc9b33ae",
+        "response-16.txt": "89a00e4a85f07b223de6fdd9c5c0a4cf7fe1839172d9f6b2535445da1b891ad1",
+        "response-17.txt": "89a00e4a85f07b223de6fdd9c5c0a4cf7fe1839172d9f6b2535445da1b891ad1",
+        "response-18.txt": "89a00e4a85f07b223de6fdd9c5c0a4cf7fe1839172d9f6b2535445da1b891ad1",
+        "response-19.txt": "89a00e4a85f07b223de6fdd9c5c0a4cf7fe1839172d9f6b2535445da1b891ad1",
+        "response-2.txt": "7a2f0a38e90d3db214a765394cd7cb34fabebd27880cded7edce151680103e60",
+        "response-20.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-21.txt": "7099f6ac3d86dcb3afc69aff9bd5e65d38e5ca3d3a5494c72ff24ad16797e9f0",
+        "response-22.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-23.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-24.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-25.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-26.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-27.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-28.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-29.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-3.txt": "7a2f0a38e90d3db214a765394cd7cb34fabebd27880cded7edce151680103e60",
+        "response-30.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-31.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-32.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-33.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-34.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-35.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-36.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-37.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-38.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-39.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-4.txt": "7a2f0a38e90d3db214a765394cd7cb34fabebd27880cded7edce151680103e60",
+        "response-40.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-41.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-42.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-43.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-44.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-45.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-46.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-47.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-48.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-49.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-5.txt": "7a2f0a38e90d3db214a765394cd7cb34fabebd27880cded7edce151680103e60",
+        "response-50.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-51.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-52.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-53.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-54.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-55.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-56.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-57.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-58.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-59.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-6.txt": "7a2f0a38e90d3db214a765394cd7cb34fabebd27880cded7edce151680103e60",
+        "response-60.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-61.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-62.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-63.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-64.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-65.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-66.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-67.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-68.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-69.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-7.txt": "6a3bbeb8d380a0871d30eb7a86bfd739af747ee58b961b8cb88a7b9518b667d4",
+        "response-70.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-71.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-72.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-73.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-74.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-75.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-76.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-77.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-78.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-79.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-8.txt": "6a3bbeb8d380a0871d30eb7a86bfd739af747ee58b961b8cb88a7b9518b667d4",
+        "response-80.txt": "409384fa24cdc1c240dd875ae1f0d0d712cd680f41560f3f6c198e05c2b9ad80",
+        "response-81.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-82.txt": "14aed02e1f03220bfae41d68ef6a61494e0564f99e94b3373b920ccf2496f3fe",
+        "response-83.txt": "3caa49e530122f722fed7f78e98272b89ac2ce2ab92528e3d8f998b430f090c5",
+        "response-9.txt": "6a2330286e56ec454d7ebec1badeec6bea3d9ca9fb3d91349a4f0767f55e3cf3",
+        "rtl.log": "8d36799ea66fc80019af7b023c7f1a2c3e6caa5c87ad557b9cf1cae0e745a7a5",
+        "scheduler-code.bin": "03a43b0f2e6a5d742099cf75a78a0e53d6ac2fac77aacbcdc437cb20952913f6",
+        "scheduler-converted.bin": "f96496b562d0b0dc1c426446d2ac84358029c4b3ec61f46fa33ba02ee718ce8e",
+        "scheduler-frame.bin": "527ac07c6367b9834f87e666e6534543b19f5a12284e8788c022ba1ff3662664",
+        "scheduler-main.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "scheduler-world.bin": "9ea5d12af4c439a6143d4857a678240089318675679f41ef59c011277045fc33",
+        "service-state.bin": "6eaae826fb8c264d9f3479a495edcebeeba64119daef77f5103a779cf179136e",
+        "service-world.bin": "5fbc850ed6b2d763b3f351be6f9850ab52bd3774e538d72a0ba140f5b2853bb9",
+        "service4-code.bin": "03a43b0f2e6a5d742099cf75a78a0e53d6ac2fac77aacbcdc437cb20952913f6",
+        "service4-converted.bin": "f96496b562d0b0dc1c426446d2ac84358029c4b3ec61f46fa33ba02ee718ce8e",
+        "service4-frame.bin": "527ac07c6367b9834f87e666e6534543b19f5a12284e8788c022ba1ff3662664",
+        "service4-main.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "service4-world.bin": "830fd995b9942e017208e76fef898b605632bc5138dfbf78106cd50dbee1b69d",
+        "settings.bin": "b7939ad0be912cc12e734a92b4d5c580e22dc9e47cba953e29cc3fb01f3f727f",
+        "trace.txt": "bf7d42134f2bd9c8a3bd51629cad333c871eb613a99f5f9f3506ee0de36f9005",
+        "unlock.bin": "4671042ab02a19589d4596e2830c968285a3a8226a71c7fe1761c093c5e5a92d",
+        "vbl-1-registers.bin": "48533e66d9b66ac4cf431b002404ff692272db7757e8d32d8952f6b47c5836a4",
+        "vbl-1-state.bin": "546a0234e5e762d8980efd71159737a0744ce42004c50d7001311ececccc231b",
+        "vbl-1-world.bin": "b69bdfa8318db418d2e86343d61a82ee49c0fb1b08b7d232bbffd85c0d4ec41c",
+        "vbl-2-registers.bin": "48533e66d9b66ac4cf431b002404ff692272db7757e8d32d8952f6b47c5836a4",
+        "vbl-2-state.bin": "b13bb6495fe23ebf36b0d7d19af76585f6e363f626cdc7ab7b14e869e6a423a6",
+        "vbl-2-world.bin": "6fb8427e68b1407721de5172f39bd05be73f262ac1cb4e8cf996c1a7cc93335c",
+        "vbl-3-registers.bin": "48533e66d9b66ac4cf431b002404ff692272db7757e8d32d8952f6b47c5836a4",
+        "vbl-3-state.bin": "7a6fd5e09b70b479806128475ea6dbc6fba75979446e8301e59d8457177e85dd",
+        "vbl-3-world.bin": "eaace5622021ceb6c83c434ea6609e83c7fc6c27730d6e2259a0060c3d062401",
+        "vbl-4-registers.bin": "48533e66d9b66ac4cf431b002404ff692272db7757e8d32d8952f6b47c5836a4",
+        "vbl-4-state.bin": "d4d0f92fe4117450b4126f2009923c3588a9356d65ac13e2e74fbe7a199582b1",
+        "vbl-4-world.bin": "0d6bfb0891c711739154b316f5ce79917641ab1ffdb5bf5a2cb1a146e4d978e9",
+        "vbl-5-registers.bin": "48533e66d9b66ac4cf431b002404ff692272db7757e8d32d8952f6b47c5836a4",
+        "vbl-5-state.bin": "b26abd506b16606470234467d906a92621f51858ba995e9df61489ccad28461e",
+        "vbl-5-world.bin": "876e4a2835c91288505eae65a23848f8625279b1677ef32d189c35e2654fe6d3",
+        "vbl-6-registers.bin": "48533e66d9b66ac4cf431b002404ff692272db7757e8d32d8952f6b47c5836a4",
+        "vbl-6-state.bin": "0c1ee95e9ff644cc0415d7e3f05352229e7e26e1ec70ae62627a3b61f8f37686",
+        "vbl-6-world.bin": "2f30b0e65503f772a5077bf7f28922aaf01c586361453693ab89e766703dee42",
+        "vbl-7-registers.bin": "48533e66d9b66ac4cf431b002404ff692272db7757e8d32d8952f6b47c5836a4",
+        "vbl-7-state.bin": "3efe549b95abd05d96a1d3f7f61ef34916900f1a8a3a1a813eb79435886c98ed",
+        "vbl-7-world.bin": "11c1f7393f17c572ad7bb5d250ee031ffcdb2b6ebfa804b5b3d345e9d52edf7e",
+        "world-input.bin": "68014d947ee7cd5032276500beff1502d262ffefe4b8d863bc48d4bca6f1afdc"
+      },
+      "vbl_callbacks": 7,
+      "admitted_callbacks": [
+        4,
+        7
+      ],
+      "cache_pairs": 168,
+      "visible_main_cells": 160,
+      "dirty_holes": 8
+    }
+  ],
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-monitor-resume\\results-1.json": "14e76f8c164b07318162a2e694a37e31430bff87b106d3ec1bf32fa65ce937ea",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\tb_monitor.sv": "a1965da4f299b9837aa1e0d888d864030f7516a46e0f3726bff1c77f64f54818",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\initial.hex": "bb1e1fd467296f2a8551cd799fb445fcc76d62188c127a2e87aa66ae4902b44b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\maclc_iie_binding.sv": "40eda71b69557af047946d0adcbab195268fa0689c5ee20c165f9aa719da1054",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\card_irq_candidate.sv": "926ffde3eb70b04d6e37f1b51ba917a51b7ea896d37bb954351a2a56ab114af9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\card_irq_cpu_bus.sv": "7b6b7460f3c86fa5df0531f0b24fbd5f3d5917f8ac22d527e4b64a20a8a5865c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-state\\card_display_state.sv": "75a3d1d065b0794a6c52234dbc2afda6d942750f8f9158f8d7f80d95af419fc5",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-video\\card_trap_decode.sv": "52e4621a6ae00aa8a738f79643f9112daf074b769d686af20b6a67faff69dc3f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-pacing\\card_cycle_pacer.sv": "3cbb73790d931bc64fb459bd917e0d939546c01ed943d2a665b5c065596d8fba",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-bridge\\prepare.py": "c8c5a44666d9d1c7446fb0aa87a24a60b84150addd74f47a7e207d8ab46d51ef",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-dispatch\\execute.lua": "0d68f1ae405eee90cef7540b60fe10561dde5ba8abe6d48b111a66487212696b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-dispatch\\results.json": "219a798ef6944454bd260215cdffc8778e64afc963a037b878931facdf3d26ec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-vbl-admission\\execute.lua": "70b6a88368fab37914408e6a9e8cbf4c55422ed35fc1960253f4948ff2fb1bf8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-bridge\\bridge.lua": "8191a8d274bed92e632ac748e507e060e2cb03f7aed38650c83d5a5e720840ac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-callback\\prepare.py": "ce9e3562b176dae34193addb6fbc6b8dc7616a687a03362bdf72a6519b45d25a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-service4\\prepare.py": "e7318d4e6df772c0d25b81d3123eac49ae8847247b1ab6797e8dbb51c0e4d0d4",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-render\\results.json": "22cd93431554d48f70598ab6df11c54ac1ebff31cf032b5c2988e2746e2858fb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\tb_cache.sv": "9a69f97f02c7759a39326c37622e2084b2cbc987f3667e4fcd17d5910dae49a2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-service4-render\\card_irq_candidate.sv": "283fe121ef29c5beda49569a01957e36c732408fd3c4c03511890000aeedecdc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-mask\\card_irq_host_registers.sv": "a83f1d659744e152c7664892317cdeef302e1c1b237338b0f57e5a8bf9dcb65d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-callback\\bridge.lua": "01800c4cbaebf437d6da6071db41d070739b2d46c59cc169448d0e98ecb73975",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-callback\\execute.lua": "42a063189c4db797afd283372d3cb7038a6706fa7184d83259520ac2c338ef8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-vbl-admission\\bridge.lua": "69faeea03f2be59213eff83ebf63b56663811a295a5c9528c1bf18f57ed472e1",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-vbl-admission\\prepare.py": "87340dad888f9c32a0e5a48ddf76d3b2313a7c2497133e4b0a6544e44ade79c2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\results.json": "1e126ce3f3edb1c92121fc38899bf58e9c462326e6f286d5306648b556284589",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\world.bin": "758007972c6069183ea91820113960656faaa05175517002d2ce8034c14b4cca",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\world.bin": "559653231aaf923e38b58551eada75672da73e5f52fd40546f7ca15f4124397e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\code-after.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\results.json": "40e9b6f818cd4fe07a49197e025c923cb38ac87201bf2828c1941660c505a222",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code5-1792958730280862100\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code6-1792958736705527900\\world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\world.bin": "c994894ad10c39f7799544e1b960eb30d171c6c94a97455706dcf6207fc709eb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\font.bin": "9192ec00494a6fdebf49e8a9b037522ecafdef9fa383fb0338319cc8b48c72ab",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-glyph\\results.json": "70f6b5cd53c3f975b1d275c5b1f37c5af4ee3c08c8323810241471db7de8253e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\resources.json": "16d9aa44d8c90dca9680784af35b590e71df0a28f1dff6a5d9739c3913184dfc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-callback\\resources.py": "9beda70a318b77d611d5691bf404ca9261dd62accaf89c401a64bed84eb2aa9f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-vbl-admission\\tb_bridge.sv": "d3070a57682cbd6327608c7f95e07b42a7a47bd9f840c10476ee9ac21f43f8d5",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-vbl-admission\\card_irq_candidate.sv": "283fe121ef29c5beda49569a01957e36c732408fd3c4c03511890000aeedecdc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-vbl-admission\\card_irq_host_registers.sv": "a83f1d659744e152c7664892317cdeef302e1c1b237338b0f57e5a8bf9dcb65d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-service4\\run.py": "9d60c1b4ee90cea8b2cda7105b96860170ae3f611080cb0e46a83fd1663be518",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-vbl-admission\\run.py": "72608f6cbfffdd1a5a22e530786751c23900f793ed164bc25e84266aa6b548c0",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-callback\\run.py": "af35bffe22aa574d6d3febfca07a10c5cc8bfe4abd6244f61eef01d350e7aa90",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-reload-callback\\live.py": "75a227e15134dde1c3d83daa19844ff9eab2f16cc136ffc43181ce413a3992e8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-text80\\run.py": "92fb600b2905cb9d8464b71bf76a8a6920065171b976611ecbe7fda12b9f28da",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-hires-color\\run.py": "942edc93b4367c2db9d45e800c7c5e9b095b5d251753b8bd84a7429897cdb435",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-glyph\\run.py": "af8180a668a76fe2e044eab2297d23ad15e895ff99fe44379b7c5d3d2303ce73",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_1.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3"
+  }
+}

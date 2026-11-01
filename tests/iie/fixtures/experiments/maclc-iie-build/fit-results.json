@@ -1,0 +1,57 @@
+{
+  "scope": "user-run full Quartus compile; offline report review; no hardware test",
+  "fit_status": "Successful - Fri Oct 23 14:41:12 2026",
+  "resources": {
+    "alms": 24080,
+    "alms_capacity": 41910,
+    "alms_delta_from_host": 1181,
+    "ram_blocks": 482,
+    "ram_blocks_capacity": 553,
+    "ram_blocks_delta_from_host": 0,
+    "registers": 23882,
+    "dsps": 45,
+    "plls": 4
+  },
+  "timing_minima": {
+    "Setup": {
+      "slack_ns": 0.266,
+      "check": "Slow 1100mV -40C Model Setup 'pll_hdmi|pll_hdmi_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk'"
+    },
+    "Hold": {
+      "slack_ns": 0.075,
+      "check": "Fast 1100mV -40C Model Hold 'emu|pllv|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk'"
+    },
+    "Recovery": {
+      "slack_ns": 4.304,
+      "check": "Slow 1100mV 100C Model Recovery 'pll_hdmi|pll_hdmi_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk'"
+    },
+    "Removal": {
+      "slack_ns": 0.389,
+      "check": "Fast 1100mV -40C Model Removal 'FPGA_CLK1_50'"
+    },
+    "Minimum Pulse Width": {
+      "slack_ns": 0.709,
+      "check": "Fast 1100mV -40C Model Minimum Pulse Width 'emu|pllv|altera_pll_i|cyclonev_pll|fpll_0|fpll|vcoph[0]'"
+    }
+  },
+  "all_summary_tns_zero": true,
+  "unconstrained_ports_identical_to_host": true,
+  "unconstrained_clocks": 0,
+  "unconstrained_inputs": 4,
+  "unconstrained_outputs": 50,
+  "qsf_change": "blank lines and EOF newline only; generated source hashes otherwise unchanged",
+  "hardware_tested": false,
+  "rbf": "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe_01.rbf",
+  "rbf_sha256": "516bc23b65df0dfc613d3c505634255c96faf5a51602ff02d7c9779130795945",
+  "report_sha256": {
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.fit.summary": "7df0b275eac4753e991ec32a7bc4a7a99dbf9e60a1d085d8e290c3cbb85dc149",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.fit.rpt": "1eb9b2591158f62fe597c4fa8d024d008dad01d1b9cee64cd2d4a1f62bcd0ecd",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.map.summary": "5b65708aad548b2049bcd008ee903e287a74a37e4ceef8c23b1fb38832ce70b7",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.map.rpt": "ddcf88a83db60b438ba3b7fbeb3f424941eea9f81e3c7c74ede83f365d5d0a9b",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.sta.summary": "ccee9b9208de1d47943c125e637435f6edb0b194411e94cb8b09d272b7732ef1",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.sta.rpt": "4a29d70f80e86a80e8b77be1b7a03e8bc46e12518a9c5009280dfd9d689e79e1",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.asm.rpt": "207261b8e995d64a7e041614d442124f9ca7257dd969495f54362a147db4192a",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\output_files\\IIe\\MacLC_IIe.flow.rpt": "c7e88718962dbf666f34af926e8b1e646f5fc1d5c8be9af896934d9163872cc0"
+  },
+  "qsf_sha256": "044b80baab81db8bf75388f4d3d17b02079412b0d3ecfd1af5f0d295d40e129e"
+}

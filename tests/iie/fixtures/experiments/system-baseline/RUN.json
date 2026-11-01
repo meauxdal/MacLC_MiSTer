@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-22",
+  "apple_iie_card_head": "0cc0600ae13700b68d2935da888cc4a74e38b267",
+  "maclc_head_observed_read_only": "07770d622facce6215dc98daa197511286817825",
+  "execution": {
+    "engine": "MAME 0.289",
+    "machine": "maclc",
+    "ram": "4M",
+    "lcpds": "empty",
+    "rom_audit": "romset maclc is good; 1 romsets found, 1 were OK",
+    "disk": "local/experiments/system-baseline/boot-exact.chd",
+    "disk_origin": "Copy of local/hardfiles/Apple-II_100MB.hda; no software installed",
+    "chd_geometry": {"cylinders": 6403, "heads": 1, "sectors": 32, "bytes_per_sector": 512},
+    "chd_logical_bytes": 104906752,
+    "runs_emulated_seconds": [20, 60],
+    "exit_codes": [0, 0],
+    "snapshot_20": "Gray patterned screen and pointer",
+    "snapshot_60": "Finder menu bar and Trash; no volume icon visible",
+    "cold_restart_between_runs": true,
+    "shared_disposable_chd_and_nvram_between_runs": true,
+    "desktop_interaction_tested": false,
+    "iie_startup_launched": false,
+    "guest_addressing_mode_verified": false,
+    "guest_file_sharing_verified": false,
+    "host_input_warnings": ["WMI Server: 0x80070005", "XInput detection: 0x80070005"],
+    "scope": "Cardless software boot in MAME; no MacLC HDL or hardware validation"
+  },
+  "fsck_checkonly": {
+    "clean": false,
+    "files_checked": 59,
+    "directories_checked": 10,
+    "errors": [
+      {"code": "InvalidClumpSize", "field": "drXTClpSiz", "value": 204288, "allocation_block_bytes": 2048},
+      {"code": "InvalidClumpSize", "field": "drCTClpSiz", "value": 204288, "allocation_block_bytes": 2048}
+    ],
+    "repair_attempted": false
+  },
+  "egret_assets": [
+    {"path": "local/Egret ADB/341s0850.bin", "bytes": 4352, "sha1": "95e08ba0c5d4b242f115f104aba9905dbd3fd87c", "sha256": "3287874a6eec75a7a1dae09faaeb6ccb73e29b07e9429663a326f1a43e5390fa"},
+    {"path": "local/Egret ADB/341s0851.bin", "bytes": 4352, "sha1": "8b0dae3ec66cdddbf71567365d2c462688aeb571", "sha256": "77f5fb2baaca55a5921423b041e60257a864d79d734872991fa607fa33784d88", "selected": true},
+    {"path": "local/Egret ADB/344s0100.bin", "bytes": 4352, "sha1": "540e752b7da521f1bdb16e0ad7c5f46ddc92d4e9", "sha256": "e02ae917464691e62b957785f534af9cf57d8fead1dcd3106a5393241aad6463"}
+  ],
+  "tools": [
+    {"path": "C:/Users/Elle/Downloads/mame0289b_x64/mame.exe", "sha256": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3"},
+    {"path": "C:/Users/Elle/Downloads/mame0289b_x64/chdman.exe", "sha256": "8a74468e3b0879698835b57c3b58e88e5a51e4de73bee6ef755c28530b5b040f"}
+  ],
+  "captures": [
+    {"path": "local/experiments/system-baseline/capture/baseline20.png", "sha256": "3f01860e3d7e70010ee9b8f44da6ca9fc525a1b35a0e8e82b5ee24cc07bd172f"},
+    {"path": "local/experiments/system-baseline/capture/baseline60.png", "sha256": "42f9b530c18c81f40fd213b97efd057a69b81af63561fd58794ff6d5997f97ab"}
+  ],
+  "startup_221": {
+    "installed_on_supplied_hda": false,
+    "archive": "local/software/Apple-IIe-Card-221-image.sit",
+    "archive_sha256": "ecb99f5450de3b39f363ee23072730e497e1ed0b51c367f60462d9cd01437c92",
+    "extracted_image_sha256": "5b180cb6d959b44106ecdc1fa9c5ec6e06ddf5f96edfaefa6ad3658355a69537",
+    "resource_bytes": 401755,
+    "resource_sha256": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "vers_1_hex": "02218000000005322e322e3127322e322e312c20a9204170706c6520436f6d70757465722c20496e632e20313937372d31393933"
+  },
+  "pairing": {
+    "stock_lc_system_712_supported_by_apple": false,
+    "supplied_image_lc_boot_observed": true,
+    "supplied_image_startup_221_compatibility": "unmeasured",
+    "os_replaced": false
+  }
+}

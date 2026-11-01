@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-22",
+  "machine": "maclc",
+  "engine": "MAME 0.289",
+  "ram": "4M",
+  "pds": "empty",
+  "source_image": "local/hardfiles/Apple-II_100MB.hda",
+  "source_sha256_before": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+  "source_sha256_after": "5e6b04f58dcf631748baf655d0f5d398d6ecb6729f42226f00dfd378c15f2e60",
+  "source_modified": false,
+  "installed_startup_version": "2.2.2d1",
+  "clean_replay": {
+    "command": "docs/experiments/startup-runtime/run.ps1 -RunName verified",
+    "emulated_seconds": 100,
+    "mame_speed_percent": 1000.08,
+    "wall_seconds_approx": 10,
+    "exit_code": 0,
+    "separate_cfg_nvram": true,
+    "natural_keyboard_return_frame": 3600,
+    "guest_copy_modification": "copy /IIe Startup to /System 7.1.2/Startup Items/IIe Startup, preserve forks and metadata",
+    "program_patch": false
+  },
+  "proof": {
+    "finder_boot": true,
+    "installed_startup_launch": true,
+    "absent_card_dialog": true,
+    "slot_manager_result_measured": false,
+    "card_bus_accesses_measured": false,
+    "conf_execution_measured": false,
+    "addressing_mode_verified": false,
+    "file_sharing_state_verified": false,
+    "hdl_tested": false
+  },
+  "artifacts": [
+    {
+      "path": "local/experiments/startup-runtime/verified/capture/final100.png",
+      "bytes": 6289,
+      "sha256": "35c32102105366c3a555b1c51183e3450b916e4f87fcdc6b7a1509cec569ed5e"
+    },
+    {
+      "path": "local/experiments/startup-runtime/verified/capture/launch-frame-3000.png",
+      "bytes": 5882,
+      "sha256": "8e46c857e240c5a0e92e7b105b757a278d159d27e53ea2ab362c5a7817603bca"
+    },
+    {
+      "path": "local/experiments/startup-runtime/verified/mame.log",
+      "bytes": 582,
+      "sha256": "8e69b2b4791f5196bf095f175b14f71e7f94fa318615b2deeefd423a3c58f428"
+    },
+    {
+      "path": "docs/experiments/startup-runtime/launch.lua",
+      "bytes": 888,
+      "sha256": "91b842e4e6f3c6a27b848b4aecaf0193bd7a77592a271dd22b35dd5755b929ef"
+    },
+    {
+      "path": "docs/experiments/startup-runtime/run.ps1",
+      "bytes": 1455,
+      "sha256": "bbd14b02bb0dd1a5b8c3c8ca3bf11d7bcc44aaa19aa37a490b42ba5b61ea7bbf"
+    }
+  ]
+}

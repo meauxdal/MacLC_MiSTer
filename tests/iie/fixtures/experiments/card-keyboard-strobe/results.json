@@ -1,0 +1,30 @@
+{
+  "result": "PASS characters=128 stalled_clear=3 checks=899\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-keyboard-strobe/tb_keyboard.sv:44: $finish called at 8990 (1s)",
+  "lint": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.011 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 7.859 MB",
+  "controls": {
+    "missing_strobe": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-keyboard-strobe/tb_keyboard.sv:18: keyboard expected=80 actual=00",
+    "missing_clear": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-keyboard-strobe/tb_keyboard.sv:18: keyboard expected=00 actual=80"
+  },
+  "firmware_windows": {
+    "C298": "ad00c08d10c030c4",
+    "C846": "8d10c060",
+    "FA7E": "2c10c0",
+    "FB85": "2c10c0",
+    "FB91": "2c10c0"
+  },
+  "limits": [
+    "isolated candidate; no host/CPU composition",
+    "simultaneous host/clear priority unqualified",
+    "static firmware operand windows; execution not established"
+  ],
+  "inputs_sha256": {
+    "docs/experiments/card-keyboard-strobe/card_keyboard_candidate.sv": "44e48f4bf065b49857cab419f94c7bea9fa4a41c82095b04902625c94d845391",
+    "docs/experiments/card-keyboard-strobe/tb_keyboard.sv": "f29134ded455e4c949acf0c791a21c9ad91f020d54367a93db7f7468ebcd2ff5",
+    "docs/experiments/card-keyboard-strobe/run.py": "98023d4d0d597b8eac0071b319e91f909cb835104eddddd7d72986efcfb5c3a0",
+    "local/experiments/firmware-memory/decoded/Monx_2606.payload.bin": "c92e4db8d40298b759d756a23e51e8d99086cb625e4fbe8074c8c9b2a6bad554",
+    "local/experiments/firmware-memory/CODE_5.txt": "bc9beca99f7e3c1c62c9164869c1967d0ff0c9fc32551f93aa1f0c978d403ca6",
+    "local/experiments/firmware-memory/CODE_6.txt": "d6b24b06748dff9a0dfa353c8a913ba28ec8d23dfb4e218c88761def2008b3e6",
+    "local/experiments/firmware-memory/code/CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "local/experiments/firmware-memory/code/CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa"
+  }
+}

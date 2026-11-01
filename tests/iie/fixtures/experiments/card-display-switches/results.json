@@ -1,0 +1,501 @@
+{
+  "scope": "Five original monitor display-switch handlers; candidate E0 status and injected reset-state host world",
+  "runs": [
+    {
+      "driver": 5,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code5-1792958730280862100",
+      "transactions": [
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49166
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49153
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          3
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49237
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          1
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49236
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          1
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49152
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          1
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ]
+      ],
+      "state": "ack=true service=0 pc=20281c sp=3f0000",
+      "rtl_result": [
+        "READY",
+        "REPLY 1 224",
+        "REPLY 2 224",
+        "REPLY 3 49166",
+        "REPLY 4 0",
+        "REPLY 5 224",
+        "REPLY 6 224",
+        "REPLY 7 49153",
+        "REPLY 8 0",
+        "REPLY 9 3",
+        "REPLY 10 1",
+        "REPLY 11 224",
+        "REPLY 12 224",
+        "REPLY 13 49237",
+        "REPLY 14 0",
+        "REPLY 15 1",
+        "REPLY 16 1",
+        "REPLY 17 224",
+        "REPLY 18 224",
+        "REPLY 19 49236",
+        "REPLY 20 0",
+        "REPLY 21 1",
+        "REPLY 22 1",
+        "REPLY 23 224",
+        "REPLY 24 224",
+        "REPLY 25 49152",
+        "REPLY 26 0",
+        "REPLY 27 1",
+        "REPLY 28 1",
+        "PASS switch next=c07d CPU=1392 writes=111 backend=1457"
+      ],
+      "hashes": {
+        "trace.txt": "0730ae8ec4b82613f947f6b045760accd6d60a67addf034c7d95cc0fadbdd7b4",
+        "bus.jsonl": "17fe9ba31ef257fe517698fd598d0213a7b37f23523c541986e5fc59deb86b9a",
+        "captures.txt": "9609fb8011b92e8cd901b87c3fc94e6b1ae1cb987ce40d8eb5f4866cdc04b623",
+        "instructions.txt": "6291149d5eb8263e3886298ec9bdd71c3de6e7835c9effa8435ec52b517440df",
+        "loaded.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+        "world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+        "code-after.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+        "state.txt": "c66f3c34b1051b253c1d0a9ee910e246938d4dc779014f0ac0bdbd25a9c359e0",
+        "poll-1.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-2.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-3.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-4.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-5.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e",
+        "poll-6.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e",
+        "poll-7.bin": "bf4df1529954c1a37d0b0d17ac2f9d6191c97738889bb128a0624232d477961c",
+        "poll-8.bin": "bf4df1529954c1a37d0b0d17ac2f9d6191c97738889bb128a0624232d477961c",
+        "poll-9.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e",
+        "poll-10.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e"
+      }
+    },
+    {
+      "driver": 6,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code6-1792958736705527900",
+      "transactions": [
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49166
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49153
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          3
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49237
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          1
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49236
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          1
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          8,
+          1,
+          224
+        ],
+        [
+          false,
+          16,
+          4,
+          49152
+        ],
+        [
+          true,
+          8,
+          12,
+          0
+        ],
+        [
+          false,
+          8,
+          13,
+          1
+        ],
+        [
+          true,
+          8,
+          13,
+          1
+        ]
+      ],
+      "state": "ack=true service=0 pc=20281c sp=3f0000",
+      "rtl_result": [
+        "READY",
+        "REPLY 1 224",
+        "REPLY 2 224",
+        "REPLY 3 49166",
+        "REPLY 4 0",
+        "REPLY 5 224",
+        "REPLY 6 224",
+        "REPLY 7 49153",
+        "REPLY 8 0",
+        "REPLY 9 3",
+        "REPLY 10 1",
+        "REPLY 11 224",
+        "REPLY 12 224",
+        "REPLY 13 49237",
+        "REPLY 14 0",
+        "REPLY 15 1",
+        "REPLY 16 1",
+        "REPLY 17 224",
+        "REPLY 18 224",
+        "REPLY 19 49236",
+        "REPLY 20 0",
+        "REPLY 21 1",
+        "REPLY 22 1",
+        "REPLY 23 224",
+        "REPLY 24 224",
+        "REPLY 25 49152",
+        "REPLY 26 0",
+        "REPLY 27 1",
+        "REPLY 28 1",
+        "PASS switch next=c07d CPU=1392 writes=111 backend=1457"
+      ],
+      "hashes": {
+        "trace.txt": "0730ae8ec4b82613f947f6b045760accd6d60a67addf034c7d95cc0fadbdd7b4",
+        "bus.jsonl": "17fe9ba31ef257fe517698fd598d0213a7b37f23523c541986e5fc59deb86b9a",
+        "captures.txt": "9609fb8011b92e8cd901b87c3fc94e6b1ae1cb987ce40d8eb5f4866cdc04b623",
+        "instructions.txt": "6291149d5eb8263e3886298ec9bdd71c3de6e7835c9effa8435ec52b517440df",
+        "loaded.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+        "world.bin": "d754eab82000212e5a8819dc36886aaa539ef95d9ad769e90b0e94074b766d0e",
+        "code-after.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+        "state.txt": "c66f3c34b1051b253c1d0a9ee910e246938d4dc779014f0ac0bdbd25a9c359e0",
+        "poll-1.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-2.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-3.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-4.bin": "0eaebbdfb54bf71f10fd01922d9d938723d7a2339fd3ec8b7ee83da499b376ba",
+        "poll-5.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e",
+        "poll-6.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e",
+        "poll-7.bin": "bf4df1529954c1a37d0b0d17ac2f9d6191c97738889bb128a0624232d477961c",
+        "poll-8.bin": "bf4df1529954c1a37d0b0d17ac2f9d6191c97738889bb128a0624232d477961c",
+        "poll-9.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e",
+        "poll-10.bin": "c1af648c5faffc06e4be6d52481a6ae110b784cbfa69343d9e2c81289ac04c8e"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "control": "C055_wrong_status_08",
+      "rejected": "original slot-device route at 0B10",
+      "trace_sha256": "66ffedaf90ed9d6c19cb696ddbad34c642cdf708db000c931715b0a3220b01d3",
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\code5-1792958744228624000"
+    }
+  ],
+  "lint": "card/binding -Wall passes with inherited exclusions",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-mask\\results.json": "4dd7a53c166368732e0996868439b308221a4386cd83a2477e3b40aac44c2455",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-mask\\tb_mask.sv": "c6b14d9f5aee70accd9fdc9f29cbe840bd1c15498ff56e259a2a9bd735f9807c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\card_irq_candidate.sv": "926ffde3eb70b04d6e37f1b51ba917a51b7ea896d37bb954351a2a56ab114af9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-runtime-bridge\\execute.lua": "2e447c56c07f4685f978978d04274cebce32e76f8f91d0eafd049381841d4a19",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\sequence.sv": "c4bad2a18a157b42c96971c834b5fe745c1639e4541e188a750cab8c613ae527",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\initial.hex": "bb1e1fd467296f2a8551cd799fb445fcc76d62188c127a2e87aa66ae4902b44b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\prepare.py": "ea6274754b766b6bcee2e3fcd6738a857fdfa3015d654cb165c1c499cb4ef04b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\bridge.lua": "0d5ebbbfbe17557aab6018dbf325971b01aaeb9e8262f4d3608aa62c89569ff7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\execute.lua": "13844d2a79594e123a009abf3dfaa583c4f708e25006041b3bbe1d27eac2b49d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-switches\\run.py": "66c4efd0918b3ee8d7d0e2aec62ebfdf7647ae90993e9f5ab52b1852d2b076a4",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\tb_switch.sv": "831910bb8e04d8994b77fad04b251e1dd29146f2ac4a67eb8b55eb2a504c074e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\maclc_iie_binding.sv": "40eda71b69557af047946d0adcbab195268fa0689c5ee20c165f9aa719da1054",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-switches\\card_irq_candidate.sv": "d1ba396c64c54371ff2e66e697bf5a8f16a5f58bef795bf3a8bb1b412d564d86",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-mask\\card_irq_host_registers.sv": "a83f1d659744e152c7664892317cdeef302e1c1b237338b0f57e5a8bf9dcb65d",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-monitor-resume\\card_irq_cpu_bus.sv": "7b6b7460f3c86fa5df0531f0b24fbd5f3d5917f8ac22d527e4b64a20a8a5865c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-state\\card_display_state.sv": "75a3d1d065b0794a6c52234dbc2afda6d942750f8f9158f8d7f80d95af419fc5",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-video\\card_trap_decode.sv": "52e4621a6ae00aa8a738f79643f9112daf074b769d686af20b6a67faff69dc3f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-pacing\\card_cycle_pacer.sv": "3cbb73790d931bc64fb459bd917e0d939546c01ed943d2a665b5c065596d8fba",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "scope": "Original CODE 5 artifact-color conversion and mixed rendering; software-derived color model, injected memory, no PDS or ACK",
+  "runs": [
+    {
+      "mode": 62,
+      "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-hires-color\\3e-0-1792982040831500600",
+      "graphics_rows": 160,
+      "text_cells": 320,
+      "world_bytes_compared": 23625,
+      "cache_bytes_compared": 30848,
+      "pixels_checked": 307200,
+      "hashes": {
+        "cache-input.bin": "62b40c001f8e7b65dac8b6490f829aec3627cc4cf50322aafcbc6349828a4680",
+        "cache.bin": "f8b2af07fddfdb4e579152a38bfd4144805fa649cf787881b719dd3f09622ca3",
+        "code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+        "code-input.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+        "dirty-input.bin": "d1d3728071cdb525645e0dd98dd73b1f8c754477ef52faf9c28a90448ce3d1e5",
+        "dirty.bin": "9711c65c20e24433d63400b3ab0da648881f821621c6d16ae43f0202c4095e4e",
+        "frame-input.bin": "b08448d061147d19b9e6313c8b9527f8f90d92876adcaf3d7083f6e83b4144a1",
+        "frame.bin": "d60f7547b2661fd3138359aa41a3007ddfbff351525598bc3bad65f21b046425",
+        "image-input.bin": "d8e278e1164748bd67157707e77a6df5c07ba9bd7a3c1dfd48175f8dd9d56589",
+        "image.bin": "d8e278e1164748bd67157707e77a6df5c07ba9bd7a3c1dfd48175f8dd9d56589",
+        "main-after.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+        "mame.log": "169b4c50a92fa58cea88dc63d6819a596560da8bcff50dbf24cf3c4f63d33bee",
+        "state.bin": "43dc0ae0a6bff063cbf6df0c29ec74ae8a40e10e3dbe82a128f0cdb91cc5b4b0",
+        "trace.txt": "3bdb3ad95f2702567bf255c5d072972a98d18ac379ceddbd1a8883485c6eb61e",
+        "world-input.bin": "1d4a63c100ee5406c203dae520b6e366a8593feea19a0f81c8e1b42c22180321",
+        "world.bin": "4afb0c2323e99f4d85b60d24e041c26f640b809ba110344c7ec130b95e82efd8"
+      }
+    }
+  ],
+  "artifact_words_checked": 2048,
+  "artifact_table_sha256": "8dc8b74d7cdc755566e1351600f9abfa340907c1ddac2da97546ed492e3b9090",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\world.bin": "758007972c6069183ea91820113960656faaa05175517002d2ce8034c14b4cca",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\results.json": "1e126ce3f3edb1c92121fc38899bf58e9c462326e6f286d5306648b556284589",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\world.bin": "c994894ad10c39f7799544e1b960eb30d171c6c94a97455706dcf6207fc709eb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-glyph\\positive-1792963869519112700\\font.bin": "9192ec00494a6fdebf49e8a9b037522ecafdef9fa383fb0338319cc8b48c72ab",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-glyph\\results.json": "70f6b5cd53c3f975b1d275c5b1f37c5af4ee3c08c8323810241471db7de8253e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-hires-color\\artifact.py": "815a9e91c986930a01a111ec96be64c91ae9f412bd2756ef01db2b28cc1adb66",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-hires-color\\run.py": "942edc93b4367c2db9d45e800c7c5e9b095b5d251753b8bd84a7429897cdb435",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-hires-color\\execute.lua": "c28e3f377463ec8384d8ebd54fc17b19ba1f3bb19ffb83da1e58e37a5fa7120e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_1.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3"
+  }
+}

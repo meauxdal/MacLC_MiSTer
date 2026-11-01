@@ -1,0 +1,37 @@
+{
+  "source": "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\floppy_sd.v",
+  "source_sha256": "511ab0548c7f4f2d712bdc737b6442b006264ecaca75f01a5383ce3fa0424988",
+  "hashes": {
+    "docs\\experiments\\maclc-committer-quiesce\\prepare.py": "e46934ac7743bd680ed8182700150434f8da6d3861eccc24fcf5db7569f080da",
+    "docs\\experiments\\maclc-committer-quiesce\\run.py": "3b178ffcf9bdae944d3886ac59b61f75a83e9ae342ab76a61be033329055fb10",
+    "docs\\experiments\\maclc-committer-quiesce\\tb_committer.sv": "3de6db634a18409e8203ccaefb2c999e6e47f5d24d94a0811f74bfe3180c8820",
+    "local\\experiments\\maclc-committer-quiesce\\committer_candidate.v": "ceb1982ee9a53e04199fe3cbf960d532e94ef10ebe3b80e8369b1e7afa75404d",
+    "local\\experiments\\maclc-committer-quiesce\\committer_baseline.v": "79356ffb51d60446dddb4782b81a27bc68c3bec54f06bc312f9138492eeb030a"
+  },
+  "runs": [
+    {
+      "name": "coordinated",
+      "expected_failure": false,
+      "exit_code": 0,
+      "output": "PASS coordinated commits=256 bytes=512 warm_resets=2 held_ack_clocks=9 stop_final_tail=0\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-committer-quiesce/tb_committer.sv:116: $finish called at 123050000 (1ps)"
+    },
+    {
+      "name": "final_ack_tail",
+      "expected_failure": false,
+      "exit_code": 0,
+      "output": "PASS coordinated commits=256 bytes=512 warm_resets=2 held_ack_clocks=9 stop_final_tail=1\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-committer-quiesce/tb_committer.sv:116: $finish called at 123050000 (1ps)"
+    },
+    {
+      "name": "immediate_reset",
+      "expected_failure": false,
+      "exit_code": 0,
+      "output": "PASS immediate_reset discarded sector: commits=13 expected=256 done=0\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-committer-quiesce/tb_committer.sv:102: $finish called at 3460000 (1ps)"
+    },
+    {
+      "name": "baseline_held_ack",
+      "expected_failure": true,
+      "exit_code": 1,
+      "output": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-committer-quiesce/tb_committer.sv:58: address skipped: commit=1 addr=001206\n       Time: 345000  Scope: tb_committer"
+    }
+  ]
+}

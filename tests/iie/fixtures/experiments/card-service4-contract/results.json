@@ -1,0 +1,49 @@
+{
+  "scope": "static original-byte contract; no service4 execution or rendering",
+  "windows": {
+    "1CC4": "4efa01f6",
+    "1EBC": "45faff56323c00a7224a10110000008012c051c9fff6343c00a87600363c06504ebae6a01b7c0009f76e4e75",
+    "057E": "7e002803d8425384286dedca08030010670a082c00030021670000e8",
+    "059A": "082c000500216768",
+    "05EA": "41f53320afee08030010670641f533209fee5346700110c010db51cefffa7e01",
+    "060A": "082c0004002167680c4408006500014e",
+    "0766": "4a476708426df6846100030e4e75"
+  },
+  "drivers": [
+    {
+      "driver": 5,
+      "source_sha256": "23a9739d6e7d52bd22d5bf0424250bbb5eb56f9f96be17694a9e74db38a641b3",
+      "transformed_sha256": "c64479bb6b6506422dad730448f2132494ba01343cac71bd3963134254d5c8fc",
+      "cache_pairs_sha256": "41609f2f2dcf6f0d052462fa663d35054edead1fbac0b8156691183f8cf73b8b"
+    },
+    {
+      "driver": 6,
+      "source_sha256": "23a9739d6e7d52bd22d5bf0424250bbb5eb56f9f96be17694a9e74db38a641b3",
+      "transformed_sha256": "c64479bb6b6506422dad730448f2132494ba01343cac71bd3963134254d5c8fc",
+      "cache_pairs_sha256": "41609f2f2dcf6f0d052462fa663d35054edead1fbac0b8156691183f8cf73b8b"
+    }
+  ],
+  "transfer": {
+    "source_resource_range": "1E14-1EBB",
+    "count": 168,
+    "logical_destination_range": "0650-06F7",
+    "main_cache_A5_relative_range": "-4372..-4223",
+    "cache_format": "dirty byte 01, transformed source byte",
+    "first_host_read": {
+      "offset": "21",
+      "width": 8,
+      "tested_bit": 5
+    },
+    "renderer_entry": "0A7E",
+    "post_transfer_A5_minus_0892": 9
+  },
+  "current_RTL_boundary": "byte read +21 is unsupported; no status value supplied",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-bridge\\results.json": "d59c808988c1ebf2bb043b82ca579476ddf4bae1e613e16b1b1ed3d7263c62d2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-service4-contract\\analyze.py": "afc20104f5b772241b14d0b270e0029a76309560b2bf99639e986be7931a0458",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-dispatch\\results.json": "219a798ef6944454bd260215cdffc8778e64afc963a037b878931facdf3d26ec"
+  }
+}

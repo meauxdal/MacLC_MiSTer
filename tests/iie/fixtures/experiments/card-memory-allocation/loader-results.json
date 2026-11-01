@@ -1,0 +1,41 @@
+{
+  "mode": "isolated proposal only; not applied to MacLC",
+  "runs": [
+    {
+      "region_words": 512,
+      "result": "PASS loader-bounds region_words=0000000000000200 cases=20 ticks=15080\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-allocation/tb_loader_bounds.sv:142: $finish called at 150800000 (1ps)"
+    },
+    {
+      "region_words": 1048576,
+      "result": "PASS loader-bounds region_words=0000000000100000 cases=15 ticks=3751\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-allocation/tb_loader_bounds.sv:142: $finish called at 37510000 (1ps)"
+    },
+    {
+      "region_words": 0,
+      "result": "PASS loader-bounds region_words=0000000000000000 cases=1 ticks=8\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-allocation/tb_loader_bounds.sv:142: $finish called at 80000 (1ps)"
+    },
+    {
+      "region_words": 8388609,
+      "result": "PASS loader-bounds region_words=0000000000800001 cases=1 ticks=8\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-allocation/tb_loader_bounds.sv:142: $finish called at 80000 (1ps)"
+    }
+  ],
+  "negative_control": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-memory-allocation/tb_loader_bounds.sv:37: loader escaped or aliased reservation: 600200 write=512\n       Time: 95595000  Scope: tb_loader_bounds",
+  "lint_warnings": 0,
+  "patch_applies": true,
+  "baseline_unchanged": true,
+  "source_sha256": {
+    "MacLC.sv": "3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0",
+    "files.qip": "2dfeea36a23f868d079b2361ffc2507f654bd584a530839b8a4155f6234d303d",
+    "rtl/addrController_top.v": "b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78",
+    "rtl/addrDecoder.v": "4714846b53d8338856f98c2073492561325a130a28966161b6f935ee9cc0249d",
+    "rtl/floppy_sd.v": "511ab0548c7f4f2d712bdc737b6442b006264ecaca75f01a5383ce3fa0424988",
+    "rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04"
+  },
+  "inputs_sha256": {
+    "docs/experiments/card-memory-allocation/audit.py": "38582dd912f63ba9500f1faef7a35c00d5e3fc84fec58938b42e00222825aa44",
+    "docs/experiments/card-memory-allocation/prepare_loader.py": "bcaaaff0e24fde1af5d1b0b5ad0e71edea5aebb54d7c85a7a3d22f9a2f41351a",
+    "docs/experiments/card-memory-allocation/run.py": "e6804fe3af55a4399fdb0ef02c69c5193bdc0567bfdd26d916a31f749d70b15b",
+    "docs/experiments/card-memory-allocation/tb_loader_bounds.sv": "4ff77db53149dba32319e37bae23f65424b822bd1fd2e3ce48d05ad7d361fa79",
+    "local/experiments/card-memory-allocation/floppy_sd_bounded.v": "53d342881a36b8812a75afc82133494a053724755f511fe1c3edcd3285217b24",
+    "docs/experiments/card-memory-allocation/loader-bounds.patch": "b9608a1359587a11e720c7fe3140642e5bc82f9057e114a9b8d19abdaaf2595f"
+  }
+}

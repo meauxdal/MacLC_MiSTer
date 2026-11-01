@@ -1,0 +1,80 @@
+{
+  "scope": "Two-clock PDS/card/floppy mailbox platform through actual native SDRAM RTL",
+  "boundary": "202F before NOP/IRQ",
+  "runs": [
+    {
+      "fork": 0,
+      "sys_period_ns": 14,
+      "sys_phase_ns": 1,
+      "memory_period_ns": 10,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=156354 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=218896 native commits=1192 early_acks=1192 backend_responses=2580 host=5112 floppy_window=1845 writeback=2564 refresh=699 max_backend_ticks=48\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-platform/tb_card_platform.sv:375: $finish called at 2188960000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 0,
+      "sys_period_ns": 22,
+      "sys_phase_ns": 3,
+      "memory_period_ns": 10,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=138008 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=303618 native commits=1192 early_acks=1192 backend_responses=2580 host=7131 floppy_window=2590 writeback=2463 refresh=977 max_backend_ticks=45\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-platform/tb_card_platform.sv:375: $finish called at 3036179000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "sys_period_ns": 14,
+      "sys_phase_ns": 1,
+      "memory_period_ns": 10,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=156354 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=218896 native commits=1192 early_acks=1192 backend_responses=2580 host=5112 floppy_window=1845 writeback=2564 refresh=699 max_backend_ticks=48\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-platform/tb_card_platform.sv:375: $finish called at 2188960000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "sys_period_ns": 22,
+      "sys_phase_ns": 3,
+      "memory_period_ns": 10,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=138008 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=303618 native commits=1192 early_acks=1192 backend_responses=2580 host=7131 floppy_window=2590 writeback=2463 refresh=977 max_backend_ticks=45\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-platform/tb_card_platform.sv:375: $finish called at 3036179000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    }
+  ],
+  "qip_sources": [
+    "docs/experiments/card-platform/card_platform.sv",
+    "docs/experiments/card-memory-cdc/card_memory_cdc.sv",
+    "docs/experiments/card-pds-system-harness/card_pds_candidate.sv",
+    "docs/experiments/card-pds-harness/card_pds_adapter.sv",
+    "docs/experiments/card-system-harness/card_candidate.sv",
+    "docs/experiments/card-host-rtl/card_host_registers.sv",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv",
+    "docs/experiments/native-memory-harness/card_native_memory_adapter.sv",
+    "docs/experiments/native-memory-harness/card_native_port_mux.sv",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv"
+  ],
+  "lint": "Platform -Wall passes with explicit filename/unused-output/signal exclusions; full testbench has only two unchanged SDRAM width warnings",
+  "baseline_lint_warnings": [
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/MacLC_MiSTer/rtl/sdram.v:361:30: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/MacLC_MiSTer/rtl/sdram.v:448:12: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits."
+  ],
+  "inputs_sha256": {
+    "docs/experiments/card-platform/tb_card_platform.sv": "7c80135c5b3ee037072d469eb53396c4331853e9a886a5bcabe1bb6447179d5e",
+    "docs/experiments/card-platform/card_platform.sv": "64002ab0ccb5fb08634dae5c7c41bdc9b8f7df20b3804a44ac8d2f0bf3d49d44",
+    "docs/experiments/card-memory-cdc/card_memory_cdc.sv": "148e09202f8ee7043fff6b146624ce1ebf764696025c0977181cf5b428b4264e",
+    "docs/experiments/card-pds-system-harness/card_pds_candidate.sv": "30f823ebbac4f4125e4bfa534edf85190962df1c80b010a32911443c21be5ee3",
+    "docs/experiments/card-pds-harness/card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "docs/experiments/card-system-harness/card_candidate.sv": "25e2c13685ebda3e3957c5ab029f482ccbd32fa66949ebc1cffaa4038ff4c3a8",
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "docs/experiments/native-memory-harness/card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "docs/experiments/native-memory-harness/card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+    "docs/experiments/card-platform/card_platform.qip": "29f3c8e362630e01631bdfed36d868c1542df8caa84dcd674367e4ea89b2cc85",
+    "docs/experiments/card-platform/run.py": "4608eedeb708ea3c4b565bc68a916d81b07f24a812428e4789462a6e7acf3c18",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge-result.json": "4e6f45911615d3e939bfcb5a822ddfac58f6e154aa0facf0537cd6c8f5f2e348",
+    "local/experiments/card-system-harness/stimulus0.txt": "ae4bc144b3775fd2ba83dab112e47f21c06962351c487202c9a96534cd8d3640",
+    "local/experiments/card-system-harness/expected0.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94",
+    "local/experiments/card-system-harness/stimulus1.txt": "ae4bc144b3775fd2ba83dab112e47f21c06962351c487202c9a96534cd8d3640",
+    "local/experiments/card-system-harness/expected1.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94"
+  }
+}

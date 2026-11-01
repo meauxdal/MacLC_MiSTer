@@ -1,0 +1,633 @@
+{
+  "source": "local/experiments/startup-protocol/app221/IIe Startup.rsrc",
+  "bytes": 401755,
+  "sha256": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+  "unidasm_sha256": "5d27d3c7bc349d63d3511d86d9eb30ce348eb4f0e61f2bd2609f87aa5a5a98e0",
+  "resources": [
+    {
+      "type": "CODE",
+      "id": 0,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 260,
+      "size": 728,
+      "sha256": "c3cd0397475579e03752766a18898c149f4b51e01c3184c14499bb4cedb084fc"
+    },
+    {
+      "type": "CODE",
+      "id": 1,
+      "name": "Main",
+      "attributes": 20,
+      "fork_offset": 992,
+      "size": 26716,
+      "sha256": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956"
+    },
+    {
+      "type": "CODE",
+      "id": 2,
+      "name": "Init",
+      "attributes": 32,
+      "fork_offset": 27712,
+      "size": 2598,
+      "sha256": "d55c1fa48645cd2bb413c9610bb76c265e1cae207de9db774238052196a223fa"
+    },
+    {
+      "type": "Conf",
+      "id": 1000,
+      "name": "ConfTest",
+      "attributes": 32,
+      "fork_offset": 210045,
+      "size": 1534,
+      "sha256": "32770b79591f67559f451a8760adb2f77205c1b1dcf0dede67216370d578b1a6"
+    },
+    {
+      "type": "Conf",
+      "id": 1001,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 209412,
+      "size": 581,
+      "sha256": "8a180d9c3339ea2d50eccc83fed71df0989563e38c491e38bce5850a10629390"
+    },
+    {
+      "type": "Conf",
+      "id": 1002,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 209997,
+      "size": 12,
+      "sha256": "81b61721e961eaa4c4fef48a3f699144fc37be84cc5ad1704226b8464ac91757"
+    },
+    {
+      "type": "Conf",
+      "id": 1003,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 210013,
+      "size": 12,
+      "sha256": "08e5f1fe0fe706bdbc54f8d8f434c943a2867c980a24597891f5bd145f64adb9"
+    },
+    {
+      "type": "Conf",
+      "id": 1004,
+      "name": null,
+      "attributes": 32,
+      "fork_offset": 210029,
+      "size": 12,
+      "sha256": "dd9204464407086528ec42763058d3e919040739d729402c061f24f068df0824"
+    }
+  ],
+  "conf_descriptors": [
+    {
+      "id": 1001,
+      "header": "00 20 00 20 3f 02",
+      "destination_le16": 8192,
+      "count_le16": 575,
+      "payload_bytes": 575
+    },
+    {
+      "id": 1002,
+      "header": "00 d0 00 50 06 00",
+      "destination_le16": 20480,
+      "count_le16": 6,
+      "payload_bytes": 6
+    },
+    {
+      "id": 1003,
+      "header": "fa ff fa 7f 06 00",
+      "destination_le16": 32762,
+      "count_le16": 6,
+      "payload_bytes": 6
+    },
+    {
+      "id": 1004,
+      "header": "fa ff fa 3f 06 00",
+      "destination_le16": 16378,
+      "count_le16": 6,
+      "payload_bytes": 6
+    }
+  ],
+  "jump_targets": {
+    "A5+AA": {
+      "segment": 1,
+      "resource_offset": "355A"
+    },
+    "A5+B2": {
+      "segment": 1,
+      "resource_offset": "35B8"
+    },
+    "A5+D2": {
+      "segment": 1,
+      "resource_offset": "4184"
+    },
+    "A5+1DA": {
+      "segment": 1,
+      "resource_offset": "6272"
+    }
+  },
+  "slot_bases_machine_19": {
+    "0": "FEE00000",
+    "9": "F9900000",
+    "A": "FAA00000",
+    "E": "FEE00000",
+    "F": "FFF00000"
+  },
+  "conf_access_sites": [
+    {
+      "pc": "00A",
+      "instruction": "clr.b   ($d,A4)"
+    },
+    {
+      "pc": "00E",
+      "instruction": "move.w  #$802, ($20,A4)"
+    },
+    {
+      "pc": "014",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "018",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "01C",
+      "instruction": "bset    #$3, ($d,A4)"
+    },
+    {
+      "pc": "02C",
+      "instruction": "bclr    #$3, ($d,A4)"
+    },
+    {
+      "pc": "046",
+      "instruction": "move.b  #$fc, ($21,A4)"
+    },
+    {
+      "pc": "04C",
+      "instruction": "move.b  #$80, ($20,A4)"
+    },
+    {
+      "pc": "05C",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "066",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "06C",
+      "instruction": "move.b  #$88, ($20,A4)"
+    },
+    {
+      "pc": "072",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "076",
+      "instruction": "move.b  #$3, ($d,A4)"
+    },
+    {
+      "pc": "084",
+      "instruction": "clr.b   ($d,A4)"
+    },
+    {
+      "pc": "098",
+      "instruction": "move.b  #$98, ($20,A4)"
+    },
+    {
+      "pc": "0A2",
+      "instruction": "move.b  #$88, ($20,A4)"
+    },
+    {
+      "pc": "0B4",
+      "instruction": "clr.b   ($21,A4)"
+    },
+    {
+      "pc": "0EE",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "0FA",
+      "instruction": "move.b  ($c,A4), D0"
+    },
+    {
+      "pc": "100",
+      "instruction": "move.w  #$802, ($20,A4)"
+    },
+    {
+      "pc": "116",
+      "instruction": "bset    #$2, ($d,A4)"
+    },
+    {
+      "pc": "11C",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "128",
+      "instruction": "bclr    #$2, ($d,A4)"
+    },
+    {
+      "pc": "12E",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "13A",
+      "instruction": "cmpi.b  #$0, ($c,A4)"
+    },
+    {
+      "pc": "148",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "150",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "160",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "168",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "178",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "180",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "18E",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "196",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "1A4",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "1AC",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "1BA",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "1C2",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "1D0",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "1D8",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "1E6",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "1EE",
+      "instruction": "move.w  ($4,A4), D0"
+    },
+    {
+      "pc": "200",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "20C",
+      "instruction": "cmpi.b  #$2, ($c,A4)"
+    },
+    {
+      "pc": "214",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "218",
+      "instruction": "bset    #$5, ($20,A4)"
+    },
+    {
+      "pc": "222",
+      "instruction": "bclr    #$5, ($20,A4)"
+    },
+    {
+      "pc": "22C",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "244",
+      "instruction": "move.b  #$a0, ($18,A4)"
+    },
+    {
+      "pc": "24A",
+      "instruction": "btst    #$7, ($9,A4)"
+    },
+    {
+      "pc": "252",
+      "instruction": "bset    #$7, ($d,A4)"
+    },
+    {
+      "pc": "258",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "264",
+      "instruction": "cmpi.b  #-$60, ($c,A4)"
+    },
+    {
+      "pc": "26C",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "278",
+      "instruction": "move.b  ($c,A4), D2"
+    },
+    {
+      "pc": "27E",
+      "instruction": "bclr    #$7, ($d,A4)"
+    },
+    {
+      "pc": "284",
+      "instruction": "btst    #$7, ($9,A4)"
+    },
+    {
+      "pc": "28C",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "298",
+      "instruction": "cmpi.b  #$20, ($c,A4)"
+    },
+    {
+      "pc": "2A0",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "2AC",
+      "instruction": "move.b  ($c,A4), D2"
+    },
+    {
+      "pc": "2B8",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "2C6",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "2DC",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "2EA",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "302",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "312",
+      "instruction": "cmpi.b  #-$1, ($8,A4)"
+    },
+    {
+      "pc": "31C",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "32C",
+      "instruction": "cmpi.b  #$0, ($8,A4)"
+    },
+    {
+      "pc": "33A",
+      "instruction": "bset    #$4, ($d,A4)"
+    },
+    {
+      "pc": "340",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "34C",
+      "instruction": "bclr    #$4, ($d,A4)"
+    },
+    {
+      "pc": "352",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "372",
+      "instruction": "clr.b   ($19,A4)"
+    },
+    {
+      "pc": "388",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "39A",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "3B0",
+      "instruction": "bset    #$6, ($d,A4)"
+    },
+    {
+      "pc": "3B6",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "3C2",
+      "instruction": "move.b  ($c,A4), D2"
+    },
+    {
+      "pc": "3C8",
+      "instruction": "bclr    #$6, ($d,A4)"
+    },
+    {
+      "pc": "3CE",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "3DA",
+      "instruction": "move.b  ($c,A4), D2"
+    },
+    {
+      "pc": "3E6",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "3F4",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "402",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "410",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "41E",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "42C",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "43A",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "448",
+      "instruction": "clr.b   ($c,A4)"
+    },
+    {
+      "pc": "47E",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "482",
+      "instruction": "move.w  D0, ($1c,A4)"
+    },
+    {
+      "pc": "48E",
+      "instruction": "move.b  (A0)+, ($11,A4)"
+    },
+    {
+      "pc": "4A2",
+      "instruction": "bclr    #$3, ($d,A4)"
+    },
+    {
+      "pc": "4BC",
+      "instruction": "bset    #$3, ($d,A4)"
+    },
+    {
+      "pc": "4DC",
+      "instruction": "bclr    #$3, ($d,A4)"
+    },
+    {
+      "pc": "504",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "508",
+      "instruction": "move.w  D0, ($1c,A4)"
+    },
+    {
+      "pc": "514",
+      "instruction": "move.b  (A0)+, ($10,A4)"
+    },
+    {
+      "pc": "530",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "534",
+      "instruction": "clr.w   ($1c,A4)"
+    },
+    {
+      "pc": "53E",
+      "instruction": "move.w  D2, ($10,A4)"
+    },
+    {
+      "pc": "542",
+      "instruction": "move.w  D2, ($10,A4)"
+    },
+    {
+      "pc": "54A",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "54E",
+      "instruction": "clr.w   ($1c,A4)"
+    },
+    {
+      "pc": "558",
+      "instruction": "cmp.b   ($10,A4), D2"
+    },
+    {
+      "pc": "560",
+      "instruction": "cmp.b   ($10,A4), D2"
+    },
+    {
+      "pc": "56A",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "56E",
+      "instruction": "clr.w   ($1c,A4)"
+    },
+    {
+      "pc": "578",
+      "instruction": "cmp.b   ($11,A4), D2"
+    },
+    {
+      "pc": "57E",
+      "instruction": "cmp.b   ($11,A4), D2"
+    },
+    {
+      "pc": "58A",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "58E",
+      "instruction": "clr.w   ($1c,A4)"
+    },
+    {
+      "pc": "598",
+      "instruction": "move.w  D2, ($10,A4)"
+    },
+    {
+      "pc": "59C",
+      "instruction": "move.w  D2, ($10,A4)"
+    },
+    {
+      "pc": "5A4",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "5A8",
+      "instruction": "clr.w   ($1c,A4)"
+    },
+    {
+      "pc": "5B2",
+      "instruction": "move.b  ($10,A4), D2"
+    },
+    {
+      "pc": "5B8",
+      "instruction": "move.b  ($10,A4), D2"
+    },
+    {
+      "pc": "5C2",
+      "instruction": "tst.b   ($8,A4)"
+    },
+    {
+      "pc": "5C6",
+      "instruction": "clr.w   ($1c,A4)"
+    },
+    {
+      "pc": "5D0",
+      "instruction": "move.b  ($11,A4), D2"
+    },
+    {
+      "pc": "5D6",
+      "instruction": "move.b  ($11,A4), D2"
+    },
+    {
+      "pc": "5EC",
+      "instruction": "move.b  ($1,A4), D2"
+    },
+    {
+      "pc": "5F0",
+      "instruction": "move.b  ($1,A4), D2"
+    }
+  ]
+}

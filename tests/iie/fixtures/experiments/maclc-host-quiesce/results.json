@@ -1,0 +1,42 @@
+{
+  "scope": "Actual translated kernel and wrapper; synthetic memory responder",
+  "source_pins": {
+    "tg68k.v": "262b972c8136e0351bc44e41b8cb1a72224a37e4a8da6a444f7a97464f32f195",
+    "TG68KdotC_Kernel.v": "219a9fab81611570f9e8733e7ee5aaf683b03d60dfd75426ab5f55c738043406"
+  },
+  "runs": [
+    "PASS host-stop cpu=3 state=-1 vpa=0 enable=0 held_ack=0 berr=0 pauses=0 writes=6 ticks=459\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4590000 (1ps)",
+    "PASS host-stop cpu=3 state=-1 vpa=0 enable=1 held_ack=0 berr=0 pauses=0 writes=6 ticks=459\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4590000 (1ps)",
+    "PASS host-stop cpu=3 state=-1 vpa=0 enable=1 held_ack=0 berr=1 pauses=0 writes=6 ticks=452\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4520000 (1ps)",
+    "PASS host-stop cpu=3 state=5 vpa=0 enable=1 held_ack=0 berr=0 pauses=1 writes=6 ticks=473\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4730000 (1ps)",
+    "PASS host-stop cpu=3 state=0 vpa=0 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=607\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6070000 (1ps)",
+    "PASS host-stop cpu=3 state=0 vpa=1 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=1858\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 18580000 (1ps)",
+    "PASS host-stop cpu=3 state=0 vpa=0 enable=1 held_ack=1 berr=0 pauses=10 writes=6 ticks=607\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6070000 (1ps)",
+    "PASS host-stop cpu=3 state=1 vpa=0 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=607\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6070000 (1ps)",
+    "PASS host-stop cpu=3 state=1 vpa=1 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=1858\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 18580000 (1ps)",
+    "PASS host-stop cpu=3 state=1 vpa=0 enable=1 held_ack=1 berr=0 pauses=10 writes=6 ticks=677\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6770000 (1ps)",
+    "PASS host-stop cpu=3 state=2 vpa=0 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=607\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6070000 (1ps)",
+    "PASS host-stop cpu=3 state=2 vpa=1 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=1858\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 18580000 (1ps)",
+    "PASS host-stop cpu=3 state=2 vpa=0 enable=1 held_ack=1 berr=0 pauses=10 writes=6 ticks=677\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6770000 (1ps)",
+    "PASS host-stop cpu=3 state=3 vpa=0 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=607\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6070000 (1ps)",
+    "PASS host-stop cpu=3 state=3 vpa=1 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=1858\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 18580000 (1ps)",
+    "PASS host-stop cpu=3 state=3 vpa=0 enable=1 held_ack=1 berr=0 pauses=10 writes=6 ticks=677\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6770000 (1ps)",
+    "PASS host-stop cpu=3 state=4 vpa=0 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=607\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6070000 (1ps)",
+    "PASS host-stop cpu=3 state=4 vpa=1 enable=1 held_ack=0 berr=0 pauses=10 writes=6 ticks=1858\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 18580000 (1ps)",
+    "PASS host-stop cpu=3 state=4 vpa=0 enable=1 held_ack=1 berr=0 pauses=10 writes=6 ticks=677\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 6770000 (1ps)",
+    "PASS host-stop cpu=3 state=1 vpa=0 enable=1 held_ack=0 berr=1 pauses=3 writes=6 ticks=498\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4980000 (1ps)",
+    "PASS host-stop cpu=3 state=2 vpa=0 enable=1 held_ack=0 berr=1 pauses=3 writes=6 ticks=498\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4980000 (1ps)",
+    "PASS host-stop cpu=3 state=3 vpa=0 enable=1 held_ack=0 berr=1 pauses=3 writes=6 ticks=498\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4980000 (1ps)",
+    "PASS host-stop cpu=3 state=4 vpa=0 enable=1 held_ack=0 berr=1 pauses=3 writes=6 ticks=498\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-host-quiesce/tb_host_stop.sv:148: $finish called at 4980000 (1ps)"
+  ],
+  "memory_bytes_compared_per_run": 4096,
+  "memory_sha256": "cee4f7c87f3033c978fb4574d2eb4e5d790661d60bb2a76932541ffa3d60ffc9",
+  "reference_sources_unchanged": true,
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-host-quiesce\\prepare.py": "b440497dc31f0c3fd324cddbb5358ce505e5ed91abfa750db7dbf3b219614fbe",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-host-quiesce\\run.py": "c149c9f8abbc8ac13af941c93dab494f9f90e0c92944413a92eed5a8ee2d5a63",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-host-quiesce\\tb_host_stop.sv": "c7ae6b9d965a1a95ffbce5f13e12b17fdb8896744fac4ed36dc8f54c1328c60a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-host-quiesce\\tg68k.v": "7f764e1eec4eee8c7318cab1a7a13862922711a9f4fe7a3487973e95af54ec7c",
+    "C:\\Workspace\\Git\\MacLC_MiSTer\\rtl\\tg68k\\TG68KdotC_Kernel.v": "219a9fab81611570f9e8733e7ee5aaf683b03d60dfd75426ab5f55c738043406"
+  }
+}

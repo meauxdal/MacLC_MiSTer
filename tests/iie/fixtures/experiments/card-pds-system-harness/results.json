@@ -1,0 +1,60 @@
+{
+  "scope": "PDS adapter, host registers, actual WDC CPU and committed-memory simulation",
+  "boundary": "202F before NOP/IRQ",
+  "lint": "Verilator -Wall clean with DECLFILENAME/PINCONNECTEMPTY/UNUSEDSIGNAL exclusions and uniform timescale",
+  "runs": [
+    {
+      "fork": 0,
+      "delay_scale": 0,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=111473 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-pds-system-harness/tb_pds_candidate.sv:219: $finish called at 1114730000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 0,
+      "delay_scale": 1,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=119075 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-pds-system-harness/tb_pds_candidate.sv:219: $finish called at 1190750000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 0,
+      "delay_scale": 2,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=127250 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-pds-system-harness/tb_pds_candidate.sv:219: $finish called at 1272500000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 0,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=111473 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-pds-system-harness/tb_pds_candidate.sv:219: $finish called at 1114730000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 1,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=119075 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-pds-system-harness/tb_pds_candidate.sv:219: $finish called at 1190750000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "delay_scale": 2,
+      "result": "PASS PDS=1325 backend=2580 stores=1192 captures=39 cpu_cycles=250 ticks=127250 plus 5 unclaimed, 1 unsupported, 1 reset-drained read\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-pds-system-harness/tb_pds_candidate.sv:219: $finish called at 1272500000 (1ps)",
+      "capture_trace_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    }
+  ],
+  "inputs_sha256": {
+    "docs/experiments/card-pds-system-harness/card_pds_candidate.sv": "30f823ebbac4f4125e4bfa534edf85190962df1c80b010a32911443c21be5ee3",
+    "docs/experiments/card-system-harness/card_candidate.sv": "25e2c13685ebda3e3957c5ab029f482ccbd32fa66949ebc1cffaa4038ff4c3a8",
+    "docs/experiments/card-pds-harness/card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "docs/experiments/card-host-rtl/card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "docs/experiments/card-cpu-rtl/card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "docs/experiments/memory-harness/card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "local/experiments/card-cpu-rtl/source/cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "local/experiments/card-cpu-rtl/source/cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "docs/experiments/card-pds-system-harness/tb_pds_candidate.sv": "0dba97563414cecc083e4c7ad9408462fbdcd04cc0c15404c063d7d050a93dd1",
+    "docs/experiments/card-pds-system-harness/run.py": "2e2e64d7bf72379afedd21510abee43e9bb341eb3150278b601977b26bfad5a4",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge-result.json": "4e6f45911615d3e939bfcb5a822ddfac58f6e154aa0facf0537cd6c8f5f2e348",
+    "local/experiments/card-system-harness/stimulus0.txt": "ae4bc144b3775fd2ba83dab112e47f21c06962351c487202c9a96534cd8d3640",
+    "local/experiments/card-system-harness/expected0.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94",
+    "local/experiments/card-system-harness/stimulus1.txt": "ae4bc144b3775fd2ba83dab112e47f21c06962351c487202c9a96534cd8d3640",
+    "local/experiments/card-system-harness/expected1.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94"
+  }
+}

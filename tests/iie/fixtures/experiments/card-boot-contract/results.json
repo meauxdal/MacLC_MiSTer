@@ -1,0 +1,48 @@
+{
+  "scope": "static original-byte contract and branch model; no guest execution",
+  "entry": 7526,
+  "service2_table": 7356,
+  "dependencies": {
+    "flag_a5": -22548,
+    "settings_word_a5": -2156,
+    "saved_a_a5": -2196
+  },
+  "writes": [
+    "saved A only"
+  ],
+  "zero_state": {
+    "saved_a": 192,
+    "next_service3_a": 191,
+    "next_monitor_pc": 64192
+  },
+  "code_windows": {
+    "1CBC": "4efa00a8",
+    "1CC0": "4efa00c8",
+    "1D66": "103c0006122da7ec6610302df7940200000f0c00000166027008000000c01b40f76c4e75",
+    "1D8A": "122da7ec6710122df76c0c0100c4661e422da7ec602c302df7940200000f0c0000016612122df76c0c4100c0675408ad0001f76f4e75",
+    "1DC0": "5500000000c0b02df76c66ec",
+    "1DCC": "598f2f3c535452203f3c5101a9a0201f672e",
+    "1E0C": "08ed0001f76f4e75",
+    "036C": "32350320eeba0c415000660c43f50520ee3a2b49f79a60100c415100660a43f50520ee3a2b49f79e",
+    "03B8": "20758161f79a20503b50f794"
+  },
+  "monitor_windows": {
+    "FAB4": "020286008501a005c601a5010203f0d78df807"
+  },
+  "branch_cases": 96,
+  "controls": {
+    "zero_state_forced_default_6": 198,
+    "nonzero_flag_incorrectly_uses_settings_1": 200
+  },
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-boot-contract\\analyze.py": "fb596f09a8d4946b08ab06801cb1b6dd56d28c44d46368d2ee56477b56ac15db",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-runtime-dispatch\\results.json": "219a798ef6944454bd260215cdffc8778e64afc963a037b878931facdf3d26ec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-monitor-entry\\results-1.json": "866ce1c6122d9ca008bc3e7cad6a7adf020c273a48820c2febdf4c576a0a36a2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\decoded\\Monx_2606.payload.bin": "c92e4db8d40298b759d756a23e51e8d99086cb625e4fbe8074c8c9b2a6bad554",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_6.bin": "72265c3fbab085222fe6cf5fb5dd290708da79efbbb7ae8529232d81727809aa"
+  },
+  "captures_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-boot-contract\\selection-cases.json": "22caacb710956ebf87f7dc61ee9133d8dbdea0eafbc77b4454a8e408665ab1ec"
+  }
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "original_path": "C:/Users/Elle/Downloads/AIIETECHREF1.pdf",
+    "local_path": "local/references/Apple-IIe-Technical-Reference-Manual-1985-Scan-1.pdf",
+    "sha256": "a264a780f933d4a5cf40d9ee960e18f6e36a094c6b29203b1d15465fe86a738c",
+    "pdf_pages": 104
+  },
+  {
+    "original_path": "C:/Users/Elle/Downloads/TIL06175.pdf",
+    "local_path": "local/references/Apple-Macintosh-12-inch-RGB-Display-Specs-and-Pin-Assignments-TIL06175.pdf",
+    "sha256": "d57437a4b96ef6b2d78bd9d0a88807bb517d569ca2ae1d78c8bc74daa5aec947",
+    "pdf_pages": 2
+  },
+  {
+    "original_path": "C:/Users/Elle/Downloads/AppleIIeCrd2.1.pdf",
+    "local_path": "local/references/Apple-IIe-Card-Owners-Guide.pdf",
+    "sha256": "e3b20a4fa01fded9b23c6f895b8e45f7e008000caa015374eb189d7f6869014d",
+    "pdf_pages": 198
+  },
+  {
+    "original_path": "C:/Users/Elle/.codex/attachments/1eddce35-76f8-4c73-a019-3f26c305ca91/Pasted text.txt",
+    "local_path": "local/references/Apple-IIe-Card-How-To-Partition-the-Hard-Drive-TA31420-1996-07-Pasted.txt",
+    "sha256": "1464030ac2836b08b05ed10141e057470f42bb48679ded652843847580cfdb70",
+    "source_url": "https://www.savagetaylor.com/TIL/TA31420.html",
+    "provenance": "User-pasted Apple article archived by Steve; remote fetch failed"
+  }
+]

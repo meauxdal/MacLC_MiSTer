@@ -1,0 +1,57 @@
+{
+  "driver": 5,
+  "event_type": 11,
+  "control": true,
+  "writes": [
+    "00e00020 00000000 ff000000",
+    "00e0000c 00000000 00ff0000"
+  ],
+  "calls": [
+    {
+      "slot": 20,
+      "registers": [
+        11,
+        54272,
+        20,
+        3276800,
+        3143456,
+        3347456,
+        4128756
+      ]
+    },
+    {
+      "slot": 0,
+      "registers": [
+        11,
+        49152,
+        0,
+        3277312,
+        3143456,
+        3342336,
+        4128756
+      ]
+    }
+  ],
+  "dispatch_order": [
+    20,
+    0
+  ],
+  "result": "missing handler rejected",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-event-paths\\execute.lua": "67582eb7874081f4d7b6960462a1b8e37d6522476b24b254e7bbe615907d7c85",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-event-paths\\run.py": "ba86333f041d4cbff954f958b6453076ba9c1268c81deab30c075d400593e176",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\startup-discovery\\debug.cmd": "768c71d785bf6bbbf8c4d6af6582041f2659027140a962cd0c55b11eddfd5e3d"
+  },
+  "captures_sha256": {
+    "code.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "handler-0.bin": "780ea97fcdb085fee4c1dc22d71f838aded1c8e8a5a558541ccb657cc709c1bc",
+    "handler-20.bin": "ae0191614c0f555bb90c7879f7e784259e23ec9a7881d0882e6217b132b9673a",
+    "handlers.bin": "d74d12e831479fb2a5e8249feb8658390912e2cc95c6c386dd46ff8b47fe70aa",
+    "state.bin": "482a78e50d66b7ebfc6544798b40ae88620ef5ed809f2fe8a5eb0a28eb81e4c4",
+    "trap.bin": "9f71a17c2b7dcd5b812dbd527315b02388dfc728426c3ada9482f3da7173d436",
+    "world.bin": "fc1ec7b21e0bcefc748f9f65d4ce71066c154abecba14c6a48f3f282ed881e6f"
+  }
+}

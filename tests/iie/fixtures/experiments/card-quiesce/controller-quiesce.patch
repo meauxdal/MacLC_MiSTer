@@ -1,0 +1,52 @@
+--- a/rtl/sdram.v
++++ b/rtl/sdram.v
+@@ -19,7 +19,9 @@
+ // along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ //
+ 
+-module sdram 
++module sdram #(
++    parameter ENABLE_QUIESCE = 0
++)
+ (
+ 	// interface to the MT48LC16M16 chip
+ 	output              sd_clk,
+@@ -44,6 +46,9 @@
+ 	output              sd_cas,     // columns address select
+ 
+ 	// cpu/chipset interface
++	input               warm_quiesce,
++	output              warm_idle,
++	output              memory_ready,
+ 	input               init,       // init signal after FPGA config to initialize RAM
+ 	input               clk_64,     // sdram is accessed at 64MHz
+ 	input               clk_8,      // 8MHz chipset clock to which sdram state machine is synchonized
+@@ -328,6 +333,10 @@
+ always @(negedge clk_64) sd_data_r <= sd_data_q;
+ always @(negedge clk_64) if (flp_cap) dout <= sd_data_q;   // floppy-window data
+ 
++wire freeze_new = ENABLE_QUIESCE && warm_quiesce;
++assign memory_ready = reset == 0 && !init;
++assign warm_idle = freeze_new && memory_ready && !seq_busy && !ref_busy &&
++                   !(oe || we || dl_req || eth_req || flp_win || flp_guard);
+ wire req_flp   = flp_win && !flp_served;
+ // Download: served in its own bus slot, at most one word per window, ranked
+ // between the floppy window and the CPU. If a CPU access happens to straddle
+@@ -463,7 +472,7 @@
+ 		end else if (ref_busy) begin
+ 			ref_cnt <= ref_cnt + 3'd1;
+ 			if (ref_cnt == 3'd4) ref_busy <= 0;   // 5 clk_64 = 77 ns > tRFC
+-		end else if (req_flp || req_dl || req_cpu || req_eth) begin
++		end else if (!freeze_new && (req_flp || req_dl || req_cpu || req_eth)) begin
+ 			// start priority: floppy window > download > CPU > ethernet DMA
+ 			// (req_eth already excludes any live CPU level, so the eth leg of
+ 			// these muxes can only be reached with the other three false)
+@@ -500,7 +509,7 @@
+ 				// ack at STATE_READ with the data. ★ never touches cpu_done.
+ 				if (eth_we) eth_ack <= 1;
+ 			end
+-		end else if (ref_due >= REF_OPP && !flp_guard && !flp_win && !(dl_req && dl_slot)) begin
++		end else if (!freeze_new && ref_due >= REF_OPP && !flp_guard && !flp_win && !(dl_req && dl_slot)) begin
+ 			// !flp_guard/!flp_win: a refresh started just before a floppy
+ 			// window would push the window's capture past its end — floppy.v
+ 			// latches on its own (post-window) enables and would read stale

@@ -1,0 +1,8 @@
+{
+  "result": "PASS extracted LED logic: activity, boundary, fault priority, inactive/PLL reset\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-banking-build/tb_led.sv:43: $finish called at 36000 (1ps)",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\MacLC_IIe.sv": "7d94805553176a03b916cae4b2977e9cf5b0e241efa888b628d6210af90fb2d1",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-banking-build\\check_led.py": "902132db90fcf436d83514ea712556e8ddf611874177cf088e885a33912d5312",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\tb_led.sv": "ed713882a78f1ce7e872418b011c534581a21f01669d118933120995e6513155"
+  }
+}

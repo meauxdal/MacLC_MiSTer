@@ -1,0 +1,188 @@
+{
+  "baseline": "07770d622facce6215dc98daa197511286817825",
+  "user_confirmed_board_bytes": 134217728,
+  "controller_addressable_bytes": 16777216,
+  "candidate_word_range": [
+    "0x540000",
+    "0x55ffff"
+  ],
+  "candidate_byte_range": [
+    "0xa80000",
+    "0xabffff"
+  ],
+  "unconditional_reservation_proved": false,
+  "bounded_producer_ranges": {
+    "motherboard_and_mirrors": [
+      "0x0",
+      "0xfffff"
+    ],
+    "SIMM_all_supported_configs": [
+      "0x100000",
+      "0x4fffff"
+    ],
+    "CPU_ROM_and_HPS_ROM_any_ioctl_address": [
+      "0x500000",
+      "0x53ffff"
+    ],
+    "CPU_VRAM": [
+      "0x580000",
+      "0x5bffff"
+    ],
+    "floppy_window_and_committer_all_22bit_offsets": [
+      "0x600000",
+      "0x7fffff"
+    ],
+    "floppy_writer_block_and_checksum": [
+      "0x600000",
+      "0x7fffff"
+    ],
+    "loader_with_payload_and_padding_within_2MiB": [
+      "0x600000",
+      "0x6fffff"
+    ]
+  },
+  "oversized_loader_witness": {
+    "raw_file_bytes": "0xe80200",
+    "file_word": "0x740000",
+    "file_byte_offset": "0xe80000",
+    "logical_word": "0xd40000",
+    "physical_word": "0x540000"
+  },
+  "supported_payload_sizes_checked": {
+    "400K": 409600,
+    "800K": 819200,
+    "720K": 737280,
+    "1440K": 1474560
+  },
+  "sources_sha256": {
+    "MacLC.sv": "3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0",
+    "files.qip": "2dfeea36a23f868d079b2361ffc2507f654bd584a530839b8a4155f6234d303d",
+    "rtl/addrController_top.v": "b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78",
+    "rtl/addrDecoder.v": "4714846b53d8338856f98c2073492561325a130a28966161b6f935ee9cc0249d",
+    "rtl/floppy_sd.v": "511ab0548c7f4f2d712bdc737b6442b006264ecaca75f01a5383ce3fa0424988",
+    "rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04"
+  },
+  "source_evidence": [
+    {
+      "producer": "motherboard",
+      "path": "rtl/addrController_top.v",
+      "line": 201,
+      "source": "motherboard_high ? {3'b000, cpuAddr[20:1]}"
+    },
+    {
+      "producer": "SIMM",
+      "path": "rtl/addrController_top.v",
+      "line": 202,
+      "source": "(23'h100000 + {1'b0, cpu_word})"
+    },
+    {
+      "producer": "CPU ROM",
+      "path": "rtl/addrController_top.v",
+      "line": 206,
+      "source": "rom_sdram_word = {5'b10100, cpuAddr[18:1]}"
+    },
+    {
+      "producer": "VRAM",
+      "path": "rtl/addrController_top.v",
+      "line": 216,
+      "source": "23'h580000 + {5'b0, vram_cpu_offset[18:1]}"
+    },
+    {
+      "producer": "floppy window",
+      "path": "rtl/addrController_top.v",
+      "line": 275,
+      "source": "23'h600000 + {2'b0, dskReadAddrInt[21:1]}"
+    },
+    {
+      "producer": "HPS ROM",
+      "path": "MacLC.sv",
+      "line": 2238,
+      "source": "dio_a    <= {5'b10100, dio_addr[17:0]}"
+    },
+    {
+      "producer": "floppy committer",
+      "path": "MacLC.sv",
+      "line": 2291,
+      "source": "24'h600000 + {3'd0, wc_addr[21:1]}"
+    },
+    {
+      "producer": "floppy loader base",
+      "path": "MacLC.sv",
+      "line": 2102,
+      "source": ".base_addr(24'h600000)"
+    },
+    {
+      "producer": "floppy readback base",
+      "path": "MacLC.sv",
+      "line": 2153,
+      "source": ".img_base        ( 24'h600000 )"
+    },
+    {
+      "producer": "floppy block readback",
+      "path": "rtl/floppy_sd.v",
+      "line": 627,
+      "source": "mem_addr <= img_base + pay_word;"
+    },
+    {
+      "producer": "floppy checksum scan",
+      "path": "rtl/floppy_sd.v",
+      "line": 713,
+      "source": "mem_addr <= img_base + {3'd0, scan_w};"
+    },
+    {
+      "producer": "loader size truncation",
+      "path": "rtl/floppy_sd.v",
+      "line": 230,
+      "source": "sec_total <= img_size[40:9] + {31'd0, |img_size[8:0]};"
+    },
+    {
+      "producer": "loader offset",
+      "path": "rtl/floppy_sd.v",
+      "line": 268,
+      "source": "(dc42 ? (file_word - DC42_HDR_WORDS) : file_word);"
+    },
+    {
+      "producer": "SDRAM row",
+      "path": "rtl/sdram.v",
+      "line": 473,
+      "source": "{ 1'b0, eth_addr[19:8] }"
+    },
+    {
+      "producer": "SDRAM bank",
+      "path": "rtl/sdram.v",
+      "line": 476,
+      "source": "eth_addr[21:20]"
+    },
+    {
+      "producer": "SDRAM column",
+      "path": "rtl/sdram.v",
+      "line": 482,
+      "source": "{ eth_addr[22], eth_addr[7:0] }"
+    },
+    {
+      "producer": "no VRAM seeder",
+      "path": "MacLC.sv",
+      "line": 2316,
+      "source": "VRAM is left uninitialized"
+    },
+    {
+      "producer": "retained native client",
+      "path": "MacLC.sv",
+      "line": 2532,
+      "source": ".eth_req        ( flp_mem_req )"
+    },
+    {
+      "producer": "download input closure",
+      "path": "MacLC.sv",
+      "line": 2527,
+      "source": ".dl_addr        ( sdram_dladdr_q"
+    },
+    {
+      "producer": "DDR inactive",
+      "path": "MacLC.sv",
+      "line": 34,
+      "source": "assign DDRAM_WE = 0;"
+    }
+  ],
+  "audit_sha256": "38582dd912f63ba9500f1faef7a35c00d5e3fc84fec58938b42e00222825aa44"
+}

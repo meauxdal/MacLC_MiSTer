@@ -1,0 +1,29 @@
+{
+  "scope": "static original-byte checks; no Macintosh or 65C02 execution",
+  "code1_windows": {
+    "02CA": "0c47000367000190",
+    "0456": "48c72f074eba4840584f",
+    "04AC": "2f3c0000c000487840004eba401a",
+    "44D2": "4e560000302e000a322e000e6106",
+    "44E6": "226dedca4a2900083340001c08e90003000d534142290010137c00ea0010534151c9fff24e75",
+    "4CEE": "3003e1480640c000323c01006100f7ea"
+  },
+  "host_initial_fill": {
+    "start": "4000",
+    "count": 49152,
+    "pattern": "00EA",
+    "sha256": "f4b1a52d4d46ea8b82e3ae6c492888cacc722415608f3042e0bebf5b01333d5a"
+  },
+  "external_slot3_snapshot": {
+    "host_start": "C300",
+    "count": 256,
+    "sha256": "85014c269cc72c8b3a6c6cb6a380afd8bf1df0435b43bd5a3316350944abb5ea",
+    "C307": "EA",
+    "comparison_FC9E": "18"
+  },
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_1.bin": "6ab2fbcabf775881e948d7d343e6fd6e5908253fcb939cc87bc3b76a0fa87956",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\decoded\\Monx_2606.payload.bin": "c92e4db8d40298b759d756a23e51e8d99086cb625e4fbe8074c8c9b2a6bad554",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-slot3-recovery\\analyze.py": "2fbd545d73439194a37267580af039833e1d999c05b7cf30d210f7e929755e1a"
+  }
+}

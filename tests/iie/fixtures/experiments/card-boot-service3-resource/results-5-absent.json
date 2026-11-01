@@ -1,0 +1,39 @@
+{
+  "driver": 5,
+  "profile": "absent",
+  "control": false,
+  "scope": "direct original BS3 with initializer snapshots and modeled resource traps",
+  "run_directory": "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-boot-service3-resource\\5-absent-0-1793217423347821000",
+  "rendered_cells": 0,
+  "saved_p": 167,
+  "resource_transform_bytes": 0,
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-display-init\\results.json": "1e126ce3f3edb1c92121fc38899bf58e9c462326e6f286d5306648b556284589",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\world.bin": "758007972c6069183ea91820113960656faaa05175517002d2ce8034c14b4cca",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code5-1792959107607629900\\code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\world.bin": "559653231aaf923e38b58551eada75672da73e5f52fd40546f7ca15f4124397e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-display-init\\code6-1792959112748178200\\code-after.bin": "24bb2fb58f13eaad59cc936b0c042aa8e5984e09910cb26279a3b4c7e9d26de7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\code\\CODE_5.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\system-baseline\\roms\\maclc\\350eacf0.rom": "129391cc72f84c2b321709cad8281e30a45e50b3cf6e7afe7434c4d32c7b9d5b",
+    "C:\\Users\\Elle\\Downloads\\mame0289b_x64\\mame.exe": "af6966108d9b52c22465c6d50f4e5d50cc371b50f2d27dc443935f287aad37a3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\resources.json": "16d9aa44d8c90dca9680784af35b590e71df0a28f1dff6a5d9739c3913184dfc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-boot-service3-resource\\str5101.bin": "7ac92c372d437cde3ae558834bd3c93c425912ef3491d3e2610052355b9ac8da",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-boot-service3-resource\\run.py": "c58f913c1e23a638968b15c3ecec0327b6fd3eb3adfa42fa277f69888f31b73e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-boot-service3-resource\\execute.lua": "b0cd816c1d3a37332206a7ec716388ce1f7a30ed371d6ea897c0a0d1498cefea"
+  },
+  "captures_sha256": {
+    "before-code.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "before-world.bin": "864e02fdd2b41337ca0433b8da6e1543cd2d4e4b8c7dfaaeed64693527c16080",
+    "code-after.bin": "f451bedaf026986af38a4498212577bf1169159c91ba6ae8616354d70938dfa9",
+    "frame.bin": "b08448d061147d19b9e6313c8b9527f8f90d92876adcaf3d7083f6e83b4144a1",
+    "loaded.bin": "90562edb712c83ca417826eb11bc02f2f3846b2189f64ee8e23158ed5ae31fac",
+    "mame.log": "da6cbd7dfbf79b5d2a6619da4049aab87616ca05cacedbdb55b8912d98041e0b",
+    "reads.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource-after.bin": "9ab1357044a89b0ecc8b8f37988ef5e7d3822acc6b479b8a15ea8b4494e854f9",
+    "resource-stack.bin": "cb113bb13f52c2a68c417eef6a2089e1afb47d63ec6c07fa55bdecf2ab40e745",
+    "state.bin": "0d670441bfa0ab43ce0c275937e09d50685eba3d71afa071337ecb7f7a9a8afb",
+    "trace.txt": "0bc09fa0d6bc41491f3ebb522e7c0c57671bf29f8083535e0adb0061a94c1441",
+    "world.bin": "9a37d90444908900f4768c28cebcfa587fc26e5e718ed85dead34250439ef680"
+  }
+}

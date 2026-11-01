@@ -1,0 +1,31 @@
+{
+  "result": "PASS states=256 held_switches=2048 invalid_completions=2048 readonly=768 classifications=262144 reset_priority=1",
+  "lint": "PASS verilator --lint-only -Wall",
+  "negative_controls": [
+    {
+      "name": "ignore_80store",
+      "failure": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-display-state/tb_card_display_state.sv:98: page plan mode=000000c0"
+    },
+    {
+      "name": "early_state",
+      "failure": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/card-display-state/tb_card_display_state.sv:38: state expected=00 observed=01 address=c00f"
+    }
+  ],
+  "archive_sha256": "c474744878f2e41865d08eccc8b1f4f7d2b3db6a34ba13d75f3424a839825a9d",
+  "timing_archive_member": "Apple-II_MiSTer-master/rtl/timing_generator.v",
+  "timing_source_sha256": "55423366c679beb3208aecc9abed1bb76e4d1c811a484adc64387c9769604bc6",
+  "inputs_sha256": {
+    "docs/experiments/card-display-state/run.py": "87842e868e41428e0f7d4f148cc64c1ff75c787dbb6f1304bb3847dd178d45d9",
+    "docs/experiments/card-display-state/card_display_state.sv": "75a3d1d065b0794a6c52234dbc2afda6d942750f8f9158f8d7f80d95af419fc5",
+    "docs/experiments/card-display-state/tb_card_display_state.sv": "e0d64ec6815a0eba548d21feb93c79f0c3a6fb84990755a8158e65046fdda1d2",
+    "docs/experiments/card-video/card_trap_decode.sv": "52e4621a6ae00aa8a738f79643f9112daf074b769d686af20b6a67faff69dc3f",
+    "local/experiments/card-cpu-rtl/source/apple2.v": "5e1c70be40b2033fd5d12ea5f991c4327b6cc16572da4defb98f116a25afec9b",
+    "docs/experiments/card-softswitch/prepare.py": "e49a23ab75e873f08bcd022f4add8740e876983e8c345154d550ee1de7856fe8",
+    "docs/experiments/card-softswitch/REPORT.md": "0913bf4a32468836867e531dde1071ceffaec837cafd3da42fbd61949ae71aa8"
+  },
+  "vectors_sha256": {
+    "oracle.hex": "d70dae6daee5a362fdbe0e152fbc18534f2546a6eb8b6919b7fd574cd9b72215",
+    "plans.hex": "aab601c054304e060e65774642e72a1392d8f7b28742446d20c749ec773947b7",
+    "probes.hex": "842824da1e1bb7848a4a0022ea602566f48c2a6de0a167297e484205411e1c4a"
+  }
+}

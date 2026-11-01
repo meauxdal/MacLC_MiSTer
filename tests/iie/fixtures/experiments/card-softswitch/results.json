@@ -1,0 +1,90 @@
+{
+  "scope": "bounded display-softswitch candidate through actual CPU/native SDRAM; no hardware claim",
+  "boundary": "2043",
+  "runs": [
+    {
+      "fork": 0,
+      "phase_ns": 2,
+      "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1463 backend=2864 stores=1208 captures=62 cpu_cycles=539 ticks=381496 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=763042 native commits=1208 early_acks=1208 backend_responses=2864 host=18330 floppy_window=6607 writeback=6638 refresh=2485 max_backend_ticks=49\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-softswitch/tb_binding.sv:434: $finish called at 11738633920 (1ps)",
+      "capture_sha256": "9ee567237c53ddfb86723752dce2075d1f292002599baae0982326680bcab0cc"
+    },
+    {
+      "fork": 0,
+      "phase_ns": 7,
+      "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1463 backend=2864 stores=1208 captures=62 cpu_cycles=539 ticks=381493 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=763036 native commits=1208 early_acks=1208 backend_responses=2864 host=18327 floppy_window=6607 writeback=6634 refresh=2485 max_backend_ticks=46\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-softswitch/tb_binding.sv:434: $finish called at 11738546610 (1ps)",
+      "capture_sha256": "9ee567237c53ddfb86723752dce2075d1f292002599baae0982326680bcab0cc"
+    },
+    {
+      "fork": 1,
+      "phase_ns": 2,
+      "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1463 backend=2864 stores=1208 captures=62 cpu_cycles=539 ticks=381496 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=763042 native commits=1208 early_acks=1208 backend_responses=2864 host=18330 floppy_window=6607 writeback=6638 refresh=2485 max_backend_ticks=49\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-softswitch/tb_binding.sv:434: $finish called at 11738633920 (1ps)",
+      "capture_sha256": "9ee567237c53ddfb86723752dce2075d1f292002599baae0982326680bcab0cc"
+    },
+    {
+      "fork": 1,
+      "phase_ns": 7,
+      "result": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1463 backend=2864 stores=1208 captures=62 cpu_cycles=539 ticks=381493 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=763036 native commits=1208 early_acks=1208 backend_responses=2864 host=18327 floppy_window=6607 writeback=6634 refresh=2485 max_backend_ticks=46\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-softswitch/tb_binding.sv:434: $finish called at 11738546610 (1ps)",
+      "capture_sha256": "9ee567237c53ddfb86723752dce2075d1f292002599baae0982326680bcab0cc"
+    }
+  ],
+  "original_spans": [
+    {
+      "fork_sha256": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+      "Conf_1000_0300_033A_sha256": "f357fa2f6b3c3af3c4eb7bd7cbc6b13f55dc7c6091bd5d63d4b54405d64b176e",
+      "Conf_1001_payload_20C5_20F6_sha256": "54bdfb7b2cb1e0fe32aa577a6e7dc1bd48f17b4035c363e1c1a08d047b3f265c"
+    },
+    {
+      "fork_sha256": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+      "Conf_1000_0300_033A_sha256": "f357fa2f6b3c3af3c4eb7bd7cbc6b13f55dc7c6091bd5d63d4b54405d64b176e",
+      "Conf_1001_payload_20C5_20F6_sha256": "54bdfb7b2cb1e0fe32aa577a6e7dc1bd48f17b4035c363e1c1a08d047b3f265c"
+    }
+  ],
+  "negative_controls": [
+    {
+      "parameter": ".IGNORE_SOFTSWITCH(1)",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-softswitch/tb_binding.sv:273: PDS read transaction=1390 offset=00000008 expected=ffff actual=00ff CPU=c001 capture=08\n       Time: 7264829770  Scope: tb_card_platform.transact"
+    },
+    {
+      "parameter": ".SOFTSWITCH_STUCK_MASK(8'h80)",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-softswitch/tb_binding.sv:273: PDS read transaction=1390 offset=00000008 expected=ffff actual=7fff CPU=c001 capture=08\n       Time: 7264829770  Scope: tb_card_platform.transact"
+    }
+  ],
+  "original_conf_aggregate_run": "IRQ NMI=1 IRQ=1 RTI=2 opcode=1 final_stack_PC=2042\nPASS PDS=1417 backend=2864 stores=1208 captures=62 cpu_cycles=539 ticks=288994 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=578026 native commits=1208 early_acks=1208 backend_responses=2864 host=13821 floppy_window=4988 writeback=5019 refresh=1878 max_backend_ticks=49\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/card-softswitch/tb_binding.sv:434: $finish called at 8892351984 (1ps)",
+  "memory_bytes_compared": 262144,
+  "lint": "binding/card closure -Wall passes with filename/unused exclusions",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-softswitch\\run.py": "a16e005ea07e1970275274e218767b775d0cdd16a42043f1196f8cb714135e06",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-softswitch\\prepare.py": "e49a23ab75e873f08bcd022f4add8740e876983e8c345154d550ee1de7856fe8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-banking-build\\binding-results.json": "6e2ef36249f3b5cd2275f4f59e1a8c9da41a91af5a6ca457b1e0d751aa22b0c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\tb_binding.sv": "f3c683a15eeef5ebbb20ea04989fe0dfc828cc307caa6062ca30ece4121dfe9a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\maclc_iie_binding.sv": "40eda71b69557af047946d0adcbab195268fa0689c5ee20c165f9aa719da1054",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\card_irq_candidate.sv": "47ff8c0d862452ee5785a2ac2877be6f56fb80ba3572b1e7910d66b4e1973836",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\tb_binding.sv": "c284126a1c043b6340c937796714f5019ed28410192d114663cc46631c2900d8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_platform.sv": "ce3012027ab8fe3a307d606e624150ff53257e9cc848b8d51e5715e5a5bca725",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-irq-build\\card_pds_candidate.sv": "1647b1676144ed61b1516eb5629cf52543941f41e64f1190a23a5657eee5d169",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_candidate.sv": "2ad6335d346915f5bbed142b672bfe5a1a1b520bc0aefaeb0d1cb83bb61b0c29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_host_registers.sv": "9f5ae27fcaf2dab26848aa5fdce6cdc9893c03a2c55127d0454ce007aa4d5e8b",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\card_irq_cpu_bus.sv": "e2137fd4804d75c95852a46277dd5cad2da6ae7bc56b6aa7cb91cc8d5db7966e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\captures-0-2.txt": "b5728ad5aac0aabcaf52939b9e1e6fb5ab0520cfcf141198f5beb35df7851bff",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\firmware-memory\\app221\\IIe Startup.rsrc": "04eaa7546e7fa426f9c07dea5f193de75fb172d83d29dd362d1954b3385266c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\stimulus0.txt": "560258376e3b62d8c735fdd6e10eabf6b7ce00b6e753ac81711a530b61a0deec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\expected0.hex": "566f82e6dc32af8431fc8dc57abd6bed9485bb4ccc5eafe565953170727819c4",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\startup-runtime\\startup\\IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\stimulus1.txt": "560258376e3b62d8c735fdd6e10eabf6b7ce00b6e753ac81711a530b61a0deec",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-banking-build\\expected1.hex": "566f82e6dc32af8431fc8dc57abd6bed9485bb4ccc5eafe565953170727819c4",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-banking-system\\prepare.py": "6934ea87f7b9342213c25a0b5125ead8f79491789bce63d20fb85a7ea90abb3e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-irq-system\\prepare.py": "102a7fce6170be3d3cc99160988ee63d21bc49004c18dba009b3026518beaf78",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-interrupt-contract\\test_interrupt_model.py": "f4a2d530d69de3a111bb07b3b06220d0480113cab328c57aafa4dab1681bfff9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\host-harness\\host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\research\\software-bringup\\inspect_resources.py": "aefed22ac415cc00064328bc86419efff21b9c55abf6603c5f9a738381b519c9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-softswitch\\conf-stimulus0.txt": "7034ac1ac076ad70bb48e0f0f54e9c185513e9e08cd320de5ad97e8c44c99787"
+  }
+}

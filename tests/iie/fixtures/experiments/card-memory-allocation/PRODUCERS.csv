@@ -1,0 +1,13 @@
+producer,path,first_line,last_line,min_physical_word,max_physical_word,notes,source_sha256
+host RAM and mirrors,rtl/addrController_top.v,178,203,000000,4FFFFF,all physical SIMM configurations,b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78
+host ROM,rtl/addrController_top.v,205,212,500000,53FFFF,includes overlay mirrors,b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78
+host VRAM,rtl/addrController_top.v,214,216,580000,5BFFFF,external backing plus separate BRAM mirror,b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78
+floppy fetch window,rtl/addrController_top.v,274,283,600000,7FFFFF,full 22-bit byte offset bound,b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78
+HPS ioctl ROM,MacLC.sv,2235,2240,500000,53FFFF,address masked to 18 low word bits,3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0
+floppy committer,MacLC.sv,2288,2299,600000,7FFFFF,full 22-bit byte offset bound,3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0
+floppy loader,rtl/floppy_sd.v,229,279,000000,7FFFFF,unbounded mount size can wrap aperture,511ab0548c7f4f2d712bdc737b6442b006264ecaca75f01a5383ce3fa0424988
+floppy readback block,rtl/floppy_sd.v,533,549,600000,7FFFFF,header source excludes subtraction underflow,511ab0548c7f4f2d712bdc737b6442b006264ecaca75f01a5383ce3fa0424988
+floppy checksum scan,rtl/floppy_sd.v,698,731,600000,7FFFFF,21-bit scan word offset,511ab0548c7f4f2d712bdc737b6442b006264ecaca75f01a5383ce3fa0424988
+controller input closure,MacLC.sv,2505,2537,,,"CPU, floppy window, download and native inputs only",3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0
+controller address pins,rtl/sdram.v,466,481,000000,7FFFFF,23 word bits; input bit23 ignored,953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04
+controller initialization,rtl/sdram.v,363,406,,,NOP/precharge/refresh/mode; no memory clear writes,953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04

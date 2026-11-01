@@ -1,0 +1,16 @@
+2026-10-22, CPython 3.12.14
+Command (repository root): python -B -m unittest discover -s docs/experiments/trap-model -p test_trap_model.py -v
+
+test_complete_io_address_space (test_trap_model.ClassificationTests.test_complete_io_address_space) ... ok
+test_display_page_bank_mode_matrix (test_trap_model.ClassificationTests.test_display_page_bank_mode_matrix) ... ok
+test_explicit_edges_holes_and_motor_scope (test_trap_model.ClassificationTests.test_explicit_edges_holes_and_motor_scope) ... ok
+test_delayed_write_and_single_completion (test_trap_model.ServiceTests.test_delayed_write_and_single_completion) ... ok
+test_invalid_service_and_ordering_policy (test_trap_model.ServiceTests.test_invalid_service_and_ordering_policy) ... ok
+test_local_memory_and_repeated_identical_writes (test_trap_model.ServiceTests.test_local_memory_and_repeated_identical_writes) ... ok
+test_read_capture_reply_and_repeated_accesses (test_trap_model.ServiceTests.test_read_capture_reply_and_repeated_accesses) ... ok
+test_reset_pending_read_and_write_rejects_old_service (test_trap_model.ServiceTests.test_reset_pending_read_and_write_rejects_old_service) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.808s
+
+OK

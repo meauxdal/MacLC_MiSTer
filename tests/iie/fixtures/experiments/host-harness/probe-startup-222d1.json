@@ -1,0 +1,212 @@
+{
+  "scope": "synthetic ROM probe and Conf prelude on one register model",
+  "checks_passed": 5,
+  "inputs_sha256": {
+    "docs/experiments/host-harness/test_probe_startup.py": "f63f44739d2fa9bc68545300453d85d5a1307fa5785afcd30feecdaf9077a4ce",
+    "docs/experiments/host-harness/host_model.py": "b28759ddeebca547356d1a557b4246cfd44c6ff09469078e588b6286b5e6126a",
+    "docs/experiments/slot-identity/probe_model.py": "dcd8d2b8ae16235d76b7ef9fe2ec44838f7282e31099ce5a4cf3bf452a4a8def",
+    "local/experiments/startup-runtime/startup/IIe Startup.rsrc": "5674f658f77e333a91c309f477e2cfbc703c781cc5f914545974fe44d2ecce8c"
+  },
+  "initial_indices_per_step": 65536,
+  "probe_steps": {
+    "0": {
+      "accepted": 1,
+      "sole_accepted_index": 65532
+    },
+    "1": {
+      "accepted": 65536,
+      "sole_accepted_index": null
+    },
+    "2": {
+      "accepted": 1,
+      "sole_accepted_index": 65532
+    }
+  },
+  "probe_traces": {
+    "step_1_index_FFFE": {
+      "result": {
+        "first_equal": true,
+        "final_equal": true,
+        "d1": 2,
+        "d2": 2,
+        "word_reads": 4
+      },
+      "final_index": 2,
+      "trace": {
+        "transactions": 7,
+        "sha256": "b8373d0ff8a0b2f5b07bb86a29b784cd5d98456c95aaaa89c3fb91bc3e04d396",
+        "counts": {
+          "R16:+10": 4,
+          "R16:+1C": 3
+        }
+      }
+    },
+    "step_0_index_0000": {
+      "result": {
+        "first_equal": false,
+        "final_equal": false,
+        "d1": 4,
+        "d2": 0,
+        "word_reads": 1
+      },
+      "final_index": 0,
+      "trace": {
+        "transactions": 3,
+        "sha256": "5b7d4b1845524613811eab9660dc95cdb299cd1a1341eb00861229e643411f52",
+        "counts": {
+          "R16:+10": 1,
+          "R16:+1C": 2
+        }
+      }
+    },
+    "step_0_index_FFFC": {
+      "result": {
+        "first_equal": false,
+        "final_equal": true,
+        "d1": 0,
+        "d2": 0,
+        "word_reads": 1
+      },
+      "final_index": 65532,
+      "trace": {
+        "transactions": 3,
+        "sha256": "9e5c5a44b6e6a4b2f805cf6a35e6941621ea260868a5e6668153cf48ce517381",
+        "counts": {
+          "R16:+10": 1,
+          "R16:+1C": 2
+        }
+      }
+    },
+    "step_2_index_FFFC": {
+      "result": {
+        "first_equal": false,
+        "final_equal": true,
+        "d1": 0,
+        "d2": 0,
+        "word_reads": 1
+      },
+      "final_index": 65534,
+      "trace": {
+        "transactions": 3,
+        "sha256": "be298bcb9892acff54341405f3d03a422e99414b8e94339f11697a45483dd7d5",
+        "counts": {
+          "R16:+10": 1,
+          "R16:+1C": 2
+        }
+      }
+    }
+  },
+  "joint_faults": {
+    "word_step_0": {
+      "probe": {
+        "first_equal": false,
+        "final_equal": true,
+        "d1": 0,
+        "d2": 0,
+        "word_reads": 1
+      },
+      "startup": {
+        "error": 1,
+        "diagnostic_pending": false
+      }
+    },
+    "word_step_2": {
+      "probe": {
+        "first_equal": false,
+        "final_equal": true,
+        "d1": 0,
+        "d2": 0,
+        "word_reads": 1
+      },
+      "startup": {
+        "error": 1,
+        "diagnostic_pending": false
+      }
+    },
+    "lane_alias": {
+      "probe": {
+        "first_equal": true,
+        "final_equal": true,
+        "d1": 0,
+        "d2": 0,
+        "word_reads": 4
+      },
+      "startup": {
+        "error": null,
+        "diagnostic_pending": true
+      }
+    },
+    "reversed_lanes": {
+      "probe": {
+        "first_equal": true,
+        "final_equal": true,
+        "d1": 0,
+        "d2": 0,
+        "word_reads": 4
+      },
+      "startup": {
+        "error": null,
+        "diagnostic_pending": true
+      }
+    }
+  },
+  "combined": {
+    "boot_probe": {
+      "first_equal": true,
+      "final_equal": true,
+      "d1": 2,
+      "d2": 2,
+      "word_reads": 4
+    },
+    "boot_trace": {
+      "transactions": 7,
+      "sha256": "b8373d0ff8a0b2f5b07bb86a29b784cd5d98456c95aaaa89c3fb91bc3e04d396",
+      "counts": {
+        "R16:+10": 4,
+        "R16:+1C": 3
+      }
+    },
+    "startup": {
+      "error": null,
+      "diagnostic_pending": true
+    },
+    "startup_trace": {
+      "transactions": 787650,
+      "sha256": "3b0a80338b26804c237e9dd7097f4882bb9d6a83ccdc7ca5d1f3c3cf3223a935",
+      "counts": {
+        "R8:+08": 17,
+        "R8:+0D": 5,
+        "R8:+10": 262144,
+        "R8:+11": 262144,
+        "R16:+04": 1,
+        "W8:+0C": 1,
+        "W8:+0D": 6,
+        "W8:+10": 593,
+        "W8:+11": 575,
+        "W8:+20": 1,
+        "W8:+21": 1,
+        "W16:+10": 262144,
+        "W16:+1C": 17,
+        "W16:+20": 1
+      }
+    },
+    "post_upload_probe": {
+      "first_equal": true,
+      "final_equal": true,
+      "d1": 16388,
+      "d2": 16388,
+      "word_reads": 4
+    },
+    "post_upload_trace": {
+      "transactions": 7,
+      "sha256": "708fd870b895309c5349cb71f3e559421eac29d6e14e6c0c0f9ed9b5d812a0b2",
+      "counts": {
+        "R16:+10": 4,
+        "R16:+1C": 3
+      }
+    },
+    "final_index": 16388,
+    "memory_sha256": "ada9d9fc0ac0b07fb63dde692e2e25171990e650695421cf02efd6565a7967b6"
+  },
+  "elapsed_seconds": 1.256
+}

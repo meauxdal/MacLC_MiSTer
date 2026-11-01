@@ -1,0 +1,72 @@
+{
+  "scope": "hardware binding with full LC addresses, recovered ROM probe and original diagnostic traffic; modeled PDS and SDRAM chip",
+  "system_period_ns": 30.769,
+  "memory_period_ns": 15.3845,
+  "runs": [
+    {
+      "fork": 0,
+      "phase_ns": 2,
+      "result": "PASS PDS=1332 backend=2588 stores=1192 captures=39 cpu_cycles=250 ticks=140455 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=280928 native commits=1192 early_acks=1192 backend_responses=2588 host=6580 floppy_window=2388 writeback=2406 refresh=903 max_backend_ticks=49\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/tb_binding.sv:399: $finish called at 4321802350 (1ps)",
+      "capture_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 0,
+      "phase_ns": 7,
+      "result": "PASS PDS=1332 backend=2588 stores=1192 captures=39 cpu_cycles=250 ticks=140459 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=280936 native commits=1192 early_acks=1192 backend_responses=2588 host=6578 floppy_window=2388 writeback=2401 refresh=902 max_backend_ticks=46\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/tb_binding.sv:399: $finish called at 4321915045 (1ps)",
+      "capture_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "phase_ns": 2,
+      "result": "PASS PDS=1332 backend=2588 stores=1192 captures=39 cpu_cycles=250 ticks=140455 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=280928 native commits=1192 early_acks=1192 backend_responses=2588 host=6580 floppy_window=2388 writeback=2406 refresh=903 max_backend_ticks=49\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/tb_binding.sv:399: $finish called at 4321802350 (1ps)",
+      "capture_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    },
+    {
+      "fork": 1,
+      "phase_ns": 7,
+      "result": "PASS PDS=1332 backend=2588 stores=1192 captures=39 cpu_cycles=250 ticks=140459 plus 11 unclaimed, 1 unsupported, 1 reset-drained read\nmem_ticks=280936 native commits=1192 early_acks=1192 backend_responses=2588 host=6578 floppy_window=2388 writeback=2401 refresh=902 max_backend_ticks=46\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/tb_binding.sv:399: $finish called at 4321915045 (1ps)",
+      "capture_sha256": "77f7eb7ce43f16cb5d66b8491b8c1783e21a0259ee4551c784e6dbe8e1e45246"
+    }
+  ],
+  "unmapped_negative_control": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/tb_binding.sv:246: early claim\n       Time: 129390850  Scope: tb_card_platform.transact",
+  "seam_checks": [
+    {
+      "name": "seams",
+      "expected_failure": null,
+      "result": "PASS extracted MacLC seams: overlay, cache, DTACK, VPA, FC7, idle, slot and error hold\n/mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/seams.sv:70: $finish called at 8000 (1ps)"
+    },
+    {
+      "name": "overlay-mask",
+      "expected_failure": "claimed overlay strobes escaped",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/overlay-mask.sv:46: claimed overlay strobes escaped\n       Time: 2000  Scope: tb_seams"
+    },
+    {
+      "name": "dtack-priority",
+      "expected_failure": "card wait lost bus priority",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-build/dtack-priority.sv:48: card wait lost bus priority\n       Time: 2000  Scope: tb_seams"
+    }
+  ],
+  "lint": "binding and card closure -Wall passes with filename/unused exclusions",
+  "inputs_sha256": {
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-platform\\tb_card_platform.sv": "7c80135c5b3ee037072d469eb53396c4331853e9a886a5bcabe1bb6447179d5e",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\tb_binding.sv": "403e78eed7f8917c3db451adf9b73ddc1b31eeb288e956731d705902439a45d9",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-build\\maclc_iie_binding.sv": "1d93ae690a5f032badc15f343a2e294a9e03992c53850c505fff3cb157093b9f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-platform\\card_platform.sv": "64002ab0ccb5fb08634dae5c7c41bdc9b8f7df20b3804a44ac8d2f0bf3d49d44",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\card_memory_cdc.sv": "bd1ac359f96ce28735bc12846a8cab29edecb5807e4dbbc9db23cd2199ab0f7f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-system-harness\\card_pds_candidate.sv": "30f823ebbac4f4125e4bfa534edf85190962df1c80b010a32911443c21be5ee3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-pds-harness\\card_pds_adapter.sv": "e8b54017d1dfc1c9ed70357846ee69bd7e4a2de9c42e0ba2219192b3992a884c",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-system-harness\\card_candidate.sv": "25e2c13685ebda3e3957c5ab029f482ccbd32fa66949ebc1cffaa4038ff4c3a8",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-host-rtl\\card_host_registers.sv": "204e10d22a5a38f9032a4c3459d0170e4ddb113aaa8d96f386fa1ae1cc3bf2b2",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\card-cpu-rtl\\card_cpu_bus.sv": "ad5795f1c58e765e7d4e773f3841c56ab8f41a540ae7b497705f24ceb00fe8cc",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\memory-harness\\card_memory_arbiter.sv": "2cc0d63651dfe97eee10a45a2d38e9642b739a4827c98a3dd2beb6b436250615",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_memory_adapter.sv": "81d949cae73406dcfa759b556ca3b9d99dcbc05e62a69ae3059a1dcd36c8dc29",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\native-memory-harness\\card_native_port_mux.sv": "a80b607f5666387101aa195588163b61f4b2230a14c50c290bb6beb69337e0d3",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_65c02.sv": "f271ff4b55bc61e2eb37f0d51653cfd5bb6078e8d66445e349474054e0011d82",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\card-cpu-rtl\\source\\cpu_alu.sv": "dd928ea4c718f4dc2a6905e316ff5d8687746f093f4ae56239bfed901b7cc0b7",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\sdram.v": "7a54dbcb1f6daee71cf26a4a0892dc120688790e76669474cd7a71854deca2bb",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-build\\run.py": "48902e4bc93a6f5925c689895163b2cd231d10373e5ece74dff63ae0fe257b95",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\docs\\experiments\\maclc-iie-build\\tb_seams.sv": "344432e21a5e7b30db1b557bc083c7c36a47de6a30ff988df43c34c5bc333660",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\seams.sv": "18ddfc2b50e4a666e3322019835a23295461e923c95226b2cdaa1d7bf079ee3f",
+    "C:\\Workspace\\Git\\Apple-IIe-Card\\local\\experiments\\maclc-iie-build\\MacLC_IIe.sv": "97c03e2a6592775b618e78d80567e6a9202a2c91fbc6ebedb69d002ab0364556"
+  }
+}

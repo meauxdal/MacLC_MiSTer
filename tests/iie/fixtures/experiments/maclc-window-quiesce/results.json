@@ -1,0 +1,45 @@
+{
+  "scope": "actual window source/decoder/controller; extracted actual floppy consumer pipeline; encoders absent",
+  "sys_period_ns": 20,
+  "mem_period_ns": 10,
+  "baseline_sources_unchanged": true,
+  "runs": [
+    {
+      "sys_phase_ns": 2,
+      "result": "PASS window-stop phase=2 resets=8 windows=34 physical_reads=34 parity-delivery default-off\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-window-quiesce/tb_window_stop.sv:192: $finish called at 779832000 (1ps)"
+    },
+    {
+      "sys_phase_ns": 7,
+      "result": "PASS window-stop phase=7 resets=8 windows=34 physical_reads=34 parity-delivery default-off\n/mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-window-quiesce/tb_window_stop.sv:192: $finish called at 779837000 (1ps)"
+    },
+    {
+      "name": "unsafe-immediate-window-stop-negative",
+      "result": "FATAL: /mnt/c/Workspace/Git/Apple-IIe-Card/docs/experiments/maclc-window-quiesce/tb_window_stop.sv:124: TRUNCATED_WINDOW ticks=1\n       Time: 258742000  Scope: tb_window_stop"
+    }
+  ],
+  "lint_warnings": [
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-window-quiesce/sdram.v:370:30: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-window-quiesce/sdram.v:457:12: Operator EQ expects 4 bits on the LHS, but LHS's VARREF 'seq' generates 3 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-window-quiesce/addrController_top.v:194:32: Operator LT expects 24 bits on the LHS, but LHS's SEL generates 23 bits.",
+    "%Warning-WIDTHTRUNC: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-window-quiesce/addrController_top.v:460:28: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'cpuAddr' generates 32 bits.",
+    "%Warning-WIDTHEXPAND: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-window-quiesce/baseline_addrController_top.v:189:32: Operator LT expects 24 bits on the LHS, but LHS's SEL generates 23 bits.",
+    "%Warning-WIDTHTRUNC: /mnt/c/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-window-quiesce/baseline_addrController_top.v:446:28: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'cpuAddr' generates 32 bits."
+  ],
+  "inputs_sha256": {
+    "docs/experiments/maclc-window-quiesce/tb_window_stop.sv": "3f44eb55e07a60735f482511a7486ef26ef4d11d1813527b782bdc9114734a54",
+    "local/experiments/maclc-window-quiesce/addrController_top.v": "de3a78659e793b09749627e1c0e94e166000105bde0263cf1c4ba61155250f8d",
+    "local/experiments/maclc-window-quiesce/baseline_addrController_top.v": "4e1a0b8fb4b51eefbc2366d4dbbf92d4a760cfbb10581baeb744ec1db9eb11ae",
+    "local/experiments/maclc-window-quiesce/floppy_read_tail.sv": "c72f3d276da652af84d04d02bed6958c97e5b274652551bba95772fb0e1af8a3",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/addrDecoder.v": "4714846b53d8338856f98c2073492561325a130a28966161b6f935ee9cc0249d",
+    "local/experiments/maclc-window-quiesce/sdram.v": "2a5538f674a5b4f21ee5ebbed1146acdd8b9f086767c1b818df5e9131cbf828e",
+    "docs/experiments/card-quiesce/card_warm_reset.sv": "6dfa21c2bb06da73e7454d44745c2811568c4b448d93f06bc6720e626a62b8c6",
+    "local/experiments/maclc-window-quiesce/unsafe_windows.v": "7978fd08b1c37d0d8c8c2da399ef27c646b1500d40ebcd9bc05b3899998d1bbe",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/addrController_top.v": "b9f619a0378bce1bd057c71645814be26ae46d5222688776dd2987fc51e95f78",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/floppy.v": "6d476e367e1eda093982d52c2cf57053e32819b317f4d01866978ec35bd56dbd",
+    "C:/Workspace/Git/MacLC_MiSTer/MacLC.sv": "3bafa309638a9325cbff5401b06402d066b9e8ac2340aafacf14549617a7e1f0",
+    "C:/Workspace/Git/MacLC_MiSTer/rtl/sdram.v": "953c6a255646ced9ce01cc5b0367bfe496e6fc24aa747d3135fc36d9315f2d04",
+    "docs/experiments/maclc-window-quiesce/prepare.py": "154b084360811f2f1fb06a307ae45c83833c9d7efa0cfcd7b43c9c4072afa68b",
+    "docs/experiments/maclc-window-quiesce/run.py": "4870d625891fde37ea085813de6f70bf13cec49a92f1648a40c526918d6958ff",
+    "docs/experiments/card-quiesce/prepare.py": "ec97fe0b8110c45b01999e8a5227932489f6db61f674a2944850d2e2b9d626d5"
+  }
+}

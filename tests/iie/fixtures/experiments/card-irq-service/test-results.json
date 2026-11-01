@@ -1,0 +1,110 @@
+{
+  "scope": "isolated IRQ platform service driven by recovered helper; no original Macintosh execution in this test",
+  "checks": [
+    "RTLService snapshot initialization and early EOF",
+    "138 recorded original-host prefix transactions",
+    "real Conf200 helper read/ACK/RMW/WAIT order",
+    "42 actual captures and reports2,0,1",
+    "STOP203A",
+    "exact full256KiB final dump"
+  ],
+  "helper_transactions": [
+    [
+      true,
+      8,
+      12,
+      0
+    ],
+    [
+      false,
+      8,
+      1,
+      224
+    ],
+    [
+      false,
+      8,
+      1,
+      224
+    ],
+    [
+      false,
+      8,
+      12,
+      2
+    ],
+    [
+      true,
+      8,
+      12,
+      0
+    ],
+    [
+      false,
+      8,
+      32,
+      136
+    ],
+    [
+      true,
+      8,
+      32,
+      168
+    ],
+    [
+      false,
+      8,
+      1,
+      224
+    ],
+    [
+      false,
+      8,
+      1,
+      224
+    ],
+    [
+      false,
+      8,
+      32,
+      168
+    ],
+    [
+      true,
+      8,
+      32,
+      136
+    ],
+    [
+      true,
+      8,
+      12,
+      0
+    ],
+    [
+      false,
+      8,
+      1,
+      224
+    ],
+    [
+      false,
+      8,
+      1,
+      224
+    ]
+  ],
+  "stop_pc": "203A",
+  "final_memory_sha256": "b891b33b34b604c30f25da588edafee2df15d49a6993481b1af2fdb6abbd0393",
+  "inputs_sha256": {
+    "docs/experiments/card-irq-service/test_service.py": "425c711e4d29309ddcf95745728d575db28412ab6a2449ec90eb2d6720de65c7",
+    "docs/experiments/card-irq-service/prepare.py": "20a7fbf14d8455dbb730115dc2f55a39b01648b112720304524339ee53e46efc",
+    "docs/experiments/card-irq-service/prepare-results.json": "2c4d7fb1350a5f4f840613d3526e2fc7fce34a43c326ca91a8abf0f35f88e752",
+    "local/experiments/host-execution/diagnostic-bridge-01/card-memory.bin": "ada9d9fc0ac0b07fb63dde692e2e25171990e650695421cf02efd6565a7967b6",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge.jsonl": "b2fbb5798489ae2f8ad3673b7b6180955ff0e86897432ea8d81b47bd28e3dd24",
+    "local/experiments/host-execution/diagnostic-bridge-01/bridge-result.json": "4e6f45911615d3e939bfcb5a822ddfac58f6e154aa0facf0537cd6c8f5f2e348",
+    "local/experiments/card-system-harness/expected0.hex": "d0d59dd53640ed5b2db39ad8d334eb75a1ec815b364e7ec83099f464baa46f94",
+    "docs/experiments/host-harness/rtl_bridge_server.py": "fca61461f46e487457677a5225b1ecf06ab021f9fe5594c755a76e0a762f90ae",
+    "docs/experiments/card-interrupt-contract/interrupt_model.py": "d16a49e2b2c639432e0645b0098a59a427f96009b596f204da7582f4cd251912"
+  }
+}
