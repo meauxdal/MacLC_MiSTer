@@ -331,24 +331,12 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED_*
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to BTN_*
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to BTN_*
 set_global_assignment -name QIP_FILE "C:/Workspace/Git/Apple-IIe-Card/local/experiments/maclc-iie-runtime/files.qip"
-
-# Project timing constraints (read after sys/sys_top.sdc). Contains the TG68
-# kernel multicycle required for reliable timing closure â€” see MacLC.sdc.
 set_global_assignment -name SDC_FILE MacLC.sdc
-
-# --- m10k-repack tier 1: stop tiny delay-line shifters from eating M10K blocks.
-# The fitter maps these altshift_taps (42-324 bits each) into whole M10K blocks
-# at 1-3% utilization (fit census 2026-07-17: ~6-8 blocks across shadowmask,
-# vga_out, osd rdout, yc phase, sys_top dv_de). Per-INSTANCE recognition-off
-# turns each back into plain registers (<1K regs total) â€” framework constrained
-# from OUR qsf; sys/ files stay stock. The big ascal shifters (4-6Kbit) are
-# deliberately NOT listed (register cost too high).
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *|rdout2*
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *vga_scaler_out|din1*
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *HDMI_shadowmask|vid*
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *yc_out|phase*
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to *dv_de1*
-
-
-
+set_global_assignment -name QIP_FILE "../Apple-IIe-Card/local/experiments/maclc-iie-runtime/files.qip"
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to HDMI_TX_CLK
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
