@@ -25,6 +25,7 @@ module emu
 );
 	assign ADC_BUS  = 'Z;
 	assign USER_OUT = '1;
+`ifndef MAC_TV525
 	assign DDRAM_CLK = clk_sys;
 	assign DDRAM_BURSTCNT = 0;
 	assign DDRAM_ADDR = 0;
@@ -32,6 +33,7 @@ module emu
 	assign DDRAM_BE = 0;
 	assign DDRAM_RD = 0;
 	assign DDRAM_WE = 0;
+`endif
 	assign {SD_SCK, SD_MOSI, SD_CS} = 'Z;
 
     wire iie_diagnostic_boundary, iie_diagnostic_fault;
@@ -102,6 +104,9 @@ module emu
 		"P1R6,Clear PRAM and reset;",
 
 		"P2OA,Monitor,640x480 VGA,512x384 12in;",
+`ifdef MAC_TV525
+		"P2O12,Deflicker,Strong,Mild,Off;",
+`endif
 		"P2O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
 		"P2OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
 
@@ -503,20 +508,70 @@ module emu
 		.ps2_mouse(ps2_mouse)
 	);
 
-	assign CLK_VIDEO = clk_vid;
-	assign CE_PIXEL = v8_ce_pix;
-
+    wire [23:0] native_rgb;
     iie_status_overlay iie_status (
         .clk_sys(clk_sys), .clk_vid(clk_vid), .reset(!pll_locked),
         .ce_pixel(v8_ce_pix), .de(v8_de), .vblank(v8_vblank), .status_sys(iie_debug_status),
         .red_in(v8_vga_r), .green_in(v8_vga_g), .blue_in(v8_vga_b),
-        .red_out(VGA_R), .green_out(VGA_G), .blue_out(VGA_B)
+        .red_out(native_rgb[23:16]), .green_out(native_rgb[15:8]), .blue_out(native_rgb[7:0])
     );
 
+`ifdef MAC_TV525
+    wire clk_tv525, tv_pll_locked;
+    wire [23:0] tv_rgb;
+    wire tv_hs, tv_vs, tv_de, tv_field;
+    wire [1:0] tv_filter_mode = status[2:1] == 2'd0 ? 2'd2 :
+                                status[2:1] == 2'd1 ? 2'd1 :
+                                status[2:1] == 2'd2 ? 2'd0 : 2'd2;
+    (* altera_attribute="-name SYNCHRONIZER_IDENTIFICATION FORCED_IF_ASYNCHRONOUS", preserve, dont_merge *) reg [1:0] tv_filter_meta=2, tv_filter_sync=2;
+    always @(posedge clk_vid) begin
+        tv_filter_meta <= tv_filter_mode;
+        tv_filter_sync <= tv_filter_meta;
+    end
+    pll_tv tv525_pll (
+        .refclk(CLK_50M), .rst(1'b0), .outclk_0(clk_tv525), .locked(tv_pll_locked)
+    );
+    reg [1:0] tv_reset_pipe = 2'b11;
+    always @(posedge clk_tv525 or negedge tv_pll_locked) begin
+        if (!tv_pll_locked) tv_reset_pipe <= 2'b11;
+        else tv_reset_pipe <= {tv_reset_pipe[0], 1'b0};
+    end
+    reg tv_mem_reset_meta = 1'b1, tv_mem_reset = 1'b1;
+    always @(posedge clk_mem) begin
+        tv_mem_reset_meta <= !pll_locked;
+        tv_mem_reset <= tv_mem_reset_meta;
+    end
+    // DDR commands drain across guest reset; only native capture is invalidated.
+    tv525_pipeline #(.FILTER_ENABLE(1)) crt_tv (
+        .clk_source(clk_vid), .source_reset(vidrst_s), .source_ce(v8_ce_pix),
+        .source_de(v8_de), .source_line(v8_native_line), .source_frame(v8_native_frame),
+        .source_width(v8_native_width), .source_height(v8_native_height),
+        .source_rgb(native_rgb), .filter_mode(tv_filter_sync),
+        .clk_mem(clk_mem), .inhibit(tv_mem_reset),
+        .clk_tv(clk_tv525), .reset_tv(tv_reset_pipe[1]),
+        .rgb(tv_rgb), .hs(tv_hs), .vs(tv_vs), .de(tv_de), .field_id(tv_field), .csync_n(),
+        .address(DDRAM_ADDR), .burstcount(DDRAM_BURSTCNT), .writedata(DDRAM_DIN),
+        .byteenable(DDRAM_BE), .read(DDRAM_RD), .write(DDRAM_WE),
+        .waitrequest(DDRAM_BUSY), .readdatavalid(DDRAM_DOUT_READY), .readdata(DDRAM_DOUT),
+        .published(), .dropped(), .repeated(), .overflows(), .underruns()
+    );
+    assign DDRAM_CLK = clk_mem;
+    assign CLK_VIDEO = clk_tv525;
+    assign CE_PIXEL = 1'b1;
+    assign {VGA_R, VGA_G, VGA_B} = tv_rgb;
+    assign VGA_DE = tv_de;
+    assign VGA_VS = tv_vs;
+    assign VGA_HS = tv_hs;
+    assign VGA_F1 = tv_field;
+`else
+    assign CLK_VIDEO = clk_vid;
+    assign CE_PIXEL = v8_ce_pix;
+    assign {VGA_R, VGA_G, VGA_B} = native_rgb;
 	assign VGA_DE = v8_de;
 	assign VGA_VS = v8_vsync;
 	assign VGA_HS = v8_hsync;
 	assign VGA_F1 = 0;
+`endif
 	assign VGA_SL = 0;
 
 	// ------------------------------------------------------------------------
@@ -679,6 +734,9 @@ module emu
 	// V8 Video system wires
 	wire v8_hsync, v8_vsync, v8_hblank, v8_vblank, v8_de;
 	wire v8_ce_pix;
+    wire v8_native_line, v8_native_frame;
+    wire [9:0] v8_native_width;
+    wire [8:0] v8_native_height;
 	wire [7:0] v8_vga_r, v8_vga_g, v8_vga_b;
 	wire [7:0] ariel_pixel_addr;
 	wire [23:0] ariel_palette_data;
@@ -1711,6 +1769,8 @@ module emu
 		.vga_b(v8_vga_b),
 		.de(v8_de),
 		.ce_pix(v8_ce_pix),
+		.native_line_start(v8_native_line), .native_frame_start(v8_native_frame),
+		.native_width(v8_native_width), .native_height(v8_native_height),
 
 		// Palette Interface (Connected to Ariel RAMDAC)
 		.palette_addr(ariel_pixel_addr),

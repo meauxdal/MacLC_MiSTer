@@ -68,5 +68,6 @@ __pycache__/
 verilator/obj_dir_tb_tv*/
 verilator/obj_dir_tb_vbuf_gate/
 verilator/out/
+tests/iie/obj_tv525_pipeline*/
 /rbf_archive
 /local

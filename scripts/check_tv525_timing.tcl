@@ -53,7 +53,7 @@ proc check_path {label args} {
 }
 
 # Reject pre-optimization databases instead of attributing them to current RTL.
-required_registers {*crt_tv|pin_tag_q[28]}
+required_registers {*crt_tv|video|canvas|tag_out[25]}
 set tv_clock [get_clocks -nowarn {*tv525_pll|*|divclk}]
 if {[get_collection_size $tv_clock] != 1} {error "Expected one TV clock"}
 set ports [get_ports {VGA_R* VGA_G* VGA_B* VGA_HS VGA_VS SDIO_CLK SDIO_CMD SDIO_DAT* SD_SPI_CS}]
@@ -108,7 +108,7 @@ foreach_in_collection op [get_available_operating_conditions] {
         -from [required_registers {*crt_tv|*|capture_fifo|rd_gray[*]*}] \
         -to [required_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
     foreach name {line reset} pair {
-        {{*crt_tv|*|line_payload[*]} {*crt_tv|*|store|address[*]}}
+        {{*crt_tv|*|line_payload[*]} {*crt_tv|*|store|multiplier[*]}}
         {{*emu|tv_reset_pipe[0]} {*emu|tv_reset_pipe[1]}}
     } {
         check_path $name -setup -from [required_registers [lindex $pair 0]] -to [required_registers [lindex $pair 1]]

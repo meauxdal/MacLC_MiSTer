@@ -1,5 +1,8 @@
 // Standard MiSTer RGB stream. Framework owns OSD, colorspace and board pins.
-module tv525_video (
+module tv525_video #(
+    parameter [27:0] BASE_WORD = 28'h2180000,
+    parameter SOURCE_WIDTH = 0, SOURCE_HEIGHT = 0
+) (
     input wire clk_tv, reset_tv, clk_mem, inhibit,
     input wire clk_source, source_reset, source_ce, source_de, source_line, source_frame,
     input wire [9:0] source_width,
@@ -7,6 +10,8 @@ module tv525_video (
     input wire [23:0] source_rgb,
     output wire [23:0] rgb,
     output wire hs, vs, de, field_id,
+    output wire csync_n,
+    output wire [31:0] published, dropped, repeated, overflows, underruns,
     output wire [27:0] address,
     output wire [7:0] burstcount,
     output wire [127:0] writedata,
@@ -28,7 +33,7 @@ tv525_timing timing (
     .frame_start(frame_start), .field_start(field_start), .line_start(line_start),
     .halfline_start(half_start), .h_sample(h_sample), .line_number(line_number)
 );
-tv_buffered_canvas canvas (
+tv_buffered_canvas #(.BASE_WORD(BASE_WORD), .SOURCE_WIDTH(SOURCE_WIDTH), .SOURCE_HEIGHT(SOURCE_HEIGHT)) canvas (
     .clk_source(clk_source), .source_reset(source_reset), .source_ce(source_ce),
     .source_de(source_de), .source_line(source_line), .source_frame(source_frame),
     .source_width(source_width), .source_height(source_height), .source_rgb(source_rgb),
@@ -37,12 +42,14 @@ tv_buffered_canvas canvas (
     .tag_out(canvas_tag), .rgb_out(rgb), .address(address), .burstcount(burstcount),
     .writedata(writedata), .byteenable(byteenable), .read(read), .write(write),
     .waitrequest(waitrequest), .readdatavalid(readdatavalid), .readdata(readdata),
-    .published(), .dropped(), .repeated(), .overflows(), .underruns()
+    .published(published), .dropped(dropped), .repeated(repeated),
+    .overflows(overflows), .underruns(underruns)
 );
 // Sync helpers and parity travel through the same registered lookup as RGB.
 assign hs=canvas_tag[27];
 assign vs=canvas_tag[26];
 assign de=canvas_tag[25];
 assign field_id=canvas_tag[23];
-wire unused_tag=^{canvas_tag[28],canvas_tag[24],canvas_tag[22:0]};
+assign csync_n=canvas_tag[28];
+wire unused_tag=^{canvas_tag[24],canvas_tag[22:0]};
 endmodule

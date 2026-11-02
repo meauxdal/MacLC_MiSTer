@@ -1,9 +1,8 @@
 // Centered vertical filter on the CRT-only progressive capture stream.
 // Every mode delays one row; the last row drains during vertical blanking.
-// Two row histories share a synchronous RAM. Read and delayed write addresses
-// never collide (supported widths are >=512), so no mixed-port old-data rule
-// is needed. Edges replicate the nearest source row; histories never cross
-// frames. mode is synchronous to clk and latched on the input frame marker.
+// Two row histories share synchronous RAM with explicit write forwarding.
+// Edges replicate the nearest row; histories never cross frames.
+// mode is synchronous to clk and latched on the input frame marker.
 module tv_deflicker (
     input wire clk, reset, ce, de, line_start, frame_start,
     input wire [9:0] width,
@@ -26,8 +25,7 @@ reg active=0, flushing=0, abort_frame=0;
 reg [9:0] x=0, flush_x=0;
 reg [8:0] y=0;
 reg [1:0] frame_mode=0;
-wire geometry_ok=(width==640 && height==480) ||
-                 (width==512 && (height==384 || height==342));
+wire geometry_ok=width!=0 && width<=640 && height!=0 && height<=480;
 wire start=ce && de && frame_start;
 wire [9:0] input_x=line_start ? 10'd0 : x;
 wire [8:0] input_y=line_start ? y+9'd1 : y;
@@ -35,17 +33,24 @@ wire malformed=width!=out_width || height!=out_height ||
                (de && ((line_start && (x!=out_width || input_y>=out_height)) ||
                        (!line_start && x>=out_width))) ||
                (!de && x!=out_width);
-// One array reference, one synchronous read port. In Quartus 17 the former
-// three procedural reads (including rows[0]) were lowered into asynchronous
-// read ports and 30,720 flip-flops despite the ramstyle attribute.
+// Keep one synchronous read port for block RAM inference.
 wire [9:0] row_read_addr=start ? 10'd0 : flushing ? flush_x : input_x;
 wire row_read=ce && !reset && (start || (flushing && !de) ||
                               (active && de && !malformed));
-always @(posedge clk) if (row_read) row_q<=rows[row_read_addr];
-// Commit one clock after the read, before this column is visited again.
+wire [47:0] row_write_data={below_q,row_q[47:24]};
+reg [47:0] ram_q;
+reg forward_q=0;
+reg [47:0] forwarded_q=0;
+always @(posedge clk) if (row_read) begin
+    ram_q<=rows[row_read_addr];
+    forward_q<=write_q && addr_q==row_read_addr;
+    forwarded_q<=row_write_data;
+end
+always @* row_q=forward_q ? forwarded_q : ram_q;
+// Forward when a narrow source revisits the column during its write.
 // Keep both RAM ports separate from reset/control logic for M10K inference.
 always @(posedge clk)
-    if (write_q && !reset) rows[addr_q]<={below_q,row_q[47:24]};
+    if (write_q && !reset) rows[addr_q]<=row_write_data;
 wire [23:0] center=row_q[47:24];
 wire [23:0] above=first_q ? center : row_q[23:0];
 wire [23:0] below=flush_q ? center : below_q;
@@ -75,7 +80,8 @@ always @(posedge clk) begin
         if (start) begin
             // Abort an unfinished old image before accepting a new one.
             abort_frame<=active || flushing || pending || !geometry_ok || !line_start;
-            active<=geometry_ok && line_start; flushing<=0;
+            active<=geometry_ok && line_start && !(width==1 && height==1);
+            flushing<=geometry_ok && line_start && width==1 && height==1; flush_x<=0;
             out_width<=width; out_height<=height; frame_mode<=mode;
             x<=1; y<=0;
             addr_q<=0; below_q<=rgb;
@@ -85,8 +91,8 @@ always @(posedge clk) begin
                 abort_frame<=1; flushing<=0; out_de<=0;
             end else begin
                 addr_q<=flush_x;
-                pending<=1; flush_q<=1; first_q<=0;
-                line_q<=flush_x==0; frame_q<=0;
+                pending<=1; flush_q<=1; first_q<=out_height==1;
+                line_q<=flush_x==0; frame_q<=out_height==1 && flush_x==0;
                 if (flush_x==out_width-1'b1) flushing<=0;
                 else flush_x<=flush_x+1'b1;
             end

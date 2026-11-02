@@ -162,7 +162,56 @@ set native_video_clocks [get_clocks {emu|pllv|*|divclk}]
 if {[get_collection_size $native_video_clocks] == 0} {
     error "Native video PLL clock was not found"
 }
-set_clock_groups -asynchronous -group $native_video_clocks
+if {[get_collection_size [get_registers -nowarn {*crt_tv|*|capture_fifo|*}]] == 0} {
+    set_clock_groups -asynchronous -group $native_video_clocks
+} else {
+    # Preserve native/memory Gray bounds and framework paths on shared selectors.
+    set core_memory_clocks [get_clocks {*emu|pll|pll_inst|*|divclk}]
+    set fifo_memory_clocks [remove_from_collection $core_memory_clocks $core_memory_clocks]
+    foreach_in_collection core_clock $core_memory_clocks {
+        if {abs([get_clock_info -period $core_clock] - 1000.0/65) < 0.01} {
+            set fifo_memory_clocks [add_to_collection $fifo_memory_clocks \
+                [get_clocks [get_clock_info -name $core_clock]]]
+        }
+    }
+    if {[get_collection_size $fifo_memory_clocks] != 1} {
+        error "Expected one capture FIFO memory clock"
+    }
+    set native_other_clocks [remove_from_collection [get_clocks *] \
+        [add_to_collection $native_video_clocks $fifo_memory_clocks]]
+    set_false_path -from $native_video_clocks -to $native_other_clocks
+    set_false_path -from $native_other_clocks -to $native_video_clocks
+    set native_keepers [get_keepers -nowarn {__tv_empty_collection__}]
+    set memory_keepers [get_keepers -nowarn {__tv_empty_collection__}]
+    set native_clock_pins [get_pins -compatibility_mode {*|clk}]
+    foreach_in_collection native_clock $native_video_clocks {
+        set native_keepers [add_to_collection $native_keepers \
+            [get_fanouts -no_logic [get_clock_info -targets $native_clock]]]
+        set native_keepers [add_to_collection $native_keepers \
+            [get_fanouts -through $native_clock_pins [get_clock_info -targets $native_clock]]]
+    }
+    foreach_in_collection memory_clock $fifo_memory_clocks {
+        set memory_keepers [add_to_collection $memory_keepers \
+            [get_fanouts -no_logic [get_clock_info -targets $memory_clock]]]
+    }
+    set native_gray_receiver [get_registers {*crt_tv|*|capture_fifo|rd_gray_meta[*]*}]
+    set memory_gray_receiver [get_registers {*crt_tv|*|capture_fifo|wr_gray_meta[*]*}]
+    if {[get_collection_size $native_keepers] == 0 ||
+        [get_collection_size $memory_keepers] == 0} {
+        error "Native/FIFO memory clock fanout was not found"
+    }
+    foreach receiver [list $native_gray_receiver $memory_gray_receiver] {
+        if {[get_collection_size $receiver] == 0} {
+            error "Capture FIFO Gray synchronizer heads missing"
+        }
+    }
+    set native_keepers [add_to_collection $native_keepers $native_gray_receiver]
+    set memory_keepers [add_to_collection $memory_keepers $memory_gray_receiver]
+    set_false_path -from $native_video_clocks \
+        -to [remove_from_collection $memory_keepers $memory_gray_receiver]
+    set_false_path -from $fifo_memory_clocks \
+        -to [remove_from_collection $native_keepers $native_gray_receiver]
+}
 
 # Belt-and-braces documentation of the synchronizer heads (redundant with the
 # clock group above, harmless).
@@ -228,4 +277,43 @@ set SDRAM_OUT [get_ports {SDRAM_A[*] SDRAM_BA[*] SDRAM_DQ[*] SDRAM_DQMH SDRAM_DQ
 set_output_delay -clock sdram_clk -max  2.0 $SDRAM_OUT
 set_output_delay -clock sdram_clk -min -0.8 $SDRAM_OUT
 
+# Independent TV raster. Keep memory crossings timed to their CDC budgets.
+set tv525_clocks [get_clocks -nowarn {*tv525_pll|*|divclk}]
+if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
+    if {[get_collection_size $tv525_clocks] != 1} {error "Expected one TV PLL clock"}
+    set tv_memory_clocks $fifo_memory_clocks
+    set tv_other_clocks [remove_from_collection [get_clocks *] \
+        [add_to_collection $tv525_clocks $tv_memory_clocks]]
+    set_false_path -from $tv525_clocks -to $tv_other_clocks
+    set_false_path -from $tv_other_clocks -to $tv525_clocks
+    set_false_path -to [get_pins -compatibility_mode {*emu|tv_reset_pipe*|clrn}]
+    set_false_path -to [get_registers {*tv_mem_reset_meta}]
+
+    foreach pointer {wr rd} {
+        set gray [get_registers [format {*crt_tv|*|capture_fifo|%s_gray[*]*} $pointer]]
+        set meta [get_registers [format {*crt_tv|*|capture_fifo|%s_gray_meta[*]*} $pointer]]
+        if {[get_collection_size $gray] == 0 || [get_collection_size $meta] == 0} {
+            error "TV capture FIFO Gray endpoints missing"
+        }
+        set_max_delay 8.0 -from $gray -to $meta
+        set_max_skew 8.0 -from $gray -to $meta
+        # A loose minimum preserves Quartus 17 skew analysis on async heads.
+        set_min_delay -100.0 -from $gray -to $meta
+    }
+    set_false_path -to [get_registers {*crt_tv|*|pair_meta *crt_tv|*|line_meta *crt_tv|*|pair_ack_meta *crt_tv|*|line_ack_meta *crt_tv|*|display_meta}]
+    # Payloads remain held while their request/acknowledge toggles cross.
+    foreach {source_pattern destination_pattern} {
+        {*crt_tv|*|line_payload[*]} {*crt_tv|*|store|*}
+        {*crt_tv|*|store|display_width[*]} {*crt_tv|*|picture_width[*]}
+        {*crt_tv|*|store|display_height[*]} {*crt_tv|*|picture_height[*]}
+    } {
+        set payload [get_registers $source_pattern]
+        set receivers [get_registers $destination_pattern]
+        if {[get_collection_size $payload] == 0 || [get_collection_size $receivers] == 0} {
+            error "TV held mailbox endpoint missing"
+        }
+        set_max_delay 20.0 -from $payload -to $receivers
+        set_false_path -hold -from $payload -to $receivers
+    }
+}
 set maclc_sdc_loaded 1

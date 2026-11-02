@@ -16,7 +16,8 @@ tv_frame_store dut (
     .pair_req(pair_req), .pair_ack(pair_ack), .line_req(1'b0), .line_payload(10'd0), .line_ack(),
     .line_we(), .line_addr(), .line_data(), .address(address), .burstcount(), .writedata(writedata),
     .byteenable(), .read(), .write(write), .waitrequest(1'b0), .readdatavalid(1'b0), .readdata(128'd0),
-    .published(published), .dropped(dropped), .repeated(repeated), .display_slot(display_slot), .display_valid(display_valid)
+    .published(published), .dropped(dropped), .repeated(repeated), .display_slot(display_slot), .display_valid(display_valid),
+    .display_width(), .display_height()
 );
 always @(posedge clk) if(write) begin
     if(display_valid && ((32'(address)-32'h2180000)/76800)==32'(display_slot))
@@ -30,11 +31,11 @@ task automatic token(input [133:0] value);
     @(negedge clk);valid=1;empty=1;
     @(negedge clk);valid=0;
 endtask
-task automatic start_frame(input integer id);
-    token({1'b1,1'b1,1'b0,1'b0,2'd0,128'(id)});
+task automatic start_frame;
+    token({1'b1,1'b1,1'b0,1'b0,2'd0,109'd0,9'd342,10'd512});
 endtask
 task automatic frame(input integer id,input bit bad);
-    start_frame(id);
+    start_frame();
     for(integer i=0;i<43776;i++) token({1'b0,1'b0,1'b0,1'b0,2'd0,{4{32'(id)}}});
     token({1'b1,1'b0,1'b1,bad,2'd0,128'd0});
     repeat(4) @(negedge clk);
@@ -51,7 +52,7 @@ initial begin
     frame(2,0);frame(3,0);select_pair(3); // discard obsolete READY 2
     select_pair(3); // repeat same completed descriptor
     frame(4,1);select_pair(3); // invalid frame never published
-    start_frame(5);
+    start_frame();
     for(integer i=0;i<64;i++)token({6'd0,{4{32'd5}}});
     frame(6,0);select_pair(6); // incomplete frame abandoned at START
     fork
