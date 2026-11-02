@@ -439,8 +439,10 @@ module card_irq_candidate #(
                     runtime_paused <= 1;
                     runtime_refresh <= 1;
                 end else if (!sidefx_word && (sidefx_wdata[7:0] & 8'hDF) == 8'h88) begin
-                    if ((capture_valid && capture_reset) || armed) begin
-                        armed <= 1;
+                    if ((capture_valid && capture_reset) || armed ||
+                        (!cpu_running && !start_pending && !reset_pending)) begin
+                        // A stopped-card command update does not release reset.
+                        if (capture_valid && capture_reset) armed <= 1;
                         runtime_paused <= 0;
                         report_mode <= 0;
                         irq_level <= sidefx_wdata[5];

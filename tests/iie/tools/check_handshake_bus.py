@@ -16,17 +16,40 @@ def main():
                       help='Restore rejection of uncaptured running data reads')
     mode.add_argument('--cleanup-error', action='store_true',
                       help='Seed auxiliary RAM to trigger original Conf error 13')
+    mode.add_argument('--stopped-control', action='store_true',
+                      help='Restore rejection of stopped command updates')
     parser.add_argument('--diagnostic', action='store_true',
                         help='Continue original Conf checks to the diagnostic return')
     parser.add_argument('--cleanup', action='store_true',
                         help='Execute original Conf cleanup and Pascal return')
+    parser.add_argument('--uploaded', action='store_true',
+                        help='Upload original Conf resources instead of preloading candidate firmware')
     args = parser.parse_args()
     args.diagnostic |= args.cleanup
     if args.idle_control and not args.diagnostic:
         parser.error('--idle-control requires --diagnostic')
     if args.cleanup_error and not args.cleanup:
         parser.error('--cleanup-error requires --cleanup')
+    if args.uploaded and (not args.diagnostic or args.cleanup_error):
+        parser.error('--uploaded requires --diagnostic or --cleanup and excludes --cleanup-error')
+    if args.stopped_control and not (args.uploaded and args.cleanup):
+        parser.error('--stopped-control requires --uploaded --cleanup')
+    result_name = ('stopped-control' if args.stopped_control else
+                   'uploaded-cleanup' if args.uploaded and args.cleanup else
+                   'uploaded' if args.uploaded else 'cleanup-error' if args.cleanup_error else
+                   'idle-control' if args.idle_control else 'control' if args.control else
+                   'cleanup' if args.cleanup else 'diagnostic' if args.diagnostic else 'pass')
     closure = runtime_sources()
+    if args.stopped_control:
+        candidate = RTL / 'card_irq_candidate.sv'
+        old = WORK / 'handshake-stopped-control.sv'
+        condition = '''                    if ((capture_valid && capture_reset) || armed ||
+                        (!cpu_running && !start_pending && !reset_pending)) begin'''
+        source = candidate.read_text()
+        assert source.count(condition) == 1
+        old.write_text(source.replace(condition,
+            '                    if ((capture_valid && capture_reset) || armed) begin'), encoding='ascii')
+        closure = [old if p == candidate else p for p in closure]
     if args.control:
         registers = RTL / 'card_irq_host_registers.sv'
         old = WORK / 'handshake-control-registers.sv'
@@ -53,12 +76,42 @@ def main():
     rom[0x100:0x10c] = bytes.fromhex('287cfee000004ef900001046')
     original = conf.read_bytes()
     rom[0x1000:0x1000 + len(original)] = original
+    upload_inputs = []
+    if args.uploaded:
+        rom.extend(bytes.fromhex('4e71') * 12288)
+        rom[0x100:0x106] = bytes.fromhex('4ef900000300')
+        # Resource Manager calls are excluded; execute the original transfer bodies.
+        rom[0x1496:0x1498] = bytes.fromhex('4e75')
+        rom[0x151c:0x151e] = bytes.fromhex('4e75')
+        program = bytearray.fromhex('287cfee00000422c000d')
+        address = 0x2000
+        for resource_id, helper, context in ((1001, 0x14f8, 0), (1001, 0x1472, 0),
+                                              (1002, 0x14f8, 8), (1003, 0x14f8, 8),
+                                              (1004, 0x14f8, 8)):
+            resource = ROOT / f'local/experiments/firmware-memory/decoded/Conf_{resource_id}.decoded.bin'
+            data = resource.read_bytes()
+            assert len(data) == int.from_bytes(data[4:6], 'little') + 6
+            rom[address:address + len(data)] = data
+            program += bytes.fromhex('197c') + context.to_bytes(2, 'big') + bytes.fromhex('000d247c')
+            program += address.to_bytes(4, 'big') + bytes.fromhex('4eb9') + helper.to_bytes(4, 'big')
+            address += (len(data) + 255) & ~255
+            upload_inputs.append(resource)
+        program += bytes.fromhex('422c000d4ef900001046')
+        rom[0x300:0x300 + len(program)] = program
     stop = 0x1100 if args.diagnostic else 0x1080
     if args.cleanup:
         rom[0x200:0x20e] = bytes.fromhex('30390000ffe833c00000800060fe')
+        if args.uploaded:
+            driver = ROOT / 'local/experiments/firmware-memory/code/CODE_5.bin'
+            resume = driver.read_bytes()[0x548:0x54e]
+            assert resume == bytes.fromhex('197c00880020')
+            tail = bytes.fromhex('30390000ffe8287cfee00000') + resume
+            tail += bytes.fromhex('33c00000800060fe')
+            rom[0x200:0x200 + len(tail)] = tail
+            upload_inputs.append(driver)
     else:
         rom[stop:stop + 8] = bytes.fromhex('33c00000800060fe')
-    image = WORK / 'handshake-host.hex'
+    image = WORK / f'handshake-{result_name}-host.hex'
     image.write_text(''.join(f'{int.from_bytes(rom[i:i+2], "big"):04x}\n'
                             for i in range(0, len(rom), 2)), encoding='ascii')
     bench = (ROOT / 'fixtures/experiments/maclc-iie-trial/tb_launch_bus.sv').read_text()
@@ -91,6 +144,9 @@ def main():
             cleanup_reset_seen <= 1;
     end''')
     bench = bench.replace('rom[address[8:1]]', "(address < 32'h2000 ? rom[address[12:1]] : stack[address[15:1]])")
+    if args.uploaded:
+        bench = bench.replace('rom [0:4095]', 'rom [0:16383]')
+        bench = bench.replace("address < 32'h2000 ? rom[address[12:1]]", "address < 32'h8000 ? rom[address[14:1]]")
     bench = bench.replace('.mem_rdata(16\'b0)', '.mem_rdata(memory_response)')
     start = bench.index('                if (rw_n && address ==')
     end = bench.index('            if (ticks >', start)
@@ -131,6 +187,20 @@ def main():
                                   'capture_valid || captures != 44 ||')
             bench = bench.replace('PASS original Conf cleanup resets held C0E8, drains card work and returns zero via Pascal stack',
                                   'PASS original Conf auxiliary RAM failure returns error 13 via Pascal stack and resets card')
+    if args.uploaded:
+        bench = bench.replace('!late_capture_seen ||', 'late_capture_seen ||')
+        bench = bench.replace("!capture_valid || capture_status != 8'h28 || capture_address != 16'hC0E8",
+                              "!capture_valid || capture_status != 8'hE0 || capture_address != 16'hC07D")
+        bench = bench.replace('if (data_out != 0 ||', "if (capture_data != 8'h82 || instruction_address != 16'h2052 || data_out != 0 ||")
+        bench = bench.replace('PASS original Conf host checks return zero on TG68K; late C0E8 remains held, captures=%0d',
+                              'PASS original Conf uploads reach X=82 final report while host returns zero, captures=%0d')
+        bench = bench.replace('PASS original Conf cleanup resets held C0E8, drains card work and returns zero via Pascal stack',
+                              'PASS original Conf uploads reach X=82; host returns zero; stopped driver command preserves reset')
+        if args.cleanup:
+            bench = bench.replace('!cleanup_reset_seen || capture_valid || captures != 63 ||',
+                                  "!cleanup_reset_seen || card.card.armed ||\n"
+                                  "                    card.card.command_context != 56'h00880000C07DE0 ||\n"
+                                  '                    capture_valid || captures != 63 ||')
     bench = bench.replace('ticks > 20000', 'ticks > 200000')
     bench = bench.replace('transactions <= transactions + 1;', '''transactions <= transactions + 1;
                 if (rw_n && card.req_offset == 6'h19) begin
@@ -141,16 +211,17 @@ def main():
     marker = '        repeat (10) @(negedge clk);'
     initial = ROOT / 'local/experiments/card-diagnostic-final/expected0.hex'
     payload = ROOT / 'local/experiments/firmware-memory/decoded/Conf_1001.payload.bin'
-    card_image = bytearray.fromhex(initial.read_text())
+    card_image = bytearray(262144) if args.uploaded else bytearray.fromhex(initial.read_text())
     # Conf clears both RAM banks before uploading the diagnostic.
     card_image[:0x20000] = bytes(0x20000)
     uploaded = payload.read_bytes()
-    card_image[0x2000:0x2000 + len(uploaded)] = uploaded
-    # The candidate fetches auxiliary code while testing display banking.
-    card_image[0x12000:0x12000 + len(uploaded)] = uploaded
+    if not args.uploaded:
+        card_image[0x2000:0x2000 + len(uploaded)] = uploaded
+        # The candidate fetches auxiliary code while testing display banking.
+        card_image[0x12000:0x12000 + len(uploaded)] = uploaded
     if args.cleanup_error:
         card_image[0x10000] = 0x80
-    preload = WORK / 'handshake-card.hex'
+    preload = WORK / f'handshake-{result_name}-card.hex'
     preload.write_text(''.join(f'{value:02x}\n' for value in card_image), encoding='ascii')
     bench = bench.replace(marker, '        $readmemh("' + linux(preload) + '''", initial_card);
         for (integer i = 0; i < 131072; i = i + 1)
@@ -162,14 +233,23 @@ def main():
         stack[16'hFFE2 >> 1] = 16'h0200;
         stack[16'hFFE8 >> 1] = 16'hFFFF;
 ''' + marker)
-    path = WORK / 'tb_handshake_bus.sv'
+    path = WORK / f'tb_handshake_{result_name}.sv'
+    if args.stopped_control:
+        bench = bench.replace('        if (!reset) begin', '''        if (!reset) begin
+            if (fault) $display("stopped command fault context=%h first=%h",
+                card.card.command_context, card.card.first_fault);''')
     path.write_text(bench, encoding='ascii')
     host = [MACLC / 'rtl/tg68k' / name for name in
             ('TG68K_Pack.sv', 'TG68K_ALU.v', 'TG68KdotC_Kernel.v', 'tg68k.v')]
-    binary = WORK / 'handshake.vvp'
+    binary = WORK / f'handshake-{result_name}.vvp'
     run(['iverilog', '-g2012', '-s', 'tb_launch_bus', '-o', linux(binary),
          linux(path), *map(linux, closure + host)])
-    if args.control or args.idle_control:
+    if args.stopped_control:
+        result = run_process(['vvp', linux(binary), '+program=' + linux(image)], timeout=30)
+        print(result.stdout, end='')
+        assert result.returncode and 'stopped command fault context=00880000c07de0 first=5' in result.stdout
+        output = result.stdout
+    elif args.control or args.idle_control:
         result = run_process(['vvp', linux(binary), '+program=' + linux(image)], timeout=30)
         print(result.stdout, end='')
         offset = '0c' if args.idle_control else '19'
@@ -181,12 +261,15 @@ def main():
              'Original Conf $046-$080, $364 helper and WAIT')
     if args.cleanup:
         scope = 'Original Conf $046-$114, diagnostic helpers, cleanup and Pascal return; synthetic saved register/argument stack'
-    record = {'control': args.control or args.idle_control or args.cleanup_error, 'result': output,
-              'scope': scope + ' on actual TG68K; preloaded main/auxiliary diagnostic code and candidate firmware/vectors',
-              'sha256': {str(p): sha(p) for p in [conf, initial, payload, preload, path, *closure, *host, Path(__file__)]}}
-    result_name = ('cleanup-error' if args.cleanup_error else
-                   'idle-control' if args.idle_control else 'control' if args.control else
-                   'cleanup' if args.cleanup else 'diagnostic' if args.diagnostic else 'pass')
+    if args.uploaded:
+        scope += '; original transfer bodies with decoded Conf 1001-1004 supplied; zeroed card RAM; Resource Manager and full memory test excluded'
+        if args.cleanup:
+            scope += '; original CODE 5 $548 command appended after Conf cleanup, full driver caller excluded'
+    else:
+        scope += '; preloaded main/auxiliary diagnostic code and candidate firmware/vectors'
+    record = {'control': args.control or args.idle_control or args.cleanup_error or args.stopped_control, 'result': output,
+              'scope': scope + ' on actual TG68K',
+              'sha256': {str(p): sha(p) for p in [conf, initial, payload, preload, path, image, *upload_inputs, *closure, *host, Path(__file__)]}}
     (WORK / f'handshake-{result_name}.json').write_text(
         json.dumps(record, indent=2) + '\n', encoding='ascii')
 

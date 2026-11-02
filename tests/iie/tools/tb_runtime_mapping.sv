@@ -40,11 +40,25 @@ module tb_runtime_mapping;
         force dut.cpu_valid = 0;
         repeat (4) @(posedge clk);
         @(negedge clk); por_n = 1;
+        write_reg(6'h20, 0, 16'h0088);
+        check_mapping(0, 16'h0000);
+        if (dut.fault || dut.armed || dut.cpu_running || dut.start_pending)
+            $fatal(1, "stopped run command changed reset state");
+        if (debug_trace[71:16] !== 56'h00880000000000)
+            $fatal(1, "stopped command context mismatch");
+        write_reg(6'h20, 0, 16'h00A8);
+        check_mapping(0, 16'h0000);
+        if (dut.fault || dut.armed || dut.cpu_running || dut.start_pending)
+            $fatal(1, "stopped IRQ command changed reset state");
         write_reg(6'h21, 0, 16'h00FC);
         write_reg(6'h20, 0, 16'h0080);
         check_mapping(0, 16'hFC10);
         write_reg(6'h20, 1, 16'h0802);
         check_mapping(0, 16'hFC10);
+        write_reg(6'h20, 0, 16'h0088);
+        check_mapping(0, 16'hFC10);
+        if (dut.fault || dut.armed || dut.cpu_running || dut.start_pending)
+            $fatal(1, "post-cleanup command restarted CPU");
         write_reg(6'h21, 0, 16'h0023);
         write_reg(6'h20, 0, 16'h0080);
         check_mapping(1, 16'h2320);
