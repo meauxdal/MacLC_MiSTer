@@ -59,7 +59,7 @@ and Apply and reset. PRAM can select a different boot disk.
 
 - **Machine (P1):** Interrupt (NMI); Clear PRAM and reset.
 - **Video (P2):** Monitor; Aspect ratio; Scale; CRT de-flicker (Strong / Mild /
-  Off) when built with [480i support](BUILD.md#optional-480i-support).
+  Off) when built with [480i support](docs/BUILD.md#optional-480i-support).
 - **Audio (P4):** MT32-pi enable, synthesizer, Munt ROM or SoundFont, and Show
   info. Unused controls hide immediately while keeping the page's spacing.
 - **Advanced (P5):** PRAM image; Floppy writes; CD-ROM drive; Ethernet;
@@ -369,7 +369,7 @@ bash scripts/setup_env.sh   # once: create scripts/local.env, set QUARTUS_BIN
 bash scripts/build_only.sh  # full compile -> output_files/MacLC.rbf + STA verdict
 ```
 
-See [BUILD.md](BUILD.md) for details. Deploy the resulting `.rbf` from `output_files/` to the
+See [BUILD.md](docs/BUILD.md) for details. Deploy the resulting `.rbf` from `output_files/` to the
 SD card.
 
 ### Simulation (Verilator)
@@ -382,8 +382,7 @@ make
 ./obj_dir/Vemu --help
 ```
 
-See [CLAUDE.md](CLAUDE.md) and the `docs/` directory for architecture notes and the
-development workflow.
+See the [docs](docs/) directory for architecture notes and technical references.
 
 ## AI Disclaimer
 Please be aware this core was developed with heavy use of AI tooling, including Claude (Fable, Opus, Sonnet Models) and GPT (Codex), and does borrow for MAME. That said, a physical Macintosh LC computer was also used to assist with the development of this core.
