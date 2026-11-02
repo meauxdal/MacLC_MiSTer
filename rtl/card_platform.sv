@@ -40,7 +40,8 @@ module card_platform #(
     output wire [7:0] capture_data,
     output wire [31:0] capture_count,
     output wire [31:0] cpu_completed,
-    output wire [3:0] debug_state
+    output wire [3:0] debug_state,
+    output wire [15:0] debug_trace
 );
     wire src_valid, src_ready, src_write, src_rsp_valid, src_rsp_ready;
     wire [16:0] src_addr;
@@ -71,7 +72,7 @@ module card_platform #(
         .mem_rdata(src_rdata), .fault(fault), .boundary(boundary),
         .card_cpu_address(card_cpu_address), .instruction_address(instruction_address), .capture_valid(capture_valid),
         .capture_status(capture_status), .capture_address(capture_address),
-        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state)
+        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state), .debug_trace(debug_trace)
     );
     card_memory_cdc card_crossing (
         .src_clk(clk_sys), .src_reset(!por_n_sys), .dst_clk(clk_mem), .dst_reset(!por_n_mem),

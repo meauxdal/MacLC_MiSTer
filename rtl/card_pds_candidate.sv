@@ -33,7 +33,8 @@ module card_irq_pds_candidate (
     output wire [7:0] capture_data,
     output wire [31:0] capture_count,
     output wire [31:0] cpu_completed,
-    output wire [3:0] debug_state
+    output wire [3:0] debug_state,
+    output wire [15:0] debug_trace
 );
     wire req_valid, req_ready, req_word, req_write;
     wire [5:0] req_offset;
@@ -55,6 +56,6 @@ module card_irq_pds_candidate (
         .mem_wdata(mem_wdata), .mem_rsp_valid(mem_rsp_valid), .mem_rsp_ready(mem_rsp_ready),
         .mem_rdata(mem_rdata), .fault(fault), .boundary(boundary), .cpu_address(card_cpu_address), .instruction_address(instruction_address),
         .capture_valid(capture_valid), .capture_status(capture_status), .capture_address(capture_address),
-        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state)
+        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state), .debug_trace(debug_trace)
     );
 endmodule

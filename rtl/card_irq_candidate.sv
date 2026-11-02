@@ -43,9 +43,15 @@ module card_irq_candidate #(
     output reg [7:0] capture_data,
     output reg [31:0] capture_count,
     output reg [31:0] cpu_completed,
-    output wire [3:0] debug_state
+    output wire [3:0] debug_state,
+    output wire [15:0] debug_trace
 );
     assign debug_state = {monitor_active, cpu_running, reset_pending, armed};
+    reg [7:0] start_mask;
+    reg start_override;
+    reg [2:0] start_count;
+    reg [3:0] first_fault;
+    assign debug_trace = {start_mask, start_override, start_count, first_fault};
     always @(posedge clk) begin
         if (!por_n) instruction_address <= 0;
         else if (cpu_ready && cpu_sync) instruction_address <= cpu_address;
@@ -316,6 +322,10 @@ module card_irq_candidate #(
             cpu_memory_wait <= 0;
             cpu_completed <= 0;
             fault <= 0;
+            start_mask <= 0;
+            start_override <= 0;
+            start_count <= 0;
+            first_fault <= 0;
         end else begin
             if (nmi_delay_left != 0) nmi_delay_left <= nmi_delay_left - 1;
             if (irq_delay_left != 0) irq_delay_left <= irq_delay_left - 1;
@@ -331,14 +341,20 @@ module card_irq_candidate #(
             if (master_valid[1] && master_ready[1]) cpu_memory_wait <= 1;
             if (master_rsp_valid[1] && master_rsp_ready[1]) begin
                 cpu_memory_wait <= 0;
-                if (denied) fault <= 1;
+                if (denied) begin
+                    fault <= 1;
+                    if (!fault) first_fault <= 1;
+                end
             end
             if (start_pending && drained && !cpu_memory_wait && !reset_stopping) begin
                 cpu_running <= 1;
                 start_pending <= 0;
             end
             if (cpu_running && !start_pending && !boundary &&
-                (cpu_halted || (cpu_valid && unsupported_cpu))) fault <= 1;
+                (cpu_halted || (cpu_valid && unsupported_cpu))) begin
+                fault <= 1;
+                if (!fault) first_fault <= cpu_halted ? 4'd2 : 4'd3;
+            end
             if (runnable && trap && !permitted && !capture_valid) begin
                 capture_valid <= 1;
                 capture_count <= capture_count + 1;
@@ -383,7 +399,10 @@ module card_irq_candidate #(
                         16'h0800: capture_status <= (monitor_active ? 8'h62 : 8'h22) | (ram_address[16] ? 8'h08 : 0) | {7'b0, report_mode};
                         16'h2000: capture_status <= 8'h04 | (ram_address[16] ? 8'h08 : 0) | {7'b0, report_mode};
                         16'h4000: capture_status <= 8'h24 | (ram_address[16] ? 8'h08 : 0) | {7'b0, report_mode};
-                        default: fault <= 1;
+                        default: begin
+                            fault <= 1;
+                            if (!fault) first_fault <= 4;
+                        end
                     endcase
                 end
             end
@@ -420,22 +439,37 @@ module card_irq_candidate #(
                         report_mode <= 0;
                         irq_level <= sidefx_wdata[5];
                         if (sidefx_wdata[5] && !irq_level) irq_delay_left <= IRQ_DELAY;
-                    end else fault <= 1;
+                    end else begin
+                        fault <= 1;
+                        if (!fault) first_fault <= 5;
+                    end
                 end else if (!sidefx_word && sidefx_wdata[7:0] == 8'h98 && armed)
                     report_mode <= 1;
-                else fault <= 1;
+                else begin
+                    fault <= 1;
+                    if (!fault) first_fault <= 6;
+                end
             end
             if (ack || read_release || (address_read && capture_valid && capture_address_release)) begin
                 if (capture_valid) begin
-                    if (sidefx_write && !read_release && sidefx_wdata[7:0] != 0) fault <= 1;
+                    if (sidefx_write && !read_release && sidefx_wdata[7:0] != 0) begin
+                        fault <= 1;
+                        if (!fault) first_fault <= 7;
+                    end
                     else if ((read_release != capture_read_release && !address_read) ||
-                             (capture_reset && !armed)) fault <= 1;
+                             (capture_reset && !armed)) begin
+                        fault <= 1;
+                        if (!fault) first_fault <= 8;
+                    end
                     else begin
                         capture_valid <= 0;
                         permitted <= 1;
                     end
                 end else if (ack && runtime_refresh) runtime_refresh <= 0;
-                else if (cpu_running && (ack || read_release)) fault <= 1;
+                else if (cpu_running && (ack || read_release)) begin
+                    fault <= 1;
+                    if (!fault) first_fault <= 9;
+                end
             end
             // Accepted memory work completes before CPU and capture state reset.
             if (reset_commit) begin
@@ -445,8 +479,14 @@ module card_irq_candidate #(
                 card_mode <= 0;
                 slot3_rom <= 0;
                 internal_c8 <= 0;
-                if (reset_restart)
+                if (reset_restart) begin
                     monitor_active <= runtime_mode || (reset_mask & 8'hFC) == 8'h20;
+                    if (!fault) begin
+                        start_mask <= reset_mask;
+                        start_override <= runtime_mode;
+                        if (start_count != 7) start_count <= start_count + 3'd1;
+                    end
+                end
                 nmi_pending <= 0;
                 nmi_overlay <= 0;
                 irq_level <= 0;

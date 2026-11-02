@@ -7,7 +7,7 @@ module maclc_iie_binding (
     input wire pds_as_n, pds_uds_n, pds_lds_n, pds_rw,
     input wire [15:0] pds_write_data,
     output wire diagnostic_boundary, diagnostic_fault,
-    output wire [199:0] debug_status,
+    output wire [215:0] debug_status,
     output wire claim, dtack_n, error,
     output wire [15:0] pds_read_data,
     input wire floppy_req,
@@ -25,6 +25,7 @@ module maclc_iie_binding (
     wire [7:0] cap_status, cap_data;
     wire [31:0] cap_count, cpu_count;
     wire [3:0] debug_state;
+    wire [15:0] debug_trace;
     reg bus_active = 0;
     reg [31:0] bus_count = 0, bus_address = 0;
     reg [15:0] bus_data = 0;
@@ -44,7 +45,7 @@ module maclc_iie_binding (
             end
         end
     end
-    assign debug_status = {debug_state, claim, cap_valid, diagnostic_boundary, diagnostic_fault,
+    assign debug_status = {debug_trace, debug_state, claim, cap_valid, diagnostic_boundary, diagnostic_fault,
         cpu_pc, cap_address, cap_status, cap_data, cpu_bus, cap_count[15:0], cpu_count, bus_count, bus_address, bus_data};
     wire cold_ready = pll_locked && memory_ready;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] reset_mem = 0;
@@ -68,6 +69,6 @@ module maclc_iie_binding (
         .native_req(native_req), .native_we(native_we), .native_addr(native_addr), .native_din(native_din),
         .native_ack(native_ack), .native_dout(native_dout),
         .fault(diagnostic_fault), .boundary(diagnostic_boundary), .card_cpu_address(cpu_bus), .instruction_address(cpu_pc), .capture_valid(cap_valid), .capture_status(cap_status),
-        .capture_address(cap_address), .capture_data(cap_data), .capture_count(cap_count), .cpu_completed(cpu_count), .debug_state(debug_state)
+        .capture_address(cap_address), .capture_data(cap_data), .capture_count(cap_count), .cpu_completed(cpu_count), .debug_state(debug_state), .debug_trace(debug_trace)
     );
 endmodule

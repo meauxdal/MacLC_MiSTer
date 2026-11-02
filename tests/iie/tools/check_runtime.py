@@ -59,7 +59,7 @@ def main():
     original = ROOT / 'local/experiments/card-diagnostic-final/tb_binding.sv'
     bench = WORK / 'tb_diagnostic.sv'
     source = original.read_text().replace('    wire diagnostic_boundary, diagnostic_fault;',
-        "    wire diagnostic_boundary, diagnostic_fault;\n    wire [199:0] debug_status;\n    wire runtime_mode = 1'b0;")
+        "    wire diagnostic_boundary, diagnostic_fault;\n    wire [215:0] debug_status;\n    wire runtime_mode = 1'b0;")
     source = source.replace('if (status == 5) transact(writing, word_access, offset, value, gap);',
         '''if (status == 5) begin
                 if (!writing && !word_access && offset == 1 && value > 0)

@@ -13,6 +13,7 @@ def main():
         'runtime': 'check_runtime.py',
         'prepare': 'prepare_runtime.py',
         'fit': 'check_runtime_fit.py',
+        'trace': 'check_hardware_trace.py',
     }
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('check', choices=scripts)

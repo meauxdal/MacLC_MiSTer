@@ -1,13 +1,13 @@
 module iie_status_overlay (
     input wire clk_sys, clk_vid, reset,
     input wire ce_pixel, de, vblank,
-    input wire [199:0] status_sys,
+    input wire [215:0] status_sys,
     input wire [7:0] red_in, green_in, blue_in,
     output wire [7:0] red_out, green_out, blue_out
 );
     reg request = 0, acknowledge = 0;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] request_sync = 0, acknowledge_sync = 0;
-    reg [199:0] held = 0, snapshot = 0;
+    reg [215:0] held = 0, snapshot = 0;
     reg vblank_d = 0, de_d = 0;
     reg [10:0] x = 0, y = 0, active_lines = 384;
     always @(posedge clk_sys) begin
@@ -75,6 +75,7 @@ module iie_status_overlay (
             "I": glyph = 35'b01110_00100_00100_00100_00100_00100_01110;
             "L": glyph = 35'b10000_10000_10000_10000_10000_10000_11111;
             "N": glyph = 35'b10001_11001_10101_10011_10001_10001_10001;
+            "O": glyph = 35'b01110_10001_10001_10001_10001_10001_01110;
             "P": glyph = 35'b11110_10001_10001_11110_10000_10000_10000;
             "R": glyph = 35'b11110_10001_10001_11110_10100_10010_10001;
             "S": glyph = 35'b01111_10000_10000_01110_00001_00001_11110;
@@ -83,7 +84,7 @@ module iie_status_overlay (
             default: glyph = 0;
         endcase
     endfunction
-    function automatic [7:0] text_char(input integer row, col, input [199:0] data);
+    function automatic [7:0] text_char(input integer row, col, input [215:0] data);
         reg [191:0] label;
         begin
             case (row)
@@ -94,6 +95,7 @@ module iie_status_overlay (
                 4: label = "CPU N 00000000          ";
                 5: label = "PDS N 00000000          ";
                 6: label = "PDS 00000000 0000       ";
+                7: label = "START 00 O0 N0 F0       ";
                 default: label = 0;
             endcase
             text_char = label[191 - col * 8 -: 8];
@@ -109,6 +111,10 @@ module iie_status_overlay (
                 text_char = hex_char(data[143 - (row - 3) * 32 - (col - 6) * 4 -: 4]);
             if (row == 6 && col >= 4 && col <= 11) text_char = hex_char(data[47 - (col - 4) * 4 -: 4]);
             if (row == 6 && col >= 13 && col <= 16) text_char = hex_char(data[15 - (col - 13) * 4 -: 4]);
+            if (row == 7 && col >= 6 && col <= 7) text_char = hex_char(data[215 - (col - 6) * 4 -: 4]);
+            if (row == 7 && col == 10) text_char = hex_char({3'b0, data[207]});
+            if (row == 7 && col == 13) text_char = hex_char({1'b0, data[206:204]});
+            if (row == 7 && col == 16) text_char = hex_char(data[203:200]);
         end
     endfunction
     integer px, py, row, col, gx, gy, panel_top;
@@ -116,13 +122,13 @@ module iie_status_overlay (
     reg [34:0] bitmap;
     always @* begin
         px = int'(x) - 8;
-        panel_top = int'(active_lines) - 120;
+        panel_top = int'(active_lines) - 136;
         py = int'(y) - panel_top;
         row = py / 16;
         col = px / 12;
         gx = (px % 12) / 2;
         gy = (py % 16) / 2;
-        panel = de && x >= 8 && x < 296 && int'(y) >= panel_top && int'(y) < panel_top + 112;
+        panel = de && x >= 8 && x < 296 && int'(y) >= panel_top && int'(y) < panel_top + 128;
         bitmap = 0;
         ink = 0;
         if (panel) begin
