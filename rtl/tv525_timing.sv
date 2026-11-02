@@ -28,7 +28,7 @@ localparam [10:0] FRAME_HALVES = 11'd1050;
 localparam [10:0] FIELD_HALVES = 11'd525;
 localparam [10:0] PICTURE_BEGIN = 11'd253;
 localparam [10:0] PICTURE_END = 11'd1675;
-localparam [11:0] PICTURE_SAMPLES = 12'd1422;
+localparam [10:0] X_PERIOD = 11'd711;
 
 reg [9:0] half_sample = 10'd0;
 reg [10:0] frame_half = 11'd0;
@@ -78,21 +78,21 @@ assign canvas_y = picture_de ? {picture_row, field_id} : 9'd0;
 // Bresenham-style sample hold: x=floor(sample_in_picture*640/1422).
 // No synthesizable divide or frame/line RAM is needed for this aperture.
 reg [9:0] logical_x = 10'd0;
-reg [10:0] x_remainder = 11'd0;
-wire [11:0] x_sum = {1'b0, x_remainder} + 12'd640;
-wire [10:0] x_wrapped = 11'(x_sum - PICTURE_SAMPLES);
+reg [9:0] x_remainder = 10'd0;
+wire [10:0] x_sum = {1'b0, x_remainder} + 11'd320;
+wire [9:0] x_wrapped = 10'(x_sum - X_PERIOD);
 always @(posedge clk) begin
     if (reset || !active_sample) begin
         logical_x <= 10'd0;
-        x_remainder <= 11'd0;
-    end else if (x_sum >= PICTURE_SAMPLES) begin
+        x_remainder <= 10'd0;
+    end else if (x_sum >= X_PERIOD) begin
         logical_x <= logical_x + 10'd1;
         x_remainder <= x_wrapped;
     end else begin
-        x_remainder <= x_sum[10:0];
+        x_remainder <= x_sum[9:0];
     end
 end
 assign canvas_x = picture_de ? logical_x : 10'd0;
-assign pixel_ce = picture_de && (x_remainder < 11'd640);
+assign pixel_ce = picture_de && (x_remainder < 10'd320);
 
 endmodule

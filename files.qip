@@ -54,3 +54,12 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_display_state.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_trap_decode.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/maclc_iie_binding.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/iie_status_overlay.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_pipeline.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_video.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv525_timing.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_buffered_canvas.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_video_capture.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_capture_fifo.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_frame_store.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_deflicker.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_bridge.sv

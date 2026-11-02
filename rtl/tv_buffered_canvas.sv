@@ -1,7 +1,10 @@
 // Portable native stream -> async FIFO -> DDR store -> complete-line RAM.
 // Raw raster tags are delayed exactly one TV edge with the synchronous RAM
 // pixel lookup. Underflow substitutes an entire black line, never stalls TV.
-module tv_buffered_canvas (
+module tv_buffered_canvas #(
+    parameter [27:0] BASE_WORD = 28'h2180000,
+    parameter SOURCE_WIDTH = 0, SOURCE_HEIGHT = 0
+) (
     input wire clk_source, source_reset, source_ce, source_de,
     input wire source_line, source_frame,
     input wire [9:0] source_width,
@@ -46,7 +49,9 @@ wire pair_ack, line_ack, line_we;
 wire [8:0] line_addr;
 wire [127:0] line_data;
 wire display_valid;
-tv_frame_store store (
+wire [9:0] display_width;
+wire [8:0] display_height;
+tv_frame_store #(.BASE_WORD(BASE_WORD), .SOURCE_WIDTH(SOURCE_WIDTH), .SOURCE_HEIGHT(SOURCE_HEIGHT)) store (
     .clk(clk_mem), .inhibit(inhibit), .fifo_empty(empty), .fifo_valid(fifo_valid),
     .fifo_data(fifo_data), .fifo_pop(pop), .pair_req(pair_req), .pair_ack(pair_ack),
     .line_req(line_req), .line_payload(line_payload), .line_ack(line_ack),
@@ -55,7 +60,8 @@ tv_frame_store store (
     .read(read), .write(write), .waitrequest(waitrequest),
     .readdatavalid(readdatavalid), .readdata(readdata),
     .published(published), .dropped(dropped), .repeated(repeated),
-    .display_slot(), .display_valid(display_valid)
+    .display_slot(), .display_valid(display_valid),
+    .display_width(display_width), .display_height(display_height)
 );
 (* ramstyle="M10K, no_rw_check" *) reg [127:0] line_ram [0:511];
 always @(posedge clk_mem) if (line_we) line_ram[line_addr]<=line_data;
@@ -70,6 +76,9 @@ reg [127:0] pixel_word=0;
 reg [1:0] pixel_lane=0;
 reg [23:0] fallback_q=0;
 reg use_picture_q=0, use_line_q=0;
+reg [9:0] picture_width=0;
+reg [8:0] picture_height=0;
+reg inside_q=0;
 wire [9:0] x=tag_in[18:9];
 // Ask one complete electrical line in advance. Bank alternates per row in
 // each field; odd/even canvas rows use the same sequence of banks.
@@ -79,12 +88,19 @@ wire [8:0] next_y=line_number<=261 ? 9'((line_number-10'd22)*10'd2+10'd1) : 9'((
 wire [8:0] current_y=line_number<=262 ? 9'((line_number-10'd23)*10'd2+10'd1) : 9'((line_number-10'd285)*10'd2);
 wire next_bank=next_y[1];
 wire current_ready=current_y[1] ? ready1 && ready_row1==current_y : ready0 && ready_row0==current_y;
+wire [9:0] origin_x=(10'd640-picture_width)>>1;
+wire [8:0] origin_y=(9'd480-picture_height)>>1;
+wire [8:0] source_y=current_y-origin_y;
+wire [1:0] row_lane=2'(source_y[1:0]*picture_width[1:0]);
+wire [9:0] source_x=x-origin_x;
+wire [9:0] pixel_x=source_x+{8'd0,row_lane};
 always @(posedge clk_tv) begin
     pair_ack_meta<=pair_ack; pair_ack_sync<=pair_ack_meta;
     line_ack_meta<=line_ack; line_ack_sync<=line_ack_meta;
     display_meta<=display_valid; display_sync<=display_meta;
     tag_out<=tag_in; fallback_q<=fallback_rgb;
-    pixel_word<=line_ram[{current_bank,x[9:2]}]; pixel_lane<=x[1:0];
+    pixel_word<=line_ram[{current_bank,pixel_x[9:2]}]; pixel_lane<=pixel_x[1:0];
+    inside_q<=x>=origin_x && source_x<picture_width && current_y>=origin_y && source_y<picture_height;
     use_picture_q<=have_picture;
     use_line_q<=line_usable;
     if (reset_tv) begin
@@ -105,6 +121,8 @@ always @(posedge clk_tv) begin
         if (tag_in[20] && line_number==21) begin
             pair_usable<=pair_ack_sync==pair_req;
             have_picture<=display_sync;
+            // Descriptor is held from pair_ack through both fields.
+            picture_width<=display_width; picture_height<=display_height;
         end
         if (tag_in[20] && next_is_picture && pair_usable && line_ack_sync==line_req) begin
             line_payload<={next_bank,next_y}; line_req<=!line_req;
@@ -122,5 +140,5 @@ always @(posedge clk_tv) begin
 end
 wire [23:0] pixel = pixel_word[pixel_lane*32 +: 24];
 assign rgb_out = !tag_out[25] ? 24'd0 : !use_picture_q ? fallback_q :
-                 use_line_q ? pixel : 24'd0;
+                 use_line_q && inside_q ? pixel : 24'd0;
 endmodule

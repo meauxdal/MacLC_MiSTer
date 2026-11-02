@@ -50,18 +50,15 @@ tv525_video video (
     .clk_source(clk_source), .source_reset(capture_reset), .source_ce(source_ce),
     .source_de(capture_de), .source_line(capture_line), .source_frame(capture_frame),
     .source_width(capture_width), .source_height(capture_height), .source_rgb(capture_rgb),
-    .rgb(rgb_raw), .hs(), .vs(), .de(), .field_id(),
+    .rgb(rgb_raw), .hs(), .vs(), .de(), .field_id(), .csync_n(),
+    .published(published), .dropped(dropped), .repeated(repeated),
+    .overflows(overflows), .underruns(underruns),
     .address(b_address), .burstcount(b_burstcount), .writedata(b_writedata), .byteenable(b_byteenable),
     .read(b_read), .write(b_write), .waitrequest(b_waitrequest),
     .readdatavalid(b_readdatavalid), .readdata(b_readdata)
 );
 assign tag_raw=video.tag;
 assign tag_out=video.canvas_tag;
-assign published=video.canvas.store.published;
-assign dropped=video.canvas.store.dropped;
-assign repeated=video.canvas.store.repeated;
-assign overflows=video.canvas.capture.overflows;
-assign underruns=video.canvas.underruns;
 wire [27:0] wide_address;
 wire [7:0] wide_burstcount;
 wire [127:0] wide_writedata, wide_readdata;
