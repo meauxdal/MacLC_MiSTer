@@ -77,6 +77,10 @@ def prepare_bench(bench, prefix=False):
         end''', 1)
     bench = bench.replace('if (!driver_return || rti_count',
                           'if (!conf_done || !runtime_seen || !driver_return || rti_count')
+    bench = bench.replace('continuation mismatch latch=%h',
+                          'continuation mismatch conf=%b runtime=%b latch=%h')
+    bench = bench.replace("world[16'hF770 >> 1][7:0], rti_count, driver_return, service_reads,",
+                          "conf_done, runtime_seen, world[16'hF770 >> 1][7:0], rti_count, driver_return, service_reads,")
     bench = bench.replace('PASS original TG68K upload and driver service 1 ACK/return; card RTI to FBDF',
                           'PASS consecutive Conf cleanup, upload, original reset helpers and service 1 RTI; automatic mapping')
     if prefix:

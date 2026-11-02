@@ -50,8 +50,10 @@ def prepare_host(rom, driver):
     return rom
 
 
-def prepare_bench(bench, driver, setup_only=False, control=False):
-    tag = f'transition-render-code{driver}' + ('-control' if control else '')
+def prepare_bench(bench, driver, setup_only=False, control=False, service=False, clear_cells=0):
+    tag = f'transition-render-code{driver}' + ('-service' if service else '') + ('-control' if control else '')
+    if clear_cells:
+        tag += f'-clear-{clear_cells}'
     glyph, pins = glyph_input()
     functions, oracle_path = oracle(glyph.read_bytes())
     short, wide = functions['lookup_tables']()
@@ -76,7 +78,7 @@ def prepare_bench(bench, driver, setup_only=False, control=False):
     reg [15:0] frame [0:{frame_words - 1}];
     wire frame_access = address >= 32'h000FFFC0 && address < 32'h00100000 + {stride * 480 + 64};
     reg lookup_done = 0, first_display = 0, display_ack = 0;
-    reg display_committed = 0;
+    reg display_committed = 0, display_return = 0;
     integer render_reads = 0, render_acks = 0, render_commits = 0, render_index;''')
     bench = bench.replace('assign data_in = claim ? card_data :', '''assign data_in = claim ? card_data :
         address[31:16] == 16'h0028 ? main_code[address[15:1]] :
@@ -121,29 +123,38 @@ def prepare_bench(bench, driver, setup_only=False, control=False):
                 $display("PHASE first monitor display write captured; original host handler continues");''')
     marker = '            if (ticks >'
     offset = bench.index(marker)
-    bench = bench[:offset] + '''            if (first_display && card.req_valid && card.req_ready &&
+    bench = bench[:offset] + '''            if (first_display && !display_return && card.req_valid && card.req_ready &&
                 !card.req_word && card.req_offset == 6'h0C) begin
                 if (card.req_write) begin
                     render_acks <= render_acks + 1;
                     display_ack <= 1;
                 end else render_reads <= render_reads + 1;
             end
-            if (first_display && card.card.cpu_ready && card.card.cpu_write && card_cpu == 16'h05FB) begin
+            if (first_display && !display_return && card.card.cpu_ready && card.card.cpu_write && card_cpu == 16'h05FB) begin
                 if (!display_ack || capture_valid || memory[17'h002FD][15:8] != 0)
                     $fatal(1, "first display store did not commit after original ACK");
                 render_commits <= render_commits + 1;
                 display_committed <= 1;
             end
-            if (display_ack && !as_n && rw_n && address == 32'h0020281C) begin
+            if (display_ack && !display_return && !as_n && rw_n && address == 32'h0020281C) begin
                 if (!display_committed || render_reads != 2 || render_acks != 1 || render_commits != 1 ||
                     world[(16'hB7EE >> 1) + 16'h01FB][7:0] != 0 || service_ack || rti_count != 0)
                     $fatal(1, "first display handler return/cache mismatch reads=%0d acks=%0d commits=%0d", render_reads, render_acks, render_commits);
                 $writememh("FRAME_OUTPUT", frame);
                 $writememh("PAGE_OUTPUT", memory, 17'h00200, 17'h003FF);
+                display_return <= 1;
                 $display("PASS original transition first display ACK, commit, cache and host polling return; pixel verification follows");
-                $finish;
+                DISPLAY_FINISH
             end
 ''' + bench[offset:]
+    bench = bench.replace('DISPLAY_FINISH', '' if service else '$finish;')
+    if service:
+        marker = 'PASS consecutive Conf cleanup, upload, original reset helpers and service 1 RTI; automatic mapping'
+        assert marker in bench
+        bench = bench.replace('$display("' + marker + '");', '''if (!display_return || !lookup_done || !initializer_done ||
+                    render_reads != 2 || render_acks != 1 || render_commits != 1)
+                    $fatal(1, "service 1 reached without verified first display return");
+                $display("PASS consecutive Conf cleanup, upload, initialization, lookup setup, first display and service 1 ACK/return; register-preserving card RTI to FBDF");''')
     bench = bench.replace('FRAME_OUTPUT', linux(WORK / f'{tag}-frame.hex'))
     bench = bench.replace('PAGE_OUTPUT', linux(WORK / f'{tag}-page.hex'))
     mismatch = '$fatal(1, "wide lookup mismatch word=%0d", render_index);'
@@ -167,8 +178,10 @@ def prepare_bench(bench, driver, setup_only=False, control=False):
     return bench, [Path(__file__), pins, glyph, oracle_path, main_image, glyph_image, lookup_image]
 
 
-def check_pixels(driver):
-    tag = f'transition-render-code{driver}'
+def check_pixels(driver, service=False, clear_cells=0):
+    tag = f'transition-render-code{driver}' + ('-service' if service else '')
+    if clear_cells:
+        tag += f'-clear-{clear_cells}'
     def read_words(path):
         return [int(word, 16) for word in path.read_text().splitlines() if word and not word.startswith('//')]
     page = b''.join(word.to_bytes(2, 'little') for word in read_words(WORK / f'{tag}-page.hex'))

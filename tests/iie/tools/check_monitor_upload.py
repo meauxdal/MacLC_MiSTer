@@ -19,6 +19,8 @@ def main():
     parser.add_argument('--transition-init', action='store_true', help='Run and check original display initialization before the transition prefix')
     parser.add_argument('--init-control', action='store_true', help='Inject a wrong initializer stride')
     parser.add_argument('--transition-render', action='store_true', help='Include automatic transition, initialization, lookup setup and first display handler; longer run')
+    parser.add_argument('--transition-service', action='store_true', help='Continue transition rendering through original service 1 ACK and RTI; longer run')
+    parser.add_argument('--transition-clear', type=int, metavar='CELLS', help='Continue the combined transition through 1-960 monitor clear cells; longer run')
     parser.add_argument('--render-setup-only', action='store_true', help='Stop after checking lookup tables and supplied glyphs')
     parser.add_argument('--lookup-control', action='store_true', help='Corrupt one CODE 1 lookup constant')
     parser.add_argument('--prepare-only', action='store_true', help='Prepare and compile without running the simulation')
@@ -27,6 +29,14 @@ def main():
     parser.add_argument('--display-control', action='store_true', help='Shift the display destination by one byte')
     parser.add_argument('--display-cells', type=int, default=1, help='Monitor clear cells to check, 1-960; full clear is a longer run')
     args = parser.parse_args()
+    if args.transition_clear is not None:
+        if not 1 <= args.transition_clear <= 960:
+            parser.error('--transition-clear requires a count from 1 to 960')
+        args.transition_service = True
+    if args.transition_service:
+        args.transition_render = True
+        if args.render_setup_only or args.lookup_control:
+            parser.error('--transition-service excludes --render-setup-only and --lookup-control')
     if args.transition_render:
         args.automatic = args.transition = args.transition_prefix = args.transition_init = True
         if args.init_control:
@@ -64,6 +74,10 @@ def main():
         fixture += '-init' + ('-control' if args.init_control else '')
     if args.transition_render:
         fixture += '-render' + ('-setup' if args.render_setup_only else '') + ('-control' if args.lookup_control else '')
+    if args.transition_service:
+        fixture += '-service'
+    if args.transition_clear:
+        fixture += f'-clear-{args.transition_clear}'
     if args.display_store:
         fixture += f'-code{args.driver}-{display_tag}-' + ('control' if args.display_control else 'pass')
     closure = runtime_sources()
@@ -151,7 +165,9 @@ def main():
             if (mem_write) memory[mem_addr] <= mem_data;
             memory_response <= memory[mem_addr];
         end
-        if (card.req_valid && card.req_ready && !card.req_word && card.req_offset == 6'h10) begin
+        // The renderer also uses the stream port after upload.
+        if (card.req_valid && card.req_ready && !card.req_word && card.req_offset == 6'h10 &&
+            uploads < RESOURCE_COUNT) begin
             if (card.req_write) stream_writes <= stream_writes + 1;
             else stream_reads <= stream_reads + 1;
         end
@@ -183,6 +199,7 @@ def main():
     bench = bench.replace('ticks > 20000', 'ticks > 1000000')
     if args.full_rom:
         bench = bench.replace('ticks > 1000000', 'ticks > 10000000')
+    bench = bench.replace('RESOURCE_COUNT', str(len(resources)))
     bench = bench.replace('uploads != 2', f'uploads != {len(resources)}')
     bench = bench.replace('stream_reads != 108 || stream_writes != 108',
                           f'stream_reads != {stream_bytes} || stream_writes != {stream_bytes}')
@@ -237,7 +254,8 @@ def main():
             if (claim && !dtack_n && !active && address == 32'hFEE0000C &&
                 rw_n && capture_address == 16'hC07D && !service_ack) begin
                 if (card_data[15:8] != 1 || capture_status != 8'hE0 || captures != 26)
-                    $fatal(1, "wrong original service 1 capture");
+                    $fatal(1, "wrong original service 1 capture data=%h status=%h captures=%0d",
+                        card_data[15:8], capture_status, captures);
                 service_read <= 1;
                 service_reads <= service_reads + 1;
             end
@@ -255,8 +273,9 @@ def main():
                 if (!driver_return || rti_count != 1 || service_reads != 2 || world[16'hF770 >> 1][7:0] != 1 ||
                     uploads != UPLOAD_COUNT || stream_reads != STREAM_BYTES ||
                     stream_writes != STREAM_BYTES || !reset_entry_seen)
-                    $fatal(1, "original driver continuation mismatch latch=%h rti=%0d return=%b",
-                        world[16'hF770 >> 1][7:0], rti_count, driver_return);
+                    $fatal(1, "original driver continuation mismatch latch=%h rti=%0d return=%b service_reads=%0d uploads=%0d upload_reads=%0d upload_writes=%0d reset_entry=%b",
+                        world[16'hF770 >> 1][7:0], rti_count, driver_return, service_reads,
+                        uploads, stream_reads, stream_writes, reset_entry_seen);
                 $display("PASS original TG68K upload and driver service 1 ACK/return; card RTI to FBDF");
                 $finish;
             end
@@ -302,8 +321,14 @@ def main():
             transition_inputs.extend(init_inputs)
         if args.transition_render:
             from monitor_render import prepare_bench as prepare_render_bench
-            bench, render_inputs = prepare_render_bench(bench, args.driver, args.render_setup_only, args.lookup_control)
+            bench, render_inputs = prepare_render_bench(bench, args.driver, args.render_setup_only,
+                                                       args.lookup_control, args.transition_service,
+                                                       args.transition_clear or 0)
             transition_inputs.extend(render_inputs)
+        if args.transition_clear:
+            from monitor_clear import prepare_bench as prepare_clear_bench
+            bench = prepare_clear_bench(bench, args.driver, args.transition_clear)
+            transition_inputs.append(ROOT / 'tools/monitor_clear.py')
     path = WORK / (f'tb_{fixture}.sv' if args.display_store or args.automatic else 'tb_monitor_upload.sv')
     path.write_text(bench, encoding='ascii')
     host = [MACLC / 'rtl/tg68k' / n for n in
@@ -325,8 +350,12 @@ def main():
         output = run(command)
     if args.transition_render and not args.render_setup_only:
         from monitor_render import check_pixels
-        transition_inputs.extend(check_pixels(args.driver))
+        transition_inputs.extend(check_pixels(args.driver, args.transition_service, args.transition_clear or 0))
         output += 'PASS first transition display framebuffer and guards match independent text oracle\n'
+    if args.transition_clear:
+        from monitor_clear import check_pixels as check_clear_pixels
+        transition_inputs.extend(check_clear_pixels(args.driver, args.transition_clear))
+        output += 'PASS transition clear framebuffer and guards match independent text oracle\n'
     inputs = [code, monitor, *resources, *driver_inputs, *transition_inputs, image, preload, path, *closure, *host, Path(__file__)]
     preload_scope = 'external slot 3' if args.full_rom else 'monitor ROM and external slot 3'
     record = {'control': args.control, 'full_rom_upload': args.full_rom, 'result': output,
@@ -335,6 +364,8 @@ def main():
               'transition_prefix': args.transition_prefix,
               'transition_init': args.transition_init, 'init_control': args.init_control,
               'transition_render': args.transition_render, 'render_setup_only': args.render_setup_only,
+              'transition_service': args.transition_service,
+              'transition_clear_cells': args.transition_clear or 0,
               'lookup_control': args.lookup_control,
               'driver': args.driver, 'service_control': args.service_control,
               'display_store': args.display_store, 'display_control': args.display_control,
@@ -381,6 +412,10 @@ def main():
             record['scope'] += '; wrong-stride control stops at the rejected second row offset, before runtime reset'
         if args.transition_render:
             name = 'render-' + name
+            if args.transition_service:
+                name = 'service-' + name
+            if args.transition_clear:
+                name = f'clear-{args.transition_clear}-' + name
             if args.render_setup_only:
                 name = 'setup-' + name
             if args.lookup_control:
@@ -390,6 +425,11 @@ def main():
                                'diagnostic firmware/code, monitor ROM and slot-3 preloads; full original caller/OS setup excluded; ')
             record['scope'] += ('stop before runtime reset' if args.render_setup_only else
                                'original $047E upload-context clear, first 05FB store ACK/commit, cache data and framebuffer after host returns to polling; no service 1 qualification')
+            if args.transition_service:
+                record['scope'] = record['scope'].replace('; no service 1 qualification',
+                    '; continue through original service 1 ACK/host return and register-preserving card RTI to FBDF')
+            if args.transition_clear:
+                record['scope'] += f'; {args.transition_clear} original monitor clear stores with ACK/commit/cache checks and final text pixels; no injected mode dispatch or prompt qualification'
             if args.lookup_control:
                 record['scope'] += '; changed disposable CODE 1 constant rejected at wide entry 1'
     (WORK / f'monitor-upload-{name}.json').write_text(json.dumps(record, indent=2) + '\n', encoding='ascii')
