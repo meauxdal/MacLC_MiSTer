@@ -7,7 +7,7 @@ module maclc_iie_binding (
     input wire pds_as_n, pds_uds_n, pds_lds_n, pds_rw,
     input wire [15:0] pds_write_data,
     output wire diagnostic_boundary, diagnostic_fault,
-    output wire [215:0] debug_status,
+    output wire [271:0] debug_status,
     output wire claim, dtack_n, error,
     output wire [15:0] pds_read_data,
     input wire floppy_req,
@@ -25,7 +25,7 @@ module maclc_iie_binding (
     wire [7:0] cap_status, cap_data;
     wire [31:0] cap_count, cpu_count;
     wire [3:0] debug_state;
-    wire [15:0] debug_trace;
+    wire [71:0] debug_trace;
     reg bus_active = 0;
     reg [31:0] bus_count = 0, bus_address = 0;
     reg [15:0] bus_data = 0;

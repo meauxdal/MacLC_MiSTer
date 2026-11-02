@@ -37,7 +37,7 @@ module emu
 	assign {SD_SCK, SD_MOSI, SD_CS} = 'Z;
 
     wire iie_diagnostic_boundary, iie_diagnostic_fault;
-    wire [215:0] iie_debug_status;
+    wire [271:0] iie_debug_status;
     reg [24:0] iie_diagnostic_ticks = 0;
     always @(posedge clk_sys) begin
         if (!pll_locked || (!iie_diagnostic_boundary && !iie_diagnostic_fault))

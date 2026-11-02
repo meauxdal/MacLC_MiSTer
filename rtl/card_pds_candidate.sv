@@ -34,7 +34,7 @@ module card_irq_pds_candidate (
     output wire [31:0] capture_count,
     output wire [31:0] cpu_completed,
     output wire [3:0] debug_state,
-    output wire [15:0] debug_trace
+    output wire [71:0] debug_trace
 );
     wire req_valid, req_ready, req_word, req_write;
     wire [5:0] req_offset;

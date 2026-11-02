@@ -44,14 +44,15 @@ module card_irq_candidate #(
     output reg [31:0] capture_count,
     output reg [31:0] cpu_completed,
     output wire [3:0] debug_state,
-    output wire [15:0] debug_trace
+    output wire [71:0] debug_trace
 );
     assign debug_state = {monitor_active, cpu_running, reset_pending, armed};
     reg [7:0] start_mask;
     reg start_override;
     reg [2:0] start_count;
     reg [3:0] first_fault;
-    assign debug_trace = {start_mask, start_override, start_count, first_fault};
+    reg [55:0] command_context;
+    assign debug_trace = {command_context, start_mask, start_override, start_count, first_fault};
     always @(posedge clk) begin
         if (!por_n) instruction_address <= 0;
         else if (cpu_ready && cpu_sync) instruction_address <= cpu_address;
@@ -326,6 +327,7 @@ module card_irq_candidate #(
             start_override <= 0;
             start_count <= 0;
             first_fault <= 0;
+            command_context <= 0;
         end else begin
             if (nmi_delay_left != 0) nmi_delay_left <= nmi_delay_left - 1;
             if (irq_delay_left != 0) irq_delay_left <= irq_delay_left - 1;
@@ -426,6 +428,10 @@ module card_irq_candidate #(
             if (mask_write) reset_mask <= sidefx_wdata[7:0];
             if (keyboard_write) keyboard <= {monitor_active || sidefx_wdata[7], sidefx_wdata[6:0]};
             if (command_write) begin
+                if (!fault) command_context <= {sidefx_wdata, reset_mask,
+                    runtime_mode, monitor_active, cpu_running, reset_pending,
+                    armed, capture_valid, capture_reset, start_pending,
+                    capture_address, capture_status};
                 if (reset_command) begin
                     reset_pending <= 1;
                     reset_restart <= !sidefx_word;

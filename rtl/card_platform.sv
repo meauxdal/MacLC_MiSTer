@@ -41,7 +41,7 @@ module card_platform #(
     output wire [31:0] capture_count,
     output wire [31:0] cpu_completed,
     output wire [3:0] debug_state,
-    output wire [15:0] debug_trace
+    output wire [71:0] debug_trace
 );
     wire src_valid, src_ready, src_write, src_rsp_valid, src_rsp_ready;
     wire [16:0] src_addr;
