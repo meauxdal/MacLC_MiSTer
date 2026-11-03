@@ -87,6 +87,7 @@ module card_irq_candidate #(
     wire [7:0] cpu_wdata;
     reg internal_rom, monitor_active;
     reg slot3_rom, internal_c8;
+    reg [2:0] expansion_slot;
     reg [7:0] card_mode;
     reg [7:0] host_return;
     wire mode_store80, mode_page2, mode_text, mode_mixed, mode_hires, mode_altchar, mode_col80;
@@ -108,6 +109,8 @@ module card_irq_candidate #(
          (cpu_address >= 16'hC100 && cpu_address < 16'hD000 && (FIXED_CX || internal_cx)));
     wire external_cx_read = monitor_active && !cpu_write && cpu_address >= 16'hC100 &&
         cpu_address < 16'hC800 && !internal_cx && !FIXED_CX;
+    wire external_c8_read = monitor_active && !cpu_write && cpu_address >= 16'hC800 &&
+        cpu_address < 16'hCFFF && !internal_cx && !FIXED_CX && expansion_slot != 0;
     wire slot3_read = monitor_active && !cpu_write && cpu_address[15:8] == 8'hC3 && !internal_cx && !FIXED_CX;
     wire cfff_read = monitor_active && !cpu_write && cpu_address == 16'hCFFF && !internal_cx && !FIXED_CX;
     wire service_register = cpu_address >= 16'hC078 && cpu_address <= 16'hC07C;
@@ -184,14 +187,15 @@ module card_irq_candidate #(
                           (cpu_address == 16'hD006 && !cpu_sync));
     wire [17:0] physical = alternate_zp ? 18'h30000 :
         language_access && ALIAS_LC_BANKS && cpu_address == 16'hD000
-        ? {1'b0, effective_ram[16], 4'hD, effective_ram[11:0]} : external_cx_read ? 18'h20000 + {2'b0, cpu_address} : receiver_read ? 18'h25000 + {2'b0, cpu_address} - 18'h0D000 :
+        ? {1'b0, effective_ram[16], 4'hD, effective_ram[11:0]} : external_c8_read ?
+        18'h2C000 + {4'b0, expansion_slot, cpu_address[10:0]} : external_cx_read ? 18'h20000 + {2'b0, cpu_address} : receiver_read ? 18'h25000 + {2'b0, cpu_address} - 18'h0D000 :
         monitor_read && cpu_address >= 16'hFFFA ? 18'h27FFA + {2'b0, cpu_address} - 18'h0FFFA :
         monitor_read ? 18'h20000 + {2'b0, cpu_address} - 18'h0C000 : firmware_test ? 18'h26000 :
         firmware_read ? 18'h25000 + {2'b0, cpu_address} - 18'h0D000 :
         cpu_address >= 16'hFFFA
         ? (card_mode[3] ? 18'h2FFFA : 18'h23FFA) + {2'b0, cpu_address} - 18'h0FFFA : {1'b0, effective_ram};
     wire unsupported_cpu = unsupported_alternate_zp || (io_space && !allowed_io) ||
-                           (!io_space && !external_cx_read && !cfff_read && !monitor_read && !receiver_read && !firmware_read && !firmware_test && !language_access && cpu_address >= 16'hC000 &&
+                           (!io_space && !external_cx_read && !external_c8_read && !cfff_read && !monitor_read && !receiver_read && !firmware_read && !firmware_test && !language_access && cpu_address >= 16'hC000 &&
                             (cpu_address < 16'hFFFA || cpu_write));
     wire runnable = (!runtime_paused || cpu_memory_wait) && cpu_valid && cpu_running && !start_pending && !boundary && !fault && !unsupported_cpu &&
                     (!reset_stopping || cpu_memory_wait);
@@ -301,6 +305,7 @@ module card_irq_candidate #(
             card_mode <= 0;
             slot3_rom <= 0;
             internal_c8 <= 0;
+            expansion_slot <= 0;
             monitor_active <= 0;
             armed <= 0;
             runtime_paused <= 0;
@@ -412,6 +417,8 @@ module card_irq_candidate #(
                 cpu_completed <= cpu_completed + 1;
                 if (cpu_address[15:8] == 8'hC3 && !slot3_rom) internal_c8 <= 1;
                 else if (cpu_address == 16'hCFFF) internal_c8 <= 0;
+                if (external_cx_read) expansion_slot <= cpu_address[10:8];
+                else if (cpu_address == 16'hCFFF) expansion_slot <= 0;
                 if (cpu_write && cpu_address == 16'hC007) internal_rom <= 1;
                 if (cpu_write && cpu_address == 16'hC006) internal_rom <= 0;
                 if (cpu_write && cpu_address == 16'hC00A) slot3_rom <= 0;
@@ -487,6 +494,7 @@ module card_irq_candidate #(
                 card_mode <= 0;
                 slot3_rom <= 0;
                 internal_c8 <= 0;
+                expansion_slot <= 0;
                 if (reset_restart) begin
                     monitor_active <= runtime_mode || (reset_mask & 8'hFC) == 8'h20;
                     if (!fault) begin

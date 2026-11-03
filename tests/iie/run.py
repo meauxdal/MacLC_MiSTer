@@ -14,6 +14,8 @@ def main():
         'prepare': 'prepare_runtime.py',
         'fit': 'check_runtime_fit.py',
         'trace': 'check_hardware_trace.py',
+        'slot': 'check_slot_rom.py',
+        'video-switch': 'check_iie_video_switch.py',
     }
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('check', choices=scripts)
