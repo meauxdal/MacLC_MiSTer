@@ -21,6 +21,7 @@ def main():
     parser.add_argument('--transition-render', action='store_true', help='Include automatic transition, initialization, lookup setup and first display handler; longer run')
     parser.add_argument('--transition-service', action='store_true', help='Continue transition rendering through original service 1 ACK and RTI; longer run')
     parser.add_argument('--transition-clear', type=int, metavar='CELLS', help='Continue the combined transition through 1-960 monitor clear cells; longer run')
+    parser.add_argument('--transition-boot', action='store_true', help='Continue the full clear through original service 4 and banner to held service 2; longer run')
     parser.add_argument('--render-setup-only', action='store_true', help='Stop after checking lookup tables and supplied glyphs')
     parser.add_argument('--lookup-control', action='store_true', help='Corrupt one CODE 1 lookup constant')
     parser.add_argument('--prepare-only', action='store_true', help='Prepare and compile without running the simulation')
@@ -29,6 +30,10 @@ def main():
     parser.add_argument('--display-control', action='store_true', help='Shift the display destination by one byte')
     parser.add_argument('--display-cells', type=int, default=1, help='Monitor clear cells to check, 1-960; full clear is a longer run')
     args = parser.parse_args()
+    if args.transition_boot:
+        if args.transition_clear not in (None, 960):
+            parser.error('--transition-boot requires the full 960-cell clear')
+        args.transition_clear = 960
     if args.transition_clear is not None:
         if not 1 <= args.transition_clear <= 960:
             parser.error('--transition-clear requires a count from 1 to 960')
@@ -78,6 +83,8 @@ def main():
         fixture += '-service'
     if args.transition_clear:
         fixture += f'-clear-{args.transition_clear}'
+    if args.transition_boot:
+        fixture += '-boot'
     if args.display_store:
         fixture += f'-code{args.driver}-{display_tag}-' + ('control' if args.display_control else 'pass')
     closure = runtime_sources()
@@ -329,6 +336,10 @@ def main():
             from monitor_clear import prepare_bench as prepare_clear_bench
             bench = prepare_clear_bench(bench, args.driver, args.transition_clear)
             transition_inputs.append(ROOT / 'tools/monitor_clear.py')
+        if args.transition_boot:
+            from monitor_boot import prepare_bench as prepare_boot_bench
+            bench = prepare_boot_bench(bench, args.driver)
+            transition_inputs.append(ROOT / 'tools/monitor_boot.py')
     path = WORK / (f'tb_{fixture}.sv' if args.display_store or args.automatic else 'tb_monitor_upload.sv')
     path.write_text(bench, encoding='ascii')
     host = [MACLC / 'rtl/tg68k' / n for n in
@@ -356,6 +367,10 @@ def main():
         from monitor_clear import check_pixels as check_clear_pixels
         transition_inputs.extend(check_clear_pixels(args.driver, args.transition_clear))
         output += 'PASS transition clear framebuffer and guards match independent text oracle\n'
+    if args.transition_boot:
+        from monitor_boot import check_pixels as check_boot_pixels
+        transition_inputs.extend(check_boot_pixels(args.driver))
+        output += 'PASS transition boot banner framebuffer and guards match independent text oracle\n'
     inputs = [code, monitor, *resources, *driver_inputs, *transition_inputs, image, preload, path, *closure, *host, Path(__file__)]
     preload_scope = 'external slot 3' if args.full_rom else 'monitor ROM and external slot 3'
     record = {'control': args.control, 'full_rom_upload': args.full_rom, 'result': output,
@@ -366,6 +381,7 @@ def main():
               'transition_render': args.transition_render, 'render_setup_only': args.render_setup_only,
               'transition_service': args.transition_service,
               'transition_clear_cells': args.transition_clear or 0,
+              'transition_boot': args.transition_boot,
               'lookup_control': args.lookup_control,
               'driver': args.driver, 'service_control': args.service_control,
               'display_store': args.display_store, 'display_control': args.display_control,
@@ -430,6 +446,9 @@ def main():
                     '; continue through original service 1 ACK/host return and register-preserving card RTI to FBDF')
             if args.transition_clear:
                 record['scope'] += f'; {args.transition_clear} original monitor clear stores with ACK/commit/cache checks and final text pixels; no injected mode dispatch or prompt qualification'
+            if args.transition_boot:
+                name = 'boot-' + name
+                record['scope'] += '; original service 4 ACK and saved-register return, nine banner stores and text pixels; stop at held service 2 before boot-resource dispatch'
             if args.lookup_control:
                 record['scope'] += '; changed disposable CODE 1 constant rejected at wide entry 1'
     (WORK / f'monitor-upload-{name}.json').write_text(json.dumps(record, indent=2) + '\n', encoding='ascii')
