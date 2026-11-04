@@ -17,7 +17,8 @@ module card_irq_cpu_bus (
     output wire rti_done,
     output wire halted,
     output wire high_ram_read,
-    output wire high_ram_write
+    output wire high_ram_write,
+    output wire banking_status
 );
     wire waiting, stopped;
     wire complete = valid && ready;
@@ -38,7 +39,8 @@ module card_irq_cpu_bus (
     iie_banking banks (
         .clk(clk), .reset(reset), .complete(complete),
         .address(address), .write(write), .ram_address(ram_address),
-        .high_ram_read(high_ram_read), .high_ram_write(high_ram_write)
+        .high_ram_read(high_ram_read), .high_ram_write(high_ram_write),
+        .status_bit(banking_status)
     );
 endmodule
 
@@ -51,7 +53,8 @@ module iie_banking (
     input wire write,
     output wire [16:0] ram_address,
     output wire high_ram_read,
-    output wire high_ram_write
+    output wire high_ram_write,
+    output wire status_bit
 );
     reg ramrd, ramwrt, altzp, store80, page2, hires;
     reg lc_read, lc_write, lc_prewrite, lc_bank1;
@@ -73,6 +76,11 @@ module iie_banking (
     assign ram_address = {aux, physical};
     assign high_ram_read = high_ram && lc_read;
     assign high_ram_write = high_ram && lc_write;
+    assign status_bit = address == 16'hC011 ? !lc_bank1 :
+                        address == 16'hC012 ? lc_read :
+                        address == 16'hC013 ? ramrd :
+                        address == 16'hC014 ? ramwrt :
+                        address == 16'hC016 ? altzp : 1'b0;
 
     always @(posedge clk) begin
         if (reset) begin

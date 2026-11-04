@@ -82,7 +82,7 @@ module card_irq_candidate #(
     reg [7:0] reset_mask, keyboard;
     reg permitted, capture_reset, capture_display, capture_read_release;
     reg capture_address_release, capture_write;
-    wire cpu_valid, cpu_write, cpu_sync, vector_pull, cpu_halted, high_read, high_write;
+    wire cpu_valid, cpu_write, cpu_sync, vector_pull, cpu_halted, high_read, high_write, banking_status;
     wire [16:0] ram_address;
     wire [7:0] cpu_wdata;
     reg internal_rom, monitor_active;
@@ -136,12 +136,24 @@ module card_irq_candidate #(
     wire diagnostic_display = cpu_write && !monitor_active && control[1:0] == 0 &&
         (cpu_address == 16'h0400 || cpu_address == 16'h0800 ||
          cpu_address == 16'h2000 || cpu_address == 16'h4000);
-    wire is_display = diagnostic_display || (monitor_active && cpu_write &&
+    wire runtime_text = (!ram_address[16] || reset_mask[3]) &&
         ((cpu_address >= 16'h0400 && cpu_address < 16'h0800 && reset_mask[5]) ||
-         (cpu_address >= 16'h0800 && cpu_address < 16'h0C00 && reset_mask[4])));
+         (cpu_address >= 16'h0800 && cpu_address < 16'h0C00 && reset_mask[4]));
+    wire runtime_hires = (!ram_address[16] || reset_mask[2]) &&
+        ((cpu_address >= 16'h2000 && cpu_address < 16'h4000 && reset_mask[7]) ||
+         (cpu_address >= 16'h4000 && cpu_address < 16'h6000 && reset_mask[6]));
+    wire is_display = diagnostic_display ||
+                      (monitor_active && cpu_write && (runtime_text || runtime_hires));
+    wire [7:0] runtime_display_status =
+        (runtime_hires ? 8'hC4 : (reset_mask[3] ? 8'h82 : 8'h42)) |
+        ((runtime_hires ? cpu_address[14] : cpu_address[11]) ? 8'h20 : 8'h00) |
+        (ram_address[16] ? 8'h08 : 8'h00) | {7'b0, report_mode};
     wire reset_vector = vector_pull && cpu_address == 16'hFFFC;
+    wire runtime_slot_io = monitor_active &&
+        ((cpu_address >= 16'hC090 && cpu_address <= 16'hC0DF) ||
+         (cpu_address >= 16'hC0F0 && cpu_address <= 16'hC0FF));
     wire io_trap = service_register || cpu_address == 16'hC07D || cpu_address == 16'hC0E9 ||
-                   cpu_address == 16'hC0E8 || cpu_address == 16'hC0A0;
+                   cpu_address == 16'hC0E8 || cpu_address == 16'hC0A0 || runtime_slot_io;
     reg [7:0] display_switches;
     wire display_switch = (cpu_write || (monitor_active && cpu_address >= 16'hC050)) && (cpu_address == 16'hC00F ||
                        cpu_address == 16'hC051 ||
@@ -170,13 +182,15 @@ module card_irq_candidate #(
                       (cpu_address >= 16'hC050 && cpu_address <= 16'hC05F) || io_trap || display_switch || (cpu_write && (cpu_address == 16'hC004 || cpu_address == 16'hC005 ||
                                                cpu_address == 16'hC008 || cpu_address == 16'hC009 ||
                                                cpu_address == 16'hC002 || cpu_address == 16'hC003)) ||
-                      (!cpu_write && (cpu_address == 16'hC000 || cpu_address == 16'hC010 ||
-                                      cpu_address == 16'hC019 || cpu_address[15:4] == 12'hC08));
+                      cpu_address[15:4] == 12'hC08 ||
+                      (!cpu_write && (cpu_address == 16'hC000 ||
+                                      (cpu_address >= 16'hC011 && cpu_address <= 16'hC019)));
     // Candidate controls, bounded to the original zero-page and E000 tests.
     wire aux_inhibit = control[2] && !IGNORE_AUX_INHIBIT && cpu_address < 16'h0200;
     wire [16:0] effective_ram = {ram_address[16] && !aux_inhibit, ram_address[15:0]};
-    wire firmware_test = cpu_address == 16'hE000 && !high_read;
-    wire protected_write = firmware_test && cpu_write && !control[4] && !IGNORE_FW_PROTECT;
+    wire firmware_test = !monitor_active && cpu_address == 16'hE000 && !high_read;
+    wire protected_write = (firmware_test && cpu_write && !control[4] && !IGNORE_FW_PROTECT) ||
+                           (monitor_active && cpu_write && cpu_address >= 16'hD000 && !high_write);
     wire language_access = cpu_address >= 16'hD000 && (cpu_write ? high_write : high_read);
     wire alternate_zp = card_mode[4] && !IGNORE_ZP_CONTEXT && effective_ram[16] &&
                         cpu_address == 16'h0000;
@@ -192,10 +206,10 @@ module card_irq_candidate #(
         monitor_read && cpu_address >= 16'hFFFA ? 18'h27FFA + {2'b0, cpu_address} - 18'h0FFFA :
         monitor_read ? 18'h20000 + {2'b0, cpu_address} - 18'h0C000 : firmware_test ? 18'h26000 :
         firmware_read ? 18'h25000 + {2'b0, cpu_address} - 18'h0D000 :
-        cpu_address >= 16'hFFFA
+        !language_access && cpu_address >= 16'hFFFA
         ? (card_mode[3] ? 18'h2FFFA : 18'h23FFA) + {2'b0, cpu_address} - 18'h0FFFA : {1'b0, effective_ram};
     wire unsupported_cpu = unsupported_alternate_zp || (io_space && !allowed_io) ||
-                           (!io_space && !external_cx_read && !external_c8_read && !cfff_read && !monitor_read && !receiver_read && !firmware_read && !firmware_test && !language_access && cpu_address >= 16'hC000 &&
+                           (!io_space && !protected_write && !external_cx_read && !external_c8_read && !cfff_read && !monitor_read && !receiver_read && !firmware_read && !firmware_test && !language_access && cpu_address >= 16'hC000 &&
                             (cpu_address < 16'hFFFA || cpu_write));
     wire runnable = (!runtime_paused || cpu_memory_wait) && cpu_valid && cpu_running && !start_pending && !boundary && !fault && !unsupported_cpu &&
                     (!reset_stopping || cpu_memory_wait);
@@ -236,7 +250,7 @@ module card_irq_candidate #(
         .irq_n(candidate_irq_n), .nmi_n(candidate_nmi_n), .valid(cpu_valid), .address(cpu_address),
         .ram_address(ram_address), .write(cpu_write), .write_data(cpu_wdata), .sync(cpu_sync),
         .vector_pull(vector_pull), .rti_done(rti_done), .halted(cpu_halted), .high_ram_read(high_read),
-        .high_ram_write(high_write)
+        .high_ram_write(high_write), .banking_status(banking_status)
     );
     card_memory_arbiter memory (
         .clk(clk), .por_n(por_n), .reset_request(1'b0), .drained(drained),
@@ -266,6 +280,8 @@ module card_irq_candidate #(
             16'hC000: cpu_rdata = keyboard;
             16'hC010: cpu_rdata = {control[7], 7'b0};
             16'hC019: cpu_rdata = {control[6], 7'b0};
+            16'hC011, 16'hC012, 16'hC013, 16'hC014, 16'hC016:
+                cpu_rdata = {banking_status, 7'b0};
             16'hC015: cpu_rdata = {internal_rom, 7'b0};
             16'hC017: cpu_rdata = {slot3_rom, 7'b0};
             16'hC018: cpu_rdata = {mode_store80, 7'b0};
@@ -287,6 +303,7 @@ module card_irq_candidate #(
             16'hC05C, 16'hC05D, 16'hC05E, 16'hC05F: cpu_rdata = FLOATING_DATA;
             default: if (iwm_selected) cpu_rdata = iwm_rdata;
         endcase
+        if (runtime_slot_io && !cpu_write) cpu_rdata = host_return;
     end
 
     always @(posedge clk) begin
@@ -391,7 +408,7 @@ module card_irq_candidate #(
                 end
                 capture_reset <= reset_vector;
                 capture_display <= is_display;
-                capture_read_release <= (service_register || cpu_address == 16'hC07D) && !cpu_write;
+                capture_read_release <= (service_register || cpu_address == 16'hC07D || runtime_slot_io) && !cpu_write;
                 capture_address_release <= is_display && report_mode;
                 capture_write <= cpu_write;
                 if (reset_vector) capture_status <= 8'h80;
@@ -399,7 +416,8 @@ module card_irq_candidate #(
                 else if (service_register || cpu_address == 16'hC07D) capture_status <= cpu_write ? 8'hE0 : 8'hE1;
                 else if (cpu_address == 16'hC0E9) capture_status <= 8'h38;
                 else if (cpu_address == 16'hC0E8) capture_status <= 8'h28;
-                else if (cpu_address == 16'hC0A0) capture_status <= cpu_write ? 8'h08 : 8'h09;
+                else if (cpu_address == 16'hC0A0 || runtime_slot_io) capture_status <= cpu_write ? 8'h08 : 8'h09;
+                else if (monitor_active && is_display) capture_status <= runtime_display_status;
                 else begin
                     case (cpu_address & 16'hFC00)
                         16'h0400: capture_status <= (monitor_active ? 8'h42 : 8'h02) | (ram_address[16] ? 8'h08 : 0) | {7'b0, report_mode};

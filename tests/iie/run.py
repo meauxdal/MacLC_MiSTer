@@ -16,6 +16,9 @@ def main():
         'trace': 'check_hardware_trace.py',
         'slot': 'check_slot_rom.py',
         'video-switch': 'check_iie_video_switch.py',
+        'banking': 'check_banking_runtime.py',
+        'display-capture': 'check_display_capture.py',
+        'slot-io': 'check_slot_io.py',
     }
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('check', choices=scripts)
