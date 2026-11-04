@@ -10,12 +10,13 @@ from check_runtime import linux, run, run_process
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--probe-hole', action='store_true', help='Trace the first capture after the monitor screen-hole store')
     parser.add_argument('--control', action='store_true', help='Corrupt vector readback')
     parser.add_argument('--full-rom', action='store_true', help='Also upload the full monitor ROM; longer run')
     parser.add_argument('--driver', type=int, choices=(5, 6), help='Continue through original runtime service 1')
     parser.add_argument('--automatic', action='store_true', help='Use automatic reset mapping')
     parser.add_argument('--transition', action='store_true', help='Run Conf cleanup, upload and original runtime reset helpers together')
-    parser.add_argument('--transition-prefix', action='store_true', help='Stop the transition at the first monitor display write')
+    parser.add_argument('--transition-prefix', action='store_true', help='Check the monitor screen-hole store and next capture')
     parser.add_argument('--transition-init', action='store_true', help='Run and check original display initialization before the transition prefix')
     parser.add_argument('--init-control', action='store_true', help='Inject a wrong initializer stride')
     parser.add_argument('--transition-render', action='store_true', help='Include automatic transition, initialization, lookup setup and first display handler; longer run')
@@ -69,8 +70,12 @@ def main():
         parser.error('--display-control requires --display-store')
     if not 1 <= args.display_cells <= 960 or (args.display_cells != 1 and not args.display_store):
         parser.error('--display-cells requires --display-store and a count from 1 to 960')
+    if args.probe_hole and (not args.driver or args.transition or args.display_store or args.control or args.full_rom or args.service_control):
+        parser.error('--probe-hole requires --driver and excludes transition, display and control')
     display_tag = 'display' if args.display_cells == 1 else f'display-{args.display_cells}'
     fixture = 'monitor-upload'
+    if args.probe_hole:
+        fixture += '-hole-probe'
     if args.automatic:
         fixture += '-automatic'
     if args.transition:
@@ -144,6 +149,8 @@ def main():
     assert len(payload) == 16384
     if not args.full_rom:
         card_image[0x20000:0x24000] = payload
+    if args.probe_hole:
+        card_image[0x05fb] = 0x5a
     card_image[0x2c300:0x2c400] = bytes.fromhex('00ea') * 128
     if args.transition:
         from startup_transition import prepare_card
@@ -196,7 +203,7 @@ def main():
             end
             if (!as_n && !rw_n && address == 32'h8002) begin
                 if (uploads != 2 || data_out[15:8] != 1 || !capture_valid ||
-                    capture_status != 8'hE0 || capture_address != 16'hC07D || captures != 26 ||
+                    capture_status != 8'hE0 || capture_address != 16'hC07D || captures != 16 ||
                     stream_reads != 108 || stream_writes != 108 || !reset_entry_seen)
                     $fatal(1, "uploaded monitor entry mismatch data=%h uploads=%0d captures=%0d", data_out, uploads, captures);
                 $display("PASS original TG68K D1 receiver/vector upload and readback; original monitor reports service 1");
@@ -260,7 +267,7 @@ def main():
                 rw_n && service_reads == 2 && !service_ack) $fatal(1, "duplicate service read");
             if (claim && !dtack_n && !active && address == 32'hFEE0000C &&
                 rw_n && capture_address == 16'hC07D && !service_ack) begin
-                if (card_data[15:8] != 1 || capture_status != 8'hE0 || captures != 26)
+                if (card_data[15:8] != 1 || capture_status != 8'hE0 || captures != 16)
                     $fatal(1, "wrong original service 1 capture data=%h status=%h captures=%0d",
                         card_data[15:8], capture_status, captures);
                 service_read <= 1;
@@ -321,7 +328,7 @@ def main():
         bench = bench.replace('STREAM_BYTES', str(stream_bytes)).replace('LAST_UPLOAD', str(len(resources) - 1))
     if args.transition:
         from startup_transition import prepare_bench
-        bench = prepare_bench(bench, args.transition_prefix)
+        bench = prepare_bench(bench, args.transition_prefix, args.transition_render)
         if args.transition_init:
             from monitor_initializer import prepare_bench as prepare_initializer_bench
             bench, init_inputs = prepare_initializer_bench(bench, args.driver, args.init_control)
@@ -340,7 +347,24 @@ def main():
             from monitor_boot import prepare_bench as prepare_boot_bench
             bench = prepare_boot_bench(bench, args.driver)
             transition_inputs.append(ROOT / 'tools/monitor_boot.py')
-    path = WORK / (f'tb_{fixture}.sv' if args.display_store or args.automatic else 'tb_monitor_upload.sv')
+    if args.probe_hole:
+        bench = bench.replace('reg reset_entry_seen = 0;', 'reg reset_entry_seen = 0, hole_seen = 0; integer hole_writes = 0;')
+        bench = bench.replace('    always @(posedge clk) begin', '''    always @(posedge clk) begin
+        if (!hole_seen && mem_valid && !mem_rsp_valid && mem_write && mem_addr == 17'h002FD)
+            hole_writes <= hole_writes + 1;
+        if (card.card.cpu_ready && card.card.cpu_write && card_cpu == 16'h05FB && !hole_seen) begin
+            if (capture_valid || card.card.cpu_wdata != 0 || memory[17'h002FD][15:8] != 0 || hole_writes != 1)
+                $fatal(1, "screen-hole store mismatch valid=%b data=%h memory=%h", capture_valid, card.card.cpu_wdata, memory[17'h002FD]);
+            hole_seen <= 1;
+            $display("PHASE monitor 05FB screen-hole commit");
+        end
+        if (hole_seen && capture_valid) begin
+            if (capture_address != 16'hC00E || capture_status != 8'hE0 || capture_data != 8'h89 || captures != 5)
+                $fatal(1, "unexpected next capture address=%h status=%h data=%h count=%0d", capture_address, capture_status, capture_data, captures);
+            $display("PASS screen-hole commit and next C00E switch capture with synthetic early ACKs");
+            $finish;
+        end''', 1)
+    path = WORK / (f'tb_{fixture}.sv' if args.display_store or args.automatic or args.probe_hole else 'tb_monitor_upload.sv')
     path.write_text(bench, encoding='ascii')
     host = [MACLC / 'rtl/tg68k' / n for n in
             ('TG68K_Pack.sv', 'TG68K_ALU.v', 'TG68KdotC_Kernel.v', 'tg68k.v')]
@@ -390,7 +414,9 @@ def main():
               'scope': 'Original CODE 1 $4550-$45BC upload/readback, decoded D1 resources; '
                        f'synthetic reset/ACK caller, preloaded {preload_scope}; candidate runtime mapping',
               'sha256': {str(p): sha(p) for p in inputs}}
-    name = 'control' if args.control else 'pass'
+    name = 'hole-probe' if args.probe_hole else ('control' if args.control else 'pass')
+    if args.probe_hole:
+        record['scope'] = 'Original monitor with synthetic early ACKs; seeded screen-hole byte, one backend commit and next switch capture; not the combined Startup transition'
     if args.automatic:
         name = 'automatic-' + name
     if args.full_rom:
@@ -399,9 +425,10 @@ def main():
         if args.service_control:
             name = name.replace('pass', 'service-control')
         name = f'code{args.driver}-' + name
-        record['scope'] += '; original TG68K receiver register save/restore and service 1 dispatch; '
-        record['scope'] += 'injected zero-volume A5 world'
-        if not args.display_store:
+        if not args.probe_hole:
+            record['scope'] += '; original TG68K receiver register save/restore and service 1 dispatch; '
+            record['scope'] += 'injected zero-volume A5 world'
+        if not args.display_store and not args.probe_hole:
             record['scope'] += ', stop after RTI to $FBDF'
     if args.display_store:
         name = name.replace('pass', display_tag + ('-control' if args.display_control else '-pass'))
@@ -421,7 +448,7 @@ def main():
                            'preload, supplied A5 buffers and slot 3; full $450 reset/OS setup excluded; '
                            f'monitor ROM {"uploaded" if args.full_rom else "preloaded"}')
         if args.transition_prefix and not args.init_control:
-            record['scope'] += '; stop with first $05FB display write held, before renderer/service 1'
+            record['scope'] += '; check uncaptured $05FB screen-hole commit and next $C00E switch capture'
         if args.transition_init:
             record['scope'] += '; original driver initializer in the same TG68K session, independent full-world/code oracle; supplied stride/geometry and modeled A81F NIL response; no initializer snapshots'
         if args.init_control:
@@ -440,10 +467,7 @@ def main():
                                'supplied captured QuickDraw glyph image, stride/geometry and modeled A81F NIL; '
                                'diagnostic firmware/code, monitor ROM and slot-3 preloads; full original caller/OS setup excluded; ')
             record['scope'] += ('stop before runtime reset' if args.render_setup_only else
-                               'original $047E upload-context clear, first 05FB store ACK/commit, cache data and framebuffer after host returns to polling; no service 1 qualification')
-            if args.transition_service:
-                record['scope'] = record['scope'].replace('; no service 1 qualification',
-                    '; continue through original service 1 ACK/host return and register-preserving card RTI to FBDF')
+                               'original $047E upload-context clear, service 1 ACK/return and RTI, first 0400 store ACK/commit, cache data and framebuffer after host returns to polling')
             if args.transition_clear:
                 record['scope'] += f'; {args.transition_clear} original monitor clear stores with ACK/commit/cache checks and final text pixels; no injected mode dispatch or prompt qualification'
             if args.transition_boot:

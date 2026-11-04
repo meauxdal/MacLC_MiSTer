@@ -10,22 +10,19 @@ def prepare_bench(bench, driver, cells):
     marker = '    integer render_reads = 0, render_acks = 0, render_commits = 0, render_index;'
     assert marker in bench
     bench = bench.replace(marker, marker + '''
-    reg service_return = 0, clear_seen = 0, clear_ack = 0, clear_committed = 0;
+    reg clear_seen = 0, clear_ack = 0, clear_committed = 0;
     reg [15:0] clear_address;
     reg [15:0] clear_initial_main [0:511];
     reg [15:0] clear_initial_aux [0:511];
     integer clear_done = 0, clear_reads = 0, clear_acks = 0, clear_commits = 0;
     integer clear_row, clear_col, clear_expected, clear_index;''')
-    bench = bench.replace("card_cpu == 16'hFBDF) begin", "card_cpu == 16'hFBDF && !service_return) begin")
-    marker = '''                $display("PASS consecutive Conf cleanup, upload, initialization, lookup setup, first display and service 1 ACK/return; register-preserving card RTI to FBDF");
-                $finish;'''
+    marker = '                service_return <= 1;'
     assert marker in bench
     bench = bench.replace(marker, '''                for (clear_index = 0; clear_index < 512; clear_index = clear_index + 1) begin
                     clear_initial_main[clear_index] = memory[17'h00200 + clear_index];
                     clear_initial_aux[clear_index] = memory[17'h08200 + clear_index];
                 end
-                service_return <= 1;
-                $display("PHASE combined transition service 1 ACK/return and register-preserving RTI verified");''')
+''' + marker)
     offset = bench.index('            if (ticks >')
     bench = bench[:offset] + '''            if (service_return && capture_valid && !clear_seen && clear_done < CELL_COUNT) begin
                 clear_row = clear_done / 40;

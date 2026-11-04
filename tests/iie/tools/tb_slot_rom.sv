@@ -15,7 +15,8 @@ module tb_slot_rom;
     reg [15:0] probe_address;
     reg probe_write = 0, probe_complete = 0;
     string image;
-    integer expansion_reads = 0;
+    integer expansion_reads = 0, hole_stores = 0;
+    reg [7:0] hole_value;
     bit control;
     card_irq_candidate dut (
         .clk(clk), .por_n(por_n), .runtime_mode(1'b0),
@@ -38,7 +39,13 @@ module tb_slot_rom;
         end
         if (mem_rsp_valid && mem_rsp_ready) mem_rsp_valid <= 0;
         if (mem_valid && !mem_rsp_valid) begin
-            if (mem_write) memory[mem_addr] <= mem_wdata;
+            if (mem_write) begin
+                memory[mem_addr] <= mem_wdata;
+                if (mem_addr == 17'h003BC) begin
+                    hole_stores <= hole_stores + 1;
+                    hole_value <= dut.cpu_wdata;
+                end
+            end
             mem_rdata <= memory[mem_addr];
             mem_rsp_valid <= 1;
         end
@@ -111,11 +118,9 @@ module tb_slot_rom;
         wait(capture_valid);
         if (capture_address != 16'hFFFC) $fatal(1, "missing reset capture");
         host(0, 32, 16'h88); host(0, 12, 0);
-        wait(capture_valid);
-        if (capture_address != 16'h0778 || dut.instruction_address != 16'hC9CC)
-            $fatal(1, "original expansion store missing");
-        host(0, 12, 0);
         wait(dut.instruction_address == 16'hC9D5);
+        if (capture_valid || hole_stores != 1 || memory[17'h003BC][7:0] !== hole_value)
+            $fatal(1, "screen-hole store capture/commit mismatch");
         if (control) $fatal(1, "control passed rejected access");
         if (expansion_reads < 9 || dut.card_mode != 0)
             $fatal(1, "original slot-7 expansion prefix incomplete");

@@ -10,14 +10,15 @@ from check_runtime import linux, run, run_process
 def main():
     sources = runtime_sources()
     program, cases = bytearray(), []
-    addresses = (0x400, 0x7ff, 0x800, 0xbff, 0x2000, 0x23ff,
-                 0x2400, 0x3fff, 0x4000, 0x43ff, 0x4400, 0x5fff)
+    addresses = (0x400, 0x477, 0x478, 0x7ff, 0x800, 0xbff,
+                 0x2000, 0x2077, 0x2078, 0x23ff, 0x2400, 0x3fff,
+                 0x4000, 0x43ff, 0x4400, 0x5fff)
     masks = (0, 0x20, 0x10, 0x30, 0x28, 0x18, 0x38,
              0x80, 0x40, 0xc0, 0x84, 0x44, 0xc4, 0xac, 0x5c)
     used_status = set()
     for mask in masks:
         for address in addresses:
-            for aux in (0, 1):
+            for aux, motor in ((0, 0), (1, 0), (0, 1), (1, 1)):
                 report = len(cases) % 3 == 0
                 value = (len(cases) * 37 + 0x53) & 255
                 if address < 0xc00:
@@ -28,15 +29,17 @@ def main():
                     page = address >= 0x4000
                     enabled = bool(mask & (0x40 if page else 0x80)) and (not aux or bool(mask & 4))
                     status = 0xc4 + page * 32 + aux * 8
+                enabled = enabled and not motor and (address & 0x7f) < 0x78
                 status = status + report if enabled else 0
                 if enabled:
                     used_status.add(status)
-                cases.append((address << 26) | (mask << 18) | (status << 10) |
-                             (value << 2) | (aux << 1) | report)
+                cases.append((address << 27) | (mask << 19) | (status << 11) |
+                             (value << 3) | (aux << 2) | (report << 1) | motor)
                 # Host installs the mask at this held report, then the CPU reads
                 # and writes the selected display byte before its completion report.
                 program.extend((0xa9, mask, 0x8d, 0x7d, 0xc0,
                                 0x8d, 0x05 if aux else 0x04, 0xc0,
+                                0xad, 0xe9 if motor else 0xe8, 0xc0,
                                 0xad, address & 255, address >> 8,
                                 0xa9, value, 0x8d, address & 255, address >> 8,
                                 0xa9, 0xee, 0x8d, 0x7d, 0xc0))
@@ -79,9 +82,14 @@ def main():
     output = run(command)
     delayed = run([*command, '+latency=73'])
     control = run_process([*command, '+hires-control'])
-    assert control.returncode != 0 and 'display mismatch case=176 ' in control.stdout, control.stdout + control.stderr
-    print('PASS missing HiRes control rejected; both original driver dispatch tables match')
+    assert control.returncode != 0 and 'display mismatch case=' in control.stdout, control.stdout + control.stderr
+    hole_control = run_process([*command, '+hole-control'])
+    motor_control = run_process([*command, '+motor-control'])
+    for result in (hole_control, motor_control):
+        assert result.returncode != 0 and 'unexpected trap after store' in result.stdout, result.stdout + result.stderr
+    print('PASS HiRes, screen-hole and motor controls rejected; both original driver dispatch tables match')
     record = {'result': output, 'delayed_memory': delayed, 'control': control.stdout,
+              'hole_control': hole_control.stdout, 'motor_control': motor_control.stdout,
               'original_dispatch': dispatch, 'cases': len(cases),
               'scope': 'Synthetic CPU stores and real host register ACKs; original dispatch bytes checked, Macintosh renderer not executed',
               'sha256': {str(p): sha(p) for p in [*sources, *originals, bench, Path(__file__), image, case_image]}}

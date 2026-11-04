@@ -19,6 +19,7 @@ def main():
         'banking': 'check_banking_runtime.py',
         'display-capture': 'check_display_capture.py',
         'slot-io': 'check_slot_io.py',
+        'slot-host': 'check_slot_host.py',
     }
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('check', choices=scripts)

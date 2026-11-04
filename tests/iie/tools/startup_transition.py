@@ -41,10 +41,11 @@ def prepare_card(image):
     return image, [initial, payload]
 
 
-def prepare_bench(bench, prefix=False):
+def prepare_bench(bench, prefix=False, render=False):
     bench = bench.replace('reg reset_entry_seen = 0;', '''reg reset_entry_seen = 0, conf_done = 0;
     reg diagnostic_seen = 0, runtime_seen = 0, cleanup_seen = 0;
-    integer capture_base = 0;''')
+    integer capture_base = 0;
+    reg transition_hole_seen = 0, transition_next_seen = 0;''')
     bench = bench.replace('if (card.card.cpu_ready && card.card.cpu_sync && !reset_entry_seen)',
                           'if (conf_done && card.card.cpu_ready && card.card.cpu_sync && !reset_entry_seen)')
     bench = bench.replace('if (card.card.opcode02_complete) begin',
@@ -53,7 +54,7 @@ def prepare_bench(bench, prefix=False):
                           'if (conf_done && card.card.cpu_ready && card.card.rti_done)')
     bench = bench.replace("rw_n && capture_address == 16'hC07D && !service_ack)",
                           "rw_n && conf_done && capture_address == 16'hC07D && !service_ack)")
-    bench = bench.replace('captures != 26', 'captures - capture_base != 26')
+    bench = bench.replace('captures != 16', 'captures - capture_base != 16')
     bench = bench.replace('ticks > 100000)', 'ticks > 2000000)')
     bench = bench.replace('    always @(posedge clk) begin', '''    always @(posedge clk) begin
         if (card.card.cpu_running && !conf_done) begin
@@ -84,19 +85,28 @@ def prepare_bench(bench, prefix=False):
     bench = bench.replace('PASS original TG68K upload and driver service 1 ACK/return; card RTI to FBDF',
                           'PASS consecutive Conf cleanup, upload, original reset helpers and service 1 RTI; automatic mapping')
     if prefix:
-        marker = '            if (service_ack && card.card.cpu_ready && card.card.cpu_sync && card_cpu == 16\'hFBDF) begin'
+        marker = "            if (service_ack && card.card.cpu_ready && card.card.cpu_sync && card_cpu == 16\'hFBDF) begin"
         assert marker in bench
-        bench = bench.replace(marker, '''            if (conf_done && capture_valid && capture_status == 8'h42 &&
-                capture_address == 16'h05FB) begin
-                if (!runtime_seen || !reset_entry_seen || captures - capture_base != 5 ||
+        bench = bench.replace(marker, '''            if (conf_done && card.card.cpu_ready && card.card.cpu_write &&
+                card_cpu == 16'h05FB && !transition_hole_seen) begin
+                if (!runtime_seen || !reset_entry_seen || capture_valid ||
                     uploads != 2 || stream_reads != 108 || stream_writes != 108 ||
-                    service_read || service_ack || rti_count != 0 || capture_data != 0 ||
-                    card.card.processor.cpu.reg_s != 8'hF5)
-                    $fatal(1, "transition display boundary mismatch captures=%0d", captures);
-                $display("PASS consecutive Conf cleanup, upload and original reset helpers; automatic monitor entry holds first 05FB display write before renderer/service 1");
-                $finish;
+                    service_read || service_ack || rti_count != 0 || card.card.cpu_wdata != 0 ||
+                    memory[17'h002FD][15:8] != 0)
+                    $fatal(1, "transition screen-hole commit mismatch");
+                transition_hole_seen <= 1;
+            end
+            if (transition_hole_seen && !transition_next_seen && capture_valid) begin
+                if (capture_address != 16'hC00E || capture_status != 8'hE0 ||
+                    capture_data != 8'h89 || captures - capture_base != 5)
+                    $fatal(1, "transition next capture mismatch address=%h status=%h data=%h",
+                        capture_address, capture_status, capture_data);
+                transition_next_seen <= 1;
+                $display("PASS consecutive Conf cleanup, upload and reset; monitor screen-hole commit and next C00E capture");
+                TRANSITION_PREFIX_FINISH
             end
 ''' + marker)
+        bench = bench.replace('TRANSITION_PREFIX_FINISH', '' if render else '$finish;')
     bench = bench.replace('"driver timeout host=%h', '"driver timeout conf=%b runtime=%b uploads=%0d captures=%0d host=%h')
     bench = bench.replace('address, card_cpu, capture_address, capture_status, service_ack, driver_return, rti_count);',
                           'conf_done, runtime_seen, uploads, captures, address, card_cpu, capture_address, capture_status, service_ack, driver_return, rti_count);')

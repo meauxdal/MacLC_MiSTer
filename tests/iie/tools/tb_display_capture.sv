@@ -67,7 +67,7 @@ module tb_display_capture;
     reg [47:0] cases [0:1023];
     reg [15:0] target;
     reg [7:0] mask, status, value, before_byte, other_byte;
-    reg aux, report;
+    reg aux, report, motor;
     initial begin
         if (!$value$plusargs("image=%s", image) ||
             !$value$plusargs("cases=%s", cases_image) ||
@@ -76,6 +76,8 @@ module tb_display_capture;
         $readmemh(image, memory);
         $readmemh(cases_image, cases, 0, count - 1);
         if ($test$plusargs("hires-control")) force dut.runtime_hires = 0;
+        if ($test$plusargs("hole-control")) force dut.runtime_screen_byte = 1;
+        if ($test$plusargs("motor-control")) force dut.iwm_motor = 0;
         repeat (4) @(negedge clk); por_n = 1;
         host(0, 33, 16'h20);
         host(0, 32, 16'h80);
@@ -84,7 +86,7 @@ module tb_display_capture;
             $fatal(1, "reset capture mismatch");
         host(0, 32, 16'h88); host(0, 12, 0);
         for (index = 0; index < count; index = index + 1) begin
-            {target, mask, status, value, aux, report} = cases[index][41:0];
+            {target, mask, status, value, aux, report, motor} = cases[index][42:0];
             wait(capture_valid);
             if (capture_address != 16'hC07D || dut.capture_data != mask)
                 $fatal(1, "setup capture mismatch case=%0d", index);
@@ -94,6 +96,10 @@ module tb_display_capture;
             saved_stores = stores;
             host(0, 33, {8'b0, mask});
             host(0, 32, report ? 16'h98 : 16'h88);
+            host(0, 12, 0);
+            wait(capture_valid);
+            if (capture_address != (motor ? 16'hC0E9 : 16'hC0E8))
+                $fatal(1, "motor capture mismatch case=%0d", index);
             host(0, 12, 0);
             wait(capture_valid);
             if (status != 0) begin
@@ -120,7 +126,7 @@ module tb_display_capture;
         end
         host(1, 32, 16'h0802);
         wait(!dut.reset_pending && !dut.cpu_running);
-        $display("PASS %0d CPU display cases: masks, both banks/pages, HiRes boundaries, held writes, ACK/address release, exact-once commits", count);
+        $display("PASS %0d CPU display cases: masks, both banks/pages, holes, motor, HiRes boundaries, held writes, ACK/address release, exact-once commits", count);
         $finish;
     end
 endmodule

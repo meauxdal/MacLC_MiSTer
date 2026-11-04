@@ -142,8 +142,10 @@ module card_irq_candidate #(
     wire runtime_hires = (!ram_address[16] || reset_mask[2]) &&
         ((cpu_address >= 16'h2000 && cpu_address < 16'h4000 && reset_mask[7]) ||
          (cpu_address >= 16'h4000 && cpu_address < 16'h6000 && reset_mask[6]));
+    wire runtime_screen_byte = cpu_address[6:0] < 7'h78;
     wire is_display = diagnostic_display ||
-                      (monitor_active && cpu_write && (runtime_text || runtime_hires));
+                      (monitor_active && cpu_write && !iwm_motor && runtime_screen_byte &&
+                       (runtime_text || runtime_hires));
     wire [7:0] runtime_display_status =
         (runtime_hires ? 8'hC4 : (reset_mask[3] ? 8'h82 : 8'h42)) |
         ((runtime_hires ? cpu_address[14] : cpu_address[11]) ? 8'h20 : 8'h00) |

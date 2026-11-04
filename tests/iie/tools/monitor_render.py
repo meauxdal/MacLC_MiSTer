@@ -77,7 +77,7 @@ def prepare_bench(bench, driver, setup_only=False, control=False, service=False,
     reg [15:0] lookup_expected [0:1535];
     reg [15:0] frame [0:{frame_words - 1}];
     wire frame_access = address >= 32'h000FFFC0 && address < 32'h00100000 + {stride * 480 + 64};
-    reg lookup_done = 0, first_display = 0, display_ack = 0;
+    reg lookup_done = 0, first_display = 0, display_ack = 0, service_return = 0;
     reg display_committed = 0, display_return = 0;
     integer render_reads = 0, render_acks = 0, render_commits = 0, render_index;''')
     bench = bench.replace('assign data_in = claim ? card_data :', '''assign data_in = claim ? card_data :
@@ -111,50 +111,48 @@ def prepare_bench(bench, driver, setup_only=False, control=False, service=False,
             SETUP_FINISH
         end
 ''' + marker, 1)
-    old = '''                $display("PASS consecutive Conf cleanup, upload, original driver initialization and reset helpers; automatic monitor entry holds first 05FB display write before renderer/service 1");
+    marker = '            if (service_ack && card.card.cpu_ready && card.card.cpu_sync && card_cpu == 16\'hFBDF) begin'
+    assert marker in bench
+    bench = bench.replace(marker, marker.replace(') begin', ' && !service_return) begin'))
+    marker = '''                $display("PASS consecutive Conf cleanup, upload, original reset helpers and service 1 RTI; automatic mapping");
                 $finish;'''
-    assert old in bench
-    bench = bench.replace("capture_address == 16'h05FB) begin", "capture_address == 16'h05FB && !first_display) begin")
-    bench = bench.replace('if (!initializer_done || !runtime_seen ||',
-                          'if (!lookup_done || !initializer_done || !runtime_seen ||')
-    bench = bench.replace('uploads != 2 || stream_reads != 108 || stream_writes != 108 ||\n                    service_read',
-                          "card.card.control[3] || uploads != 2 || stream_reads != 108 || stream_writes != 108 ||\n                    service_read")
-    bench = bench.replace(old, '''                first_display <= 1;
-                $display("PHASE first monitor display write captured; original host handler continues");''')
+    assert marker in bench
+    bench = bench.replace(marker, '''                if (!lookup_done || !initializer_done)
+                    $fatal(1, "service 1 reached before display setup");
+                service_return <= 1;
+                $display("PHASE service 1 ACK/return and register-preserving RTI verified");''')
     marker = '            if (ticks >'
     offset = bench.index(marker)
-    bench = bench[:offset] + '''            if (first_display && !display_return && card.req_valid && card.req_ready &&
+    bench = bench[:offset] + '''            if (service_return && !first_display && capture_valid) begin
+                if (card.card.control[3] || capture_address != 16'h0400 || capture_status != 8'h42 || capture_data != 8'hA0)
+                    $fatal(1, "first display capture mismatch address=%h status=%h data=%h", capture_address, capture_status, capture_data);
+                first_display <= 1;
+            end
+            if (first_display && !display_return && card.req_valid && card.req_ready &&
                 !card.req_word && card.req_offset == 6'h0C) begin
                 if (card.req_write) begin
                     render_acks <= render_acks + 1;
                     display_ack <= 1;
                 end else render_reads <= render_reads + 1;
             end
-            if (first_display && !display_return && card.card.cpu_ready && card.card.cpu_write && card_cpu == 16'h05FB) begin
-                if (!display_ack || capture_valid || memory[17'h002FD][15:8] != 0)
+            if (first_display && !display_return && card.card.cpu_ready && card.card.cpu_write && card_cpu == 16'h0400) begin
+                if (!display_ack || capture_valid || memory[17'h00200][7:0] != 8'hA0)
                     $fatal(1, "first display store did not commit after original ACK");
                 render_commits <= render_commits + 1;
                 display_committed <= 1;
             end
             if (display_ack && !display_return && !as_n && rw_n && address == 32'h0020281C) begin
                 if (!display_committed || render_reads != 2 || render_acks != 1 || render_commits != 1 ||
-                    world[(16'hB7EE >> 1) + 16'h01FB][7:0] != 0 || service_ack || rti_count != 0)
+                    world[16'hB7EE >> 1] != 16'h00A0)
                     $fatal(1, "first display handler return/cache mismatch reads=%0d acks=%0d commits=%0d", render_reads, render_acks, render_commits);
                 $writememh("FRAME_OUTPUT", frame);
                 $writememh("PAGE_OUTPUT", memory, 17'h00200, 17'h003FF);
                 display_return <= 1;
-                $display("PASS original transition first display ACK, commit, cache and host polling return; pixel verification follows");
+                $display("PASS original service 1 and first display ACK, commit, cache and host polling return; pixel verification follows");
                 DISPLAY_FINISH
             end
 ''' + bench[offset:]
-    bench = bench.replace('DISPLAY_FINISH', '' if service else '$finish;')
-    if service:
-        marker = 'PASS consecutive Conf cleanup, upload, original reset helpers and service 1 RTI; automatic mapping'
-        assert marker in bench
-        bench = bench.replace('$display("' + marker + '");', '''if (!display_return || !lookup_done || !initializer_done ||
-                    render_reads != 2 || render_acks != 1 || render_commits != 1)
-                    $fatal(1, "service 1 reached without verified first display return");
-                $display("PASS consecutive Conf cleanup, upload, initialization, lookup setup, first display and service 1 ACK/return; register-preserving card RTI to FBDF");''')
+    bench = bench.replace('DISPLAY_FINISH', '' if clear_cells else '$finish;')
     bench = bench.replace('FRAME_OUTPUT', linux(WORK / f'{tag}-frame.hex'))
     bench = bench.replace('PAGE_OUTPUT', linux(WORK / f'{tag}-page.hex'))
     mismatch = '$fatal(1, "wide lookup mismatch word=%0d", render_index);'
