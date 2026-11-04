@@ -10,11 +10,11 @@ The build **never touches the MiSTer** — deploying is a separate step (see
 
 ## Apple IIe card measurement branch
 
-Develop the card directly on `codex/iie-card-metrics`, using `MacLC.qpf`,
+Develop the card directly on `integration-test`, using `MacLC.qpf`,
 `MacLC.sv`, `rtl/` and `files.qip`. The integrated card uses the normal
 `output_files/MacLC.rbf`; no separate IIe project or preparation step is needed.
-Card and host RTL are tracked here; the sibling Apple-IIe-Card checkout holds
-research and simulation fixtures. Keep `sys` aligned with upstream MiSTer.
+Card and host RTL, tests and fixtures are tracked here; the sibling
+Apple-IIe-Card checkout holds documentation. Keep `sys` aligned with upstream MiSTer.
 
 This branch omits CD-ROM/audio, the second floppy, 480i/de-flicker,
 Ethernet, MT32-pi and BlueSCSI Toolbox hardware. Native progressive video,

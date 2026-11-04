@@ -18,17 +18,19 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = ['Pri. disk (ID 0)', 'Disk (ID 1)', 'Floppy', 'Load ROM',
+TOP = ['Pri. disk (ID 0)', 'Disk (ID 1)', 'Floppy disk', 'Load ROM',
        'Memory', 'Machine', 'Video', 'Advanced', 'Apply and reset']
-PAGES = {1: ['Interrupt (NMI)', 'Clear PRAM and reset'],
-         2: ['Monitor', 'Aspect ratio', 'Scale'],
+PAGES = {1: ['IIe ROM mapping', 'Interrupt (NMI)', 'Clear PRAM and reset'],
+         2: ['Monitor', 'Aspect ratio', 'Scale', 'IIe trial overlay'],
          5: ['PRAM image', 'Floppy writes']}
 BITS = {'Aspect ratio': (7, 8), 'Scale': (12, 13),
         'Monitor': (10, 10), 'Memory': (4, 4),
         'Apply and reset': (0, 0), 'Clear PRAM and reset': (6, 6),
-        'Floppy writes': (14, 14), 'Interrupt (NMI)': (5, 5)}
+        'Floppy writes': (14, 14), 'Interrupt (NMI)': (5, 5),
+        'IIe ROM mapping': (18, 18), 'IIe trial overlay': (9, 9),
+        'Deflicker': (1, 2)}
 MEDIA = ['SC0,IMGVHDHDA,Pri. disk (ID 0)', 'SC1,IMGVHDHDA,Disk (ID 1)',
-         'S6,DSKIMG,Floppy', 'F0,ROM,Load ROM', 'SC2,NVR,PRAM image']
+         'S6,DSKIMG,Floppy disk', 'F0,ROM,Load ROM', 'SC2,NVR,PRAM image']
 
 
 def expand(text, diag):
@@ -119,6 +121,8 @@ def verify_menu(conf, diag, hdmask):
     root = [t for t in drawing(conf) if t]
     assert [label(t) for t in root] == TOP
     expected = dict(PAGES)
+    if diag:
+        expected[2] = ['Monitor', 'Deflicker', *PAGES[2][1:]]
     checks = 0
     for page, flat in [(0, False), *[(page, False) for page in PAGES], (0, True)]:
         physical = drawing(conf, page, flat, hdmask)
@@ -208,16 +212,17 @@ def verify_configs_and_defaults(conf):
         (folder / name).unlink()
         assert not (folder / name).exists()  # Main zeroes options on missing file
     options = {label(t): t.split(',')[2:] for t in all_controls(conf) if t[0] in 'Oo'}
-    for name, value in {'Monitor': '640x480 VGA', 'Memory': '2 MB',
-                        'Floppy writes': 'Off'}.items():
+    for name, value in {'Monitor': '640x480 VGA', 'Memory': '2MB',
+                        'Floppy writes': 'Off', 'IIe ROM mapping': 'Automatic',
+                        'IIe trial overlay': 'On'}.items():
         assert options[name][0] == value
 
 
 def verify_pending(text, conf, diag):
-    # Derive pending bits from the menu, excluding the fields consumed by Main.
+    # IIe mapping, overlay and deflicker controls apply live.
     expected = set()
     for token in all_controls(conf):
-        if token[0] == 'O':
+        if token[0] == 'O' and label(token) not in ('IIe ROM mapping', 'IIe trial overlay', 'Deflicker'):
             code = token.split(',')[0][1:]
             expected.update(range(int(code[0], 36), int(code[-1], 36) + 1))
     block = text.split('localparam [31:0] CFG_MASK =', 1)[1].split(';', 1)[0]
@@ -227,6 +232,7 @@ def verify_pending(text, conf, diag):
     assert len(drawing(conf, hdmask=1)) == len(drawing(conf, hdmask=0)) + 1
     # The upstream monitor encoding must also match the ROM's sense IDs.
     assert "v8_monitor_id = cfg[10] ? 4'h2 : 4'h6;" in text
+    assert '.enable_sys(!status[9])' in text
 
 
 def main():
@@ -239,7 +245,7 @@ def main():
     if args.main_source_dir:
         verify_sources(args.main_source_dir)
         print('PASS: upstream/fork source rules and host network bit ranges')
-    for diag in (False,):
+    for diag in (False, True):
         conf = expand(text, diag)
         checks = sum(verify_menu(conf, diag, mask) for mask in range(16))
         verify_configs_and_defaults(conf)
@@ -254,14 +260,20 @@ def main():
     if args.baseline:
         old = subprocess.check_output(['git', 'show', f'{args.baseline}:MacLC.sv'],
                                       cwd=ROOT).decode('utf-8')
-        for diag in (False,):
+        for diag in (False, True):
             new_tokens = all_controls(expand(text, diag))
             old_tokens = all_controls(expand(old, diag))
             # Labels may change; stored option values and media indices may not.
             def saved_values(tokens):
                 return Counter((t.split(',')[0], tuple(v.replace(' ', '') for v in t.split(',')[2:]))
                                for t in tokens if t[0] in 'Oo')
-            assert not (saved_values(new_tokens) - saved_values(old_tokens))
+            additions = [t for t in new_tokens
+                         if label(t) in ('IIe ROM mapping', 'IIe trial overlay', 'Deflicker')]
+            assert not (saved_values(new_tokens) - saved_values(old_tokens) - saved_values(additions))
+            old_by_label = {label(t): t for t in old_tokens}
+            for token in new_tokens:
+                if label(token) in old_by_label:
+                    assert token == old_by_label[label(token)], (token, old_by_label[label(token)])
             media = lambda ts: Counter(tuple(t.split(',')[:2]) for t in ts if t[0] == 'S')
             assert not (media(new_tokens) - media(old_tokens))
         print(f'PASS: {args.baseline} remaining saved option values and media slots/filters preserved')

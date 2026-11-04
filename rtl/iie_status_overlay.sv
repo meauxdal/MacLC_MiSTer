@@ -1,11 +1,13 @@
 module iie_status_overlay (
     input wire clk_sys, clk_vid, reset,
+    input wire enable_sys,
     input wire ce_pixel, de, vblank,
     input wire [271:0] status_sys,
     input wire [7:0] red_in, green_in, blue_in,
     output wire [7:0] red_out, green_out, blue_out
 );
     reg request = 0, acknowledge = 0;
+    (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] enable_sync = 2'b11;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] request_sync = 0, acknowledge_sync = 0;
     reg [271:0] held = 0, snapshot = 0;
     reg vblank_d = 0, de_d = 0;
@@ -22,6 +24,7 @@ module iie_status_overlay (
         end
     end
     always @(posedge clk_vid) begin
+        enable_sync <= reset ? 2'b11 : {enable_sync[0], enable_sys};
         acknowledge_sync <= {acknowledge_sync[0], acknowledge};
         if (reset) begin
             request <= 0;
@@ -137,7 +140,7 @@ module iie_status_overlay (
         col = px / 12;
         gx = (px % 12) / 2;
         gy = (py % 16) / 2;
-        panel = de && x >= 8 && x < 296 && int'(y) >= panel_top && int'(y) < panel_top + 160;
+        panel = enable_sync[1] && de && x >= 8 && x < 296 && int'(y) >= panel_top && int'(y) < panel_top + 160;
         bitmap = 0;
         ink = 0;
         if (panel) begin

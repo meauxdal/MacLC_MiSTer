@@ -4,6 +4,7 @@ module tb_status_overlay;
     always #5 clk_sys = !clk_sys;
     always #7 clk_vid = !clk_vid;
     reg ce_pixel = 1, de = 0, vblank = 1;
+    reg enable_sys = 1;
     reg [271:0] status_sys = 0;
     wire [7:0] red_out, green_out, blue_out;
     iie_status_overlay dut (.clk_sys(clk_sys), .clk_vid(clk_vid), .reset(reset),
@@ -39,7 +40,7 @@ module tb_status_overlay;
                 for (col = 0; col < width; col = col + 1) begin
                     pixel();
                     if (capture) begin
-                        in_panel = col >= 8 && col < 296 && row >= height - 168 && row < height - 8;
+                        in_panel = enable_sys && col >= 8 && col < 296 && row >= height - 168 && row < height - 8;
                         if (!in_panel) begin
                             if ({red_out, green_out, blue_out} !== 24'h203040)
                                 $fatal(1, "native pixels changed x=%0d y=%0d", col, row);
@@ -90,13 +91,21 @@ module tb_status_overlay;
         file_out = 0;
         if (pixels != 512 * 384 || background != 512 * 384 - 288 * 160 || ink < 1000)
             $fatal(1, "overlay coverage mismatch pixels=%0d background=%0d ink=%0d", pixels, background, ink);
+        enable_sys = 0;
+        pixels = 0; background = 0; ink = 0;
+        frame(512, 384, 1);
+        if (background != 512 * 384 || ink != 0) $fatal(1, "disabled overlay changed native pixels");
         frame(640, 480, 0);
         frame(640, 480, 0);
         pixels = 0; background = 0; ink = 0;
         frame(640, 480, 1);
+        if (background != 640 * 480 || ink != 0) $fatal(1, "disabled overlay changed VGA pixels");
+        enable_sys = 1;
+        pixels = 0; background = 0; ink = 0;
+        frame(640, 480, 1);
         if (pixels != 640 * 480 || background != 640 * 480 - 288 * 160 || ink < 1000)
             $fatal(1, "mode-change overlay mismatch");
-        $display("PASS overlay snapshot, CE, native pixels, 384/480-line placement");
+        $display("PASS overlay snapshot, CE, native pixels, live disable/re-enable, 384/480-line placement");
         $finish;
     end
 endmodule

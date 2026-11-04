@@ -86,10 +86,10 @@ module emu
 		"-;",
 		"SC0,IMGVHDHDA,Pri. disk (ID 0);",
 		"SC1,IMGVHDHDA,Disk (ID 1);",
-		"S6,DSKIMG,Floppy;",
+		"S6,DSKIMG,Floppy disk;",
 		"F0,ROM,Load ROM;",
 		"-;",
-		"O4,Memory,2 MB,10 MB;",
+		"O4,Memory,2MB,10MB;",
 		"-;",
 		"P1,Machine;",
 		"P2,Video;",
@@ -109,6 +109,7 @@ module emu
 `endif
 		"P2O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
 		"P2OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
+		"P2O9,IIe trial overlay,On,Off;",
 
 		"P5SC2,NVR,PRAM image;",
 		"P5-;",
@@ -511,6 +512,7 @@ module emu
     wire [23:0] native_rgb;
     iie_status_overlay iie_status (
         .clk_sys(clk_sys), .clk_vid(clk_vid), .reset(!pll_locked),
+        .enable_sys(!status[9]),
         .ce_pixel(v8_ce_pix), .de(v8_de), .vblank(v8_vblank), .status_sys(iie_debug_status),
         .red_in(v8_vga_r), .green_in(v8_vga_g), .blue_in(v8_vga_b),
         .red_out(native_rgb[23:16]), .green_out(native_rgb[15:8]), .blue_out(native_rgb[7:0])
