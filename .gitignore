@@ -63,3 +63,10 @@ verilator/sim_stdout.log
 # python tooling artifacts
 __pycache__/
 *.pyc
+/local
+/rbf_archive
+/tests/iie/local
+/tests/iie
+/verilator/out
+/verilator/obj_dir*
+AGENTS.md
