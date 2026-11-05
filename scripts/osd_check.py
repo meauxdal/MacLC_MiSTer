@@ -219,10 +219,10 @@ def verify_configs_and_defaults(conf):
 
 
 def verify_pending(text, conf, diag):
-    # IIe mapping, overlay and deflicker controls apply live.
+    # Only machine configuration requires Apply and reset.
     expected = set()
     for token in all_controls(conf):
-        if token[0] == 'O' and label(token) not in ('IIe ROM mapping', 'IIe trial overlay', 'Deflicker'):
+        if token[0] == 'O' and label(token) in ('Memory', 'Monitor'):
             code = token.split(',')[0][1:]
             expected.update(range(int(code[0], 36), int(code[-1], 36) + 1))
     block = text.split('localparam [31:0] CFG_MASK =', 1)[1].split(';', 1)[0]
@@ -232,6 +232,11 @@ def verify_pending(text, conf, diag):
     assert len(drawing(conf, hdmask=1)) == len(drawing(conf, hdmask=0)) + 1
     # The upstream monitor encoding must also match the ROM's sense IDs.
     assert "v8_monitor_id = cfg[10] ? 4'h2 : 4'h6;" in text
+    assert 'configRAMSize = cfg[4]' in text
+    assert 'wire [1:0] ar = status[8:7];' in text
+    assert '.SCALE(status[13:12])' in text
+    assert 'assign flp_int_wp = ~status[14] || flp_int_ro;' in text
+    assert set(re.findall(r'\bcfg\[([^]]+)\]', text)) == {'4', '10'}
     assert '.enable_sys(!status[9])' in text
 
 

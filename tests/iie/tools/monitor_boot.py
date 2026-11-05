@@ -52,14 +52,18 @@ def prepare_bench(bench, driver):
                     banner_acks <= banner_acks + 1;
                 end else banner_reads <= banner_reads + 1;
             end
-            if (clear_return && !banner_return && card.card.cpu_ready &&
+            if (clear_return && banner_ack && !banner_return && card.card.cpu_ready &&
                 card.card.cpu_sync && card_cpu == 16'hFB65) begin
                 if (!banner_ack || banner_saved != 5'b11111 || banner_restored != 5'b11111 ||
                     banner_reads != 2 || banner_acks != 1 || rti_count != 2 ||
                     card.card.processor.cpu.reg_a != saved_a ||
                     card.card.processor.cpu.reg_x != saved_x || card.card.processor.cpu.reg_y != 9 ||
                     card.card.processor.cpu.reg_s != saved_s || card.card.processor.cpu.reg_p != saved_p)
-                    $fatal(1, "service 4 did not return original host Y=9 and preserved registers");
+                    $fatal(1, "service 4 return ack=%b saved=%b restored=%b reads=%0d acks=%0d rti=%0d A=%h/%h X=%h/%h Y=%h/09 S=%h/%h P=%h/%h",
+                        banner_ack, banner_saved, banner_restored, banner_reads, banner_acks, rti_count,
+                        card.card.processor.cpu.reg_a, saved_a, card.card.processor.cpu.reg_x, saved_x,
+                        card.card.processor.cpu.reg_y, card.card.processor.cpu.reg_s, saved_s,
+                        card.card.processor.cpu.reg_p, saved_p);
                 banner_return <= 1;
             end
             if (banner_return && card.card.cpu_ready && card.card.cpu_write &&

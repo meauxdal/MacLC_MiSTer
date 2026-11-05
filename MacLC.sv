@@ -57,7 +57,7 @@ module emu
 	assign HDMI_BLACKOUT = 0;
 	assign HDMI_BOB_DEINT = 0;
 
-	wire [1:0] ar = cfg[8:7];
+	wire [1:0] ar = status[8:7];
 	video_freak video_freak
 	(
 		.*,
@@ -77,7 +77,7 @@ module emu
 		.ARY((!ar) ? 12'd3 : 12'd0),
 		.CROP_SIZE(0),
 		.CROP_OFF(0),
-		.SCALE(cfg[13:12])
+		.SCALE(status[13:12])
 	);
 	
 	`include "build_id.v"
@@ -185,8 +185,8 @@ module emu
 	// Apply machine settings only while reset is asserted.
 	reg [31:0] cfg = 0;
 	always @(posedge clk_sys) if (~n_reset) cfg <= status;
-	// OSD settings only; exclude unused bits and momentary actions.
-	localparam [31:0] CFG_MASK = 32'h00007590;
+	// Only memory size and monitor sense require Apply and reset.
+	localparam [31:0] CFG_MASK = 32'h00000410;
 	wire osd_pending = |((status ^ cfg) & CFG_MASK);
 
 	///////////////////////////////////////////////////
@@ -2199,7 +2199,7 @@ module emu
 	// DC42 is NOT excluded: the load path normalises the container away, so
 	// SDRAM holds pure sector data and a volatile write is container-agnostic.
 	// Only the write-BACK has to care which layout it is writing.
-	assign flp_int_wp = ~cfg[14] || flp_int_ro;
+	assign flp_int_wp = ~status[14] || flp_int_ro;
 
 	// -- Committed sectors reach the user's file ---------------------------
 	// Everything upstream is volatile: the committer lands a verified sector
