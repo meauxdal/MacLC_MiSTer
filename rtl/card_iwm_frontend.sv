@@ -9,6 +9,7 @@ module card_iwm_frontend (
     input wire [7:0] write_data,
     input wire [7:0] drive_data,
     input wire drive_sense,
+    input wire drive_enabled,
     input wire write_busy,
     input wire write_underrun,
     output reg [7:0] read_data,
@@ -32,8 +33,8 @@ module card_iwm_frontend (
 
     always @* begin
         case (reg_select)
-            2'b00: read_data = motor ? drive_data : 8'hFF;
-            2'b01: read_data = {drive_sense, 1'b0, motor, mode};
+            2'b00: read_data = drive_enabled ? drive_data : 8'hFF;
+            2'b01: read_data = {drive_sense, 1'b0, drive_enabled, mode};
             2'b10: read_data = {!write_busy, !write_underrun, 6'b0};
             2'b11: read_data = 0;
         endcase

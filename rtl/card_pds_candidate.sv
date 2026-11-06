@@ -1,5 +1,7 @@
 // Experimental same-clock PDS adapter and card runtime.
-module card_irq_pds_candidate (
+module card_irq_pds_candidate #(
+    parameter bit IWM_BACKEND = 0
+) (
     input wire clk,
     input wire runtime_mode,
     input wire por_n,
@@ -34,7 +36,9 @@ module card_irq_pds_candidate (
     output wire [31:0] capture_count,
     output wire [31:0] cpu_completed,
     output wire [3:0] debug_state,
-    output wire [71:0] debug_trace
+    output wire [71:0] debug_trace,
+    output wire [22:0] iwm_control,
+    input wire [11:0] iwm_drive
 );
     wire req_valid, req_ready, req_word, req_write;
     wire [5:0] req_offset;
@@ -48,7 +52,7 @@ module card_irq_pds_candidate (
         .req_offset(req_offset), .req_word(req_word), .req_write(req_write), .req_wdata(req_wdata),
         .rsp_valid(rsp_valid), .rsp_ready(rsp_ready), .rsp_rdata(rsp_rdata), .rsp_error(rsp_error)
     );
-    card_irq_candidate card (
+    card_irq_candidate #(.IWM_BACKEND(IWM_BACKEND)) card (
         .clk(clk), .por_n(por_n), .runtime_mode(runtime_mode), .req_valid(req_valid), .req_ready(req_ready),
         .req_offset(req_offset), .req_word(req_word), .req_write(req_write), .req_wdata(req_wdata),
         .rsp_valid(rsp_valid), .rsp_ready(rsp_ready), .rsp_rdata(rsp_rdata), .rsp_error(rsp_error),
@@ -56,6 +60,7 @@ module card_irq_pds_candidate (
         .mem_wdata(mem_wdata), .mem_rsp_valid(mem_rsp_valid), .mem_rsp_ready(mem_rsp_ready),
         .mem_rdata(mem_rdata), .fault(fault), .boundary(boundary), .cpu_address(card_cpu_address), .instruction_address(instruction_address),
         .capture_valid(capture_valid), .capture_status(capture_status), .capture_address(capture_address),
-        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state), .debug_trace(debug_trace)
+        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state), .debug_trace(debug_trace),
+        .iwm_control(iwm_control), .iwm_drive(iwm_drive)
     );
 endmodule

@@ -87,6 +87,7 @@ module emu
 		"SC0,IMGVHDHDA,Pri. disk (ID 0);",
 		"SC1,IMGVHDHDA,Disk (ID 1);",
 		"S6,DSKIMG,Floppy disk;",
+		"S3,WOZ,IIe 5.25 drive;",
 		"F0,ROM,Load ROM;",
 		"-;",
 		"O4,Memory,2MB,10MB;",
@@ -193,6 +194,7 @@ module emu
 
 	localparam SCSI_DEVS = 2;          // SCSI block devices -> hps_io slots 0,1
 	localparam VD_PRAM    = 2;         // PRAM NVRAM save image -> hps_io slot 2
+	localparam VD_IIE_DRIVE1 = 3;      // IIe card external 5.25 WOZ image
 	// Retain slot 6 so saved floppy mounts keep their mapping.
 	localparam VD_FLOPPY_INT = 6;
 	localparam VDNUM = 7;
@@ -230,7 +232,7 @@ module emu
 	// Reserved media slots have no hardware behind them.
 	generate
 		genvar slot;
-		for (slot = 3; slot < 6; slot = slot + 1) begin : unused_media
+		for (slot = 4; slot < 6; slot = slot + 1) begin : unused_media
 			assign sd_lba[slot] = 0;
 			assign sd_rd[slot] = 0;
 			assign sd_wr[slot] = 0;
@@ -2548,7 +2550,9 @@ module emu
 	// Diagnostic build: SDRAM init only on cold PLL loss.
 
     wire iie_memory_ready;
-    maclc_iie_binding iie_card (
+    wire [22:0] iie_iwm_control;
+    wire [11:0] iie_iwm_drive;
+    maclc_iie_binding #(.IWM_BACKEND(1'b1)) iie_card (
         .clk_sys(clk_sys), .clk_mem(clk_mem), .pll_locked(pll_locked),
         .memory_ready(iie_memory_ready), .host_reset(!_cpuReset),
         .pds_address(cpuAddr), .pds_fc(cpuFC), .pds_as_n(_cpuAS),
@@ -2558,7 +2562,20 @@ module emu
         .pds_read_data(iie_card_read_data),
         .floppy_req(flp_mem_req), .floppy_addr(flp_mem_addr), .floppy_ack(flp_mem_ack), .floppy_data(flp_mem_dout),
         .native_req(iie_native_req), .native_we(iie_native_we), .native_addr(iie_native_addr),
-        .native_din(iie_native_din), .native_ack(iie_native_ack), .native_dout(iie_native_dout)
+        .native_din(iie_native_din), .native_ack(iie_native_ack), .native_dout(iie_native_dout),
+        .iwm_control(iie_iwm_control), .iwm_drive(iie_iwm_drive)
+    );
+
+    // IIe card external 5.25 drive 1. Writes follow the floppy write option.
+    card_iwm_backend iie_drive (
+        .clk(clk_sys), .cold_reset(!pll_locked_s),
+        .control(iie_iwm_control), .drive(iie_iwm_drive),
+        .write_protect(~status[14]), .active(),
+        .sd_lba(sd_lba[VD_IIE_DRIVE1]), .sd_rd(sd_rd[VD_IIE_DRIVE1]), .sd_wr(sd_wr[VD_IIE_DRIVE1]),
+        .sd_ack(sd_ack[VD_IIE_DRIVE1]), .sd_buff_addr(sd_buff_addr[7:0]),
+        .sd_buff_dout(sd_buff_dout), .sd_buff_din(sd_buff_din[VD_IIE_DRIVE1]),
+        .sd_buff_wr(sd_buff_wr), .img_mounted(img_mounted[VD_IIE_DRIVE1]),
+        .img_readonly(img_readonly), .img_size(img_size)
     );
 	sdram sdram
 	(

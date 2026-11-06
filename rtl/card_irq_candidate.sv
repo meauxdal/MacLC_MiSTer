@@ -10,7 +10,8 @@ module card_irq_candidate #(
     parameter bit SUPPRESS_NMI = 0, SUPPRESS_IRQ = 0,
     parameter integer NMI_DELAY = 0, IRQ_DELAY = 0,
     parameter bit IGNORE_AUX_INHIBIT = 0, IGNORE_FW_PROTECT = 0, IGNORE_SOFTSWITCH = 0,
-    parameter [7:0] SOFTSWITCH_STUCK_MASK = 8'h00
+    parameter [7:0] SOFTSWITCH_STUCK_MASK = 8'h00,
+    parameter bit IWM_BACKEND = 0
 ) (
     input wire clk,
     input wire runtime_mode,
@@ -44,7 +45,9 @@ module card_irq_candidate #(
     output reg [31:0] capture_count,
     output reg [31:0] cpu_completed,
     output wire [3:0] debug_state,
-    output wire [71:0] debug_trace
+    output wire [71:0] debug_trace,
+    output wire [22:0] iwm_control,
+    input wire [11:0] iwm_drive
 );
     assign debug_state = {monitor_active, cpu_running, reset_pending, armed};
     reg [7:0] start_mask;
@@ -120,17 +123,27 @@ module card_irq_candidate #(
         .complete(pace_due), .due(pace_due)
     );
     wire iwm_selected = cpu_address[15:4] == 12'hC0E;
-    wire [7:0] iwm_rdata;
+    wire [7:0] iwm_rdata, iwm_data_out;
     wire [4:0] iwm_mode;
-    wire iwm_motor, iwm_q6, iwm_q7;
+    wire [3:0] iwm_phases;
+    wire iwm_motor, iwm_q6, iwm_q7, iwm_drive_select, iwm_data_write;
+    wire iwm_reset = !por_n || !cpu_running;
+    // Without a backend the drive inputs read as an empty, idle interface.
     card_iwm_frontend iwm (
-        .clk(clk), .reset(!por_n || !cpu_running), .complete(cpu_ready),
+        .clk(clk), .reset(iwm_reset), .complete(cpu_ready),
         .selected(iwm_selected), .address(cpu_address[3:0]), .write(cpu_write),
-        .write_data(cpu_wdata), .drive_data(8'hFF), .drive_sense(1'b1),
-        .write_busy(1'b0), .write_underrun(1'b0), .read_data(iwm_rdata),
-        .phases(), .motor(iwm_motor), .drive_select(), .q6(iwm_q6), .q7(iwm_q7),
-        .mode(iwm_mode), .data_read(), .data_write(), .data_out()
+        .write_data(cpu_wdata),
+        .drive_data(IWM_BACKEND ? iwm_drive[7:0] : 8'hFF),
+        .drive_sense(IWM_BACKEND ? iwm_drive[8] : 1'b1),
+        .drive_enabled(IWM_BACKEND ? iwm_drive[11] : iwm_motor),
+        .write_busy(IWM_BACKEND && iwm_drive[9]),
+        .write_underrun(IWM_BACKEND && iwm_drive[10]), .read_data(iwm_rdata),
+        .phases(iwm_phases), .motor(iwm_motor), .drive_select(iwm_drive_select),
+        .q6(iwm_q6), .q7(iwm_q7), .mode(iwm_mode), .data_read(),
+        .data_write(iwm_data_write), .data_out(iwm_data_out)
     );
+    assign iwm_control = {iwm_reset, iwm_data_write, iwm_data_out, iwm_mode, iwm_q7, iwm_q6,
+                          iwm_drive_select, iwm_motor, iwm_phases};
     reg [7:0] cpu_rdata;
     reg cpu_memory_wait;
     wire diagnostic_display = cpu_write && !monitor_active && control[1:0] == 0 &&

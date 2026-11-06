@@ -18,7 +18,8 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = ['Pri. disk (ID 0)', 'Disk (ID 1)', 'Floppy disk', 'Load ROM',
+TOP = ['Pri. disk (ID 0)', 'Disk (ID 1)', 'Floppy disk', 'IIe 5.25 drive',
+       'Load ROM',
        'Memory', 'Machine', 'Video', 'Advanced', 'Apply and reset']
 PAGES = {1: ['IIe ROM mapping', 'Interrupt (NMI)', 'Clear PRAM and reset'],
          2: ['Monitor', 'Aspect ratio', 'Scale', 'IIe trial overlay'],
@@ -30,7 +31,8 @@ BITS = {'Aspect ratio': (7, 8), 'Scale': (12, 13),
         'IIe ROM mapping': (18, 18), 'IIe trial overlay': (9, 9),
         'Deflicker': (1, 2)}
 MEDIA = ['SC0,IMGVHDHDA,Pri. disk (ID 0)', 'SC1,IMGVHDHDA,Disk (ID 1)',
-         'S6,DSKIMG,Floppy disk', 'F0,ROM,Load ROM', 'SC2,NVR,PRAM image']
+         'S6,DSKIMG,Floppy disk', 'S3,WOZ,IIe 5.25 drive', 'F0,ROM,Load ROM',
+         'SC2,NVR,PRAM image']
 
 
 def expand(text, diag):
@@ -280,7 +282,8 @@ def main():
                 if label(token) in old_by_label:
                     assert token == old_by_label[label(token)], (token, old_by_label[label(token)])
             media = lambda ts: Counter(tuple(t.split(',')[:2]) for t in ts if t[0] == 'S')
-            assert not (media(new_tokens) - media(old_tokens))
+            media_additions = [t for t in new_tokens if label(t) == 'IIe 5.25 drive']
+            assert not (media(new_tokens) - media(old_tokens) - media(media_additions))
         print(f'PASS: {args.baseline} remaining saved option values and media slots/filters preserved')
 
 

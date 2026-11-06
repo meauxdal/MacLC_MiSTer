@@ -49,6 +49,11 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_native_port_mux.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/cpu_65c02.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/cpu_alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_iwm_frontend.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_iwm_backend.sv
+set_global_assignment -name VERILOG_FILE rtl/woz/flux_drive.v
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/woz/woz_floppy_controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/woz/woz_cell525.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/woz/woz_bram.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_cycle_pacer.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_display_state.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/card_trap_decode.sv

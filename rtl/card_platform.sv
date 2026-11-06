@@ -1,7 +1,8 @@
 // Experimental two-clock card endpoint; the native SDRAM controller is external.
 `timescale 1ns/1ps
 module card_platform #(
-    parameter [23:0] BASE_WORD = 24'h540000
+    parameter [23:0] BASE_WORD = 24'h540000,
+    parameter bit IWM_BACKEND = 0
 ) (
     input wire clk_sys,
     input wire clk_mem,
@@ -41,7 +42,9 @@ module card_platform #(
     output wire [31:0] capture_count,
     output wire [31:0] cpu_completed,
     output wire [3:0] debug_state,
-    output wire [71:0] debug_trace
+    output wire [71:0] debug_trace,
+    output wire [22:0] iwm_control,
+    input wire [11:0] iwm_drive
 );
     wire src_valid, src_ready, src_write, src_rsp_valid, src_rsp_ready;
     wire [16:0] src_addr;
@@ -61,7 +64,7 @@ module card_platform #(
     reg [15:0] floppy_frozen_data;
     wire [15:0] floppy_native_data;
 
-    card_irq_pds_candidate card (
+    card_irq_pds_candidate #(.IWM_BACKEND(IWM_BACKEND)) card (
         .clk(clk_sys), .por_n(por_n_sys), .runtime_mode(runtime_mode), .host_reset(host_reset),
         .pds_address(pds_address), .pds_fc(pds_fc), .pds_as_n(pds_as_n),
         .pds_uds_n(pds_uds_n), .pds_lds_n(pds_lds_n), .pds_rw(pds_rw),
@@ -72,7 +75,8 @@ module card_platform #(
         .mem_rdata(src_rdata), .fault(fault), .boundary(boundary),
         .card_cpu_address(card_cpu_address), .instruction_address(instruction_address), .capture_valid(capture_valid),
         .capture_status(capture_status), .capture_address(capture_address),
-        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state), .debug_trace(debug_trace)
+        .capture_data(capture_data), .capture_count(capture_count), .cpu_completed(cpu_completed), .debug_state(debug_state), .debug_trace(debug_trace),
+        .iwm_control(iwm_control), .iwm_drive(iwm_drive)
     );
     card_memory_cdc card_crossing (
         .src_clk(clk_sys), .src_reset(!por_n_sys), .dst_clk(clk_mem), .dst_reset(!por_n_mem),

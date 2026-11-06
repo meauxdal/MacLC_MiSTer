@@ -1,5 +1,7 @@
 // Experimental card binding. Warm host reset preserves backend work.
-module maclc_iie_binding (
+module maclc_iie_binding #(
+    parameter bit IWM_BACKEND = 0
+) (
     input wire clk_sys, clk_mem, pll_locked, memory_ready, host_reset,
     input wire runtime_mode,
     input wire [31:0] pds_address,
@@ -18,7 +20,9 @@ module maclc_iie_binding (
     output wire [23:0] native_addr,
     output wire [15:0] native_din,
     input wire native_ack,
-    input wire [15:0] native_dout
+    input wire [15:0] native_dout,
+    output wire [22:0] iwm_control,
+    input wire [11:0] iwm_drive
 );
     wire [15:0] cpu_pc, cpu_bus, cap_address;
     wire cap_valid;
@@ -59,7 +63,7 @@ module maclc_iie_binding (
     // Translate full LC slot addresses to the adapter's MAME-masked aliases.
     wire [31:0] card_address = pds_address[31:24] == 8'hFE ?
                                {8'h80, pds_address[23:0]} : pds_address;
-    card_platform #(.BASE_WORD(24'h540000)) platform (
+    card_platform #(.BASE_WORD(24'h540000), .IWM_BACKEND(IWM_BACKEND)) platform (
         .clk_sys(clk_sys), .clk_mem(clk_mem), .por_n_sys(reset_sys[1]), .runtime_mode(runtime_mode), .por_n_mem(reset_mem[1]),
         .host_reset(host_reset), .pds_address(card_address), .pds_fc(pds_fc),
         .pds_as_n(pds_as_n), .pds_uds_n(pds_uds_n), .pds_lds_n(pds_lds_n), .pds_rw(pds_rw),
@@ -69,6 +73,7 @@ module maclc_iie_binding (
         .native_req(native_req), .native_we(native_we), .native_addr(native_addr), .native_din(native_din),
         .native_ack(native_ack), .native_dout(native_dout),
         .fault(diagnostic_fault), .boundary(diagnostic_boundary), .card_cpu_address(cpu_bus), .instruction_address(cpu_pc), .capture_valid(cap_valid), .capture_status(cap_status),
-        .capture_address(cap_address), .capture_data(cap_data), .capture_count(cap_count), .cpu_completed(cpu_count), .debug_state(debug_state), .debug_trace(debug_trace)
+        .capture_address(cap_address), .capture_data(cap_data), .capture_count(cap_count), .cpu_completed(cpu_count), .debug_state(debug_state), .debug_trace(debug_trace),
+        .iwm_control(iwm_control), .iwm_drive(iwm_drive)
     );
 endmodule

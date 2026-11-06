@@ -6,20 +6,27 @@
   --transition-render` checks successfully. Each reached service 1, the first
   display ACK and commit, and passed framebuffer and guard comparisons.
 - Changes: `tests/iie/tools/monitor_boot.py` checks the service 4 return only
-  after ACK and prints assertion values on failure. `MacLC.qsf` was already
-  marked modified when the results arrived; preserve it.
+  after ACK and prints assertion values on failure. `check_monitor_upload.py`
+  and `monitor_service2.py` add a combined original service 2 continuation
+  with supplied slot-selection inputs. `monitor_service3.py` adds the first
+  service 3 mismatch return; both driver variants compile, execution pending.
 - Tests: user-provided output shows both render passes. Input hashes and wall
   times were not checked. Earlier short-check results are in the card handoff.
-- CODE 6 boot passes after correcting a premature `$FB65` return check: full
+- CODE 5 and 6 boot pass after correcting a premature `$FB65` return check: full
   clear, service 4 Y=9, nine banner stores, held service 2 and all framebuffer
-  and guard oracles. User output supplied; input hashes and wall time unchecked.
+  and guard oracles. CODE 6 is user-provided output. CODE 5's runner was changed
+  during execution, so its final runner hash does not identify the loaded code.
   A Windows prepare-only attempt failed writing the local host hex (permission
-  denied). CODE 5 boot result is not provided.
-- Unresolved: CODE 5 boot, unassisted Startup,
+  denied).
+- CODE 5 and 6 `--transition-service2` pass original service 2 with flag 0 and
+  settings `$A5B6`: A=`$C6` returned through PDS, then service 3 is held with
+  A/zero-page `$01`=`$C5` and Y=5. Framebuffer checks pass. Runner, service 2
+  test and candidate RTL hashes match the manifest.
+- Unresolved: service 3 in the combined transition, unassisted Startup,
   external drive, complete host service and hardware qualification remain open.
   Earlier clear results predate screen-hole and motor suppression.
-- Next: run `upload --driver 5 --transition-boot`. Repository instructions
-  require the user to run long scripts.
+- Next: collect and diagnose both `--transition-service3` results. The user
+  authorized long scripts.
 
 # Live OSD settings
 

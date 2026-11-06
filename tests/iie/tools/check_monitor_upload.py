@@ -23,6 +23,8 @@ def main():
     parser.add_argument('--transition-service', action='store_true', help='Continue transition rendering through original service 1 ACK and RTI; longer run')
     parser.add_argument('--transition-clear', type=int, metavar='CELLS', help='Continue the combined transition through 1-960 monitor clear cells; longer run')
     parser.add_argument('--transition-boot', action='store_true', help='Continue the full clear through original service 4 and banner to held service 2; longer run')
+    parser.add_argument('--transition-service2', action='store_true', help='Continue through original service 2 to service 3; longer run')
+    parser.add_argument('--transition-service3', action='store_true', help='Continue through the first original service 3 return; longer run')
     parser.add_argument('--render-setup-only', action='store_true', help='Stop after checking lookup tables and supplied glyphs')
     parser.add_argument('--lookup-control', action='store_true', help='Corrupt one CODE 1 lookup constant')
     parser.add_argument('--prepare-only', action='store_true', help='Prepare and compile without running the simulation')
@@ -31,6 +33,10 @@ def main():
     parser.add_argument('--display-control', action='store_true', help='Shift the display destination by one byte')
     parser.add_argument('--display-cells', type=int, default=1, help='Monitor clear cells to check, 1-960; full clear is a longer run')
     args = parser.parse_args()
+    if args.transition_service3:
+        args.transition_service2 = True
+    if args.transition_service2:
+        args.transition_boot = True
     if args.transition_boot:
         if args.transition_clear not in (None, 960):
             parser.error('--transition-boot requires the full 960-cell clear')
@@ -90,6 +96,10 @@ def main():
         fixture += f'-clear-{args.transition_clear}'
     if args.transition_boot:
         fixture += '-boot'
+    if args.transition_service2:
+        fixture += '-service2'
+    if args.transition_service3:
+        fixture += '-service3'
     if args.display_store:
         fixture += f'-code{args.driver}-{display_tag}-' + ('control' if args.display_control else 'pass')
     closure = runtime_sources()
@@ -347,6 +357,14 @@ def main():
             from monitor_boot import prepare_bench as prepare_boot_bench
             bench = prepare_boot_bench(bench, args.driver)
             transition_inputs.append(ROOT / 'tools/monitor_boot.py')
+        if args.transition_service2:
+            from monitor_service2 import prepare_bench as prepare_service2_bench
+            bench = prepare_service2_bench(bench)
+            transition_inputs.append(ROOT / 'tools/monitor_service2.py')
+        if args.transition_service3:
+            from monitor_service3 import prepare_bench as prepare_service3_bench
+            bench = prepare_service3_bench(bench)
+            transition_inputs.append(ROOT / 'tools/monitor_service3.py')
     if args.probe_hole:
         bench = bench.replace('reg reset_entry_seen = 0;', 'reg reset_entry_seen = 0, hole_seen = 0; integer hole_writes = 0;')
         bench = bench.replace('    always @(posedge clk) begin', '''    always @(posedge clk) begin
@@ -406,6 +424,8 @@ def main():
               'transition_service': args.transition_service,
               'transition_clear_cells': args.transition_clear or 0,
               'transition_boot': args.transition_boot,
+              'transition_service2': args.transition_service2,
+              'transition_service3': args.transition_service3,
               'lookup_control': args.lookup_control,
               'driver': args.driver, 'service_control': args.service_control,
               'display_store': args.display_store, 'display_control': args.display_control,
@@ -473,6 +493,12 @@ def main():
             if args.transition_boot:
                 name = 'boot-' + name
                 record['scope'] += '; original service 4 ACK and saved-register return, nine banner stores and text pixels; stop at held service 2 before boot-resource dispatch'
+            if args.transition_service2:
+                name = 'service2-' + name
+                record['scope'] = record['scope'].replace('stop at held service 2 before boot-resource dispatch', 'original service 2 with supplied slot selection, stop at service 3 before host dispatch')
+            if args.transition_service3:
+                name = 'service3-' + name
+                record['scope'] = record['scope'].replace('stop at service 3 before host dispatch', 'original service 3 mismatch return, stop before monitor branch')
             if args.lookup_control:
                 record['scope'] += '; changed disposable CODE 1 constant rejected at wide entry 1'
     (WORK / f'monitor-upload-{name}.json').write_text(json.dumps(record, indent=2) + '\n', encoding='ascii')
