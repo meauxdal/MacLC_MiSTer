@@ -790,6 +790,7 @@ module emu
 
 		.video_mode(v8_video_mode),
 		.monitor_id(v8_monitor_id),
+		.iie_mode(pvia_ram_config_out[0]),
 
 		.hsync(v8_hsync),
 		.vsync(v8_vsync),

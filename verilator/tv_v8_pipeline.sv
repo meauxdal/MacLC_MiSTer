@@ -3,6 +3,7 @@
 module tv_v8_pipeline (
     input wire clk_source, clk_mem, clk_tv, reset_tv, reset_source,
     input wire [3:0] monitor_id,
+    input wire iie_mode,
     input wire source_ce,
     input wire test_pattern,
     input wire actual_memory,
@@ -55,6 +56,7 @@ always @(posedge clk_source)
 maclc_v8_video source (
     .clk_sys(clk_source), .clk8_en_p(1'b0), .pix_ce(source_ce), .reset(reset_source),
     .video_mode(actual_memory ? video_mode : 3'd3), .monitor_id(monitor_id),
+    .iie_mode(iie_mode),
     .test_bypass_vram(test_pattern), .test_pattern_sel(2'd3),
     .hsync(), .vsync(), .hblank(), .vblank(),
     .vga_r(native_rgb[23:16]), .vga_g(native_rgb[15:8]), .vga_b(native_rgb[7:0]),

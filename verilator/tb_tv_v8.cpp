@@ -57,7 +57,7 @@ static void prepare(Vtv_v8_pipeline &d,int w,int h,int mode) {
     }
     d.cpu_vram_we=0;d.clk_mem=0;d.eval();
 }
-static void run(bool twelve, bool pattern=true,int actual_mode=-1,bool drawing=false) {
+static void run(bool twelve, bool pattern=true,int actual_mode=-1,bool drawing=false,bool iie=false) {
     Vtv_v8_pipeline d;
     std::vector<std::array<uint32_t,4>> ram(262144);
     uint64_t t=0,ns=79,nm=43,nt=111,source_ticks=0,source_pixels=0,tv_pixels=0;
@@ -68,9 +68,11 @@ static void run(bool twelve, bool pattern=true,int actual_mode=-1,bool drawing=f
     std::vector<uint32_t> native_snapshot;
     std::vector<std::vector<uint32_t>> completed;
     std::vector<unsigned> candidates;
-    int w=twelve?512:640,h=twelve?384:480,totalx=twelve?640:800,totaly=twelve?407:525;
+    // IIe 560x384 mode: 4bpp regardless of the depth field (Startup leaves it one above 4bpp), 702-clock lines at 17.192 MHz on 12" RGB, top-left 560x384 of VGA timing otherwise.
+    int w=iie?560:twelve?512:640,h=iie?384:twelve?384:480,totalx=iie&&twelve?702:twelve?640:800,totaly=twelve?407:525;
     d.monitor_id=twelve?2:6;d.source_ce=1;d.test_pattern=pattern;d.reset_tv=1;d.reset_source=1;
     d.actual_memory=actual_mode>=0;d.video_mode=actual_mode>=0?actual_mode:3;
+    d.iie_mode=iie;if(iie)d.video_mode=3;
     if(d.actual_memory)prepare(d,w,h,actual_mode);
     auto expected=[&](int x,int y){return actual_mode>=0?actual_color(x,y,actual_mode):pattern?color(x,y):color(0,0);};
     d.eval();
@@ -125,7 +127,7 @@ static void run(bool twelve, bool pattern=true,int actual_mode=-1,bool drawing=f
             }
             if(d.readdatavalid){--remaining;++index;}
         }
-        if(s){d.clk_source=!d.clk_source;ns+=twelve?31921:19861;}
+        if(s){d.clk_source=!d.clk_source;ns+=twelve?(iie?29083:31921):19861;}
         if(m){d.clk_mem=!d.clk_mem;nm+=7692;}
         if(v){d.clk_tv=!d.clk_tv;nt+=18518;}
         d.eval();
@@ -175,7 +177,7 @@ static void run(bool twelve, bool pattern=true,int actual_mode=-1,bool drawing=f
         }
     }
     if(d.overflows||d.underruns||d.published<4||tv_pixels<1000000)fail("native coverage or buffer faults");
-    std::cout<<"PASS V8 "<<w<<"x"<<h<<(actual_mode>=0?" real VRAM+Ariel bpp="+std::to_string(1<<actual_mode):pattern?" XOR":" VRAM")<<" source_pixels="<<source_pixels<<" canvas_pixels="<<tv_pixels
+    std::cout<<"PASS V8 "<<(iie?"IIe ":"")<<w<<"x"<<h<<(actual_mode>=0?" real VRAM+Ariel bpp="+std::to_string(1<<actual_mode):pattern?" XOR":" VRAM")<<" source_pixels="<<source_pixels<<" canvas_pixels="<<tv_pixels
              <<" published="<<d.published<<" overflow="<<d.overflows<<" underrun="<<d.underruns<<std::endl;
     if(drawing)std::cout<<"PASS live drawing writes="<<draw_words<<" complete source snapshots="<<completed.size()<<" both-field frame identity"<<std::endl;
 }
@@ -226,6 +228,7 @@ int main(int argc,char**argv) {
         for(int mode=0;mode<4;mode++){run(true,false,mode);run(false,false,mode);}
         run(true,false,4);
         for(int mode : {0,2,3}){run(true,false,mode,true);run(false,false,mode,true);}
-        run(true,false,4,true);}
+        run(true,false,4,true);
+        run(true,false,2,false,true);run(false,false,2,false,true);run(true,false,2,true,true);}
     catch(const std::exception&e){std::cerr<<"FAIL "<<e.what()<<std::endl;return 1;}
 }

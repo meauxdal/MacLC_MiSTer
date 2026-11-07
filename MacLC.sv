@@ -625,10 +625,12 @@ module emu
 		.reconfig_from_pll(reconfig_from_pll)
 	);
 
+	wire v8_iie_video;  // IIe 560x384 display mode, assigned at the PseudoVIA wiring below
 	// C0 counter value per monitor: {[22:18] counter#=0, [17] odd-div,
 	// [16] bypass, [15:8] high count, [7:0] low count} — layout per
 	// sys/pll_cfg/altera_pll_reconfig_core.v:557-569.
-	wire [31:0] pix_c0 = (v8_monitor_id == 4'h2) ? 32'h00021716 :  // /45 = 15.664 MHz
+	wire [31:0] pix_c0 = (v8_monitor_id == 4'h2 && v8_iie_video) ? 32'h00021514 :  // /41 = 17.192 MHz, IIe 560x384 on 12" RGB
+	                     (v8_monitor_id == 4'h2) ? 32'h00021716 :  // /45 = 15.664 MHz
 	                     (v8_monitor_id == 4'h1) ? 32'h00000606 :  // /12 = 58.742 MHz
 	                                               32'h00000E0E;   // /28 = 25.175 MHz
 	// Reconfig QUIET WINDOW (2026-08-08, the "out of range / V-80 on this
@@ -727,6 +729,8 @@ module emu
 	// The 10MB path is not yet verified — see docs and addrController_top.v.
 	wire [7:0] configRAMSize = cfg[4] ? 8'hE4 : 8'h24; // 1=10MB (2MB board + 4MB+4MB SIMM), 0=2MB (board only)
 	wire [7:0] pvia_ram_config_out;   // Active RAM config from pseudovia
+	// PseudoVIA $01 bit 0: IIe Startup sets it on display entry and clears it on exit (Startup CODE-1 $4216). Selects the V8 560x384 IIe mode.
+	assign v8_iie_video = pvia_ram_config_out[0];
 	wire       pvia_ram_configured;   // ROM has programmed V8 RAM config ($0 mirror enable)
 				  
 	// Serial Ports
@@ -1758,6 +1762,7 @@ module emu
 		// Configuration
 		.video_mode(v8_video_mode),
 		.monitor_id(v8_monitor_id),
+		.iie_mode(v8_iie_video),
 
 		// Test / diagnostic controls — disabled (OSD test options removed).
 		.test_bypass_vram(1'b0),

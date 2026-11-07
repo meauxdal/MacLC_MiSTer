@@ -20,6 +20,8 @@ module maclc_v8_video(
 
     input [2:0] video_mode,
     input [3:0] monitor_id,
+    // Apple IIe card display mode (PseudoVIA $01 bit 0, set by IIe Startup on entry): 560x384 at 4bpp. On the 12" RGB monitor the card's 17.234 MHz clock keeps the 12" line rate; the VGA monitor gets the same picture centered in 640x480 timing.
+    input iie_mode,
 
     // Test/diagnostic controls
     input        test_bypass_vram,  // 1 = ignore VRAM, generate synthetic pattern
@@ -62,21 +64,25 @@ reg [9:0] v_total, v_active, v_sync_start, v_sync_end;
 // clock) this only adds two cycles of latency.
 reg [2:0] vmode_meta, vmode_v;
 reg [3:0] monid_meta, monid_v;
+reg       iie_meta,   iie_v;
 reg       tbyp_meta,  tbyp_v;
 reg [1:0] tsel_meta,  tsel_v;
 always @(posedge clk_sys) begin
     vmode_meta <= video_mode;       vmode_v <= vmode_meta;
     monid_meta <= monitor_id;       monid_v <= monid_meta;
+    iie_meta   <= iie_mode;         iie_v   <= iie_meta;
     tbyp_meta  <= test_bypass_vram; tbyp_v  <= tbyp_meta;
     tsel_meta  <= test_pattern_sel; tsel_v  <= tsel_meta;
 end
+// IIe mode is 4bpp only; the depth field Startup bumps by one is not a depth there.
+wire [2:0] vmode_eff = iie_v ? 3'd2 : vmode_v;
 
 // Bits per pixel and fetch mask configuration
 reg [4:0] bits_per_pixel; // 1, 2, 4, 8, 16
 reg [3:0] fetch_mask;     // When to fetch new word
 
 always @(*) begin
-    case (vmode_v)
+    case (vmode_eff)
         3'd0: begin bits_per_pixel = 1;  fetch_mask = 4'hF; end // 1bpp: Fetch every 16
         3'd1: begin bits_per_pixel = 2;  fetch_mask = 4'h7; end // 2bpp: Fetch every 8
         3'd2: begin bits_per_pixel = 4;  fetch_mask = 4'h3; end // 4bpp: Fetch every 4
@@ -95,13 +101,23 @@ always @(*) begin
              v_total = 10'd918; v_active = 10'd870;
              v_sync_start = 10'd871; v_sync_end = 10'd877;
         end
-        4'h2: begin // 12" RGB Alternate
+        4'h2: if (iie_v) begin // 12" RGB, IIe 560x384: 17.192 MHz (PLL /41), 702 total keeps the 24.48 kHz line rate
+            h_total = 11'd702; h_active = 11'd560;
+            h_sync_start = 11'd578; h_sync_end = 11'd631;
+            v_total = 10'd407; v_active = 10'd384;
+            v_sync_start = 10'd385; v_sync_end = 10'd388;
+        end else begin // 12" RGB Alternate
             h_total = 11'd640; h_active = 11'd512;
             h_sync_start = 11'd528; h_sync_end = 11'd576;
             v_total = 10'd407; v_active = 10'd384;
             v_sync_start = 10'd385; v_sync_end = 10'd388;
         end
-        default: begin // VGA 640x480 (Monitor ID 6)
+        default: if (iie_v) begin // VGA timing, IIe 560x384 centered (unverified against hardware)
+            h_total = 11'd800; h_active = 11'd560;
+            h_sync_start = 11'd616; h_sync_end = 11'd712;
+            v_total = 10'd525; v_active = 10'd384;
+            v_sync_start = 10'd442; v_sync_end = 10'd444;
+        end else begin // VGA 640x480 (Monitor ID 6)
             h_total = 11'd800; h_active = 11'd640;
             h_sync_start = 11'd656; h_sync_end = 11'd752;
             v_total = 10'd525; v_active = 10'd480;
@@ -364,7 +380,7 @@ wire [7:0] pixel_index;
 // 4bpp: 0x0F | (4-bit << 4) → 0x0F, 0x1F, 0x2F, ..., 0xFF
 // 8bpp: direct 0x00-0xFF
 always @(*) begin
-    case (vmode_v)
+    case (vmode_eff)
         3'd0: pixel_index_real = {pix_word[15], 7'b1111111};               // 1bpp: 0x7F or 0xFF
         3'd1: pixel_index_real = {pix_word[15:14], 6'b111111};             // 2bpp: 0x3F, 0x7F, 0xBF, 0xFF
         3'd2: pixel_index_real = {pix_word[15:12], 4'b1111};               // 4bpp: 0x0F-0xFF
@@ -408,7 +424,7 @@ always @(posedge clk_sys) begin
     // into a supported capture. Native counters and output remain unchanged.
     width_d1      <= monid_v == 4'h1 ? 10'd0 : h_active[9:0];
     height_d1     <= monid_v == 4'h1 ? 9'd0 : v_active[8:0];
-    video_mode_d1 <= vmode_v;
+    video_mode_d1 <= vmode_eff;
     // Match the palette address's h_count pixel. The former video_data
     // register loaded on this edge, supplying the PREVIOUS word here.
     // In direct color every pixel loads a word, so that was a one-pixel
