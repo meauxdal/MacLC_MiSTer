@@ -188,7 +188,7 @@ module card_irq_candidate #(
                        cpu_address == 16'hC000);
     wire trap = reset_vector || io_trap || display_switch || is_display;
     wire io_space = cpu_address >= 16'hC000 && cpu_address < 16'hC100;
-    wire allowed_io = iwm_selected || (cpu_write && cpu_address == 16'hC028) || cpu_address == 16'hC010 || service_register ||
+    wire allowed_io = iwm_selected || cpu_address == 16'hC028 || cpu_address == 16'hC010 || service_register ||
                       cpu_address == 16'hC015 || cpu_address == 16'hC018 || cpu_address == 16'hC02B ||
                       (cpu_address >= 16'hC01A && cpu_address <= 16'hC01F) ||
                       cpu_address == 16'hC007 || cpu_address == 16'hC006 ||
@@ -458,6 +458,9 @@ module card_irq_candidate #(
                 if (cpu_write && cpu_address == 16'hC00B) slot3_rom <= 1;
                 if (cpu_write && cpu_address == 16'hC02B) card_mode <= cpu_wdata;
                 if (cpu_write && cpu_address == 16'hC028 && cpu_wdata[7] && !IGNORE_FW_OVERLAY)
+                    card_mode[3] <= 1;
+                // Hypothesis: the monitor IRQ/BRK entry ($C40B) sets $C02B bit 7 and then reads $C028 (BIT), the read form of the Conf diagnostic's bit-7 write above.
+                if (!cpu_write && cpu_address == 16'hC028 && card_mode[7] && !IGNORE_FW_OVERLAY)
                     card_mode[3] <= 1;
                 
                 permitted <= 0;

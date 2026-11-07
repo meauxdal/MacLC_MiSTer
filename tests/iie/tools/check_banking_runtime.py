@@ -108,6 +108,16 @@ def main():
     report(0xfffc, 0x82)
     access(0xc082)
     report(0xfffc, 0x62)
+    # Monitor IRQ/BRK entry ($C40B): LDA #$80; TSB $C02B; BIT $C028. The read must complete and latch bit 3.
+    load(0x80)
+    emit(0x0c, 0x2b, 0xc0)
+    emit(0x2c, 0x28, 0xc0)
+    report(0xc02b, 0x88)
+    # Without bit 7 a $C028 read leaves $C02B unchanged.
+    load(0x00)
+    access(0xc02b, True)
+    emit(0x2c, 0x28, 0xc0)
+    report(0xc02b, 0x00)
     emit(0x4c, 0x00, 0x20)
 
     memory = bytearray(262144)
