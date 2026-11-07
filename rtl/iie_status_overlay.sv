@@ -3,13 +3,14 @@ module iie_status_overlay (
     input wire enable_sys,
     input wire ce_pixel, de, vblank,
     input wire [271:0] status_sys,
+    input wire [15:0] pvia_sys,  // {PseudoVIA $01 ram_cfg, $10 video config}, shown on row 9 as R and D
     input wire [7:0] red_in, green_in, blue_in,
     output wire [7:0] red_out, green_out, blue_out
 );
     reg request = 0, acknowledge = 0;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] enable_sync = 2'b11;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] request_sync = 0, acknowledge_sync = 0;
-    reg [271:0] held = 0, snapshot = 0;
+    reg [287:0] held = 0, snapshot = 0;
     reg vblank_d = 0, de_d = 0;
     reg [10:0] x = 0, y = 0, active_lines = 384;
     always @(posedge clk_sys) begin
@@ -19,7 +20,7 @@ module iie_status_overlay (
             acknowledge <= 0;
             request_sync <= 0;
         end else if (request_sync[1] != acknowledge) begin
-            held <= status_sys;
+            held <= {pvia_sys, status_sys};
             acknowledge <= request_sync[1];
         end
     end
@@ -89,7 +90,7 @@ module iie_status_overlay (
             default: glyph = 0;
         endcase
     endfunction
-    function automatic [7:0] text_char(input integer row, col, input [271:0] data);
+    function automatic [7:0] text_char(input integer row, col, input [287:0] data);
         reg [191:0] label;
         begin
             case (row)
@@ -102,7 +103,7 @@ module iie_status_overlay (
                 6: label = "PDS 00000000 0000       ";
                 7: label = "START 00 O0 N0 F0       ";
                 8: label = "CMD 0000 MASK 00 ST 00  ";
-                9: label = "CAP 0000 S00            ";
+                9: label = "CAP 0000 S00 R00 D00    ";
                 default: label = 0;
             endcase
             text_char = label[191 - col * 8 -: 8];
@@ -127,6 +128,8 @@ module iie_status_overlay (
             if (row == 8 && col >= 20 && col <= 21) text_char = hex_char(data[247 - (col - 20) * 4 -: 4]);
             if (row == 9 && col >= 4 && col <= 7) text_char = hex_char(data[239 - (col - 4) * 4 -: 4]);
             if (row == 9 && col >= 10 && col <= 11) text_char = hex_char(data[223 - (col - 10) * 4 -: 4]);
+            if (row == 9 && col >= 14 && col <= 15) text_char = hex_char(data[287 - (col - 14) * 4 -: 4]);
+            if (row == 9 && col >= 18 && col <= 19) text_char = hex_char(data[279 - (col - 18) * 4 -: 4]);
         end
     endfunction
     integer px, py, row, col, gx, gy, panel_top;

@@ -516,6 +516,7 @@ module emu
         .clk_sys(clk_sys), .clk_vid(clk_vid), .reset(!pll_locked),
         .enable_sys(!status[9]),
         .ce_pixel(v8_ce_pix), .de(v8_de), .vblank(v8_vblank), .status_sys(iie_debug_status),
+        .pvia_sys({pvia_ram_config_out, pvia_video_config}),
         .red_in(v8_vga_r), .green_in(v8_vga_g), .blue_in(v8_vga_b),
         .red_out(native_rgb[23:16]), .green_out(native_rgb[15:8]), .blue_out(native_rgb[7:0])
     );

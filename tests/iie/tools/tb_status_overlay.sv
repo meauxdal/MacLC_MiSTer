@@ -6,6 +6,7 @@ module tb_status_overlay;
     reg ce_pixel = 1, de = 0, vblank = 1;
     reg enable_sys = 1;
     reg [271:0] status_sys = 0;
+    reg [15:0] pvia_sys = 0;
     wire [7:0] red_out, green_out, blue_out;
     iie_status_overlay dut (.clk_sys(clk_sys), .clk_vid(clk_vid), .reset(reset),
         .ce_pixel(ce_pixel), .de(de), .vblank(vblank), .status_sys(status_sys),
