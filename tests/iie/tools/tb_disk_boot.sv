@@ -148,7 +148,8 @@ module tb_disk_boot;
         host(0, 33, 16'h20); host(0, 32, 16'h80);
         wait (capture_valid);
         if (capture_status != 8'h80 || capture_address != 16'hFFFC) $fatal(1, "reset capture mismatch");
-        host(0, 32, 16'h88); host(0, 12, 0);
+        // IRQs on, as in the live runtime. The 6502 keeps I set through the boot path.
+        host(0, 32, 16'hA8); host(0, 12, 0);
         // Service captures until the boot sector's motor-off store.
         while (!booted) begin
             wait (capture_valid);
@@ -157,6 +158,10 @@ module tb_disk_boot;
                 motor_on_traps = motor_on_traps + 1;
                 motor_on_time = $realtime;
                 $display("motor on  pc=%h t=%0d us", instruction_address, $rtoi($realtime / 1e3));
+                // Driver $23A2: BSET #4,+$20 on the live $A8 command byte.
+                host(0, 32, 16'hB8);
+                if (dut.fault || !dut.report_mode || !dut.irq_level)
+                    $fatal(1, "$B8 motor-on command rejected fault=%b cause=%0d", dut.fault, dut.first_fault);
                 host(0, 12, 0);
                 repeat (200) @(negedge clk);
                 if (!dut.iwm_motor) $fatal(1, "motor-on ACK did not reach the IWM");
@@ -164,6 +169,10 @@ module tb_disk_boot;
                 $display("motor off pc=%h t=%0d us", instruction_address, $rtoi($realtime / 1e3));
                 booted = instruction_address == 16'h0803;
                 if (booted) boot_time = $realtime;
+                // Driver $2176: BCLR #4,+$20.
+                host(0, 32, 16'hA8);
+                if (dut.fault || dut.report_mode)
+                    $fatal(1, "$A8 motor-off command rejected fault=%b cause=%0d", dut.fault, dut.first_fault);
                 host(0, 12, 0);
                 repeat (200) @(negedge clk);
                 if (dut.iwm_motor) $fatal(1, "motor-off ACK did not reach the IWM");

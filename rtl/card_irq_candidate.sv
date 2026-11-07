@@ -157,7 +157,7 @@ module card_irq_candidate #(
          (cpu_address >= 16'h4000 && cpu_address < 16'h6000 && reset_mask[6]));
     wire runtime_screen_byte = cpu_address[6:0] < 7'h78;
     wire is_display = diagnostic_display ||
-                      (monitor_active && cpu_write && !iwm_motor && runtime_screen_byte &&
+                      (monitor_active && cpu_write && runtime_screen_byte &&
                        (runtime_text || runtime_hires));
     wire [7:0] runtime_display_status =
         (runtime_hires ? 8'hC4 : (reset_mask[3] ? 8'h82 : 8'h42)) |
@@ -478,22 +478,21 @@ module card_irq_candidate #(
                 end else if (!sidefx_word && sidefx_wdata[7:0] == 8'h80 && armed && reset_mask != 8'hFC) begin
                     runtime_paused <= 1;
                     runtime_refresh <= 1;
-                end else if (!sidefx_word && (sidefx_wdata[7:0] & 8'hDF) == 8'h88) begin
+                end else if (!sidefx_word && (sidefx_wdata[7:0] & 8'hCF) == 8'h88) begin
+                    // Run command: bit 5 = IRQ level, bit 4 = display report mode. The driver's motor-on/off handlers ($23A2/$2176) flip bit 4 with BSET/BCLR on the live byte, so $B8/$A8 occur with IRQs enabled.
                     if ((capture_valid && capture_reset) || armed ||
-                        (!cpu_running && !start_pending && !reset_pending)) begin
+                        (!cpu_running && !start_pending && !reset_pending && !sidefx_wdata[4])) begin
                         // A stopped-card command update does not release reset.
                         if (capture_valid && capture_reset) armed <= 1;
                         runtime_paused <= 0;
-                        report_mode <= 0;
+                        report_mode <= sidefx_wdata[4];
                         irq_level <= sidefx_wdata[5];
                         if (sidefx_wdata[5] && !irq_level) irq_delay_left <= IRQ_DELAY;
                     end else begin
                         fault <= 1;
                         if (!fault) first_fault <= 5;
                     end
-                end else if (!sidefx_word && sidefx_wdata[7:0] == 8'h98 && armed)
-                    report_mode <= 1;
-                else begin
+                end else begin
                     fault <= 1;
                     if (!fault) first_fault <= 6;
                 end

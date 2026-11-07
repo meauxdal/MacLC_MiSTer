@@ -29,7 +29,8 @@ def main():
                     page = address >= 0x4000
                     enabled = bool(mask & (0x40 if page else 0x80)) and (not aux or bool(mask & 4))
                     status = 0xc4 + page * 32 + aux * 8
-                enabled = enabled and not motor and (address & 0x7f) < 0x78
+                # Display traps stay live while the motor is on; the driver batches them through report mode.
+                enabled = enabled and (address & 0x7f) < 0x78
                 status = status + report if enabled else 0
                 if enabled:
                     used_status.add(status)
@@ -84,10 +85,13 @@ def main():
     control = run_process([*command, '+hires-control'])
     assert control.returncode != 0 and 'display mismatch case=' in control.stdout, control.stdout + control.stderr
     hole_control = run_process([*command, '+hole-control'])
+    assert hole_control.returncode != 0 and 'unexpected trap after store' in hole_control.stdout, \
+        hole_control.stdout + hole_control.stderr
+    # Control: the old motor-on suppression must now be caught as a missing display trap.
     motor_control = run_process([*command, '+motor-control'])
-    for result in (hole_control, motor_control):
-        assert result.returncode != 0 and 'unexpected trap after store' in result.stdout, result.stdout + result.stderr
-    print('PASS HiRes, screen-hole and motor controls rejected; both original driver dispatch tables match')
+    assert motor_control.returncode != 0 and 'display mismatch case=' in motor_control.stdout, \
+        motor_control.stdout + motor_control.stderr
+    print('PASS HiRes, screen-hole and motor-suppression controls rejected; both original driver dispatch tables match')
     record = {'result': output, 'delayed_memory': delayed, 'control': control.stdout,
               'hole_control': hole_control.stdout, 'motor_control': motor_control.stdout,
               'original_dispatch': dispatch, 'cases': len(cases),

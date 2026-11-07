@@ -77,7 +77,14 @@ module tb_display_capture;
         $readmemh(cases_image, cases, 0, count - 1);
         if ($test$plusargs("hires-control")) force dut.runtime_hires = 0;
         if ($test$plusargs("hole-control")) force dut.runtime_screen_byte = 1;
-        if ($test$plusargs("motor-control")) force dut.iwm_motor = 0;
+        if ($test$plusargs("motor-control")) fork
+            // Recreates the old motor-on display trap suppression.
+            forever begin
+                @(dut.iwm_motor);
+                if (dut.iwm_motor) force dut.is_display = 0;
+                else release dut.is_display;
+            end
+        join_none
         repeat (4) @(negedge clk); por_n = 1;
         host(0, 33, 16'h20);
         host(0, 32, 16'h80);
