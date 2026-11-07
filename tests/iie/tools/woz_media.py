@@ -54,7 +54,7 @@ def four_four(v):
     return bytes(((v >> 1) | 0xAA, v | 0xAA))
 
 
-def track_bits(track):
+def track_bits(track, boot=None):
     bits = []
     def sync(count):
         for _ in range(count):
@@ -67,7 +67,8 @@ def track_bits(track):
         put(b'\xd5\xaa\x96' + four_four(VOLUME) + four_four(track) + four_four(sector) +
             four_four(VOLUME ^ track ^ sector) + b'\xde\xaa\xeb')
         sync(6)
-        put(b'\xd5\xaa\xad' + encode62(sector_data(track, sector)) + b'\xde\xaa\xeb')
+        data = boot if boot is not None and track == 0 and sector == 0 else sector_data(track, sector)
+        put(b'\xd5\xaa\xad' + encode62(data) + b'\xde\xaa\xeb')
         sync(16)
     return bits
 
@@ -89,7 +90,9 @@ def write_schedule(track, salt):
     return out
 
 
-def build_woz():
+def build_woz(boot=None):
+    """WOZ2 image; boot, if given, replaces the 256 bytes of track 0 physical sector 0."""
+    assert boot is None or len(boot) == 256
     info = struct.pack('<BBBBB32sBBBHHH', 2, 1, 0, 0, 1, b'MacLC IWM check'.ljust(32), 1, 1, 32, 0, 0,
                        TRACK_BLOCKS).ljust(60, b'\0')
     tmap = bytearray([0xFF] * 160)
@@ -99,7 +102,7 @@ def build_woz():
                 tmap[q] = t
     entries, data = bytearray(), bytearray()
     for t in range(TRACKS):
-        bits = track_bits(t)
+        bits = track_bits(t, boot)
         packed = bytearray((len(bits) + 7) // 8)
         for i, bit in enumerate(bits):
             packed[i >> 3] |= bit << (7 - (i & 7))
