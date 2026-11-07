@@ -2,6 +2,8 @@
 // Card CPU boots the original Disk II P5 ROM through card_iwm_frontend and
 // card_iwm_backend from a WOZ image served by a 16-bit hps_io block model.
 // The synthetic host only starts the CPU and ACKs captures (+$0C).
+// +drive2 mounts the image on drive 2 and inverts the select line into the
+// backend, so the ROM's drive 1 boot runs through drive 2.
 module tb_disk_boot;
     localparam integer IMAGE_BYTES = 1536 + 35 * 13 * 512;
     reg clk = 0, por_n = 0;
@@ -44,19 +46,28 @@ module tb_disk_boot;
     );
 
     // Drive backend and its SD block port.
-    wire [31:0] sd_lba;
-    wire sd_rd, sd_wr;
+    bit use_drive2;
+    initial use_drive2 = $test$plusargs("drive2");
+    wire [22:0] drive_control = {iwm_control[22:6], iwm_control[5] ^ use_drive2, iwm_control[4:0]};
+    wire [63:0] sd_lba_n;
+    wire [1:0] sd_rd_n, sd_wr_n;
+    wire [31:0] sd_buff_din_n;
     reg sd_ack = 0, sd_buff_wr = 0, img_mounted = 0, cold_reset = 1;
     reg [7:0] sd_buff_addr = 0;
     reg [15:0] sd_buff_dout = 0;
-    wire [15:0] sd_buff_din;
+    wire [31:0] sd_lba = sd_lba_n[use_drive2 * 32 +: 32];
+    wire sd_rd = sd_rd_n[use_drive2], sd_wr = sd_wr_n[use_drive2];
+    always @(posedge clk) if (sd_rd_n[!use_drive2] || sd_wr_n[!use_drive2])
+        $fatal(1, "the empty drive requested SD access");
     card_iwm_backend drive (
-        .clk(clk), .cold_reset(cold_reset), .control(iwm_control), .drive(iwm_drive),
+        .clk(clk), .cold_reset(cold_reset), .control(drive_control), .drive(iwm_drive),
         .write_protect(1'b1), .active(),
-        .sd_lba(sd_lba), .sd_rd(sd_rd), .sd_wr(sd_wr), .sd_ack(sd_ack),
-        .sd_buff_addr(sd_buff_addr), .sd_buff_dout(sd_buff_dout), .sd_buff_din(sd_buff_din),
-        .sd_buff_wr(sd_buff_wr), .img_mounted(img_mounted), .img_readonly(1'b1),
-        .img_size(64'(IMAGE_BYTES))
+        .sd_lba(sd_lba_n), .sd_rd(sd_rd_n), .sd_wr(sd_wr_n),
+        .sd_ack({sd_ack && use_drive2, sd_ack && !use_drive2}),
+        .sd_buff_addr(sd_buff_addr), .sd_buff_dout(sd_buff_dout), .sd_buff_din(sd_buff_din_n),
+        .sd_buff_wr(sd_buff_wr),
+        .img_mounted({img_mounted && use_drive2, img_mounted && !use_drive2}),
+        .img_readonly(1'b1), .img_size(64'(IMAGE_BYTES))
     );
 
     reg [7:0] disk [0:IMAGE_BYTES-1];

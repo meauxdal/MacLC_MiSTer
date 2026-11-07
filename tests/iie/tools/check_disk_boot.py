@@ -44,7 +44,9 @@ def main():
     boot[:9] = bytes.fromhex('01a62bbd88c04c0608')
     # --control puts a different byte $80 on the disk than the check expects.
     control = '--control' in sys.argv
-    plusargs = [a for a in sys.argv[1:] if a != '--control']
+    # --drive2 boots the same image through the second drive's unit.
+    drive2 = '--drive2' in sys.argv
+    plusargs = [a for a in sys.argv[1:] if a not in ('--control', '--drive2')]
     on_disk = bytearray(boot)
     if control:
         on_disk[0x80] ^= 0xFF
@@ -59,7 +61,7 @@ def main():
     subprocess.run(['iverilog', '-g2012', '-s', 'tb_disk_boot', '-o', linux(binary), linux(bench),
                     *map(linux, sources)], check=True)
     result = subprocess.run(['vvp', '-n', linux(binary), f'+image={linux(image)}', f'+disk={linux(disk)}',
-                             f'+out={linux(out)}', *plusargs], capture_output=True, text=True, timeout=14400)
+                             f'+out={linux(out)}', *(['+drive2'] if drive2 else []), *plusargs], capture_output=True, text=True, timeout=14400)
     print(result.stdout if plusargs else result.stdout[-3000:], result.stderr[-2000:])
     if result.returncode or 'DONE' not in result.stdout:
         raise SystemExit('FAIL simulation')
@@ -79,11 +81,12 @@ def main():
         raise SystemExit(f'FAIL {fields}')
     record = {'fields': fields, 'stdout': result.stdout[-3000:],
               'scope': 'Original slot 6 firmware (CNxx/Monx 5632) and monitor ROM on the card CPU; synthetic host '
-                       'ACKs motor traps; drive 1 only, read-only WOZ, no DOS beyond T0S0',
+                       f'ACKs motor traps; drive {2 if drive2 else 1} (select inverted for drive 2), read-only WOZ, '
+                       'no DOS beyond T0S0',
               'sha256': {str(p): sha(p) for p in [*sources, monitor, p5, c8, bench, Path(__file__),
                                                   ROOT / 'tools/woz_media.py']}}
-    (WORK / 'disk-boot.json').write_text(json.dumps(record, indent=2) + '\n', encoding='ascii')
-    print(f'PASS disk boot: original slot 6 firmware recalibrated to track 0, read T0S0 into $0800 and ran it; '
+    (WORK / ('disk-boot-drive2.json' if drive2 else 'disk-boot.json')).write_text(json.dumps(record, indent=2) + '\n', encoding='ascii')
+    print(f'PASS disk boot{" (drive 2)" if drive2 else ""}: original slot 6 firmware recalibrated to track 0, read T0S0 into $0800 and ran it; '
           f'motor on at {fields["MOTOR_ON_MS"]} ms, boot sector at {fields["BOOT_MS"]} ms, '
           f'{fields["BLOCKS"]} image blocks read')
 
