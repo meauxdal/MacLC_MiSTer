@@ -2,6 +2,7 @@
 """Check the IIe card 5.25 drive backend: WOZ mount, reads, stepping, holdover, write and write-back."""
 import json
 import subprocess
+import sys
 
 from prepare_runtime import ROOT, WORK, RTL, sha
 from check_runtime import linux
@@ -14,6 +15,8 @@ SALT = 100
 
 
 def main():
+    # --drive2 runs the sequence on drive 2 and then reads drive 1 back.
+    drive2 = '--drive2' in sys.argv
     WORK.mkdir(parents=True, exist_ok=True)
     image = woz_media.build_woz()
     hex_path = WORK / 'iwm-backend.hex'
@@ -27,18 +30,20 @@ def main():
     subprocess.run(['iverilog', '-g2012', '-s', 'tb_iwm_backend', '-o', linux(binary), linux(BENCH),
                     *map(linux, SOURCES)], check=True)
     result = subprocess.run(['vvp', '-n', linux(binary), f'+image={linux(hex_path)}', f'+out={linux(out)}',
-                             f'+write={linux(write_path)}'], capture_output=True, text=True, timeout=7200)
+                             f'+write={linux(write_path)}', *(['+drive2'] if drive2 else [])], capture_output=True, text=True, timeout=7200)
     if result.returncode or 'DONE' not in result.stdout:
         print(result.stdout[-4000:], result.stderr[-2000:])
         raise SystemExit('FAIL simulation')
 
-    streams, current, summary = {}, None, ''
+    streams, current, summary, other = {}, None, '', ''
     for line in out.read_text(encoding='ascii').split('\n'):
-        if line[:1] in ('T', 'W'):
+        if line.startswith('BLOCKS'):
+            summary = line
+        elif line.startswith('OTHER'):
+            other = line
+        elif line[:1] in ('T', 'W', 'O'):
             current = line
             streams[current] = bytearray()
-        elif line.startswith('BLOCKS'):
-            summary = line
         elif line:
             streams[current].append(int(line, 16))
     record = {'summary': summary, 'tracks': {}}
@@ -59,10 +64,20 @@ def main():
     written, reloaded = int(fields[2]), int(fields[-1])
     if written != 13 or reloaded < 16:
         raise SystemExit('FAIL write-back or reload block counts')
+    if drive2:
+        print(other)
+        record['other'] = other
+        if 'O0' not in streams or other.split()[2] != '0':
+            raise SystemExit('FAIL drive 1 readback or drive 1 writes')
     record['sha256'] = {str(p): sha(p) for p in [*SOURCES, BENCH, ROOT / 'tools/woz_media.py']}
-    (WORK / 'iwm-backend.json').write_text(json.dumps(record, indent=2) + '\n', encoding='ascii')
-    print('PASS IWM backend: WOZ mount, 16 sectors on tracks 0 and 2, stepping, holdover, track write, '
-          'write-back and reload from the image')
+    name = 'iwm-backend-drive2.json' if drive2 else 'iwm-backend.json'
+    (WORK / name).write_text(json.dumps(record, indent=2) + '\n', encoding='ascii')
+    if drive2:
+        print('PASS IWM backend drive 2: same sequence on drive 2 with both drives mounted; drive 1 '
+              'wrote nothing, its head stayed on track 0 and it still reads track 0')
+    else:
+        print('PASS IWM backend: WOZ mount, 16 sectors on tracks 0 and 2, stepping, holdover, track write, '
+              'write-back and reload from the image')
 
 
 if __name__ == '__main__':
