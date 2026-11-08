@@ -52,7 +52,11 @@ module maclc_v8_video(
     // On-chip framebuffer (BRAM) read port (Phase 2): the scanline prefetch now
     // reads from vram_bram instead of the shared SDRAM slot. Registered read.
     output [17:0] vram_raddr,
-    input  [15:0] vram_rdata
+    input  [15:0] vram_rdata,
+
+    // Packed base of the line the prefetch is reading (vram_raddr minus the
+    // word index). vram_ddr3 keeps that line and the one after it cached.
+    output [17:0] fetch_base
 );
 
 reg [10:0] h_total, h_active, h_sync_start, h_sync_end;
@@ -270,6 +274,7 @@ reg       fetch_pend;     // a read was issued last cycle (its data is valid now
 reg       fetch_buf_d;    // fetch_buf aligned to the write phase
 
 assign vram_raddr = fetch_packed_base + {8'd0, fetch_idx};
+assign fetch_base = fetch_packed_base;
 
 // SDRAM video path retired in Phase 2 — video reads the on-chip framebuffer.
 

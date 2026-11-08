@@ -166,3 +166,9 @@ tb_tv525_video:
 tb_tv_ddram_cdc:
 	$V --cc --exe --build -j 4 --Wall --top-module tv_ddram_cdc --Mdir ./obj_dir_tb_tv_ddram_cdc -o tb_tv_ddram_cdc -CFLAGS "-std=c++17 -O2" $(RTL)/tv_ddram_cdc.sv tb_tv_ddram_cdc.cpp
 	./obj_dir_tb_tv_ddram_cdc/tb_tv_ddram_cdc
+
+# DDR3 framebuffer: real V8 scanout + tv_ddr_arbiter + random-latency DDR3.
+.PHONY: tb_vram_ddr3
+tb_vram_ddr3:
+	$V --binary --timing -j 4 -Wno-fatal -Wno-WIDTH -Wno-PINMISSING --top-module tb_vram_ddr3 --Mdir ./obj_dir_tb_vram_ddr3 -o tb_vram_ddr3 -CFLAGS "-O2" tb_vram_ddr3.sv $(RTL)/vram_ddr3.sv $(RTL)/maclc_v8_video.sv $(RTL)/tv_ddr_arbiter.sv
+	./obj_dir_tb_vram_ddr3/tb_vram_ddr3

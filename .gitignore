@@ -71,3 +71,4 @@ verilator/out/
 tests/iie/obj_tv525_pipeline*/
 /rbf_archive
 /local
+/refs

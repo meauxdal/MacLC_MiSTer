@@ -26,6 +26,7 @@ module emu
 	assign ADC_BUS  = 'Z;
 	assign USER_OUT = '1;
 `ifndef MAC_TV525
+`ifdef VRAM_BRAM
 	assign DDRAM_CLK = clk_sys;
 	assign DDRAM_BURSTCNT = 0;
 	assign DDRAM_ADDR = 0;
@@ -33,6 +34,7 @@ module emu
 	assign DDRAM_BE = 0;
 	assign DDRAM_RD = 0;
 	assign DDRAM_WE = 0;
+`endif
 `endif
 	assign {SD_SCK, SD_MOSI, SD_CS} = 'Z;
 
@@ -523,6 +525,16 @@ module emu
         .red_out(native_rgb[23:16]), .green_out(native_rgb[15:8]), .blue_out(native_rgb[7:0])
     );
 
+    // DDR3 framebuffer client (rtl/vram_ddr3.sv, instanced with the V8 below).
+    // With the 480i pipeline it shares the DDRAM port through tv_ddr_arbiter;
+    // without it, it owns the port.  `VRAM_BRAM restores the old on-chip
+    // framebuffer (384 M10K) for A/B tests.
+    wire [28:0] vram_ddr_address;
+    wire  [7:0] vram_ddr_burstcount, vram_ddr_byteenable;
+    wire [63:0] vram_ddr_writedata, vram_ddr_readdata;
+    wire        vram_ddr_read, vram_ddr_write;
+    wire        vram_ddr_waitrequest, vram_ddr_readdatavalid;
+
 `ifdef MAC_TV525
     wire clk_tv525, tv_pll_locked;
     wire [23:0] tv_rgb;
@@ -548,6 +560,10 @@ module emu
         tv_mem_reset_meta <= !pll_locked;
         tv_mem_reset <= tv_mem_reset_meta;
     end
+    wire [28:0] tv_ddr_address;
+    wire  [7:0] tv_ddr_burstcount, tv_ddr_byteenable;
+    wire [63:0] tv_ddr_writedata, tv_ddr_readdata;
+    wire        tv_ddr_read, tv_ddr_write, tv_ddr_waitrequest, tv_ddr_readdatavalid;
     // DDR commands drain across guest reset; only native capture is invalidated.
     tv525_pipeline #(.FILTER_ENABLE(1)) crt_tv (
         .clk_source(clk_vid), .source_reset(vidrst_s), .source_ce(v8_ce_pix),
@@ -557,11 +573,41 @@ module emu
         .clk_mem(clk_mem), .inhibit(tv_mem_reset),
         .clk_tv(clk_tv525), .reset_tv(tv_reset_pipe[1]),
         .rgb(tv_rgb), .hs(tv_hs), .vs(tv_vs), .de(tv_de), .field_id(tv_field), .csync_n(),
-        .address(DDRAM_ADDR), .burstcount(DDRAM_BURSTCNT), .writedata(DDRAM_DIN),
-        .byteenable(DDRAM_BE), .read(DDRAM_RD), .write(DDRAM_WE),
-        .waitrequest(DDRAM_BUSY), .readdatavalid(DDRAM_DOUT_READY), .readdata(DDRAM_DOUT),
+        .address(tv_ddr_address), .burstcount(tv_ddr_burstcount), .writedata(tv_ddr_writedata),
+        .byteenable(tv_ddr_byteenable), .read(tv_ddr_read), .write(tv_ddr_write),
+        .waitrequest(tv_ddr_waitrequest), .readdatavalid(tv_ddr_readdatavalid), .readdata(tv_ddr_readdata),
         .published(), .dropped(), .repeated(), .overflows(), .underruns()
     );
+`ifdef VRAM_BRAM
+    assign DDRAM_ADDR = tv_ddr_address;
+    assign DDRAM_BURSTCNT = tv_ddr_burstcount;
+    assign DDRAM_DIN = tv_ddr_writedata;
+    assign DDRAM_BE = tv_ddr_byteenable;
+    assign DDRAM_RD = tv_ddr_read;
+    assign DDRAM_WE = tv_ddr_write;
+    assign tv_ddr_waitrequest = DDRAM_BUSY;
+    assign tv_ddr_readdatavalid = DDRAM_DOUT_READY;
+    assign tv_ddr_readdata = DDRAM_DOUT;
+`else
+    // Frame store on port a (the one inhibit drains), framebuffer on port b.
+    // Grants alternate when both ask; a burst keeps the port to its last beat.
+    tv_ddr_arbiter #(.DW(64), .AW(29)) ddr_arb (
+        .clk(clk_mem), .inhibit(tv_mem_reset),
+        .a_address(tv_ddr_address), .a_burstcount(tv_ddr_burstcount),
+        .a_writedata(tv_ddr_writedata), .a_byteenable(tv_ddr_byteenable),
+        .a_read(tv_ddr_read), .a_write(tv_ddr_write),
+        .a_waitrequest(tv_ddr_waitrequest), .a_readdatavalid(tv_ddr_readdatavalid),
+        .a_readdata(tv_ddr_readdata),
+        .b_address(vram_ddr_address), .b_burstcount(vram_ddr_burstcount),
+        .b_writedata(vram_ddr_writedata), .b_byteenable(vram_ddr_byteenable),
+        .b_read(vram_ddr_read), .b_write(vram_ddr_write),
+        .b_waitrequest(vram_ddr_waitrequest), .b_readdatavalid(vram_ddr_readdatavalid),
+        .b_readdata(vram_ddr_readdata),
+        .address(DDRAM_ADDR), .burstcount(DDRAM_BURSTCNT), .writedata(DDRAM_DIN),
+        .byteenable(DDRAM_BE), .read(DDRAM_RD), .write(DDRAM_WE),
+        .waitrequest(DDRAM_BUSY), .readdatavalid(DDRAM_DOUT_READY), .readdata(DDRAM_DOUT)
+    );
+`endif
     assign DDRAM_CLK = clk_mem;
     assign CLK_VIDEO = clk_tv525;
     assign CE_PIXEL = 1'b1;
@@ -571,6 +617,18 @@ module emu
     assign VGA_HS = tv_hs;
     assign VGA_F1 = tv_field;
 `else
+`ifndef VRAM_BRAM
+    assign DDRAM_CLK = clk_mem;
+    assign DDRAM_ADDR = vram_ddr_address;
+    assign DDRAM_BURSTCNT = vram_ddr_burstcount;
+    assign DDRAM_DIN = vram_ddr_writedata;
+    assign DDRAM_BE = vram_ddr_byteenable;
+    assign DDRAM_RD = vram_ddr_read;
+    assign DDRAM_WE = vram_ddr_write;
+    assign vram_ddr_waitrequest = DDRAM_BUSY;
+    assign vram_ddr_readdatavalid = DDRAM_DOUT_READY;
+    assign vram_ddr_readdata = DDRAM_DOUT;
+`endif
     assign CLK_VIDEO = clk_vid;
     assign CE_PIXEL = v8_ce_pix;
     assign {VGA_R, VGA_G, VGA_B} = native_rgb;
@@ -1193,6 +1251,7 @@ module emu
 	wire        vram_bram_we;
 	wire [17:0] v8_vram_raddr;
 	wire [15:0] v8_vram_rdata;
+	wire [17:0] v8_fetch_base;   // packed base of the line being prefetched
 
 	// Forward declarations: assigned with the rest of the disk-mount state
 	// further down; needed here for addrController's flp_present gate.
@@ -1790,9 +1849,11 @@ module emu
 
 		.words_per_line(v8_words_per_line),
 		.vram_raddr(v8_vram_raddr),
-		.vram_rdata(v8_vram_rdata)
+		.vram_rdata(v8_vram_rdata),
+		.fetch_base(v8_fetch_base)
 	);
 
+`ifdef VRAM_BRAM
 	// On-chip framebuffer (BRAM). CPU VRAM writes land on port A (clk_sys);
 	// video reads port B in the pixel-clock domain — the CDC lives inside the
 	// dual-clock M10K primitive.
@@ -1807,6 +1868,44 @@ module emu
 		.b_addr(v8_vram_raddr),    // video scanline prefetch
 		.b_dout(v8_vram_rdata)
 	);
+	assign vram_ddr_address = 29'd0;
+	assign vram_ddr_burstcount = 8'd1;
+	assign vram_ddr_writedata = 64'd0;
+	assign vram_ddr_byteenable = 8'd0;
+	assign vram_ddr_read = 1'b0;
+	assign vram_ddr_write = 1'b0;
+`else
+	// Framebuffer in HPS DDR3 at byte 0x21C00000 (above the 480i frame store)
+	// with a two-line M10K cache for the scanout; same write strobe and the
+	// same one-clock read latency as vram_bram.  See rtl/vram_ddr3.sv.
+	wire       vram_wq_overflow;
+	wire [9:0] vram_wq_peak;
+	vram_ddr3 vram_fb(
+		.clk_sys(clk_sys),
+		.cpu_addr(vram_bram_waddr),
+		.cpu_din(memoryDataOut),
+		.cpu_be({~_cpuUDS, ~_cpuLDS}),
+		.cpu_we(vram_bram_we),
+		.clk_vid(clk_vid),
+		.reset_vid(vidrst_s),
+		.vid_base(v8_fetch_base),
+		.vid_wpl(v8_words_per_line),
+		.vid_raddr(v8_vram_raddr),
+		.vid_rdata(v8_vram_rdata),
+		.clk_mem(clk_mem),
+		.ddr_address(vram_ddr_address),
+		.ddr_burstcount(vram_ddr_burstcount),
+		.ddr_writedata(vram_ddr_writedata),
+		.ddr_byteenable(vram_ddr_byteenable),
+		.ddr_read(vram_ddr_read),
+		.ddr_write(vram_ddr_write),
+		.ddr_waitrequest(vram_ddr_waitrequest),
+		.ddr_readdatavalid(vram_ddr_readdatavalid),
+		.ddr_readdata(vram_ddr_readdata),
+		.wq_overflow(vram_wq_overflow),
+		.wq_peak(vram_wq_peak)
+	);
+`endif
 
 	// ASC sample outputs (Commit C will route to AUDIO_L/R)
 	wire signed [15:0] asc_sample_l;
