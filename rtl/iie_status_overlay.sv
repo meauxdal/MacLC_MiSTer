@@ -157,25 +157,41 @@ module iie_status_overlay (
             if (row == 12 && col >= 20 && col <= 23) text_char = hex_char(data[383 - (col - 20) * 4 -: 4]);
         end
     endfunction
-    integer px, py, row, col, gx, gy, panel_top;
-    reg panel, ink;
-    reg [34:0] bitmap;
-    always @* begin
-        px = int'(x) - 8;
-        panel_top = int'(active_lines) - 216;
-        py = int'(y) - panel_top;
-        row = py / 16;
-        col = px / 12;
-        gx = (px % 12) / 2;
-        gy = (py % 16) / 2;
-        panel = enable_sync[1] && de && x >= 8 && x < 296 && int'(y) >= panel_top && int'(y) < panel_top + 208;
-        bitmap = 0;
-        ink = 0;
-        if (panel) begin
-            bitmap = glyph(text_char(row, col, snapshot));
-            if (gx < 5 && gy < 7) ink = bitmap[34 - gy * 5 - gx];
+    // Character-cell position as counters that track x and y, so the pixel
+    // path holds no divider. A cell is 12 pixels wide and starts at x = 8, so
+    // a line starts at sub_x 4 of cell -1 (col_q 63). The glyph of the next
+    // cell is fetched into bitmap_q on the last pixel of the current one,
+    // which leaves the text mux a whole clock and the pixel path only a bit
+    // select.
+    reg [3:0] sub_x = 4'd4;
+    reg [5:0] col_q = 6'd63;
+    reg signed [11:0] py_q = 0;
+    reg [34:0] bitmap_q = 0;
+    wire signed [11:0] panel_top = $signed({1'b0, active_lines}) - 12'sd216;
+    wire [5:0] col_next = col_q + 6'd1;
+    always @(posedge clk_vid) begin
+        if (reset) begin
+            sub_x <= 4'd4;
+            col_q <= 6'd63;
+            py_q <= 0;
+            bitmap_q <= 0;
+        end else if (ce_pixel) begin
+            py_q <= $signed({1'b0, y}) - panel_top;
+            if (sub_x == 4'd11) bitmap_q <= glyph(text_char(int'($signed(py_q[11:4])), int'(col_next), snapshot));
+            if (!vblank && de && de_d) begin
+                sub_x <= sub_x == 4'd11 ? 4'd0 : sub_x + 4'd1;
+                if (sub_x == 4'd11) col_q <= col_next;
+            end else begin
+                sub_x <= 4'd4;
+                col_q <= 6'd63;
+            end
         end
     end
+    wire [3:0] row = py_q[7:4];
+    wire [2:0] gx = sub_x[3:1];
+    wire [2:0] gy = py_q[3:1];
+    wire panel = enable_sync[1] && de && col_q < 6'd24 && py_q >= 0 && py_q < 12'sd208;
+    wire ink = panel && gx < 3'd5 && gy < 3'd7 && bitmap_q[6'd34 - {3'b0, gy} * 6'd5 - {3'b0, gx}];
     assign red_out = panel ? (ink && (row != 0 || snapshot[192]) ? 8'hFF : 8'h00) : red_in;
     assign green_out = panel ? (ink && (row != 0 || !snapshot[192]) ? 8'hFF : 8'h00) : green_in;
     assign blue_out = panel ? (ink && row != 0 ? 8'hFF : 8'h00) : blue_in;
