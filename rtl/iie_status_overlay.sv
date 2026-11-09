@@ -4,13 +4,14 @@ module iie_status_overlay (
     input wire ce_pixel, de, vblank,
     input wire [271:0] status_sys,
     input wire [15:0] pvia_sys,  // {PseudoVIA $01 ram_cfg, $10 video config}, shown on row 9 as R and D
+    input wire [127:0] drive_sys, // card_iwm_backend debug, rows 10-12
     input wire [7:0] red_in, green_in, blue_in,
     output wire [7:0] red_out, green_out, blue_out
 );
     reg request = 0, acknowledge = 0;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] enable_sync = 2'b11;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] request_sync = 0, acknowledge_sync = 0;
-    reg [287:0] held = 0, snapshot = 0;
+    reg [415:0] held = 0, snapshot = 0;
     reg vblank_d = 0, de_d = 0;
     reg [10:0] x = 0, y = 0, active_lines = 384;
     always @(posedge clk_sys) begin
@@ -20,7 +21,7 @@ module iie_status_overlay (
             acknowledge <= 0;
             request_sync <= 0;
         end else if (request_sync[1] != acknowledge) begin
-            held <= {pvia_sys, status_sys};
+            held <= {drive_sys, pvia_sys, status_sys};
             acknowledge <= request_sync[1];
         end
     end
@@ -83,14 +84,16 @@ module iie_status_overlay (
             "N": glyph = 35'b10001_11001_10101_10011_10001_10001_10001;
             "O": glyph = 35'b01110_10001_10001_10001_10001_10001_01110;
             "P": glyph = 35'b11110_10001_10001_11110_10000_10000_10000;
+            "Q": glyph = 35'b01110_10001_10001_10001_10101_10010_01101;
             "R": glyph = 35'b11110_10001_10001_11110_10100_10010_10001;
             "S": glyph = 35'b01111_10000_10000_01110_00001_00001_11110;
             "T": glyph = 35'b11111_00100_00100_00100_00100_00100_00100;
             "U": glyph = 35'b10001_10001_10001_10001_10001_10001_01110;
+            "W": glyph = 35'b10001_10001_10001_10101_10101_10101_01010;
             default: glyph = 0;
         endcase
     endfunction
-    function automatic [7:0] text_char(input integer row, col, input [287:0] data);
+    function automatic [7:0] text_char(input integer row, col, input [415:0] data);
         reg [191:0] label;
         begin
             case (row)
@@ -104,6 +107,9 @@ module iie_status_overlay (
                 7: label = "START 00 O0 N0 F0       ";
                 8: label = "CMD 0000 MASK 00 ST 00  ";
                 9: label = "CAP 0000 S00 R00 D00    ";
+                10: label = "D1 M0 S0 T00 R00 K00 L00";
+                11: label = "D2 M0 S0 T00 R00 K00 L00";
+                12: label = "IWM E0 P0 Q0 N0000 F0000";
                 default: label = 0;
             endcase
             text_char = label[191 - col * 8 -: 8];
@@ -130,6 +136,25 @@ module iie_status_overlay (
             if (row == 9 && col >= 10 && col <= 11) text_char = hex_char(data[223 - (col - 10) * 4 -: 4]);
             if (row == 9 && col >= 14 && col <= 15) text_char = hex_char(data[287 - (col - 14) * 4 -: 4]);
             if (row == 9 && col >= 18 && col <= 19) text_char = hex_char(data[279 - (col - 18) * 4 -: 4]);
+            // Rows 10-11: drive 1 at data[327:288], drive 2 at data[367:328].
+            if (row >= 10 && row <= 11) begin
+                if (col == 4) text_char = hex_char(data[327 + (row - 10) * 40 -: 4]);
+                if (col == 7) text_char = hex_char(data[323 + (row - 10) * 40 -: 4]);
+                if (col >= 10 && col <= 11)
+                    text_char = hex_char(data[319 + (row - 10) * 40 - (col - 10) * 4 -: 4]);
+                if (col >= 14 && col <= 15)
+                    text_char = hex_char(data[311 + (row - 10) * 40 - (col - 14) * 4 -: 4]);
+                if (col >= 18 && col <= 19)
+                    text_char = hex_char(data[303 + (row - 10) * 40 - (col - 18) * 4 -: 4]);
+                if (col >= 22 && col <= 23)
+                    text_char = hex_char(data[295 + (row - 10) * 40 - (col - 22) * 4 -: 4]);
+            end
+            // Row 12: sequencer at data[411:368].
+            if (row == 12 && col == 5) text_char = hex_char(data[411:408]);
+            if (row == 12 && col == 8) text_char = hex_char(data[407:404]);
+            if (row == 12 && col == 11) text_char = hex_char(data[403:400]);
+            if (row == 12 && col >= 14 && col <= 17) text_char = hex_char(data[399 - (col - 14) * 4 -: 4]);
+            if (row == 12 && col >= 20 && col <= 23) text_char = hex_char(data[383 - (col - 20) * 4 -: 4]);
         end
     endfunction
     integer px, py, row, col, gx, gy, panel_top;
@@ -137,13 +162,13 @@ module iie_status_overlay (
     reg [34:0] bitmap;
     always @* begin
         px = int'(x) - 8;
-        panel_top = int'(active_lines) - 168;
+        panel_top = int'(active_lines) - 216;
         py = int'(y) - panel_top;
         row = py / 16;
         col = px / 12;
         gx = (px % 12) / 2;
         gy = (py % 16) / 2;
-        panel = enable_sync[1] && de && x >= 8 && x < 296 && int'(y) >= panel_top && int'(y) < panel_top + 160;
+        panel = enable_sync[1] && de && x >= 8 && x < 296 && int'(y) >= panel_top && int'(y) < panel_top + 208;
         bitmap = 0;
         ink = 0;
         if (panel) begin

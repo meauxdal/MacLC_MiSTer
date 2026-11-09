@@ -11,6 +11,10 @@
 //          [12:8] mode, [20:13] write data, [21] data write, [22] reset
 // drive:   [7:0] data, [8] sense, [9] write busy, [10] underrun, [11] enabled
 // SD ports are packed per drive, drive 1 in the low half.
+// debug (status overlay only): [39:0] drive 1, [79:40] drive 2, each
+//          {mounted, spinning, qtrack, sd_rd count, sd_ack count,
+//          track load count}; [123:80] {enabled, phases, q7 q6,
+//          nibble count, flux edge count} for the selected drive.
 module card_iwm_backend #(
     parameter integer CLK_HZ = 32500000,
     parameter integer TRACK_ADDR_WIDTH = 13,
@@ -22,6 +26,7 @@ module card_iwm_backend #(
     output wire [11:0] drive,
     input wire write_protect,
     output wire active,
+    output wire [127:0] debug,
 
     output wire [63:0] sd_lba,
     output wire [1:0] sd_rd,
@@ -88,6 +93,7 @@ module card_iwm_backend #(
     wire [31:0] bit_count_n [0:1];
     wire [8:0] qtrack_n [0:1];
     wire [7:0] track_id_n [0:1];
+    wire [39:0] debug_n [0:1];
 
     genvar n;
     generate
@@ -100,7 +106,7 @@ module card_iwm_backend #(
                 .flux(flux_n[n]), .wp(wp_n[n]), .mounted(mounted_n[n]),
                 .bit_timer(bit_timer_n[n]), .timing(timing_n[n]),
                 .bit_count(bit_count_n[n]), .qtrack(qtrack_n[n]),
-                .track_id(track_id_n[n]),
+                .track_id(track_id_n[n]), .debug(debug_n[n]),
                 .sd_lba(sd_lba[32 * n +: 32]), .sd_rd(sd_rd[n]), .sd_wr(sd_wr[n]),
                 .sd_ack(sd_ack[n]), .sd_buff_addr(sd_buff_addr),
                 .sd_buff_dout(sd_buff_dout), .sd_buff_din(sd_buff_din[16 * n +: 16]),
@@ -196,6 +202,18 @@ module card_iwm_backend #(
     // TODO: latch, asynchronous handshake, fast and 8 MHz mode bits.
     assign drive = {enabled, 1'b0, 1'b0, wp, stall != 0 ? sr_stall : sr};
     assign active = enabled;
+
+    // Overlay counters: whole nibbles reaching the read latch and flux edges
+    // from the selected drive. Both wrap; only movement matters.
+    reg sr7_d = 0;
+    reg [15:0] nibble_count = 0, flux_count = 0;
+    always @(posedge clk) begin
+        sr7_d <= sr[7];
+        if (sr[7] && !sr7_d && !q6 && !q7) nibble_count <= nibble_count + 1'd1;
+        if (ce && flux_edge) flux_count <= flux_count + 1'd1;
+    end
+    assign debug = {4'b0, 3'b0, enabled, phases, 2'b0, q7, q6, nibble_count, flux_count,
+                    debug_n[1], debug_n[0]};
 endmodule
 
 // One 5.25 drive: WOZ image, track RAM, head and motor. Phases, motor and
@@ -223,6 +241,7 @@ module card_iwm_disk #(
     output wire [31:0] bit_count,
     output wire [8:0] qtrack,
     output wire [7:0] track_id,
+    output wire [39:0] debug,
 
     output wire [31:0] sd_lba,
     output wire sd_rd,
@@ -364,4 +383,16 @@ module card_iwm_disk #(
         .track_data_valid(), .disk_type_mismatch(), .disk_write_protected(ctrl_wp),
         .optimal_bit_timing(timing), .dbg_load_sum(), .dbg_load_bytes(), .dbg_load_blocks()
     );
+
+    // Overlay counters: SD requests, SD acks and finished track loads.
+    reg sd_rd_d = 0, sd_ack_d = 0;
+    reg [7:0] rd_count = 0, ack_count = 0, load_count = 0;
+    always @(posedge clk) begin
+        sd_rd_d <= sd_rd;
+        sd_ack_d <= sd_ack;
+        if (sd_rd && !sd_rd_d) rd_count <= rd_count + 1'd1;
+        if (sd_ack && !sd_ack_d) ack_count <= ack_count + 1'd1;
+        if (load_done) load_count <= load_count + 1'd1;
+    end
+    assign debug = {3'b0, mounted, 3'b0, spinning, qtrack[7:0], rd_count, ack_count, load_count};
 endmodule

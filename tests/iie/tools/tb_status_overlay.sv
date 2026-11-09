@@ -7,6 +7,7 @@ module tb_status_overlay;
     reg enable_sys = 1;
     reg [271:0] status_sys = 0;
     reg [15:0] pvia_sys = 0;
+    reg [127:0] drive_sys = 0;
     wire [7:0] red_out, green_out, blue_out;
     iie_status_overlay dut (.clk_sys(clk_sys), .clk_vid(clk_vid), .reset(reset),
         .ce_pixel(ce_pixel), .de(de), .vblank(vblank), .status_sys(status_sys),
@@ -41,7 +42,7 @@ module tb_status_overlay;
                 for (col = 0; col < width; col = col + 1) begin
                     pixel();
                     if (capture) begin
-                        in_panel = enable_sys && col >= 8 && col < 296 && row >= height - 168 && row < height - 8;
+                        in_panel = enable_sys && col >= 8 && col < 296 && row >= height - 216 && row < height - 8;
                         if (!in_panel) begin
                             if ({red_out, green_out, blue_out} !== 24'h203040)
                                 $fatal(1, "native pixels changed x=%0d y=%0d", col, row);
@@ -90,7 +91,7 @@ module tb_status_overlay;
         frame(512, 384, 1);
         $fclose(file_out);
         file_out = 0;
-        if (pixels != 512 * 384 || background != 512 * 384 - 288 * 160 || ink < 1000)
+        if (pixels != 512 * 384 || background != 512 * 384 - 288 * 208 || ink < 1000)
             $fatal(1, "overlay coverage mismatch pixels=%0d background=%0d ink=%0d", pixels, background, ink);
         enable_sys = 0;
         pixels = 0; background = 0; ink = 0;
@@ -104,7 +105,7 @@ module tb_status_overlay;
         enable_sys = 1;
         pixels = 0; background = 0; ink = 0;
         frame(640, 480, 1);
-        if (pixels != 640 * 480 || background != 640 * 480 - 288 * 160 || ink < 1000)
+        if (pixels != 640 * 480 || background != 640 * 480 - 288 * 208 || ink < 1000)
             $fatal(1, "mode-change overlay mismatch");
         $display("PASS overlay snapshot, CE, native pixels, live disable/re-enable, 384/480-line placement");
         $finish;

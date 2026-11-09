@@ -40,6 +40,7 @@ module emu
 
     wire iie_diagnostic_boundary, iie_diagnostic_fault;
     wire [271:0] iie_debug_status;
+    wire [127:0] iie_drive_debug;
     reg [24:0] iie_diagnostic_ticks = 0;
     always @(posedge clk_sys) begin
         if (!pll_locked || (!iie_diagnostic_boundary && !iie_diagnostic_fault))
@@ -521,6 +522,7 @@ module emu
         .enable_sys(!status[9]),
         .ce_pixel(v8_ce_pix), .de(v8_de), .vblank(v8_vblank), .status_sys(iie_debug_status),
         .pvia_sys({pvia_ram_config_out, pvia_video_config}),
+        .drive_sys(iie_drive_debug),
         .red_in(v8_vga_r), .green_in(v8_vga_g), .blue_in(v8_vga_b),
         .red_out(native_rgb[23:16]), .green_out(native_rgb[15:8]), .blue_out(native_rgb[7:0])
     );
@@ -2678,7 +2680,7 @@ module emu
     card_iwm_backend iie_drive (
         .clk(clk_sys), .cold_reset(!pll_locked_s),
         .control(iie_iwm_control), .drive(iie_iwm_drive),
-        .write_protect(~status[14]), .active(),
+        .write_protect(~status[14]), .active(), .debug(iie_drive_debug),
         .sd_lba({sd_lba[VD_IIE_DRIVE2], sd_lba[VD_IIE_DRIVE1]}),
         .sd_rd(sd_rd[VD_IIE_DRIVE2:VD_IIE_DRIVE1]), .sd_wr(sd_wr[VD_IIE_DRIVE2:VD_IIE_DRIVE1]),
         .sd_ack(sd_ack[VD_IIE_DRIVE2:VD_IIE_DRIVE1]), .sd_buff_addr(sd_buff_addr[7:0]),
