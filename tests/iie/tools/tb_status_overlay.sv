@@ -8,15 +8,17 @@ module tb_status_overlay;
     reg [271:0] status_sys = 0;
     reg [15:0] pvia_sys = 0;
     reg [127:0] drive_sys = 0;
+    reg [95:0] scan_sys = 0;
     wire [7:0] red_out, green_out, blue_out;
     iie_status_overlay dut (.clk_sys(clk_sys), .clk_vid(clk_vid), .reset(reset),
         .ce_pixel(ce_pixel), .de(de), .vblank(vblank), .status_sys(status_sys),
         .red_in(8'h20), .green_in(8'h30), .blue_in(8'h40), .*);
+    localparam [95:0] SCAN = 96'h3702_0003_574F5A32_200_05_000;
     localparam [271:0] FIRST = {56'h0088FC26FFFC80, 16'hFC19, 4'd0, 4'h4, 16'hFB65, 16'hC07D, 8'hE0, 8'h04,
         16'hC07D, 16'd64, 32'd18052, 32'h1234, 32'hFEE0000C, 16'h0004};
     localparam [271:0] SECOND = {56'h00A8236CC07DE0, 16'h23A0, 4'd0, 4'h5, 16'h2040, 16'hC0E8, 8'h28, 8'hA5,
         16'hC0E8, 16'd63, 32'd910, 32'h2345, 32'hFE000004, 16'hC0E8};
-    reg [271:0] previous = 0;
+    reg [511:0] previous = 0;
     integer file_out = 0, ink = 0, background = 0, pixels = 0;
     reg [1023:0] output_path;
     task pixel;
@@ -42,7 +44,7 @@ module tb_status_overlay;
                 for (col = 0; col < width; col = col + 1) begin
                     pixel();
                     if (capture) begin
-                        in_panel = enable_sys && col >= 8 && col < 296 && row >= height - 216 && row < height - 8;
+                        in_panel = enable_sys && col >= 8 && col < 296 && row >= height - 248 && row < height - 8;
                         if (!in_panel) begin
                             if ({red_out, green_out, blue_out} !== 24'h203040)
                                 $fatal(1, "native pixels changed x=%0d y=%0d", col, row);
@@ -78,6 +80,13 @@ module tb_status_overlay;
             dut.text_char(9, 10, FIRST) != "8" || dut.text_char(9, 11, FIRST) != "0" ||
             dut.text_char(9, 10, SECOND) != "E")
             $fatal(1, "command context label mismatch");
+        // Rows 13-14: drive 1 WOZ scan state from scan_sys.
+        if (dut.text_char(13, 4, {SCAN, 416'd0}) != "3" || dut.text_char(13, 7, {SCAN, 416'd0}) != "0" ||
+            dut.text_char(13, 8, {SCAN, 416'd0}) != "1" || dut.text_char(13, 14, {SCAN, 416'd0}) != "2" ||
+            dut.text_char(13, 20, {SCAN, 416'd0}) != "3" || dut.text_char(14, 4, {SCAN, 416'd0}) != "5" ||
+            dut.text_char(14, 11, {SCAN, 416'd0}) != "2" || dut.text_char(14, 14, {SCAN, 416'd0}) != "2" ||
+            dut.text_char(14, 20, {SCAN, 416'd0}) != "5" || dut.glyph("H") == 0 || dut.glyph("V") == 0 || dut.glyph("X") == 0)
+            $fatal(1, "scan row label mismatch");
         repeat (4) pixel();
         reset = 0;
         status_sys = FIRST;
@@ -91,7 +100,7 @@ module tb_status_overlay;
         frame(512, 384, 1);
         $fclose(file_out);
         file_out = 0;
-        if (pixels != 512 * 384 || background != 512 * 384 - 288 * 208 || ink < 1000)
+        if (pixels != 512 * 384 || background != 512 * 384 - 288 * 240 || ink < 1000)
             $fatal(1, "overlay coverage mismatch pixels=%0d background=%0d ink=%0d", pixels, background, ink);
         enable_sys = 0;
         pixels = 0; background = 0; ink = 0;
@@ -105,7 +114,7 @@ module tb_status_overlay;
         enable_sys = 1;
         pixels = 0; background = 0; ink = 0;
         frame(640, 480, 1);
-        if (pixels != 640 * 480 || background != 640 * 480 - 288 * 208 || ink < 1000)
+        if (pixels != 640 * 480 || background != 640 * 480 - 288 * 240 || ink < 1000)
             $fatal(1, "mode-change overlay mismatch");
         $display("PASS overlay snapshot, CE, native pixels, live disable/re-enable, 384/480-line placement");
         $finish;

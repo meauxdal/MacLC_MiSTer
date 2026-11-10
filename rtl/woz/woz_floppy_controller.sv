@@ -91,7 +91,9 @@ module woz_floppy_controller #(
     output reg [15:0] dbg_load_sum,
     // DEBUG: byte count and ack-fall (block) count for the same load window.
     output reg [13:0] dbg_load_bytes,
-    output reg [7:0]  dbg_load_blocks
+    output reg [7:0]  dbg_load_blocks,
+    // DEBUG: WOZ scan state for the IIe overlay, see the dbg_scan block.
+    output wire [95:0] dbg_scan
 );
 
     //=========================================================================
@@ -415,6 +417,43 @@ module woz_floppy_controller #(
     // Track when we've issued a new request that the C++ hasn't processed yet
     // This prevents attributing an old transfer's sd_ack to our new request
     reg request_issued;
+
+    // DEBUG: what the streaming parser takes on hardware. The first four
+    // file bytes after a mount, the parser bytes in the last finished block
+    // (512 when nothing is lost), and acks that arrived with no request of
+    // ours pending. All restart on a mount edge.
+    reg [31:0] dbg_hdr = 0;
+    reg  [2:0] dbg_hdr_n = 0;
+    reg [11:0] dbg_blk_bytes = 0, dbg_last_bytes = 0;
+    reg  [7:0] dbg_unsolicited = 0;
+    wire dbg_parse = sd_ack && sd_buff_wr && state == S_SCAN_WOZ &&
+                     !scan_skip_discard && (transfer_active || (!old_ack && sd_ack));
+    always @(posedge clk) begin
+        if (reset || (img_mounted && !prev_mounted)) begin
+            dbg_hdr <= 0;
+            dbg_hdr_n <= 0;
+            dbg_blk_bytes <= 0;
+            dbg_last_bytes <= 0;
+            dbg_unsolicited <= 0;
+        end else begin
+            if (!old_ack && sd_ack) begin
+                dbg_blk_bytes <= 0;
+                if (!request_issued) dbg_unsolicited <= dbg_unsolicited + 1'd1;
+            end else if (dbg_parse) dbg_blk_bytes <= dbg_blk_bytes + 1'd1;
+            if (old_ack && !sd_ack && state == S_SCAN_WOZ)
+                dbg_last_bytes <= dbg_blk_bytes;
+            if (dbg_parse && dbg_hdr_n < 3'd4) begin
+                dbg_hdr <= {dbg_hdr[23:0], sd_buff_dout};
+                dbg_hdr_n <= dbg_hdr_n + 1'd1;
+            end
+        end
+    end
+    // [95:92] state, [91:88] {scan_failed, INFO, TMAP, TRKS}, [87:80] INFO
+    // version, [79:64] scan_blocks, [63:32] first four bytes, [31:20] parser
+    // bytes in the last block, [19:12] unsolicited acks, [11:0] spare.
+    assign dbg_scan = {state, scan_failed, have_info, have_tmap, have_trks,
+                       info_version, scan_blocks, dbg_hdr, dbg_last_bytes,
+                       dbg_unsolicited, 12'd0};
 
     always @(posedge clk) begin
         old_ack <= sd_ack;

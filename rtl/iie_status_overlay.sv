@@ -5,13 +5,14 @@ module iie_status_overlay (
     input wire [271:0] status_sys,
     input wire [15:0] pvia_sys,  // {PseudoVIA $01 ram_cfg, $10 video config}, shown on row 9 as R and D
     input wire [127:0] drive_sys, // card_iwm_backend debug, rows 10-12
+    input wire [95:0] scan_sys,   // drive 1 WOZ scan state, rows 13-14
     input wire [7:0] red_in, green_in, blue_in,
     output wire [7:0] red_out, green_out, blue_out
 );
     reg request = 0, acknowledge = 0;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] enable_sync = 2'b11;
     (* altera_attribute = "-name SYNCHRONIZER_IDENTIFICATION \"FORCED IF ASYNCHRONOUS\"" *) reg [1:0] request_sync = 0, acknowledge_sync = 0;
-    reg [415:0] held = 0, snapshot = 0;
+    reg [511:0] held = 0, snapshot = 0;
     reg vblank_d = 0, de_d = 0;
     reg [10:0] x = 0, y = 0, active_lines = 384;
     always @(posedge clk_sys) begin
@@ -21,7 +22,7 @@ module iie_status_overlay (
             acknowledge <= 0;
             request_sync <= 0;
         end else if (request_sync[1] != acknowledge) begin
-            held <= {drive_sys, pvia_sys, status_sys};
+            held <= {scan_sys, drive_sys, pvia_sys, status_sys};
             acknowledge <= request_sync[1];
         end
     end
@@ -77,6 +78,7 @@ module iie_status_overlay (
             "E": glyph = 35'b11111_10000_10000_11110_10000_10000_11111;
             "F": glyph = 35'b11111_10000_10000_11110_10000_10000_10000;
             "G": glyph = 35'b01111_10000_10000_10111_10001_10001_01111;
+            "H": glyph = 35'b10001_10001_10001_11111_10001_10001_10001;
             "I": glyph = 35'b01110_00100_00100_00100_00100_00100_01110;
             "K": glyph = 35'b10001_10010_10100_11000_10100_10010_10001;
             "L": glyph = 35'b10000_10000_10000_10000_10000_10000_11111;
@@ -90,10 +92,12 @@ module iie_status_overlay (
             "T": glyph = 35'b11111_00100_00100_00100_00100_00100_00100;
             "U": glyph = 35'b10001_10001_10001_10001_10001_10001_01110;
             "W": glyph = 35'b10001_10001_10001_10101_10101_10101_01010;
+            "V": glyph = 35'b10001_10001_10001_10001_10001_01010_00100;
+            "X": glyph = 35'b10001_10001_01010_00100_01010_10001_10001;
             default: glyph = 0;
         endcase
     endfunction
-    function automatic [7:0] text_char(input integer row, col, input [415:0] data);
+    function automatic [7:0] text_char(input integer row, col, input [511:0] data);
         reg [191:0] label;
         begin
             case (row)
@@ -110,6 +114,8 @@ module iie_status_overlay (
                 10: label = "D1 M0 S0 T00 R00 K00 L00";
                 11: label = "D2 M0 S0 T00 R00 K00 L00";
                 12: label = "IWM E0 P0 Q0 N0000 F0000";
+                13: label = "W1 S0 F0000 V00 B0000   ";
+                14: label = "HDR 00000000 X000 U00   ";
                 default: label = 0;
             endcase
             text_char = label[191 - col * 8 -: 8];
@@ -155,6 +161,16 @@ module iie_status_overlay (
             if (row == 12 && col == 11) text_char = hex_char(data[403:400]);
             if (row == 12 && col >= 14 && col <= 17) text_char = hex_char(data[399 - (col - 14) * 4 -: 4]);
             if (row == 12 && col >= 20 && col <= 23) text_char = hex_char(data[383 - (col - 20) * 4 -: 4]);
+            // Row 13: drive 1 scan state, flags {failed, INFO, TMAP, TRKS},
+            // INFO version, blocks scanned. Row 14: first four file bytes,
+            // parser bytes in the last block, unsolicited acks. data[511:416].
+            if (row == 13 && col == 4) text_char = hex_char(data[511:508]);
+            if (row == 13 && col >= 7 && col <= 10) text_char = hex_char({3'b0, data[514 - col]});
+            if (row == 13 && col >= 13 && col <= 14) text_char = hex_char(data[503 - (col - 13) * 4 -: 4]);
+            if (row == 13 && col >= 17 && col <= 20) text_char = hex_char(data[495 - (col - 17) * 4 -: 4]);
+            if (row == 14 && col >= 4 && col <= 11) text_char = hex_char(data[479 - (col - 4) * 4 -: 4]);
+            if (row == 14 && col >= 14 && col <= 16) text_char = hex_char(data[447 - (col - 14) * 4 -: 4]);
+            if (row == 14 && col >= 19 && col <= 20) text_char = hex_char(data[435 - (col - 19) * 4 -: 4]);
         end
     endfunction
     // Character-cell position as counters that track x and y, so the pixel
@@ -167,7 +183,7 @@ module iie_status_overlay (
     reg [5:0] col_q = 6'd63;
     reg signed [11:0] py_q = 0;
     reg [34:0] bitmap_q = 0;
-    wire signed [11:0] panel_top = $signed({1'b0, active_lines}) - 12'sd216;
+    wire signed [11:0] panel_top = $signed({1'b0, active_lines}) - 12'sd248;
     wire [5:0] col_next = col_q + 6'd1;
     always @(posedge clk_vid) begin
         if (reset) begin
@@ -190,7 +206,7 @@ module iie_status_overlay (
     wire [3:0] row = py_q[7:4];
     wire [2:0] gx = sub_x[3:1];
     wire [2:0] gy = py_q[3:1];
-    wire panel = enable_sync[1] && de && col_q < 6'd24 && py_q >= 0 && py_q < 12'sd208;
+    wire panel = enable_sync[1] && de && col_q < 6'd24 && py_q >= 0 && py_q < 12'sd240;
     wire ink = panel && gx < 3'd5 && gy < 3'd7 && bitmap_q[6'd34 - {3'b0, gy} * 6'd5 - {3'b0, gx}];
     assign red_out = panel ? (ink && (row != 0 || snapshot[192]) ? 8'hFF : 8'h00) : red_in;
     assign green_out = panel ? (ink && (row != 0 || !snapshot[192]) ? 8'hFF : 8'h00) : green_in;
