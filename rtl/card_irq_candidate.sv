@@ -83,6 +83,8 @@ module card_irq_candidate #(
     wire reset_stopping = reset_pending || reset_command;
     wire reset_commit = reset_pending && drained && !cpu_memory_wait;
     reg [7:0] reset_mask, keyboard;
+    // Open-Apple and Solid-Apple from run command bits 0-1 (Command, Option).
+    reg [1:0] apple_keys;
     reg permitted, capture_reset, capture_display, capture_read_release;
     reg capture_address_release, capture_write;
     wire cpu_valid, cpu_write, cpu_sync, vector_pull, cpu_halted, high_read, high_write, banking_status;
@@ -237,7 +239,9 @@ module card_irq_candidate #(
     assign boundary = 1'b0;
     assign master_valid[1] = runnable && released && !io_space && !protected_write && !cpu_memory_wait && !reset_stopping;
     assign master_write[1] = cpu_write;
-    assign master_rsp_ready[1] = cpu_memory_wait && pace_due && runnable && released;
+    // After a fault the CPU stops, but its outstanding memory response is
+    // still drained so a host reset can commit.
+    assign master_rsp_ready[1] = cpu_memory_wait && ((pace_due && runnable && released) || fault);
     assign cpu_ready = runnable && released && pace_due &&
                        (io_space ? allowed_io : (protected_write || (cpu_memory_wait && master_rsp_valid[1])));
     assign master_rsp_ready[0] = host_mem_rsp_ready;
@@ -307,8 +311,8 @@ module card_irq_candidate #(
             16'hC01E: cpu_rdata = {mode_altchar, 7'b0};
             16'hC01F: cpu_rdata = {mode_col80, 7'b0};
             16'hC02B: cpu_rdata = card_mode;
-            16'hC061: cpu_rdata = {GAME_INPUTS[0], 7'b0};
-            16'hC062: cpu_rdata = {GAME_INPUTS[1], 7'b0};
+            16'hC061: cpu_rdata = {GAME_INPUTS[0] | apple_keys[0], 7'b0};
+            16'hC062: cpu_rdata = {GAME_INPUTS[1] | apple_keys[1], 7'b0};
             16'hC063: cpu_rdata = {GAME_INPUTS[2], 7'b0};
             16'hC078, 16'hC079, 16'hC07A, 16'hC07B, 16'hC07C:
                 cpu_rdata = host_return;
@@ -360,6 +364,7 @@ module card_irq_candidate #(
             cpu_memory_wait <= 0;
             cpu_completed <= 0;
             fault <= 0;
+            apple_keys <= 0;
             start_mask <= 0;
             start_override <= 0;
             start_count <= 0;
@@ -478,16 +483,27 @@ module card_irq_candidate #(
                 if (reset_command) begin
                     reset_pending <= 1;
                     reset_restart <= !sidefx_word;
-                end else if (!sidefx_word && sidefx_wdata[7:0] == 8'h80 && armed && reset_mask != 8'hFC) begin
+                end else if (!sidefx_word && (sidefx_wdata[7:0] & 8'hCC) == 8'h80 && armed && reset_mask != 8'hFC) begin
+                    // Pause. The same live byte as the run command, so the
+                    // motor handlers' bit 4 and the Apple-key bits 0-1 ride on
+                    // it too ($90 seen on hardware while booting a WOZ disk).
+                    // Bits 4-5 are not applied while paused; the next run
+                    // command carries them.
                     runtime_paused <= 1;
                     runtime_refresh <= 1;
-                end else if (!sidefx_word && (sidefx_wdata[7:0] & 8'hCF) == 8'h88) begin
+                    apple_keys <= sidefx_wdata[1:0];
+                end else if (!sidefx_word && (sidefx_wdata[7:0] & 8'hCC) == 8'h88) begin
                     // Run command: bit 5 = IRQ level, bit 4 = display report mode. The driver's motor-on/off handlers ($23A2/$2176) flip bit 4 with BSET/BCLR on the live byte, so $B8/$A8 occur with IRQs enabled.
+                    // Bits 0-1 follow the Command and Option keys ($89 seen on
+                    // hardware with left Command held). Taken as the IIe Open-
+                    // and Solid-Apple pushbuttons, read at $C061/$C062. Bit 1 is
+                    // inferred from the IIe pairing, not yet observed.
                     if ((capture_valid && capture_reset) || armed ||
                         (!cpu_running && !start_pending && !reset_pending && !sidefx_wdata[4])) begin
                         // A stopped-card command update does not release reset.
                         if (capture_valid && capture_reset) armed <= 1;
                         runtime_paused <= 0;
+                        apple_keys <= sidefx_wdata[1:0];
                         report_mode <= sidefx_wdata[4];
                         irq_level <= sidefx_wdata[5];
                         if (sidefx_wdata[5] && !irq_level) irq_delay_left <= IRQ_DELAY;
@@ -523,6 +539,11 @@ module card_irq_candidate #(
             end
             // Accepted memory work completes before CPU and capture state reset.
             if (reset_commit) begin
+                // A host reset/restart recovers a faulted card, so relaunching
+                // Startup works without reloading the core. first_fault keeps
+                // the last code for the status panel until the next fault.
+                fault <= 0;
+                apple_keys <= 0;
                 host_return <= 0;
                 reset_pending <= 0;
                 internal_rom <= 0;

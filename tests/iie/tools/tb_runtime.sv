@@ -29,9 +29,10 @@ module tb_runtime;
         .capture_data(), .capture_count(), .cpu_completed()
     );
     integer ticks = 0;
+    reg expect_fault = 0;
     always @(posedge clk) begin
         ticks <= ticks + 1;
-        if (ticks > 100000 || fault || boundary) $fatal(1, "runtime smoke fault/watchdog");
+        if (ticks > 100000 || (fault && !expect_fault) || boundary) $fatal(1, "runtime smoke fault/watchdog");
         if (mem_rsp_valid && mem_rsp_ready) mem_rsp_valid <= 0;
         if (mem_valid && !mem_rsp_valid) begin
             if (mem_write) memory[mem_addr] <= mem_wdata;
@@ -83,7 +84,35 @@ module tb_runtime;
         wait(memory['h201 / 2] == 16'h41C1);
         if (memory['h400 / 2][7:0] != 8'hA5 || dut.keyboard[7])
             $fatal(1, "runtime text or keyboard mismatch");
-        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear");
+        // Command/Option ride in run command bits 0-1 as the Apple keys.
+        host(0, 32, 16'h89);
+        if (dut.apple_keys != 2'b01) $fatal(1, "Open-Apple not latched from $89");
+        host(0, 32, 16'h8A);
+        if (dut.apple_keys != 2'b10) $fatal(1, "Solid-Apple not latched from $8A");
+        host(0, 32, 16'h88);
+        if (dut.apple_keys != 2'b00) $fatal(1, "$88 did not clear the Apple keys");
+        // Pause carries the same flag bits: $90 (motor bit 4) and $91.
+        host(0, 32, 16'h90);
+        if (!dut.runtime_paused) $fatal(1, "$90 did not pause");
+        host(0, 12, 0);
+        host(0, 32, 16'h91);
+        if (!dut.runtime_paused || dut.apple_keys != 2'b01) $fatal(1, "$91 pause/key mismatch");
+        host(0, 12, 0);
+        host(0, 32, 16'h88);
+        if (dut.runtime_paused || dut.apple_keys != 2'b00) $fatal(1, "$88 did not resume");
+        // An unknown command still faults, and a host restart recovers.
+        expect_fault = 1;
+        host(0, 32, 16'h8C);
+        repeat (2) @(negedge clk);
+        if (!fault || dut.first_fault != 6) $fatal(1, "unknown command did not fault");
+        host(1, 32, 16'h0802);
+        host(0, 33, 16'h20);
+        host(0, 32, 16'h80);
+        wait(capture_valid);
+        if (fault || capture_status != 8'h80 || capture_address != 16'hFFFC)
+            $fatal(1, "restart after fault did not recover");
+        expect_fault = 0;
+        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear, Apple keys, flagged pause, fault recovery");
         $finish;
     end
 endmodule
