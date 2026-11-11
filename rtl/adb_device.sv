@@ -64,6 +64,10 @@ module adb_device(
 	reg  [9:0] keyRaw_s1, keyRaw_s2;
 	reg  [7:0] keyData;
 	reg        key_pending;
+	// The decoded key is the ADB power key. Its code is $7F, the same value
+	// the table uses for "no key", so it needs its own flag. The Apple IIe
+	// Card uses it as the Reset key (Control-Reset, Control-Command-Reset).
+	reg        key_power;
 	wire       key_edge   = (kstb_s3 != kstb_d);
 	wire [8:0] key_sc     = keyRaw_s2[8:0];
 	wire       press      = keyRaw_s2[9];
@@ -131,7 +135,7 @@ module adb_device(
 			kbdFifoRd <= 0; kbdFifoWr <= 0;
 			mouseX <= 0; mouseY <= 0; mouseButton <= 0; mouse_evt <= 0; mouse_init <= 1'b1;
 			kstb_s1 <= ps2_key[10]; kstb_s2 <= ps2_key[10]; kstb_s3 <= ps2_key[10]; kstb_d <= ps2_key[10];
-			keyRaw_s1 <= 0; keyRaw_s2 <= 0; keyData <= 8'h7F; key_pending <= 0; capslock <= 0;
+			keyRaw_s1 <= 0; keyRaw_s2 <= 0; keyData <= 8'h7F; key_pending <= 0; key_power <= 0; capslock <= 0;
 			mstb_s1 <= ps2_mouse[24]; mstb_s2 <= ps2_mouse[24]; mstb_s3 <= ps2_mouse[24]; mstb_d <= ps2_mouse[24];
 			mX_s1 <= 0; mX_s2 <= 0; mY_s1 <= 0; mY_s2 <= 0; mBtn_s1 <= 0; mBtn_s2 <= 0;
 		end else begin
@@ -281,7 +285,7 @@ module adb_device(
 			  9'h07b: keyData[6:0] <= 7'h4E;	//KP -
 			  9'h07c: keyData[6:0] <= 7'h43;	//KP *
 			  9'h07d: keyData[6:0] <= 7'h5C;	//KP 9
-			  9'h07e: keyData[6:0] <= 7'h7F;	//SCROLL LOCK / KP )
+			  9'h07e: keyData[6:0] <= 7'h7F;	//SCROLL LOCK (power key, see key_power)
 			  9'h07f: keyData[6:0] <= 7'h7F;
 			  9'h080: keyData[6:0] <= 7'h7F;
 			  9'h081: keyData[6:0] <= 7'h7F;
@@ -669,10 +673,12 @@ module adb_device(
 			  9'h1ff: keyData[6:0] <= 7'h7F;
 				endcase
 				keyData[7] <= ~press;   // 1 = key-up, 0 = key-down
+				key_power  <= (key_sc == 9'h07e);
 			end
 
-			// push decoded key into the FIFO (one cycle after decode)
-			if (key_pending && keyData[6:0] != 7'h7F) begin
+			// push decoded key into the FIFO (one cycle after decode). Unmapped
+			// keys ($7F) are dropped, so a $7F entry is always the power key.
+			if (key_pending && (keyData[6:0] != 7'h7F || key_power)) begin
 				kbdFifo[kbdFifoWr] <= keyData;
 				kbdFifoWr <= kbdFifoWr + 3'd1;
 			end
@@ -740,7 +746,13 @@ module adb_device(
 								2'd0: begin
 									if (!kbdFifoEmpty) begin
 										resp0 <= kbdFifo[kbdFifoRd];
-										if (kbdFifoRd + 3'd1 != kbdFifoWr) begin
+										if (kbdFifo[kbdFifoRd][6:0] == 7'h7F) begin
+											// power key: the code fills both bytes,
+											// $7F7F down and $FFFF up
+											resp1 <= kbdFifo[kbdFifoRd];
+											kbdFifoRd <= kbdFifoRd + 3'd1;
+										end else if (kbdFifoRd + 3'd1 != kbdFifoWr &&
+										             kbdFifo[kbdFifoRd + 3'd1][6:0] != 7'h7F) begin
 											resp1 <= kbdFifo[kbdFifoRd + 3'd1];
 											kbdFifoRd <= kbdFifoRd + 3'd2;
 										end else begin
@@ -911,7 +923,7 @@ module adb_device(
 			//   ksrq    = a command NOT addressed to the keyboard was seen while the kbd FIFO
 			//             held data, so the device asserted a Service Request to be polled.
 			// Reading kbd_evt>0, ksrq>0, but ktalk static => Egret ignores the kbd SRQ.
-			if (key_pending && keyData[6:0] != 7'h7F)
+			if (key_pending && (keyData[6:0] != 7'h7F || key_power))
 				dbg_kbd_evt <= dbg_kbd_evt + 8'd1;
 			if (st == S_TSTOP && rise && !kbdFifoEmpty && cmd_addr != kbd_addr)
 				dbg_ksrq <= dbg_ksrq + 8'd1;
