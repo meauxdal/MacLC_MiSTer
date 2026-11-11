@@ -78,7 +78,18 @@ module card_irq_candidate #(
     reg cpu_running, start_pending, armed, report_mode;
     reg runtime_paused, runtime_refresh;
     reg reset_pending, reset_restart;
-    wire reset_command = command_write && ((sidefx_word && sidefx_wdata == 16'h0802) ||
+    // Warm reset: after stop word $0800 the driver reinitializes and sends
+    // $88 directly, with no $80 and no wait for the $FFFC capture. That run
+    // command restarts the CPU and its reset vector fetch is not trapped.
+    // Inferred from the driver's $51A sequence, not observed on a card.
+    reg warm_reset, warm_vector;
+    // A word write puts the command in the high byte and the mask in the low
+    // one. Command bit 7 clear holds the 6502 in reset. The original software
+    // sends three such words: $0802 (Conf and driver restart, $450), $0800
+    // (driver warm reset for Control-Reset, $51A) and $0000 (Quit, CODE 1
+    // $467E, followed by a host fill of both RAM banks).
+    wire stop_word = sidefx_word && (sidefx_wdata & 16'hF7FD) == 16'h0000;
+    wire reset_command = command_write && (stop_word ||
         (!sidefx_word && sidefx_wdata[7:0] == 8'h80 && (reset_mask == 8'hFC || !cpu_running)));
     wire reset_stopping = reset_pending || reset_command;
     wire reset_commit = reset_pending && drained && !cpu_memory_wait;
@@ -165,7 +176,7 @@ module card_irq_candidate #(
         (runtime_hires ? 8'hC4 : (reset_mask[3] ? 8'h82 : 8'h42)) |
         ((runtime_hires ? cpu_address[14] : cpu_address[11]) ? 8'h20 : 8'h00) |
         (ram_address[16] ? 8'h08 : 8'h00) | {7'b0, report_mode};
-    wire reset_vector = vector_pull && cpu_address == 16'hFFFC;
+    wire reset_vector = vector_pull && cpu_address == 16'hFFFC && !warm_vector;
     wire runtime_slot_io = monitor_active &&
         ((cpu_address >= 16'hC090 && cpu_address <= 16'hC0DF) ||
          (cpu_address >= 16'hC0F0 && cpu_address <= 16'hC0FF));
@@ -337,6 +348,8 @@ module card_irq_candidate #(
             start_pending <= 0;
             reset_pending <= 0;
             reset_restart <= 0;
+            warm_reset <= 0;
+            warm_vector <= 0;
             internal_rom <= 0;
             card_mode <= 0;
             slot3_rom <= 0;
@@ -469,6 +482,7 @@ module card_irq_candidate #(
                     card_mode[3] <= 1;
                 
                 permitted <= 0;
+                if (vector_pull && cpu_address == 16'hFFFD) warm_vector <= 0;
                 if (cpu_address == 16'hC010 && (monitor_active || !cpu_write)) keyboard[7] <= 0;
             end
             if (read_release && capture_valid && capture_read_release)
@@ -483,6 +497,7 @@ module card_irq_candidate #(
                 if (reset_command) begin
                     reset_pending <= 1;
                     reset_restart <= !sidefx_word;
+                    warm_reset <= sidefx_word && sidefx_wdata == 16'h0800;
                 end else if (!sidefx_word && (sidefx_wdata[7:0] & 8'hCC) == 8'h80 && armed && reset_mask != 8'hFC) begin
                     // Pause. The same live byte as the run command, so the
                     // motor handlers' bit 4 and the Apple-key bits 0-1 ride on
@@ -498,7 +513,17 @@ module card_irq_candidate #(
                     // hardware with left Command held). Taken as the IIe Open-
                     // and Solid-Apple pushbuttons, read at $C061/$C062. Bit 1 is
                     // inferred from the IIe pairing, not yet observed.
-                    if ((capture_valid && capture_reset) || armed ||
+                    if (warm_reset && !cpu_running && !start_pending && !reset_pending) begin
+                        // Control-Reset: restart straight into the run state.
+                        warm_reset <= 0;
+                        warm_vector <= 1;
+                        start_pending <= 1;
+                        armed <= 1;
+                        apple_keys <= sidefx_wdata[1:0];
+                        report_mode <= sidefx_wdata[4];
+                        irq_level <= sidefx_wdata[5];
+                        if (sidefx_wdata[5]) irq_delay_left <= IRQ_DELAY;
+                    end else if ((capture_valid && capture_reset) || armed ||
                         (!cpu_running && !start_pending && !reset_pending && !sidefx_wdata[4])) begin
                         // A stopped-card command update does not release reset.
                         if (capture_valid && capture_reset) armed <= 1;
@@ -566,6 +591,7 @@ module card_irq_candidate #(
                 irq_delay_left <= 0;
                 cpu_running <= 0;
                 start_pending <= reset_restart;
+                warm_vector <= 0;
                 armed <= 0;
                 runtime_paused <= 0;
                 runtime_refresh <= 0;

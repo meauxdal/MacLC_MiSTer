@@ -112,7 +112,38 @@ module tb_runtime;
         if (fault || capture_status != 8'h80 || capture_address != 16'hFFFC)
             $fatal(1, "restart after fault did not recover");
         expect_fault = 0;
-        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear, Apple keys, flagged pause, fault recovery");
+        host(0, 32, 16'h88); host(0, 12, 0);
+        wait(capture_valid && capture_address == 16'h0400);
+        // Control-Reset (driver $51A): word $0800, ACK, then $88 with no $80.
+        // The CPU restarts through an untrapped reset vector.
+        host(1, 32, 16'h0800);
+        wait(!dut.reset_pending); @(negedge clk);
+        if (fault || dut.cpu_running || capture_valid) $fatal(1, "$0800 did not stop the card");
+        host(0, 12, 0);
+        host(0, 33, 16'h20);
+        memory['h400 / 2] = 0;
+        host(0, 32, 16'h88);
+        wait(capture_valid);
+        if (fault || capture_status != 8'h42 || capture_address != 16'h0400 || !dut.armed)
+            $fatal(1, "warm reset did not rerun to the display capture");
+        host(0, 12, 0);
+        // Quit (CODE 1 $467E): word $0000 stops the card with no fault, and
+        // a later $88 does not restart it.
+        host(1, 32, 16'h0000);
+        wait(!dut.reset_pending); @(negedge clk);
+        if (fault || dut.cpu_running || capture_valid || dut.warm_reset)
+            $fatal(1, "$0000 did not stop the card");
+        host(0, 32, 16'h88);
+        repeat (200) @(negedge clk);
+        if (fault || dut.cpu_running || dut.start_pending) $fatal(1, "card ran after quit");
+        // Relaunch after quit.
+        host(1, 32, 16'h0802);
+        host(0, 33, 16'h20);
+        host(0, 32, 16'h80);
+        wait(capture_valid);
+        if (fault || capture_status != 8'h80 || capture_address != 16'hFFFC)
+            $fatal(1, "relaunch after quit did not reach the reset capture");
+        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear, Apple keys, flagged pause, fault recovery, warm reset, quit");
         $finish;
     end
 endmodule
