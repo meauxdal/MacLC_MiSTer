@@ -938,6 +938,7 @@ module emu
 		.pseudovia_data_in(pseudovia_dout),
 
 		.ps2_key(ps2_key),
+		.osd_chord(3'b000),
 		.capslock(capslock),
 		.ps2_mouse(ps2_mouse),
 		.serialIn(serialIn),

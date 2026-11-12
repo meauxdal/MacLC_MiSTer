@@ -26,10 +26,12 @@ module adb_device(
 	input  wire        host_line,  // = ~adb_data_out from the Egret (1 = idle/high)
 	output reg         dev_line,   // open-collector: 1 = released, 0 = pull low
 	input  wire [10:0] ps2_key,
-	input  wire [24:0] ps2_mouse
+	input  wire [24:0] ps2_mouse,
+	// OSD key chords, one rising edge each:
+	// [0] Control-Reset  [1] Control-Command-Reset  [2] Control-Command-Esc
+	input  wire  [2:0] osd_chord,
+	output reg         capslock    // caps-lock toggle state, drives the LED
 );
-
-	reg capslock;   // tracked for caps-lock toggle handling (internal)
 
 	// ---- line cell timing (clk32 cycles) ----
 	localparam [17:0] T_ATTN  = 18'd3000;  // line low longer than this = attention
@@ -64,10 +66,29 @@ module adb_device(
 	reg  [9:0] keyRaw_s1, keyRaw_s2;
 	reg  [7:0] keyData;
 	reg        key_pending;
-	// The decoded key is the ADB power key. Its code is $7F, the same value
-	// the table uses for "no key", so it needs its own flag. The Apple IIe
-	// Card uses it as the Reset key (Control-Reset, Control-Command-Reset).
-	reg        key_power;
+
+	// ---- OSD chord injection ----
+	// Reset is the ADB power key, code $7F. The scan-code table uses $7F for
+	// "no key" and drops it, so only this path can queue it.
+	localparam [6:0] ADB_ESC = 7'h35, ADB_CTRL = 7'h36, ADB_CMD = 7'h37, ADB_POWER = 7'h7F;
+	localparam [19:0] T_CHORD = 20'd640000;  // 20 ms between chord steps
+	reg  [2:0] osd_s1, osd_s2, osd_d;
+	reg        chord_busy, chord_cmd, chord_esc;
+	reg  [2:0] chord_step;
+	reg [19:0] chord_timer;
+	reg  [7:0] chord_code;
+	reg        chord_skip;
+	always @(*) begin
+		chord_skip = 1'b0;
+		case (chord_step)
+			3'd0:    chord_code = {1'b0, ADB_CTRL};
+			3'd1:    begin chord_code = {1'b0, ADB_CMD}; chord_skip = !chord_cmd; end
+			3'd2:    chord_code = {1'b0, chord_esc ? ADB_ESC : ADB_POWER};
+			3'd3:    chord_code = {1'b1, chord_esc ? ADB_ESC : ADB_POWER};
+			3'd4:    begin chord_code = {1'b1, ADB_CMD}; chord_skip = !chord_cmd; end
+			default: chord_code = {1'b1, ADB_CTRL};
+		endcase
+	end
 	wire       key_edge   = (kstb_s3 != kstb_d);
 	wire [8:0] key_sc     = keyRaw_s2[8:0];
 	wire       press      = keyRaw_s2[9];
@@ -135,7 +156,8 @@ module adb_device(
 			kbdFifoRd <= 0; kbdFifoWr <= 0;
 			mouseX <= 0; mouseY <= 0; mouseButton <= 0; mouse_evt <= 0; mouse_init <= 1'b1;
 			kstb_s1 <= ps2_key[10]; kstb_s2 <= ps2_key[10]; kstb_s3 <= ps2_key[10]; kstb_d <= ps2_key[10];
-			keyRaw_s1 <= 0; keyRaw_s2 <= 0; keyData <= 8'h7F; key_pending <= 0; key_power <= 0; capslock <= 0;
+			keyRaw_s1 <= 0; keyRaw_s2 <= 0; keyData <= 8'h7F; key_pending <= 0; capslock <= 0;
+			osd_s1 <= 0; osd_s2 <= 0; osd_d <= 0; chord_busy <= 0; chord_cmd <= 0; chord_esc <= 0; chord_step <= 0; chord_timer <= 0;
 			mstb_s1 <= ps2_mouse[24]; mstb_s2 <= ps2_mouse[24]; mstb_s3 <= ps2_mouse[24]; mstb_d <= ps2_mouse[24];
 			mX_s1 <= 0; mX_s2 <= 0; mY_s1 <= 0; mY_s2 <= 0; mBtn_s1 <= 0; mBtn_s2 <= 0;
 		end else begin
@@ -285,7 +307,7 @@ module adb_device(
 			  9'h07b: keyData[6:0] <= 7'h4E;	//KP -
 			  9'h07c: keyData[6:0] <= 7'h43;	//KP *
 			  9'h07d: keyData[6:0] <= 7'h5C;	//KP 9
-			  9'h07e: keyData[6:0] <= 7'h7F;	//SCROLL LOCK (power key, see key_power)
+			  9'h07e: keyData[6:0] <= 7'h7F;	//SCROLL LOCK / KP )
 			  9'h07f: keyData[6:0] <= 7'h7F;
 			  9'h080: keyData[6:0] <= 7'h7F;
 			  9'h081: keyData[6:0] <= 7'h7F;
@@ -673,14 +695,33 @@ module adb_device(
 			  9'h1ff: keyData[6:0] <= 7'h7F;
 				endcase
 				keyData[7] <= ~press;   // 1 = key-up, 0 = key-down
-				key_power  <= (key_sc == 9'h07e);
 			end
 
 			// push decoded key into the FIFO (one cycle after decode). Unmapped
 			// keys ($7F) are dropped, so a $7F entry is always the power key.
-			if (key_pending && (keyData[6:0] != 7'h7F || key_power)) begin
+			if (key_pending && keyData[6:0] != 7'h7F) begin
 				kbdFifo[kbdFifoWr] <= keyData;
 				kbdFifoWr <= kbdFifoWr + 3'd1;
+			end
+			else if (chord_busy && chord_timer == 0 && !key_pending) begin
+				if (!chord_skip) begin
+					kbdFifo[kbdFifoWr] <= chord_code;
+					kbdFifoWr <= kbdFifoWr + 3'd1;
+					chord_timer <= T_CHORD;
+				end
+				chord_step <= chord_step + 3'd1;
+				if (chord_step == 3'd5) chord_busy <= 1'b0;
+			end
+
+			// ---- OSD chords: modifiers down, key down, key up, modifiers up ----
+			osd_s1 <= osd_chord; osd_s2 <= osd_s1; osd_d <= osd_s2;
+			if (chord_timer != 0) chord_timer <= chord_timer - 20'd1;
+			if (!chord_busy && |(osd_s2 & ~osd_d)) begin
+				chord_busy  <= 1'b1;
+				chord_step  <= 3'd0;
+				chord_timer <= 20'd0;
+				chord_cmd   <= !(osd_s2[0] & ~osd_d[0]);
+				chord_esc   <= !(osd_s2[0] & ~osd_d[0]) && !(osd_s2[1] & ~osd_d[1]);
 			end
 
 			// ---- PS2 mouse: update on the synchronized strobe edge ----
@@ -923,7 +964,7 @@ module adb_device(
 			//   ksrq    = a command NOT addressed to the keyboard was seen while the kbd FIFO
 			//             held data, so the device asserted a Service Request to be polled.
 			// Reading kbd_evt>0, ksrq>0, but ktalk static => Egret ignores the kbd SRQ.
-			if (key_pending && (keyData[6:0] != 7'h7F || key_power))
+			if (key_pending && keyData[6:0] != 7'h7F)
 				dbg_kbd_evt <= dbg_kbd_evt + 8'd1;
 			if (st == S_TSTOP && rise && !kbdFifoEmpty && cmd_addr != kbd_addr)
 				dbg_ksrq <= dbg_ksrq + 8'd1;

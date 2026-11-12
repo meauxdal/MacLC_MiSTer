@@ -91,20 +91,18 @@ module emu
 		"SC0,IMGVHDHDA,Pri. disk (ID 0);",
 		"SC1,IMGVHDHDA,Disk (ID 1);",
 		"S6,DSKIMG,Floppy disk;",
-		"S7,WOZ,IIe 5.25 drive 1;",
-		"S8,WOZ,IIe 5.25 drive 2;",
 		"F0,ROM,Load ROM;",
 		"-;",
 		"O4,Memory,2MB,10MB;",
 		"-;",
 		"P1,Machine;",
 		"P2,Video;",
+		"P3,Apple IIe Card;",
 		"P5,Advanced;",
 		"-;",
 		"h0-,Changes pending;",
 		"R0,Apply and reset;",
 
-		"P1OI,IIe ROM mapping,Automatic,Runtime;",
 		"P1R5,Interrupt (NMI);",
 		"P1-;",
 		"P1R6,Clear PRAM and reset;",
@@ -115,7 +113,16 @@ module emu
 `endif
 		"P2O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
 		"P2OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
-		"P2O9,IIe trial overlay,On,Off;",
+
+		"P3S7,WOZ,5.25 drive 1;",
+		"P3S8,WOZ,5.25 drive 2;",
+		"P3-;",
+		"P3RJ,Control-Reset;",
+		"P3RK,Restart (Ctrl-Cmd-Reset);",
+		"P3RL,Option Panel (Quit IIe);",
+		"P3-;",
+		"P3OI,ROM mapping,Automatic,Runtime;",
+		"P3O9,Trial overlay,On,Off;",
 
 		"P5SC2,NVR,PRAM image;",
 		"P5-;",
@@ -2084,6 +2091,7 @@ module emu
 		
 		// peripherals
 		.ps2_key(ps2_key), 
+		.osd_chord(status[21:19]),
 		.capslock(capslock),
 		.ps2_mouse(ps2_mouse),
 		// serial uart

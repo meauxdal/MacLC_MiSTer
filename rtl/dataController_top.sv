@@ -91,6 +91,7 @@ module dataController_top(
 	 
 	// mouse:
 	input [24:0] ps2_mouse,
+	input  [2:0] osd_chord,   // OSD key chords, see adb_device
 	
 	// serial:
 	input serialIn, 
@@ -310,7 +311,6 @@ module dataController_top(
 	wire [15:0] swimDataOut;
 	wire [7:0] sccDataOut;
 	wire [15:0] scsiDataOut;   // 16-bit: ncr5380 returns word for pseudo-DMA, byte-duplicated otherwise
-	wire mouseX1, mouseX2, mouseY1, mouseY2, mouseButton;
 	
 	// Mac LC interrupt priorities (active low encoding: 111=none, 110=1, 101=2, 011=4, etc.)
 	// Level 1: VIA1
@@ -797,7 +797,9 @@ module dataController_top(
 		.host_line  (~egret_adb_dout),
 		.dev_line   (adb_dev_line),
 		.ps2_key    (ps2_key),
-		.ps2_mouse  (ps2_mouse)
+		.ps2_mouse  (ps2_mouse),
+		.osd_chord  (osd_chord),
+		.capslock   (capslock)
 	);
 `ifdef EGRET_BEHAVIORAL
 	egret_behavioral egret_inst(
@@ -869,92 +871,9 @@ module dataController_top(
 		.dbg_cpu_running    (egret_dbg_running)
 	);
 
-	wire _ADBint;
-	wire ADBST0 = ~via_pb_oe[4] | via_pb_o[4];
-	wire ADBST1 = ~via_pb_oe[5] | via_pb_o[5];
-	wire ADBListen;
-
-	reg kbdclk;
-	reg [7:0] kbdclk_count;  // ADB timing only needs 8 bits
-	reg kbd_transmitting, kbd_wait_receiving, kbd_receiving;
-	reg [2:0] kbd_bitcnt;
-
-	wire cb2_i = kbddata_o;
+	// CB2 is pulled up while the Egret is not driving it.
+	wire cb2_i = 1'b1;
 	wire cb2_o, cb2_t;
-	wire kbddat_i = ~cb2_t | cb2_o;
-	reg kbddata_o;
-	reg  [7:0] kbd_to_mac;
-	reg kbd_data_valid;
-
-	// ADB Keyboard transmitter-receiver
-	always @(posedge clk32) begin
-		if (clk8_en_p) begin
-			if ((kbd_transmitting && !kbd_wait_receiving) || kbd_receiving) begin
-				kbdclk_count <= kbdclk_count + 1'd1;
-				if (kbdclk_count == 8'd80) begin  // ADB timing
-					kbdclk <= ~kbdclk;
-					kbdclk_count <= 0;
-					if (kbdclk) begin
-						// shift before the falling edge
-						if (kbd_transmitting) kbd_out_data <= { kbd_out_data[6:0], kbddat_i };
-						if (kbd_receiving) kbddata_o <= kbd_to_mac[7-kbd_bitcnt];
-					end
-				end
-			end else begin
-				kbdclk_count <= 0;
-				kbdclk <= 1;
-			end
-		end
-	end
-
-	// ADB Keyboard control (Mac LC uses ADB exclusively)
-	always @(posedge clk32) begin
-		reg kbdclk_d;
-		reg ADBListenD;
-		if (!_cpuReset) begin
-			kbd_bitcnt <= 0;
-			kbd_transmitting <= 0;
-			kbd_wait_receiving <= 0;
-			kbd_data_valid <= 0;
-			ADBListenD <= 0;
-		end else if (clk8_en_p) begin
-			// ADB data reception
-			if (adb_dout_strobe) begin
-				kbd_to_mac <= adb_dout;
-				kbd_receiving <= 1;
-			end
-
-			kbd_out_strobe <= 0;
-			adb_din_strobe <= 0;
-			kbdclk_d <= kbdclk;
-
-			// ADB transmission start
-			if (!kbd_transmitting && !kbd_receiving) begin
-				ADBListenD <= ADBListen;
-				if (!ADBListenD && ADBListen) begin
-					kbd_transmitting <= 1;
-					kbd_bitcnt <= 0;
-				end
-			end
-
-			// send/receive bits at rising edge of the keyboard clock
-			if (~kbdclk_d & kbdclk) begin
-				kbd_bitcnt <= kbd_bitcnt + 1'd1;
-
-				if (kbd_bitcnt == 3'd7) begin
-					if (kbd_transmitting) begin
-						adb_din_strobe <= 1;
-						adb_din <= kbd_out_data;
-						kbd_transmitting <= 0;
-					end
-					if (kbd_receiving) begin
-						kbd_receiving <= 0;
-						kbd_data_valid <= 0;
-					end
-				end
-			end
-		end
-	end
 
 	// SWIM (IWM + ISM dual-mode floppy controller)
 	swim sw(
@@ -1051,58 +970,6 @@ module dataController_top(
 		.cts(serialCTS),
 		.rts(serialRTS)
 		);
-				
-	
-	// Mouse
-	ps2_mouse mouse(
-		.clk(clk32),
-		.ce(clk8_en_p),
-		.reset(~_cpuReset),
-		.ps2_mouse(ps2_mouse),
-		.x1(mouseX1),
-		.y1(mouseY1),
-		.x2(mouseX2),
-		.y2(mouseY2),
-		.button(mouseButton));
 
-	wire [7:0] kbd_in_data;
-	wire kbd_in_strobe;
-	reg  [7:0] kbd_out_data;
-	reg  kbd_out_strobe;
-
-	// Keyboard
-	ps2_kbd kbd(
-		.clk(clk32),
-		.ce(clk8_en_p),
-		.reset(~_cpuReset),
-		.ps2_key(ps2_key),
-		.data_out(kbd_out_data),              // data from mac
-		.strobe_out(kbd_out_strobe),
-		.data_in(kbd_in_data),         // data to mac
-		.strobe_in(kbd_in_strobe),
-		.capslock(capslock)
-		);
-		
-	reg  [7:0] adb_din;
-	reg        adb_din_strobe;
-	wire [7:0] adb_dout;
-	wire       adb_dout_strobe;
-
-	adb adb(
-		.clk(clk32),
-		.clk_en(clk8_en_p),
-		.reset(~_cpuReset),
-		.st({ADBST1, ADBST0}),
-		._int(_ADBint),
-		.viaBusy(kbd_transmitting || kbd_receiving),
-		.listen(ADBListen),
-		.adb_din(adb_din),
-		.adb_din_strobe(adb_din_strobe),
-		.adb_dout(adb_dout),
-		.adb_dout_strobe(adb_dout_strobe),
-
-		.ps2_mouse(ps2_mouse),
-		.ps2_key(ps2_key)
-	);
 
 endmodule

@@ -116,7 +116,7 @@ From `files.qip`:
 - CPU: tg68k/*.v
 - Memory: addrController_top.v, addrDecoder.v, dataController_top.sv
 - Video: maclc_v8_video.sv, ariel_ramdac.sv, videoTimer.v, videoShifter.v
-- I/O: via6522.sv, pseudovia.sv, adb.sv, ps2_kbd.sv, ps2_mouse.v
+- I/O: via6522.sv, pseudovia.sv, adb_device.sv
 - Storage: iwm.v, floppy.v, floppy_track_encoder.v, scsi.v, ncr5380.sv
 - Serial: scc.v, uart/txuart.v, uart/rxuart.v
 - Other: rtc.v
