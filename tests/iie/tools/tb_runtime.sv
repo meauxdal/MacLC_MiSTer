@@ -16,7 +16,7 @@ module tb_runtime;
     wire capture_valid;
     wire [7:0] capture_status;
     wire [15:0] capture_address;
-    card_irq_candidate dut (
+    card_irq_candidate #(.PADDLE_CYCLES(198)) dut (
         .clk(clk), .por_n(por_n), .runtime_mode(1'b1),
         .req_valid(req_valid), .req_ready(req_ready), .req_offset(req_offset),
         .req_word(req_word), .req_write(req_write), .req_wdata(req_wdata),
@@ -55,18 +55,18 @@ module tb_runtime;
         if (address[0]) memory[address / 2][15:8] = value;
         else memory[address / 2][7:0] = value;
     endtask
-    reg [7:0] program_bytes [0:23];
+    // Synthetic monitor: write text, read key, clear strobe, read key again,
+    // then touch the speaker and game port and time paddle 0 into $0202:
+    // STA/LDA $C030, LDA $C060, LDA $C068, LDX #0, STA $C070,
+    // loop INX / LDA $C064 / BMI loop (9 cycles), STX $0202, JMP self.
+    localparam integer PROGRAM_LENGTH = 49;
+    localparam [8 * PROGRAM_LENGTH - 1:0] PROGRAM = {
+        160'hA9A58D0004AD00C08D0002AD10C0AD00C08D0102,
+        232'h8D30C0AD30C0AD60C0AD68C0A2008D70C0E8AD64C030FA8E02024C90FA};
     initial begin
         for (integer i = 0; i < 131072; i = i + 1) memory[i] = 0;
-        // Synthetic monitor: write text, read key, clear strobe, read key again.
-        {program_bytes[0], program_bytes[1], program_bytes[2], program_bytes[3],
-         program_bytes[4], program_bytes[5], program_bytes[6], program_bytes[7],
-         program_bytes[8], program_bytes[9], program_bytes[10], program_bytes[11],
-         program_bytes[12], program_bytes[13], program_bytes[14], program_bytes[15],
-         program_bytes[16], program_bytes[17], program_bytes[18], program_bytes[19],
-         program_bytes[20], program_bytes[21], program_bytes[22], program_bytes[23]} =
-            192'hA9A58D0004AD00C08D0002AD10C0AD00C08D01024C77FAEA;
-        for (integer i = 0; i < 24; i = i + 1) byte_at('h23A62 + i, program_bytes[i]);
+        for (integer i = 0; i < PROGRAM_LENGTH; i = i + 1)
+            byte_at('h23A62 + i, PROGRAM[8 * (PROGRAM_LENGTH - i) - 1 -: 8]);
         byte_at('h27FFC, 8'h62); byte_at('h27FFD, 8'hFA);
         repeat (4) @(negedge clk); por_n = 1;
         host(1, 32, 16'h0802);
@@ -84,6 +84,12 @@ module tb_runtime;
         wait(memory['h201 / 2] == 16'h41C1);
         if (memory['h400 / 2][7:0] != 8'hA5 || dut.keyboard[7])
             $fatal(1, "runtime text or keyboard mismatch");
+        // Speaker and game port run without a fault; 198 cycles of paddle
+        // timer is 22 passes of the 9-cycle loop, give or take one.
+        wait(memory['h202 / 2][7:0] != 0);
+        if (memory['h202 / 2][7:0] < 21 || memory['h202 / 2][7:0] > 24 || dut.speaker)
+            $fatal(1, "paddle timer %0d or speaker %b mismatch",
+                   memory['h202 / 2][7:0], dut.speaker);
         // Command/Option ride in run command bits 0-1 as the Apple keys.
         host(0, 32, 16'h89);
         if (dut.apple_keys != 2'b01) $fatal(1, "Open-Apple not latched from $89");
@@ -143,7 +149,7 @@ module tb_runtime;
         wait(capture_valid);
         if (fault || capture_status != 8'h80 || capture_address != 16'hFFFC)
             $fatal(1, "relaunch after quit did not reach the reset capture");
-        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear, Apple keys, flagged pause, fault recovery, warm reset, quit");
+        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear, Apple keys, flagged pause, speaker, paddle timer, fault recovery, warm reset, quit");
         $finish;
     end
 endmodule

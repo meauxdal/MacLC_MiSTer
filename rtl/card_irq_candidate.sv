@@ -5,6 +5,10 @@ module card_irq_candidate #(
     parameter bit FIXED_CX = 0,
     parameter [2:0] GAME_INPUTS = 3'b000,
     parameter [7:0] FLOATING_DATA = 8'h00,
+    // Card CPU cycles a paddle timer stays high after $C070. No joystick is
+    // wired yet, so all four read centred: about 128 counts of the monitor's
+    // 11-cycle PREAD loop.
+    parameter integer PADDLE_CYCLES = 1408,
     parameter bit PACE_FAST = 0,
     parameter integer PACE_CLOCK_HZ = 32500000,
     parameter bit SUPPRESS_NMI = 0, SUPPRESS_IRQ = 0,
@@ -183,6 +187,14 @@ module card_irq_candidate #(
     wire io_trap = service_register || cpu_address == 16'hC07D || cpu_address == 16'hC0E9 ||
                    cpu_address == 16'hC0E8 || cpu_address == 16'hC0A0 || runtime_slot_io;
     reg [7:0] display_switches;
+    // The game port and speaker belong to the card. Startup 1.0 traps $C070
+    // to the host (card_trap_decode), but here $C070-$C077 start the paddle
+    // timers locally, and any $C030-$C03F access toggles the speaker. The
+    // speaker bit drives no audio yet.
+    reg [11:0] paddle_left;
+    reg speaker;
+    wire paddle_trigger = cpu_address[15:3] == 13'h180E;
+    wire speaker_access = cpu_address[15:4] == 12'hC03;
     wire display_switch = (cpu_write || (monitor_active && cpu_address >= 16'hC050)) && (cpu_address == 16'hC00F ||
                        cpu_address == 16'hC051 ||
                        cpu_address == 16'hC057 ||
@@ -206,7 +218,8 @@ module card_irq_candidate #(
                       (cpu_address >= 16'hC01A && cpu_address <= 16'hC01F) ||
                       cpu_address == 16'hC007 || cpu_address == 16'hC006 ||
                       cpu_address == 16'hC00A || cpu_address == 16'hC00B || cpu_address == 16'hC017 ||
-                      (cpu_address >= 16'hC061 && cpu_address <= 16'hC063) ||
+                      cpu_address[15:4] == 12'hC03 || cpu_address[15:4] == 12'hC06 ||
+                      cpu_address[15:3] == 13'h180E ||
                       (cpu_address >= 16'hC050 && cpu_address <= 16'hC05F) || io_trap || display_switch || (cpu_write && (cpu_address == 16'hC004 || cpu_address == 16'hC005 ||
                                                cpu_address == 16'hC008 || cpu_address == 16'hC009 ||
                                                cpu_address == 16'hC002 || cpu_address == 16'hC003)) ||
@@ -322,9 +335,6 @@ module card_irq_candidate #(
             16'hC01E: cpu_rdata = {mode_altchar, 7'b0};
             16'hC01F: cpu_rdata = {mode_col80, 7'b0};
             16'hC02B: cpu_rdata = card_mode;
-            16'hC061: cpu_rdata = {GAME_INPUTS[0] | apple_keys[0], 7'b0};
-            16'hC062: cpu_rdata = {GAME_INPUTS[1] | apple_keys[1], 7'b0};
-            16'hC063: cpu_rdata = {GAME_INPUTS[2], 7'b0};
             16'hC078, 16'hC079, 16'hC07A, 16'hC07B, 16'hC07C:
                 cpu_rdata = host_return;
             16'hC050, 16'hC051, 16'hC052, 16'hC053,
@@ -333,6 +343,17 @@ module card_irq_candidate #(
             16'hC05C, 16'hC05D, 16'hC05E, 16'hC05F: cpu_rdata = FLOATING_DATA;
             default: if (iwm_selected) cpu_rdata = iwm_rdata;
         endcase
+        // Game port inputs, mirrored at $C068-$C06F: $C060 cassette in (none),
+        // $C061-$C063 pushbuttons, $C064-$C067 paddle timers.
+        if (cpu_address[15:4] == 12'hC06)
+            case (cpu_address[2:0])
+                3'd0: cpu_rdata = 8'h00;
+                3'd1: cpu_rdata = {GAME_INPUTS[0] | apple_keys[0], 7'b0};
+                3'd2: cpu_rdata = {GAME_INPUTS[1] | apple_keys[1], 7'b0};
+                3'd3: cpu_rdata = {GAME_INPUTS[2], 7'b0};
+                default: cpu_rdata = {paddle_left != 0, 7'b0};
+            endcase
+        if (speaker_access || paddle_trigger) cpu_rdata = FLOATING_DATA;
         if (runtime_slot_io && !cpu_write) cpu_rdata = host_return;
     end
 
@@ -363,6 +384,8 @@ module card_irq_candidate #(
             reset_mask <= 0;
             keyboard <= 0;
             display_switches <= 0;
+            paddle_left <= 0;
+            speaker <= 0;
             capture_valid <= 0;
             capture_status <= 0;
             capture_address <= 0;
@@ -466,6 +489,9 @@ module card_irq_candidate #(
             end
             if (cpu_ready) begin
                 cpu_completed <= cpu_completed + 1;
+                if (paddle_trigger) paddle_left <= PADDLE_CYCLES[11:0];
+                else if (paddle_left != 0) paddle_left <= paddle_left - 1'd1;
+                if (speaker_access) speaker <= !speaker;
                 if (cpu_address[15:8] == 8'hC3 && !slot3_rom) internal_c8 <= 1;
                 else if (cpu_address == 16'hCFFF) internal_c8 <= 0;
                 if (external_cx_read) expansion_slot <= cpu_address[10:8];
