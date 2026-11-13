@@ -55,13 +55,14 @@ module tb_runtime;
         if (address[0]) memory[address / 2][15:8] = value;
         else memory[address / 2][7:0] = value;
     endtask
-    // Synthetic monitor: write text, read key, clear strobe, read key again,
+    // Synthetic monitor: write text, read key, clear strobe with STA $C010 (as
+    // games do; a write must clear outside the monitor too), read key again,
     // then touch the speaker and game port and time paddle 0 into $0202:
     // STA/LDA $C030, LDA $C060, LDA $C068, LDX #0, STA $C070,
     // loop INX / LDA $C064 / BMI loop (9 cycles), STX $0202, JMP self.
     localparam integer PROGRAM_LENGTH = 49;
     localparam [8 * PROGRAM_LENGTH - 1:0] PROGRAM = {
-        160'hA9A58D0004AD00C08D0002AD10C0AD00C08D0102,
+        160'hA9A58D0004AD00C08D00028D10C0AD00C08D0102,
         232'h8D30C0AD30C0AD60C0AD68C0A2008D70C0E8AD64C030FA8E02024C90FA};
     initial begin
         for (integer i = 0; i < 131072; i = i + 1) memory[i] = 0;

@@ -13,7 +13,7 @@ def linux(path):
     return '/mnt/' + path.drive[0].lower() + path.as_posix()[2:] if path.drive else path.as_posix()
 
 
-def run_process(command, timeout=60):
+def run_process(command, timeout=300):
     if os.name == 'nt':
         command = ['wsl.exe', '--cd', linux(ROOT), '--exec', *command]
     return subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=timeout)

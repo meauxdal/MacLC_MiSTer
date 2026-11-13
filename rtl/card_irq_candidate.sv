@@ -509,7 +509,9 @@ module card_irq_candidate #(
                 
                 permitted <= 0;
                 if (vector_pull && cpu_address == 16'hFFFD) warm_vector <= 0;
-                if (cpu_address == 16'hC010 && (monitor_active || !cpu_write)) keyboard[7] <= 0;
+                // Any completed $C010 access clears the strobe, read or write;
+                // games commonly use STA $C010.
+                if (cpu_address == 16'hC010) keyboard[7] <= 0;
             end
             if (read_release && capture_valid && capture_read_release)
                 host_return <= sidefx_wdata[7:0];
