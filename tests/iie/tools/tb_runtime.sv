@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 module tb_runtime;
-    reg clk = 0, por_n = 0;
+    reg clk = 0, por_n = 0, runtime_mode = 1;
     always #15.3845 clk = !clk;
     reg req_valid = 0, req_word = 0, req_write = 1;
     reg [5:0] req_offset = 0;
@@ -17,7 +17,7 @@ module tb_runtime;
     wire [7:0] capture_status;
     wire [15:0] capture_address;
     card_irq_candidate #(.PADDLE_CYCLES(198)) dut (
-        .clk(clk), .por_n(por_n), .runtime_mode(1'b1),
+        .clk(clk), .por_n(por_n), .runtime_mode(runtime_mode),
         .req_valid(req_valid), .req_ready(req_ready), .req_offset(req_offset),
         .req_word(req_word), .req_write(req_write), .req_wdata(req_wdata),
         .rsp_valid(rsp_valid), .rsp_ready(1'b1), .rsp_rdata(rsp_rdata), .rsp_error(rsp_error),
@@ -32,7 +32,8 @@ module tb_runtime;
     reg expect_fault = 0;
     always @(posedge clk) begin
         ticks <= ticks + 1;
-        if (ticks > 100000 || (fault && !expect_fault) || boundary) $fatal(1, "runtime smoke fault/watchdog");
+        if (ticks > 100000 || (fault && !expect_fault) || boundary) $fatal(1, "runtime smoke fault/watchdog: ticks=%0d fault=%b first_fault=%0d boundary=%b pc=%h kb=%h mon=%b",
+                   ticks, fault, dut.first_fault, boundary, cpu_address, dut.keyboard, dut.monitor_active);
         if (mem_rsp_valid && mem_rsp_ready) mem_rsp_valid <= 0;
         if (mem_valid && !mem_rsp_valid) begin
             if (mem_write) memory[mem_addr] <= mem_wdata;
@@ -150,7 +151,35 @@ module tb_runtime;
         wait(capture_valid);
         if (fault || capture_status != 8'h80 || capture_address != 16'hFFFC)
             $fatal(1, "relaunch after quit did not reach the reset capture");
-        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear, Apple keys, flagged pause, speaker, paddle timer, fault recovery, warm reset, quit");
+        // Outside the monitor (ROM mapping Automatic, mask not $20), as on
+        // hardware: STA $C010 must still clear the strobe, or the second
+        // read stays $C1 and the watchdog fires.
+        host(1, 32, 16'h0000);
+        wait(!dut.reset_pending); @(negedge clk);
+        // Out of the monitor, $F000 reads are unsupported and the vectors come
+        // from physical $23FFA, so run a copy of the program from RAM at
+        // $6000, with its final JMP-to-self relocated.
+        runtime_mode = 0;
+        for (integer i = 0; i < PROGRAM_LENGTH; i = i + 1)
+            byte_at('h6000 + i, PROGRAM[8 * (PROGRAM_LENGTH - i) - 1 -: 8]);
+        byte_at('h602F, 8'h2E); byte_at('h6030, 8'h60);
+        byte_at('h23FFC, 8'h00); byte_at('h23FFD, 8'h60);
+        memory['h200 / 2] = 0; memory['h202 / 2] = 0; memory['h400 / 2] = 0;
+        ticks = 0;
+        host(1, 32, 16'h0802);
+        host(0, 33, 16'h00);
+        host(0, 32, 16'h80);
+        wait(capture_valid);
+        if (fault || capture_status != 8'h80 || dut.monitor_active)
+            $fatal(1, "non-monitor launch mismatch");
+        host(0, 32, 16'h88); host(0, 12, 0);
+        wait(capture_valid);
+        if (capture_address != 16'h0400) $fatal(1, "non-monitor display capture mismatch");
+        host(0, 24, 16'hC1);
+        host(0, 12, 0);
+        wait(memory['h201 / 2] == 16'h41C1);
+        if (dut.keyboard[7]) $fatal(1, "non-monitor STA $C010 left the strobe set");
+        $display("PASS runtime vector mapping, text capture/commit, keyboard strobe and clear (monitor and non-monitor), Apple keys, flagged pause, speaker, paddle timer, fault recovery, warm reset, quit");
         $finish;
     end
 endmodule
