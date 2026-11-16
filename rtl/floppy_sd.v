@@ -82,7 +82,8 @@ module floppy_loader #(parameter [63:0] REGION_WORDS = 64'h100000)
 	localparam S_DRAIN  = 3'd3;   // push words to SDRAM
 	localparam S_NEXT   = 3'd4;
 	localparam S_DONE   = 3'd5;
-	localparam S_REJECT = 3'd6;
+	localparam S_REJECT = 3'd6;   // image does not fit its SDRAM region
+	localparam S_ABORT  = 3'd7;   // mount arrived mid-load: let hps_io finish
 
 	reg  [2:0] state;
 	reg [31:0] sec_total;         // sectors to stream (file size / 512)
@@ -326,8 +327,51 @@ module floppy_loader #(parameter [63:0] REGION_WORDS = 64'h100000)
 				state   <= S_IDLE;
 			end
 
+			S_ABORT: begin
+				// A mount pulse landed while a load was running (the OSD was
+				// used again before the first image finished). It used to be
+				// dropped, so the load went on with the NEW file mixed into
+				// the old one's SDRAM image. Restart from sector 0 instead,
+				// but only once hps_io has finished the transfer in flight,
+				// or its trailing sd_ack fall would be taken for sector 0.
+				if (!sd_ack) begin
+					if (img_size_l != 0 && (!region_valid ||
+					    img_size_l > REGION_BYTES + 64'd84)) begin
+						loading <= 0;
+						state   <= S_REJECT;
+					end else if (img_size_l != 64'd0) begin
+						sec_total <= img_size_l[40:9] + {31'd0, |img_size_l[8:0]};
+						sd_lba    <= 32'd0;
+						file_word <= 24'd0;
+						sd_rd     <= 1'b1;
+						state     <= S_RD;
+					end else begin
+						loading <= 1'b0;       // it was an unmount
+						state   <= S_IDLE;
+					end
+				end
+			end
+
 			default: state <= S_IDLE;
 			endcase
+
+			// ── a mount pulse outside S_IDLE aborts the load in flight ─────
+			// After the case so it wins this cycle. An SDRAM word withdrawn
+			// mid-flight is harmless: the restart rewrites every word from 0.
+			if (img_mounted && state != S_IDLE) begin
+				readonly     <= img_readonly;
+				base_addr_l  <= base_addr;
+				dc42         <= 1'b0;
+				dc42_name_ok <= 1'b0;
+				dc42_fmt     <= 8'd0;
+				raw_img      <= 1'b0;
+				is_dc42      <= 1'b0;
+				size         <= 64'd0;
+				wr_req       <= 1'b0;
+				sd_rd        <= 1'b0;
+				loading      <= 1'b1;
+				state        <= S_ABORT;
+			end
 		end
 	end
 

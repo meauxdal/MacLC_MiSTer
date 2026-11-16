@@ -72,4 +72,10 @@ tests/iie/obj_tv525_pipeline*/
 /rbf_archive
 /local
 /refs
-software/
+/software
+
+# AI agent instructions and settings (kept locally, not in the repo)
+CLAUDE.md
+AGENTS.md
+.claude/
+.codex/

@@ -316,4 +316,28 @@ if {[get_collection_size [get_registers -nowarn {*crt_tv|*}]] != 0} {
         set_false_path -hold -from $payload -to $receivers
     }
 }
+# DDR3 port reset synchronizer (rtl tv_mem_reset_meta, present in every build).
+set tv_mem_reset_head [get_registers -nowarn {*tv_mem_reset_meta}]
+if {[get_collection_size $tv_mem_reset_head] != 0} {
+    set_false_path -to $tv_mem_reset_head
+}
+
+# Ethernet mailbox bridge (tv_ddram_cdc pds_bridge, clk_sys -> clk_mem).
+# Absent with MACLC_NO_ETHERNET. Payloads stay held across the toggle round
+# trip, so their paths get a bounded delay instead of a full cut.
+set ethernet_cdc [get_registers -nowarn {*pds_bridge|*}]
+if {[get_collection_size $ethernet_cdc] != 0} {
+    set_false_path -to [get_registers {*pds_bridge|request_meta *pds_bridge|acknowledge_meta}]
+    set ethernet_command [get_registers {*pds_bridge|command_payload[*]}]
+    set ethernet_command_regs [get_registers {*pds_bridge|reading *pds_bridge|address[*] *pds_bridge|writedata[*] *pds_bridge|byteenable[*]}]
+    set ethernet_response [get_registers {*pds_bridge|response_payload[*]}]
+    set ethernet_response_regs [get_registers {*pds_bridge|source_readdata[*]}]
+    foreach endpoint [list $ethernet_command $ethernet_command_regs $ethernet_response $ethernet_response_regs] {
+        if {[get_collection_size $endpoint] == 0} {error "Ethernet CDC payload endpoints missing"}
+    }
+    set_max_delay 30.0 -from $ethernet_command -to $ethernet_command_regs
+    set_false_path -hold -from $ethernet_command -to $ethernet_command_regs
+    set_max_delay 30.0 -from $ethernet_response -to $ethernet_response_regs
+    set_false_path -hold -from $ethernet_response -to $ethernet_response_regs
+}
 set maclc_sdc_loaded 1

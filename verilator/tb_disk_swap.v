@@ -39,7 +39,7 @@
  * Build + run (from verilator/):
  *   verilator --binary -j 0 -Wno-fatal --timescale 1ns/1ps -I../rtl \
  *     --Mdir /tmp/obj_swap --top-module tb_disk_swap tb_disk_swap.v ../rtl/floppy.v \
- *     ../rtl/mfm_track_encoder.v ../rtl/floppy_track_encoder.v
+ *     ../rtl/mfm_track_encoder.v ../rtl/floppy_track_encoder.v ../rtl/floppy_sd.v
  *   /tmp/obj_swap/Vtb_disk_swap
  */
 

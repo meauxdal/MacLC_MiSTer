@@ -1,7 +1,7 @@
 set_global_assignment -name QIP_FILE rtl/tg68k/TG68K.qip
 set_global_assignment -name VERILOG_FILE rtl/sdram.v
 set_global_assignment -name VERILOG_FILE rtl/scsi.v
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/cd_sdp.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/cd_audio.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/ncr5380.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/dbg_probes.sv
 set_global_assignment -name VERILOG_FILE rtl/floppy_track_encoder.v
@@ -18,6 +18,7 @@ set_global_assignment -name VERILOG_FILE rtl/swim.v
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/via6522.sv
 set_global_assignment -name VERILOG_FILE rtl/addrDecoder.v
 set_global_assignment -name VERILOG_FILE rtl/addrController_top.v
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/pds/pds_enet.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/dataController_top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/egret_behavioral.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/ariel_ramdac.sv
@@ -25,6 +26,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/maclc_v8_video.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/vram_bram.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/vram_ddr3.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddr_arbiter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/tv_ddram_cdc.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/fetch_cache.sv
 set_global_assignment -name VERILOG_FILE rtl/pll_video.v
 set_global_assignment -name QIP_FILE sys/pll_cfg.qip

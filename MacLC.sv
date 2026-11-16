@@ -24,18 +24,20 @@ module emu
 	`include "sys/emu_ports.vh"
 );
 	assign ADC_BUS  = 'Z;
+`ifdef MACLC_NO_MT32PI
 	assign USER_OUT = '1;
-`ifndef MAC_TV525
-`ifdef VRAM_BRAM
-	assign DDRAM_CLK = clk_sys;
-	assign DDRAM_BURSTCNT = 0;
-	assign DDRAM_ADDR = 0;
-	assign DDRAM_DIN = 0;
-	assign DDRAM_BE = 0;
-	assign DDRAM_RD = 0;
-	assign DDRAM_WE = 0;
+`else
+	// USER_OUT is driven by the mt32pi instance (user-port MIDI + I2C);
+	// unused user-port pins are held at '1 inside sys/mt32pi.sv.
 `endif
-`endif
+
+	// DDR3 port: shared by the DDR3 framebuffer (rtl/vram_ddr3.sv), the PDS
+	// Ethernet card's mailbox (rtl/pds/pds_enet.sv, Main's mac_eth service
+	// serves the other side) and the 480i frame store. See "DDR3 PORT" below.
+	wire [28:0] pds_mem_addr;
+	wire  [7:0] pds_mem_burst, pds_mem_be;
+	wire        pds_mem_rd, pds_mem_we;
+	wire [63:0] pds_mem_wdata;
 	assign {SD_SCK, SD_MOSI, SD_CS} = 'Z;
 
     wire iie_diagnostic_boundary, iie_diagnostic_fault;
@@ -87,17 +89,30 @@ module emu
 	`include "build_id.v"
 	localparam CONF_STR = {
 		"MACLC;UART57600:115200,MIDI;",
-		"-;",
+		// Layout follows the computer-core OSD standard (danifunker/
+		// hp9000-715_MiSTer docs/osd-standard.md). Status bits are unchanged
+		// from the flat layout, so saved .CFG files still apply.
+		// CD-ROM (SCSI ID 3): ISO/TOAST are raw 2048-byte images; CUE/BIN/CHD
+		// go through Main's translation layer.
 		"SC0,IMGVHDHDA,Pri. disk (ID 0);",
 		"SC1,IMGVHDHDA,Disk (ID 1);",
-		"S6,DSKIMG,Floppy disk;",
+`ifndef MACLC_NO_CDROM
+		"SC4,ISOTO*CUEBINCHD,CD-ROM (ID 3);",
+`endif
+		"S6,DSKIMG,Floppy;",
 		"F0,ROM,Load ROM;",
 		"-;",
-		"O4,Memory,2MB,10MB;",
+		"O4,Memory,2 MB,10 MB;",
+`ifndef MACLC_NO_ETHERNET
+		"o45,Network interface,eth0,tap0,macvlan,eth1;",
+`endif
 		"-;",
 		"P1,Machine;",
 		"P2,Video;",
 		"P3,Apple IIe Card;",
+`ifndef MACLC_NO_MT32PI
+		"P4,Audio;",
+`endif
 		"P5,Advanced;",
 		"-;",
 		"h0-,Changes pending;",
@@ -107,6 +122,7 @@ module emu
 		"P1-;",
 		"P1R6,Clear PRAM and reset;",
 
+		// Aspect ratio and scale only steer the scaler, so they act at once.
 		"P2OA,Monitor,640x480 VGA,512x384 12in;",
 `ifdef MAC_TV525
 		"P2O12,Deflicker,Strong,Mild,Off;",
@@ -114,20 +130,62 @@ module emu
 		"P2O78,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
 		"P2OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
 
-		"P3S7,WOZ,5.25 drive 1;",
-		"P3S8,WOZ,5.25 drive 2;",
+`ifndef MACLC_NO_MT32PI
+		"P4-,MT32-pi;",
+		"P4OO,Use MT32-pi,Yes,No;",
+		"H1P4OQ,Synthesizer,Munt,FluidSynth;",
+		"h1P4-;",
+		"H2P4ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
+		"H3P4OTV,SoundFont,0,1,2,3,4,5,6,7;",
+		"h1P4-;",
+		"H1P4OMN,Show info,No,Yes,LCD-On,LCD-Auto;",
+		"h1P4-;",
+`endif
+
+		// IIe options sit on bits the release leaves free: buttons 15-17
+		// (osd_chord), ROM mapping 20, trial overlay 9. Drives are slots 8/9.
+		"P3S8,WOZ,5.25 drive 1;",
+		"P3S9,WOZ,5.25 drive 2;",
 		"P3-;",
-		"P3RJ,Control-Reset;",
-		"P3RK,Restart (Ctrl-Cmd-Reset);",
-		"P3RL,Option Panel (Quit IIe);",
+		"P3RF,Control-Reset;",
+		"P3RG,Restart (Ctrl-Cmd-Reset);",
+		"P3RH,Option Panel (Quit IIe);",
 		"P3-;",
-		"P3OI,ROM mapping,Automatic,Runtime;",
+		"P3OK,ROM mapping,Automatic,Runtime;",
 		"P3O9,Trial overlay,On,Off;",
 
 		"P5SC2,NVR,PRAM image;",
 		"P5-;",
-		// Floppy writes remain opt-in.
+		// Floppy writes default OFF and must stay that way: the ROM's write
+		// primitive polls the IWM handshake in an UNBOUNDED loop, so a write
+		// bug hangs the machine. A read-only mount stays write-protected
+		// whatever this says (flp_int_wp below).
 		"P5OE,Floppy writes,Off,On;",
+`ifndef MACLC_NO_CDROM
+		"P5OI,CD-ROM drive,Enabled,Disabled;",
+`endif
+		"P5-;",
+		// Ethernet defaults OFF: with an older ethernet Main a card-ON boot
+		// hangs. ena_osd below is the matching un-inverted cfg[19].
+`ifndef MACLC_NO_ETHERNET
+		"P5OJ,Ethernet,Off,On;",
+		"P5o03,MAC suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
+`endif
+`ifndef MACLC_NO_MT32PI
+		"I,",
+		"MT32-pi: SoundFont #0,",
+		"MT32-pi: SoundFont #1,",
+		"MT32-pi: SoundFont #2,",
+		"MT32-pi: SoundFont #3,",
+		"MT32-pi: SoundFont #4,",
+		"MT32-pi: SoundFont #5,",
+		"MT32-pi: SoundFont #6,",
+		"MT32-pi: SoundFont #7,",
+		"MT32-pi: MT-32 v1,",
+		"MT32-pi: MT-32 v2,",
+		"MT32-pi: CM-32L,",
+		"MT32-pi: Unknown mode;",
+`endif
 		"V,v",`BUILD_DATE
 	};
 
@@ -165,6 +223,7 @@ module emu
 	localparam [1:0] status_cpu = 2'b10; // 68020
 	reg       n_reset = 0;
 	reg       pram_force_reset = 1'b0;  // PRAM clear -> system reset pulse
+	reg       pram_mount_deferred = 1'b0; // OSD PRAM mount waits for Apply
 	wire      egret_reset_680x0_w;      // Egret HC05 holding 68k in reset (#3 probe)
 	// Mac LC always runs at C15M (~15.67 MHz) - use 16 MHz clock enables
 	always @(posedge clk_sys) begin
@@ -195,25 +254,43 @@ module emu
 		end
 	end
 
-	// Apply machine settings only while reset is asserted.
+	// Machine settings apply only while reset is asserted (OSD standard).
+	// Saved configs still apply on first load: the HPS delivers status while
+	// n_reset is held. Aspect ratio and scale (bits 7-8, 12-13) stay live on
+	// status, since they only steer the scaler, so they are not in the mask.
 	reg [31:0] cfg = 0;
 	always @(posedge clk_sys) if (~n_reset) cfg <= status;
-	// Only memory size and monitor sense require Apply and reset.
-	localparam [31:0] CFG_MASK = 32'h00000410;
-	wire osd_pending = |((status ^ cfg) & CFG_MASK);
+	// Settings that wait for reset; excludes unused bits and momentary actions.
+	localparam [31:0] CFG_MASK = 32'hFDCC4410;
+	// A PRAM image mounted from the OSD while the guest runs also waits for
+	// reset (see pram_mount_deferred in the PRAM block).
+	wire osd_pending = |((status ^ cfg) & CFG_MASK) | pram_mount_deferred;
 
 	///////////////////////////////////////////////////
 
 	localparam SCSI_DEVS = 2;          // SCSI block devices -> hps_io slots 0,1
 	localparam VD_PRAM    = 2;         // PRAM NVRAM save image -> hps_io slot 2
-	// Slots 3-5 stay empty: Main routes them by core name for every MacLC
-	// build (3 BlueSCSI Toolbox, 4 CD-ROM, 5 CD Changer, support/mac), so
-	// a WOZ there gets Toolbox replies instead of file data.
-	// Retain slot 6 so saved floppy mounts keep their mapping.
-	localparam VD_FLOPPY_INT = 6;
-	localparam VD_IIE_DRIVE1 = 7;      // IIe card external 5.25 WOZ images
-	localparam VD_IIE_DRIVE2 = 8;      // (must stay adjacent to drive 1)
-	localparam VDNUM = 9;
+	localparam VD_TOOLBOX = 3;         // BlueSCSI Toolbox shared folder -> hps_io slot 3
+	localparam VD_CDROM   = 4;         // CD-ROM image (SCSI ID 3) -> hps_io slot 4
+	localparam VD_CD_TOOLBOX = 5;      // BlueSCSI Toolbox CD Changer control -> hps_io slot 5
+	// Phase 1 (2026-09-14): floppies became block devices. They take NEW
+	// indices deliberately — every device above keeps the slot it already
+	// had, so a user's saved mounts (config/MacLC.sN) still resolve after the
+	// upgrade. Do not renumber these to "tidy up".
+	localparam VD_FLOPPY_INT = 6;      // floppy image -> hps_io slot 6
+	localparam VD_UNUSED7 = 7;         // never mounted, see below
+	localparam VD_IIE_DRIVE1 = 8;      // IIe card external 5.25 WOZ images
+	localparam VD_IIE_DRIVE2 = 9;      // (must stay adjacent to drive 1)
+	localparam VDNUM      = 10;        // total hps_io block devices
+
+	// WHY SLOT 7 STAYS EMPTY. Main notifies a mount with one word,
+	// (1 << slot) | 0x80-if-read-only, and hps_io decodes img_mounted from
+	// io_din[VDNUM-1:0] and img_readonly from io_din[7]. Bit 7 is both the
+	// read-only flag and slot 7, so every read-only mount anywhere pulses
+	// img_mounted[7]: a loader there would start on a slot with no image,
+	// Main serves zero blocks, and the write address wraps over guest RAM.
+	// Slot 7 is tied off; slots 8 and 9 need Main to send the word 16 bits
+	// wide.
 
 	// the status register is controlled by the on screen display (OSD)
 	wire [31:0] status;
@@ -224,6 +301,8 @@ module emu
 	wire  [VDNUM-1:0] sd_rd;
 	wire  [VDNUM-1:0] sd_wr;
 	wire  [VDNUM-1:0] sd_ack;
+	// hps_io drives [12:0] (AW=12 in WIDE mode); [7:0] serves every 512-byte
+	// consumer, [12:8] reach the CD whole-frame burst path (2352 B/txn).
 	wire           [12:0] sd_buff_addr;
 	wire           [15:0] sd_buff_dout;
 	wire           [15:0] sd_buff_din[VDNUM];
@@ -245,16 +324,55 @@ module emu
 	assign sd_buff_din[0] = scsi_buff_din[0];
 	assign sd_buff_din[1] = scsi_buff_din[1];
 
-	// Reserved media slots have no hardware behind them.
-	generate
-		genvar slot;
-		for (slot = 3; slot < 6; slot = slot + 1) begin : unused_media
-			assign sd_lba[slot] = 0;
-			assign sd_rd[slot] = 0;
-			assign sd_wr[slot] = 0;
-			assign sd_buff_din[slot] = 0;
-		end
-	endgenerate
+	// Slot 7 has no hardware behind it (see WHY SLOT 7 STAYS EMPTY).
+	assign sd_lba[VD_UNUSED7]      = 32'd0;
+	assign sd_rd [VD_UNUSED7]      = 1'b0;
+	assign sd_wr [VD_UNUSED7]      = 1'b0;
+	assign sd_buff_din[VD_UNUSED7] = 16'd0;
+
+	// BlueSCSI Toolbox dedicated slot (3): isolated block device driven by the
+	// primary SCSI target through dataController. Inert until the HPS mounts a
+	// shared folder there (tb_mounted) and the Main handler answers — see
+	// docs/BLUESCSI_CORE_HPS_CONTRACT.md §4a (graceful degradation).
+	wire [31:0] tb_lba;
+	wire        tb_rd, tb_wr;
+	wire [15:0] tb_buff_din;
+	assign sd_lba[VD_TOOLBOX]      = tb_lba;
+	assign sd_rd [VD_TOOLBOX]      = tb_rd;
+	assign sd_wr [VD_TOOLBOX]      = tb_wr;
+	assign sd_buff_din[VD_TOOLBOX] = tb_buff_din;
+	wire        tb_ack     = sd_ack[VD_TOOLBOX];
+	wire        tb_mounted = img_mounted[VD_TOOLBOX];
+
+	// BlueSCSI Toolbox CD Changer control slot (5): control-only round-trip for
+	// the CD target's 0xD7/D8/DA. No CONF_STR mount entry — the Main fork mounts
+	// it when the CD-folder handler is active. docs/BLUESCSI_CD_CHANGER_CONTRACT.md
+	wire [31:0] cdtb_lba;
+	wire        cdtb_rd, cdtb_wr;
+	wire [15:0] cdtb_buff_din;
+	assign sd_lba[VD_CD_TOOLBOX]      = cdtb_lba;
+	assign sd_rd [VD_CD_TOOLBOX]      = cdtb_rd;
+	assign sd_wr [VD_CD_TOOLBOX]      = cdtb_wr;
+	assign sd_buff_din[VD_CD_TOOLBOX] = cdtb_buff_din;
+	wire        cdtb_ack     = sd_ack[VD_CD_TOOLBOX];
+	wire        cdtb_mounted = img_mounted[VD_CD_TOOLBOX];
+
+	// CD-ROM (SCSI ID 3) dedicated slot (4): read-only block device driven by
+	// the cdrom target through dataController. cd_wr is tied off — the target
+	// never issues writes (read-only device, WRITE commands CHECK).
+	wire [31:0] cd_lba;
+	wire        cd_rd;
+	wire [15:0] cd_buff_din;
+	assign sd_lba[VD_CDROM]      = cd_lba;
+	assign sd_rd [VD_CDROM]      = cd_rd;
+	assign sd_wr [VD_CDROM]      = 1'b0;
+	assign sd_buff_din[VD_CDROM] = cd_buff_din;
+	wire        cd_ack     = sd_ack[VD_CDROM];
+	wire        cd_mounted = img_mounted[VD_CDROM];
+	// OSD "CD-ROM drive" option (OI / bit 18, 0 = Enabled). Disabling makes
+	// ID 3 vanish from the bus entirely at the next reset — the pre-CD
+	// baseline, kept as a hardware A/B lever given the SCSI wedge history.
+	wire        cd_enable  = ~cfg[18];
 	wire        ioctl_write;
 	reg         ioctl_wait = 0;
 	wire [10:0] ps2_key;
@@ -298,6 +416,7 @@ module emu
 	reg        pram_rst_after;                  // pulse reset after the current save
 	reg        pram_load_pending, pram_flush_pending, pram_clr_pending;
 	reg [26:0] pram_settle;          // eager-flush settle timer (restarts on each PRAM write)
+	reg [24:0] osd_recent;           // >0 while the OSD is open and ~1 s after it closes
 	reg        old_pack, old_osd, old_mnt2, old_rstpram;
 	reg        pram_ready;        // -> Egret: pram[] loaded (or no image / timed out)
 	reg [31:0] pram_rdy_cnt;      // ready backstop so a missing image never hangs boot
@@ -320,6 +439,7 @@ module emu
 		if (~pll_locked_s) begin
 			pst <= P_IDLE; pram_rd <= 0; pram_wr_req <= 0; pram_load_wr <= 0;
 			pram_ena <= 0; pram_dirty <= 0; pram_force_reset <= 0; pram_rst_after <= 0;
+			pram_mount_deferred <= 0; osd_recent <= 0;
 			pram_load_pending <= 0; pram_flush_pending <= 0; pram_clr_pending <= 0;
 			pram_settle <= 0;
 			old_pack <= 0; old_osd <= 0; old_mnt2 <= 0; old_rstpram <= 0; rst_hold <= 0;
@@ -342,10 +462,45 @@ module emu
 			if (pram_wr_stb) pram_dirty <= 1'b1;
 
 			// event latches
+			// A mount made from the OSD while the guest is running (pram_ready
+			// already up) is a machine setting like Memory or Monitor: it waits
+			// for Apply and reset instead of restarting the Mac on the spot.
+			// The LOAD waits too, not just the restart: after the boot-copy the
+			// Egret mirrors every guest PRAM write into pram[], so a loaded
+			// image would pick up the old session's writes (and the eager
+			// flush would save them into the new file) before Apply. pram_ena
+			// stays low meanwhile so nothing is flushed into the new file.
+			// Main hides the OSD BEFORE it mounts the picked image (menu.cpp
+			// MENU_GENERIC_IMAGE_SELECTED: MenuHide, then the mount), so an OSD
+			// pick shows up with OSD_STATUS already low. osd_recent bridges
+			// that: it holds for ~1 s (32.5 MHz clk_sys) after the OSD closes.
+			// Core-start autoloads arrive with the OSD long closed and keep the
+			// old path (load now; a late one restarts via
+			// pram_restart_after_load).
+			if (OSD_STATUS)          osd_recent <= 25'd32_500_000;
+			else if (osd_recent != 0) osd_recent <= osd_recent - 1'b1;
+
 			if (img_mounted[VD_PRAM] && !old_mnt2) begin
-				pram_ena <= (img_size != 0);
-				if (img_size != 0) pram_load_pending <= 1'b1;  // load runs -> P_LD_CPY sets pram_ready
-				else               pram_ready        <= 1'b1;  // no image: release the boot-copy now
+				pram_mount_deferred <= 1'b0;
+				if (img_size != 0 && pram_ready && (OSD_STATUS || osd_recent != 0)) begin
+					pram_ena <= 1'b0;
+					pram_mount_deferred <= 1'b1;
+				end else begin
+					pram_ena <= (img_size != 0);
+					if (img_size != 0) pram_load_pending <= 1'b1;  // load runs -> P_LD_CPY sets pram_ready
+					else               pram_ready        <= 1'b1;  // no image: release the boot-copy now
+				end
+			end
+			// Apply (or any reset): run the deferred load while the 68k is held.
+			// Dropping pram_ready makes the Egret's boot-copy wait for it, and
+			// since the load then lands before the CPU runs, P_LD_DAT sees
+			// pram_ready low and does not add a second restart.
+			else if (pram_mount_deferred && !n_reset) begin
+				pram_mount_deferred <= 1'b0;
+				pram_ena <= 1'b1;
+				pram_ready <= 1'b0;
+				pram_rdy_cnt <= 0;
+				pram_load_pending <= 1'b1;
 			end
 			if (OSD_STATUS && !old_osd && pram_dirty && pram_ena) pram_flush_pending <= 1'b1;
 			// ── EAGER NVRAM PERSISTENCE (2026-08-19 user directive) ─────────
@@ -492,10 +647,13 @@ module emu
 
 		.buttons(buttons),
 		.status(status),
-		.status_menumask({15'd0, osd_pending}),
+		// Menumask: 0 = no pending changes; 1 = MT32-pi off; 2 = Munt ROM
+		// hidden (off or FluidSynth); 3 = SoundFont hidden (off or Munt).
+		.status_menumask({12'd0, status[24] | ~status[26], status[24] | status[26], status[24], osd_pending}),
 
-		.info_req(1'b0),
-		.info(8'd0),
+		// MT32-pi "Show Info = Yes" OSD popup (CONF_STR "I," strings, 1-based)
+		.info_req(mt32_info_req),
+		.info({4'd0, mt32_info_disp}),
 
 		.sd_lba(sd_lba),
 		.sd_rd(sd_rd),
@@ -524,8 +682,42 @@ module emu
 		.ps2_kbd_led_use(3'b001),
 		.ps2_kbd_led_status({2'b00, capslock}),
 
-		.ps2_mouse(ps2_mouse)
+		.ps2_mouse(ps2_mouse),
+
+		// OSD "UART mode" as Main reports it to the core: 0=None, 1=PPP
+		// (Main maps its modem modes to 1 before sending), 2=Console, 3=MIDI.
+		// Gates the user-port MIDI-in merge at the serialIn assign below.
+		.uart_mode(uart_mode)
 	);
+
+	// Video Output — V8 video, then the MT32-pi LCD overlay (ao486
+	// convention: inside the LCD box the video dims to the low 6 bits and the
+	// white text pixel is OR'd into the top 2 bits; mt32_lcd_en/pix are on
+	// clk_vid inside sys/mt32pi.sv), then the debug HUD, then the IIe status
+	// overlay. The result (native_rgb) goes out directly or through the 480i
+	// pipeline.
+`ifndef MACLC_NO_MT32PI
+	wire       mt32_lcd   = mt32_lcd_en & mt32_lcd_on;
+	wire [7:0] mt32_vga_r = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_r[7:2]} : v8_vga_r;
+	wire [7:0] mt32_vga_g = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_g[7:2]} : v8_vga_g;
+	wire [7:0] mt32_vga_b = mt32_lcd ? {{2{mt32_lcd_pix}}, v8_vga_b[7:2]} : v8_vga_b;
+`else
+	wire [7:0] mt32_vga_r = v8_vga_r;
+	wire [7:0] mt32_vga_g = v8_vga_g;
+	wire [7:0] mt32_vga_b = v8_vga_b;
+`endif
+`ifdef USE_DBG_HUD
+	// Debug HUD (see the USE_DBG_HUD block near the probe deck): binary
+	// pixel-strip overlay, BOTTOM-left corner, video-only (input untouched).
+	// HUD keeps precedence over the MT32-pi overlay when enabled.
+	wire [7:0] hud_vga_r = hud_on_q ? hud_px : mt32_vga_r;
+	wire [7:0] hud_vga_g = hud_on_q ? hud_px : mt32_vga_g;
+	wire [7:0] hud_vga_b = hud_on_q ? hud_px : mt32_vga_b;
+`else
+	wire [7:0] hud_vga_r = mt32_vga_r;
+	wire [7:0] hud_vga_g = mt32_vga_g;
+	wire [7:0] hud_vga_b = mt32_vga_b;
+`endif
 
     wire [23:0] native_rgb;
     iie_status_overlay iie_status (
@@ -534,19 +726,39 @@ module emu
         .ce_pixel(v8_ce_pix), .de(v8_de), .vblank(v8_vblank), .status_sys(iie_debug_status),
         .pvia_sys({pvia_ram_config_out, pvia_video_config}),
         .drive_sys(iie_drive_debug), .scan_sys(iie_scan_debug),
-        .red_in(v8_vga_r), .green_in(v8_vga_g), .blue_in(v8_vga_b),
+        .red_in(hud_vga_r), .green_in(hud_vga_g), .blue_in(hud_vga_b),
         .red_out(native_rgb[23:16]), .green_out(native_rgb[15:8]), .blue_out(native_rgb[7:0])
     );
 
-    // DDR3 framebuffer client (rtl/vram_ddr3.sv, instanced with the V8 below).
-    // With the 480i pipeline it shares the DDRAM port through tv_ddr_arbiter;
-    // without it, it owns the port.  `VRAM_BRAM restores the old on-chip
-    // framebuffer (384 M10K) for A/B tests.
+    // ---- DDR3 PORT --------------------------------------------------------
+    // Up to three clients share DDRAM on clk_mem through two tv_ddr_arbiter
+    // stages: the 480i frame store (MAC_TV525) and the framebuffer
+    // (rtl/vram_ddr3.sv, absent with `VRAM_BRAM) meet first; Ethernet joins
+    // at the second stage. An absent client is tied idle, so its arbiter
+    // port never asks and synthesis prunes the rest.
     wire [28:0] vram_ddr_address;
     wire  [7:0] vram_ddr_burstcount, vram_ddr_byteenable;
     wire [63:0] vram_ddr_writedata, vram_ddr_readdata;
     wire        vram_ddr_read, vram_ddr_write;
     wire        vram_ddr_waitrequest, vram_ddr_readdatavalid;
+`ifdef VRAM_BRAM
+    assign vram_ddr_address = 0;
+    assign vram_ddr_burstcount = 0;
+    assign vram_ddr_byteenable = 0;
+    assign vram_ddr_writedata = 0;
+    assign vram_ddr_read = 0;
+    assign vram_ddr_write = 0;
+`endif
+
+    wire [28:0] tv_ddr_address;
+    wire  [7:0] tv_ddr_burstcount, tv_ddr_byteenable;
+    wire [63:0] tv_ddr_writedata, tv_ddr_readdata;
+    wire        tv_ddr_read, tv_ddr_write, tv_ddr_waitrequest, tv_ddr_readdatavalid;
+    reg tv_mem_reset_meta = 1'b1, tv_mem_reset = 1'b1;
+    always @(posedge clk_mem) begin
+        tv_mem_reset_meta <= !pll_locked;
+        tv_mem_reset <= tv_mem_reset_meta;
+    end
 
 `ifdef MAC_TV525
     wire clk_tv525, tv_pll_locked;
@@ -568,15 +780,6 @@ module emu
         if (!tv_pll_locked) tv_reset_pipe <= 2'b11;
         else tv_reset_pipe <= {tv_reset_pipe[0], 1'b0};
     end
-    reg tv_mem_reset_meta = 1'b1, tv_mem_reset = 1'b1;
-    always @(posedge clk_mem) begin
-        tv_mem_reset_meta <= !pll_locked;
-        tv_mem_reset <= tv_mem_reset_meta;
-    end
-    wire [28:0] tv_ddr_address;
-    wire  [7:0] tv_ddr_burstcount, tv_ddr_byteenable;
-    wire [63:0] tv_ddr_writedata, tv_ddr_readdata;
-    wire        tv_ddr_read, tv_ddr_write, tv_ddr_waitrequest, tv_ddr_readdatavalid;
     // DDR commands drain across guest reset; only native capture is invalidated.
     tv525_pipeline #(.FILTER_ENABLE(1)) crt_tv (
         .clk_source(clk_vid), .source_reset(vidrst_s), .source_ce(v8_ce_pix),
@@ -591,20 +794,39 @@ module emu
         .waitrequest(tv_ddr_waitrequest), .readdatavalid(tv_ddr_readdatavalid), .readdata(tv_ddr_readdata),
         .published(), .dropped(), .repeated(), .overflows(), .underruns()
     );
-`ifdef VRAM_BRAM
-    assign DDRAM_ADDR = tv_ddr_address;
-    assign DDRAM_BURSTCNT = tv_ddr_burstcount;
-    assign DDRAM_DIN = tv_ddr_writedata;
-    assign DDRAM_BE = tv_ddr_byteenable;
-    assign DDRAM_RD = tv_ddr_read;
-    assign DDRAM_WE = tv_ddr_write;
-    assign tv_ddr_waitrequest = DDRAM_BUSY;
-    assign tv_ddr_readdatavalid = DDRAM_DOUT_READY;
-    assign tv_ddr_readdata = DDRAM_DOUT;
+    assign CLK_VIDEO = clk_tv525;
+    assign CE_PIXEL = 1'b1;
+    assign {VGA_R, VGA_G, VGA_B} = tv_rgb;
+    assign VGA_DE = tv_de;
+    assign VGA_VS = tv_vs;
+    assign VGA_HS = tv_hs;
+    assign VGA_F1 = tv_field;
 `else
-    // Frame store on port a (the one inhibit drains), framebuffer on port b.
-    // Grants alternate when both ask; a burst keeps the port to its last beat.
-    tv_ddr_arbiter #(.DW(64), .AW(29)) ddr_arb (
+    assign tv_ddr_address = 0;
+    assign tv_ddr_burstcount = 0;
+    assign tv_ddr_byteenable = 0;
+    assign tv_ddr_writedata = 0;
+    assign tv_ddr_read = 0;
+    assign tv_ddr_write = 0;
+    assign CLK_VIDEO = clk_vid;
+    assign CE_PIXEL = v8_ce_pix;
+    assign {VGA_R, VGA_G, VGA_B} = native_rgb;
+    assign VGA_DE = v8_de;
+    assign VGA_VS = v8_vsync;
+    assign VGA_HS = v8_hsync;
+    assign VGA_F1 = 0;
+`endif
+    assign VGA_SL = 0;
+
+    // Stage 1: frame store on port a (the one inhibit drains), framebuffer
+    // on port b. Grants alternate when both ask; a burst keeps the port to
+    // its last beat.
+    wire [28:0] video_ddr_address;
+    wire  [7:0] video_ddr_burstcount, video_ddr_byteenable;
+    wire [63:0] video_ddr_writedata, video_ddr_readdata;
+    wire        video_ddr_read, video_ddr_write;
+    wire        video_ddr_waitrequest, video_ddr_readdatavalid;
+    tv_ddr_arbiter #(.DW(64), .AW(29)) video_ddr_arb (
         .clk(clk_mem), .inhibit(tv_mem_reset),
         .a_address(tv_ddr_address), .a_burstcount(tv_ddr_burstcount),
         .a_writedata(tv_ddr_writedata), .a_byteenable(tv_ddr_byteenable),
@@ -616,41 +838,58 @@ module emu
         .b_read(vram_ddr_read), .b_write(vram_ddr_write),
         .b_waitrequest(vram_ddr_waitrequest), .b_readdatavalid(vram_ddr_readdatavalid),
         .b_readdata(vram_ddr_readdata),
+        .address(video_ddr_address), .burstcount(video_ddr_burstcount),
+        .writedata(video_ddr_writedata), .byteenable(video_ddr_byteenable),
+        .read(video_ddr_read), .write(video_ddr_write),
+        .waitrequest(video_ddr_waitrequest), .readdatavalid(video_ddr_readdatavalid),
+        .readdata(video_ddr_readdata)
+    );
+
+    // Stage 2: Ethernet on port a, video on port b. The mailbox runs in
+    // clk_sys, so its one-beat commands cross to clk_mem in tv_ddram_cdc.
+    wire [28:0] pds_ddr_address;
+    wire [63:0] pds_ddr_writedata, pds_ddr_readdata;
+    wire  [7:0] pds_ddr_byteenable;
+    wire        pds_ddr_read, pds_ddr_write, pds_ddr_waitrequest, pds_ddr_readdatavalid;
+    wire [63:0] pds_mem_rdata;
+    wire        pds_mem_busy, pds_mem_rvalid;
+`ifndef MACLC_NO_ETHERNET
+    tv_ddram_cdc pds_bridge (
+        .clk_source(clk_sys), .reset_source(~pll_locked_s | RESET), .clk_mem(clk_mem),
+        .source_address(pds_mem_addr), .source_writedata(pds_mem_wdata), .source_byteenable(pds_mem_be),
+        .source_read(pds_mem_rd), .source_write(pds_mem_we), .source_waitrequest(pds_mem_busy),
+        .source_readdatavalid(pds_mem_rvalid), .source_readdata(pds_mem_rdata),
+        .address(pds_ddr_address), .writedata(pds_ddr_writedata), .byteenable(pds_ddr_byteenable),
+        .read(pds_ddr_read), .write(pds_ddr_write), .waitrequest(pds_ddr_waitrequest),
+        .readdatavalid(pds_ddr_readdatavalid), .readdata(pds_ddr_readdata)
+    );
+`else
+    assign pds_ddr_address = 0;
+    assign pds_ddr_writedata = 0;
+    assign pds_ddr_byteenable = 0;
+    assign pds_ddr_read = 0;
+    assign pds_ddr_write = 0;
+    assign pds_mem_rdata = 0;
+    assign pds_mem_busy = 1'b1;
+    assign pds_mem_rvalid = 1'b0;
+`endif
+    tv_ddr_arbiter #(.DW(64), .AW(29)) ddr_arb (
+        .clk(clk_mem), .inhibit(1'b0),
+        .a_address(pds_ddr_address), .a_burstcount(8'd1),
+        .a_writedata(pds_ddr_writedata), .a_byteenable(pds_ddr_byteenable),
+        .a_read(pds_ddr_read), .a_write(pds_ddr_write),
+        .a_waitrequest(pds_ddr_waitrequest), .a_readdatavalid(pds_ddr_readdatavalid),
+        .a_readdata(pds_ddr_readdata),
+        .b_address(video_ddr_address), .b_burstcount(video_ddr_burstcount),
+        .b_writedata(video_ddr_writedata), .b_byteenable(video_ddr_byteenable),
+        .b_read(video_ddr_read), .b_write(video_ddr_write),
+        .b_waitrequest(video_ddr_waitrequest), .b_readdatavalid(video_ddr_readdatavalid),
+        .b_readdata(video_ddr_readdata),
         .address(DDRAM_ADDR), .burstcount(DDRAM_BURSTCNT), .writedata(DDRAM_DIN),
         .byteenable(DDRAM_BE), .read(DDRAM_RD), .write(DDRAM_WE),
         .waitrequest(DDRAM_BUSY), .readdatavalid(DDRAM_DOUT_READY), .readdata(DDRAM_DOUT)
     );
-`endif
     assign DDRAM_CLK = clk_mem;
-    assign CLK_VIDEO = clk_tv525;
-    assign CE_PIXEL = 1'b1;
-    assign {VGA_R, VGA_G, VGA_B} = tv_rgb;
-    assign VGA_DE = tv_de;
-    assign VGA_VS = tv_vs;
-    assign VGA_HS = tv_hs;
-    assign VGA_F1 = tv_field;
-`else
-`ifndef VRAM_BRAM
-    assign DDRAM_CLK = clk_mem;
-    assign DDRAM_ADDR = vram_ddr_address;
-    assign DDRAM_BURSTCNT = vram_ddr_burstcount;
-    assign DDRAM_DIN = vram_ddr_writedata;
-    assign DDRAM_BE = vram_ddr_byteenable;
-    assign DDRAM_RD = vram_ddr_read;
-    assign DDRAM_WE = vram_ddr_write;
-    assign vram_ddr_waitrequest = DDRAM_BUSY;
-    assign vram_ddr_readdatavalid = DDRAM_DOUT_READY;
-    assign vram_ddr_readdata = DDRAM_DOUT;
-`endif
-    assign CLK_VIDEO = clk_vid;
-    assign CE_PIXEL = v8_ce_pix;
-    assign {VGA_R, VGA_G, VGA_B} = native_rgb;
-	assign VGA_DE = v8_de;
-	assign VGA_VS = v8_vsync;
-	assign VGA_HS = v8_hsync;
-	assign VGA_F1 = 0;
-`endif
-	assign VGA_SL = 0;
 
 	// ------------------------------------------------------------------------
 	// Dedicated pixel clock (pll_video) — true per-monitor scanout rates.
@@ -782,8 +1021,27 @@ module emu
 		v8_hblank_s <= hbl_meta;
 	end
 
-	assign AUDIO_L = asc_sample_l;
-	assign AUDIO_R = asc_sample_r;
+	// ASC samples drive AUDIO_L/R, with CD audio (SCSI CD-ROM playback
+	// engine) mixed in at full gain, saturating — the real LC sums the
+	// drive's line out with the DAC at unity, and the previous half-gain
+	// mix was the "CD sounds half as loud" report (07-28). cd_snd_* are
+	// silent (exact zeros) whenever the drive isn't playing, and are
+	// linearly interpolated inside cd_audio.sv so the sys/audio_out 48 kHz
+	// pickup doesn't add stair-step imaging.
+	// MT32-pi I2S return joins at unity gain, gated by mt32_use (a Pi is
+	// present AND "Use MT32-pi" is Yes); exact zeros otherwise, so the mix is
+	// bit-identical with no Pi attached or the device disabled from the OSD.
+	wire signed [15:0] cd_snd_l, cd_snd_r;
+	wire signed [17:0] audio_mix_l = {{2{asc_sample_l[15]}}, asc_sample_l}
+	                               + {{2{cd_snd_l[15]}}, cd_snd_l}
+	                               + (mt32_use ? {{2{mt32_i2s_l[15]}}, mt32_i2s_l} : 18'sd0);
+	wire signed [17:0] audio_mix_r = {{2{asc_sample_r[15]}}, asc_sample_r}
+	                               + {{2{cd_snd_r[15]}}, cd_snd_r}
+	                               + (mt32_use ? {{2{mt32_i2s_r[15]}}, mt32_i2s_r} : 18'sd0);
+	assign AUDIO_L = (audio_mix_l > 18'sd32767)  ? 16'sd32767 :
+	                 (audio_mix_l < -18'sd32768) ? -16'sd32768 : audio_mix_l[15:0];
+	assign AUDIO_R = (audio_mix_r > 18'sd32767)  ? 16'sd32767 :
+	                 (audio_mix_r < -18'sd32768) ? -16'sd32768 : audio_mix_r[15:0];
 	assign AUDIO_S = 1;
 	assign AUDIO_MIX = 0;
 
@@ -812,6 +1070,7 @@ module emu
 	wire serialIn;
 	wire serialCTS = 1'b1; // Idle/deasserted when no serial device connected
 	wire serialRTS;
+	wire [7:0] uart_mode;  // OSD "UART mode" from hps_io (3 = MIDI)
 
 	// V8 Video system wires
 	wire v8_hsync, v8_vsync, v8_hblank, v8_vblank, v8_de;
@@ -829,10 +1088,145 @@ module emu
 	wire [7:0] pseudovia_dout;
 	wire pseudovia_irq;
 
-	assign serialIn = UART_RXD;
+	// SCC Channel A RX is wired to the physical MiSTer UART pin so the serial
+	// port is usable for PPP / dial-up (and as the basis for AppleTalk work).
+	// (Previously forced to 1'b1 to dodge a suspected ROM "Break detection loop";
+	// that was a symptom of earlier boot issues, since resolved, not the RX path.)
+	// The line idles high; rxuart double-syncs UART_RXD internally.
+	// RX sources:
+	//  - ALWAYS the HPS UART (UART_RXD) — MidiLink / console / PPP.
+	//  - MIDI IN (2026-08-14): in OSD UART mode = MIDI ONLY, the user-port
+	//    MIDI-in line (mt32_midi_rx from sys/mt32pi.sv: the Pi's TX pin when
+	//    an MT32-pi is detected, USER_IN[0] otherwise) is AND-merged in.
+	//    Both lines idle high (USER_IO has weak pull-ups, MacLC.qsf), so the
+	//    merge is inert until a source actually transmits; a start bit from
+	//    either reaches the SCC. A USB MIDI keyboard on the MiSTer arrives
+	//    via MidiLink on UART_RXD; a controller on the MT32-pi (or a user-port
+	//    MIDI receiver with no Pi) arrives on mt32_midi_rx. The SCC side needs
+	//    nothing: rx/tx share one baud divider, the WR11/TRxC clause covers
+	//    the RX clock-source bits, and tb_scc_midi section 3 gates RX @31250.
+	// (2026-08-13) The old `mt32_available ? mt32_midi_rx : UART_RXD` mux was a
+	// bug: whenever a Pi was detected on the user port it repointed the guest's
+	// RX at the Pi's MIDI-return line, so EVERY guest-receive path died with a
+	// Pi plugged in — TX still worked (UART_TXD=serialOut, unaffected), so it
+	// looked one-directional. PPP was the first feature to need guest RX and
+	// exposed it (LCP: pppd rcvd the guest's ConfReq but the guest never saw
+	// pppd's ConfAck -> LCP never completed). cozyMIDI is TX-only and missed it.
+	// The uart_mode==MIDI gate below is exactly what that post-mortem
+	// prescribed: outside MIDI mode serialIn is UART_RXD alone and the user
+	// port can never hijack guest receive (PPP/console unaffected).
+	wire userport_midi_in = (uart_mode == 8'd3) ? mt32_midi_rx : 1'b1;
+	assign serialIn = UART_RXD & userport_midi_in;
 	assign UART_TXD = serialOut;
-	assign UART_RTS = serialRTS;
+	assign UART_RTS = serialRTS ;
 	assign UART_DTR = UART_DSR;
+
+	// MT32-pi on the user port (framework module sys/mt32pi.sv): serial MIDI
+	// out on USER_OUT[1] at the SCC's programmed rate, I2S synth audio back
+	// on USER_IN[2/4/5], I2C detection/control on USER_IN[0]/[3]. The synth
+	// path runs in the fixed 24.576 MHz CLK_AUDIO domain; the LCD-overlay
+	// raster tracker runs on clk_vid (live video inputs below) and its box is
+	// composited into the final VGA_R/G/B at the video output above.
+	// Audio page settings (cfg[31:24]) apply on reset. "Show info"
+	// (cfg[23:22]) selects the readout: 1=Yes → framework OSD info popup,
+	// 2/3=LCD-On/LCD-Auto → LCD overlay.
+	wire [15:0] mt32_i2s_l, mt32_i2s_r;
+	wire        mt32_available;
+	wire        mt32_midi_rx;
+	wire        mt32_disable = cfg[24];                    // "Use MT32-pi" = No
+	wire        mt32_mute    = mt32_available & mt32_disable;
+	wire        mt32_use     = mt32_available & ~mt32_disable;
+	wire  [1:0] mt32_info    = cfg[23:22];                 // Show info: No/Yes/LCD-On/LCD-Auto
+	wire  [7:0] mt32_mode, mt32_rom, mt32_sf;
+	wire        mt32_newmode;
+	wire        mt32_lcd_en, mt32_lcd_pix, mt32_lcd_update;
+`ifndef MACLC_NO_MT32PI
+	mt32pi mt32pi
+	(
+		.CLK_AUDIO(CLK_AUDIO),
+		.CLK_VIDEO(clk_vid),
+		.CE_PIXEL(v8_ce_pix),
+		.VGA_VS(v8_vsync),
+		.VGA_DE(v8_de),
+		.USER_IN(USER_IN),
+		.USER_OUT(USER_OUT),
+		.reset(~n_reset),
+		.midi_tx(serialOut | mt32_mute),   // idle the Pi's MIDI-in when disabled
+		.midi_rx(mt32_midi_rx),
+		.mt32_i2s_r(mt32_i2s_r),
+		.mt32_i2s_l(mt32_i2s_l),
+		.mt32_available(mt32_available),
+		.mt32_mode_req(cfg[26]),             // Synth: 0=Munt, 1=FluidSynth
+		.mt32_rom_req(cfg[28:27]),           // Munt ROM: MT-32 v1/v2/CM-32L
+		.mt32_sf_req({5'd0, cfg[31:29]}),    // SoundFont 0-7
+		.mt32_mode(mt32_mode),
+		.mt32_rom(mt32_rom),
+		.mt32_sf(mt32_sf),
+		.mt32_newmode(mt32_newmode),
+		.mt32_lcd_en(mt32_lcd_en),
+		.mt32_lcd_pix(mt32_lcd_pix),
+		.mt32_lcd_update(mt32_lcd_update)
+	);
+`else
+	// MACLC_NO_MT32PI: no Pi; the user port idles (USER_OUT above), the
+	// MIDI-in line idles high and the synth return is silent.
+	assign mt32_midi_rx = 1'b1;
+	assign mt32_i2s_l = 16'd0;
+	assign mt32_i2s_r = 16'd0;
+	assign mt32_available = 1'b0;
+	assign mt32_mode = 8'd0;
+	assign mt32_rom = 8'd0;
+	assign mt32_sf = 8'd0;
+	assign mt32_newmode = 1'b0;
+	assign mt32_lcd_en = 1'b0;
+	assign mt32_lcd_pix = 1'b0;
+	assign mt32_lcd_update = 1'b0;
+`endif
+
+	// "Show Info = Yes": on a Pi-acknowledged mode change (mt32_newmode
+	// toggles), flash the mode name via the framework info popup (hps_io
+	// info_req/info -> CONF_STR "I," strings). Block is ao486-verbatim;
+	// mt32_newmode/mode/rom/sf come from the CLK_AUDIO domain but change
+	// rarely and are edge-detected, same as ao486.
+	reg       mt32_info_req;
+	reg [3:0] mt32_info_disp;
+	always @(posedge clk_sys) begin
+		reg old_mode;
+
+		old_mode <= mt32_newmode;
+		mt32_info_req <= (old_mode ^ mt32_newmode) && (mt32_info == 1);
+
+		mt32_info_disp <= (mt32_mode == 'hA2) ? (4'd1 + mt32_sf[2:0]) :
+		                  (mt32_mode == 'hA1 && mt32_rom == 0) ?  4'd9 :
+		                  (mt32_mode == 'hA1 && mt32_rom == 1) ?  4'd10 :
+		                  (mt32_mode == 'hA1 && mt32_rom == 2) ?  4'd11 : 4'd12;
+	end
+
+	// LCD overlay visibility (ao486 pattern): "LCD-On" pins it up, "LCD-Auto"
+	// shows it while the Pi pushes LCD updates and drops it after a timeout.
+	// The timeout counts clk_vid ticks: at RUNTIME clk_vid is 25.175 MHz
+	// (VGA) or 15.664 MHz (12") — the 58.74 MHz static config is STA-only —
+	// so 50M ticks ~= 2.0 s / 3.2 s. Purely cosmetic timer; a monitor-mode
+	// PLL retarget mid-count merely stretches the fade.
+	reg mt32_lcd_on;
+	always @(posedge clk_vid) begin
+		int to;
+		reg old_update;
+
+		old_update <= mt32_lcd_update;
+		if(to) to <= to - 1;
+
+		if(mt32_info == 2) mt32_lcd_on <= 1;
+		else if(mt32_info != 3) mt32_lcd_on <= 0;
+		else begin
+			if(!to) mt32_lcd_on <= 0;
+			if(old_update ^ mt32_lcd_update) begin
+				mt32_lcd_on <= 1;
+				to <= 50_000_000;
+			end
+		end
+	end
+
 
 	// interconnects
 	// CPU
@@ -879,6 +1273,7 @@ module emu
 	wire [15:0] memoryDataOut;
 	wire memoryLatch;
 	// peripherals
+	wire pds_slot_irq = pds_irq;  // PDS Ethernet card → pseudo-VIA slot-IFR bit $20 (slot $E)
 	wire vid_alt;
 	wire memoryOverlayOn, selectSCSI, selectSCC, selectIWM, selectVIA, selectRAM, selectROM, selectASC, selectUnmapped;
 	wire selectSCSIDMA;   // SCSI pseudo-DMA window (DACK) from address decoder
@@ -889,6 +1284,8 @@ module emu
 	wire [31:0] dbg_ncr_w, dbg_ncr2_w, dbg_wr_w, dbg_wrfb_w;
 	wire [31:0] dbg_ring0_w, dbg_ring1_w;
 	wire [31:0] dbg_ism_flpe_w;  // read-ring bookkeeping (anchor-only)
+	wire [31:0] dbg_cda0_w, dbg_cda1_w, dbg_cda2_w, dbg_cda3_w, dbg_cda4_w;
+	wire [31:0] dbg_cdur_w;
 	wire [23:0] overlay_trigger_addr;
 	wire [15:0] dataControllerDataOut;
 
@@ -1020,10 +1417,86 @@ module emu
 		end
 	end
 
-	assign      _cpuVPA = fc7_iack ? 1'b0 : ((fc7_berr || slot_space || iie_card_claim) ? 1'b1 : ~(!_cpuAS && cpuAddr[23:21] == 3'b111 && !selectVRAM && !selectSCSIDMA));
+	// ── PDS Ethernet card (Apple Ethernet LC Twisted Pair, pseudo-slot $E) ─────
+	// Claims $FE0Dxxxx/$FE0Exxxx/$FEFFxxxx (and the 24-bit $EDxxxx/$EExxxx
+	// windows) ONLY when Main's mac_eth service has published MAGIC — otherwise
+	// slot space keeps the hardware-validated open-bus $FFFF ack below. Card
+	// cycles complete via stretched async DTACK (never VPA), like SCSI DMA.
+	wire        pds_card_sel, pds_card_ack, pds_irq;
+	wire        pds_dbg_present, pds_dbg_cmdq, pds_dbg_wd;
+	wire  [3:0] pds_dbg_kind;
+	wire [15:0] pds_dbg_rdata;
+	wire [15:0] pds_dout;
+	// guest-RAM DMA legs into the SDRAM controller's eth port (Phase 3)
+	wire        pds_eth_req, pds_eth_we, pds_eth_ack;
+	wire [23:0] pds_eth_addr;
+	wire [15:0] pds_eth_din, pds_eth_dout;
+`ifndef MACLC_NO_ETHERNET
+	pds_enet pds_enet (
+		.clk_sys   (clk_sys),
+		.rst_core  (~pll_locked_s | RESET),
+		.rst_guest (~_cpuReset | ~_cpuReset_o),
+		.ram_config_phys(configRAMSize),
+		.eth_req   (pds_eth_req),
+		.eth_we    (pds_eth_we),
+		.eth_addr  (pds_eth_addr),
+		.eth_din   (pds_eth_din),
+		.eth_ack   (pds_eth_ack),
+		.eth_dout  (pds_eth_dout),
+		.ena_osd   (cfg[19]),      // OJ list is Off,On -> bit SET = On (default Off)
+		.cpuAddr   (cpuAddr),
+		.cpuDataIn (cpuDataOut),
+		._cpuAS    (_cpuAS),
+		._cpuUDS   (_cpuUDS),
+		._cpuLDS   (_cpuLDS),
+		._cpuRW    (_cpuRW),
+		.card_sel  (pds_card_sel),
+		.card_ack  (pds_card_ack),
+		.card_dout (pds_dout),
+		.irq       (pds_irq),
+		.dbg_present    (pds_dbg_present),
+		.dbg_cmd_queued (pds_dbg_cmdq),
+		.dbg_wd_fired   (pds_dbg_wd),
+		.dbg_last_kind  (pds_dbg_kind),
+		.dbg_rdata      (pds_dbg_rdata),
+		.mem_addr  (pds_mem_addr),
+		.mem_burst (pds_mem_burst),
+		.mem_rd    (pds_mem_rd),
+		.mem_we    (pds_mem_we),
+		.mem_wdata (pds_mem_wdata),
+		.mem_be    (pds_mem_be),
+		.mem_rdata (pds_mem_rdata),
+		.mem_rvalid(pds_mem_rvalid),
+		.mem_busy  (pds_mem_busy)
+	);
+`else
+	// MACLC_NO_ETHERNET: slot $E stays open bus; no DMA, no mailbox.
+	assign pds_card_sel = 1'b0;
+	assign pds_card_ack = 1'b0;
+	assign pds_irq = 1'b0;
+	assign pds_dout = 16'hFFFF;
+	assign pds_dbg_present = 1'b0;
+	assign pds_dbg_cmdq = 1'b0;
+	assign pds_dbg_wd = 1'b0;
+	assign pds_dbg_kind = 4'd0;
+	assign pds_dbg_rdata = 16'd0;
+	assign pds_eth_req = 1'b0;
+	assign pds_eth_we = 1'b0;
+	assign pds_eth_addr = 24'd0;
+	assign pds_eth_din = 16'd0;
+	assign pds_mem_addr = 29'd0;
+	assign pds_mem_burst = 8'd0;
+	assign pds_mem_rd = 1'b0;
+	assign pds_mem_we = 1'b0;
+	assign pds_mem_wdata = 64'd0;
+	assign pds_mem_be = 8'd0;
+`endif
+
+	assign      _cpuVPA = fc7_iack ? 1'b0 : ((fc7_berr || slot_space || pds_card_sel || iie_card_claim) ? 1'b1 : ~(!_cpuAS && cpuAddr[23:21] == 3'b111 && !selectVRAM && !selectSCSIDMA));
 	assign      _cpuDTACK = fc7_berr ? 1'b1 :
 	                        iie_card_claim ? (iie_card_error ? 1'b1 : iie_card_dtack_n) :
 	                        icache_hit ? 1'b0 :        // fetch-cache hit answers now
+	                        pds_card_sel ? ~pds_card_ack :
 	                        (slot_space && !_cpuAS) ? 1'b0 :
 	                        selectSCSIDMA ? ~scsiDREQ :
 	                        // Phase C: SDRAM-backed targets ack via the demand
@@ -1206,6 +1679,7 @@ module emu
 	reg [15:0] periph_din_reg;
 	always @(posedge clk_sys) periph_din_reg <= dataControllerDataOut;
 	wire [15:0] cpu_din_muxed = iie_card_claim ? iie_card_read_data :
+	                            pds_card_sel   ? pds_dout :
 	                            slot_space     ? 16'hFFFF :
 	                            icache_hit     ? icache_data :
 	                            vpa_periph_read ? periph_din_reg :
@@ -1285,7 +1759,7 @@ module emu
 		._cpuRW(_cpuRW),
 		._cpuAS(_cpuAS),
 		.cpuFC(cpuFC),
-		.pds_claim(iie_card_claim),
+		.pds_claim(pds_card_sel || iie_card_claim),
 		.ram_config(pvia_ram_config_out),
 		.ram_config_phys(configRAMSize),   // PHYSICAL SIMM size — was unconnected (=0),
 		                                   // so the 10MB SIMM was invisible and the Mac
@@ -1349,9 +1823,24 @@ module emu
 							   status[17] ? 3'd4 : 3'd2;       // 16bpp override
 	*/
 
-	// Preserve saved monitor values: 0 = VGA, 1 = 12-inch RGB.
-	// A real LC samples monitor sense lines during the ROM's boot probe.
-	wire [3:0] v8_monitor_id = cfg[10] ? 4'h2 : 4'h6;
+	// Monitor ID Selection — 640x480 VGA (default, MAME-faithful) or
+	// 512x384 12" RGB. Portrait is not supported. This is the sense ID the
+	// ROM reads to pick V8 timing.
+	// LATCHED UNDER RESET: a real LC samples the monitor sense lines only
+	// during the ROM's boot probe — the display cannot change on a running
+	// system, and the OS lays out QuickDraw for the boot geometry. The old
+	// live status[10] wire retargeted the pixel PLL mid-session (guest-
+	// hostile, and the source of the out-of-range class pix_quiet guards).
+	// The OSD choice now applies at the next reset — R0 "Apply and reset",
+	// R6, or core reload — the same pattern as the Memory option. Saved
+	// configs still apply on first load: the HPS delivers status while
+	// n_reset is held, so the latch captures it before first release.
+	// (verilator/sim.v hardwires 4'h6 — no sim-side counterpart needed.)
+	reg [3:0] v8_monitor_id = 4'h6;  // 640x480 VGA until first reset sample
+	always @(posedge clk_sys) begin
+		if (~n_reset) v8_monitor_id <= status[10] ? 4'h2 :  // 512x384 12" RGB
+		                                            4'h6;   // 640x480 VGA
+	end
 
 	ariel_ramdac ariel(
 		.clk_sys(clk_sys),
@@ -1388,7 +1877,7 @@ module emu
 		.we(selectPseudoVIA && !_cpuRW && cpuBusControl),
 		.req(selectPseudoVIA && cpuBusControl),
 		.vblank_irq(v8_vblank_s),   // 2FF-synced from the clk_vid scanout domain
-		.slot_irq(1'b0),
+		.slot_irq(pds_slot_irq),
 		.asc_irq(asc_irq),
 		// SCSI flags RE-TIED-OFF (2026-06-12 evening). History of reversals:
 		// - 06-11 (1f6c8d5): tied off — wiring them gave "System 7.x crash+
@@ -1444,7 +1933,22 @@ module emu
 	wire [7:0]  dbg_flp_status;
 	wire [31:0] dbg_flp_media;   // media-change witness (floppy.v dbg_media)
 
-	// Preserve the hardware-validated disk read and floppy fetch cones.
+	// ── Always-on marginality anchor (2026-07-29) ───────────────────────────
+	// Probes-OFF fits of this netlist deterministically corrupt the SCSI read
+	// path on hardware (Finder colour-icon noise → error-11 / F-Line bombs)
+	// while every probe-bearing fit passes; STA is met either way and does not
+	// predict it (HW-bisected 2026-07-29: observer-only FAILED, ISSP-only PASSED). A two-way
+	// bisect isolated the protective effect to the fanout of the 11 top-level
+	// ISSP probes below — NOT the dbg_probes observer deck: observer-only
+	// (54b6c8e1) bombed the Finder on boot 1; ISSP-only (063c2354) passed the
+	// full colour-icon gate + 3-boot soak. These sink registers keep exactly
+	// the same nets loaded in every build — deliberately, with no JTAG hub —
+	// so the fitter keeps treating the SCSI capture/status cones as live
+	// logic. preserve+noprune = no merging, no retiming, no sweeping. Do NOT
+	// remove, ifdef, or XOR-fold them (a reduction would let synthesis
+	// restructure the cones); ~352 FFs is the entire cost.
+	(* preserve, noprune *) reg [31:0] anchor_cda0, anchor_cda1, anchor_cda2,
+	                                   anchor_cda3, anchor_cda4, anchor_cdur;
 	(* preserve, noprune *) reg [31:0] anchor_psdt, anchor_psds, anchor_psd2,
 	                                   anchor_psd3, anchor_wrfb;
 	// (2026-08-03) Extension: the 11-word anchor above proved INSUFFICIENT on
@@ -1470,6 +1974,12 @@ module emu
 	// remove, ifdef, or fold.
 	(* preserve, noprune *) reg [31:0] anchor_flp0, anchor_flp1, anchor_flp2;
 	always @(posedge clk_sys) begin
+		anchor_cda0 <= dbg_cda0_w;
+		anchor_cda1 <= dbg_cda1_w;
+		anchor_cda2 <= dbg_cda2_w;
+		anchor_cda3 <= dbg_cda3_w;
+		anchor_cda4 <= dbg_cda4_w;
+		anchor_cdur <= dbg_cdur_w;
 		anchor_psdt <= {sdma_berr_cnt, 1'b0, sdma_stall_max};
 		anchor_psds <= {15'd0, sdma_snapped, sdma_snap_scsi2};
 		anchor_psd2 <= sdma_snap_ncr;
@@ -1694,7 +2204,8 @@ module emu
 			// Row 14 (2026-08-26): card write-vanish witnesses.
 			// [31:16]=last completed card-cycle data, [7:4]=sticky
 			// {saw_stub,saw_regwr,0,0}, [2]=wd_fired [1]=cmd_queued [0]=present
-			hud_w14 <= 32'd0;
+			hud_w14 <= {pds_dbg_rdata, 8'b0, pds_dbg_kind,
+			            1'b0, pds_dbg_wd, pds_dbg_cmdq, pds_dbg_present};
 		end
 		hud_on_q    <= hud_vband && (hud_x < HUD_W) && v8_de;
 		hud_white_q <= hud_wmux[5'd31 - hud_x[6:2]];
@@ -1716,6 +2227,46 @@ module emu
 	// observer: CPU bus + scsi_dbg/4/5/ncr2). A full debug deck needs BOTH.
 `ifdef USE_DBG_PROBES
 	// PSDT: pseudo-DMA stall timeout visibility — {fires[7:0], max_stall[22:0]}
+	// CDA0/CDA1: CD-audio engine + CD target visibility (2026-07-17, the
+	// "one track / PLAY fails" hunt). Decode:
+	//   CDA0 [0]=mounted [1]=toc_ready [2]=toc_valid [9:3]=n_tracks
+	//        [14:10]=mst [16:15]=pstate [18:17]=fst [26:19]=toc_fetch_cnt
+	//        [31:27]=frame_fetch_cnt
+	//   CDA1 [7:0]=last_op [15:8]=cmd_cnt [19:16]=sense_key [27:20]=sense_asc
+	//        [28]=last_cmd_ok [29]=mounted [30]=cd_no_media [31]=toc_ready
+	altsource_probe #(
+		.instance_id ("CDA0"), .probe_width (32), .source_width(1),
+		.sld_auto_instance_index ("YES")
+	) cp_cda0 (.probe(dbg_cda0_w), .source(), .source_clk(clk_sys), .source_ena(1'b1));
+	altsource_probe #(
+		.instance_id ("CDA1"), .probe_width (32), .source_width(1),
+		.sld_auto_instance_index ("YES")
+	) cp_cda1 (.probe(dbg_cda1_w), .source(), .source_clk(clk_sys), .source_ena(1'b1));
+
+	altsource_probe #(
+		.instance_id ("CDA2"), .probe_width (32), .source_width(1),
+		.sld_auto_instance_index ("YES")
+	) cp_cda2 (.probe(dbg_cda2_w), .source(), .source_clk(clk_sys), .source_ena(1'b1));
+
+	altsource_probe #(
+		.instance_id ("CDA3"), .probe_width (32), .source_width(1),
+		.sld_auto_instance_index ("YES")
+	) cp_cda3 (.probe(dbg_cda3_w), .source(), .source_clk(clk_sys), .source_ena(1'b1));
+
+	altsource_probe #(
+		.instance_id ("CDA4"), .probe_width (32), .source_width(1),
+		.sld_auto_instance_index ("YES")
+	) cp_cda4 (.probe(dbg_cda4_w), .source(), .source_clk(clk_sys), .source_ena(1'b1));
+
+	// CDUR: cd_audio delivery-starvation counters (2026-07-28, the "scratchy /
+	// not CD quality" hunt). [31:16]=starvation entries (wraps), [15:0]=starved
+	// clk/256 (7.9 us units). Healthy playback: both frozen. The 07-20 HDMI
+	// capture measured ~5% starvation duty = CDS 41.8k/s, freezes of 0.4-4 ms.
+	altsource_probe #(
+		.instance_id ("CDUR"), .probe_width (32), .source_width(1),
+		.sld_auto_instance_index ("YES")
+	) cp_cdur (.probe(dbg_cdur_w), .source(), .source_clk(clk_sys), .source_ena(1'b1));
+
 	altsource_probe #(
 		.instance_id ("PSDT"), .probe_width (32), .source_width(1),
 		.sld_auto_instance_index ("YES")
@@ -1998,6 +2549,38 @@ module emu
 		.source ()
 	);
 
+	// CD-audio cadence probe (instance "CDS") — for the "CD audio sounds like
+	// half quality / distorted" report. Free-running wrap counters of VALUE
+	// CHANGES on the CD engine's PCM outputs; read twice a known interval
+	// apart (scripts/cd_meters.tcl) and diff mod 2^16:
+	//   ~44_100 changes/s during music  -> full-rate content reaches the mixer;
+	//     the whole digital path (HPS serving, fetch, sample engine) is
+	//     exonerated and the loss is downstream (mix gain / 48 kHz ZOH
+	//     resample in sys_top / analog out).
+	//   ~22_050/s -> literally half-rate content (duplicated samples): defect
+	//     in the serving/engine path.
+	//   Far lower + audible stutter -> underruns (frame fetch starving).
+	reg [15:0] cdl_chg_cnt = 16'd0, cdr_chg_cnt = 16'd0;
+	reg signed [15:0] cdl_prev = 16'sd0, cdr_prev = 16'sd0;
+	always @(posedge clk_sys) begin
+		cdl_prev <= cd_snd_l;
+		cdr_prev <= cd_snd_r;
+		if (cd_snd_l != cdl_prev) cdl_chg_cnt <= cdl_chg_cnt + 16'd1;
+		if (cd_snd_r != cdr_prev) cdr_chg_cnt <= cdr_chg_cnt + 16'd1;
+	end
+	wire [31:0] cds_probe_bus = { cdl_chg_cnt, cdr_chg_cnt };
+	altsource_probe #(
+		.sld_auto_instance_index ("YES"),
+		.sld_instance_index      (0),
+		.instance_id             ("CDS"),
+		.probe_width             (32),
+		.source_width            (0),
+		.source_initial_value    ("0"),
+		.enable_metastability    ("NO")
+	) u_cds_issp (
+		.probe  (cds_probe_bus),
+		.source ()
+	);
 `endif
 
 	/*
@@ -2067,6 +2650,12 @@ module emu
 		.dbg_scsi4(dbg_scsi4_w),
 		.dbg_scsi5(dbg_scsi5_w),
 		.dbg_ncr(dbg_ncr_w),
+		.dbg_cda0(dbg_cda0_w),
+		.dbg_cda1(dbg_cda1_w),
+		.dbg_cda2(dbg_cda2_w),
+		.dbg_cda3(dbg_cda3_w),
+		.dbg_cda4(dbg_cda4_w),
+		.dbg_cdur(dbg_cdur_w),
 		.dbg_ncr2(dbg_ncr2_w),
 		.dbg_wr(dbg_wr_w),
 		.dbg_wrfb(dbg_wrfb_w),
@@ -2091,7 +2680,7 @@ module emu
 		
 		// peripherals
 		.ps2_key(ps2_key), 
-		.osd_chord(status[21:19]),
+		.osd_chord(status[17:15]),
 		.capslock(capslock),
 		.ps2_mouse(ps2_mouse),
 		// serial uart
@@ -2110,7 +2699,10 @@ module emu
 
 
 		// floppy disk interface
-		// The absent external drive reads as an open bus.
+		// Drive 1 (the external port) has no image source since the second
+		// floppy was removed: swim.v still instantiates floppyExt, and it
+		// reports an empty drive exactly as it did with nothing mounted —
+		// the state the Sony driver's benign -65 polling already covers.
 		.insertDisk({1'b0, dsk_int_ins}),
 		.writeProtect({1'b1, flp_int_wp}),   // drive 2 has no media: always locked
 		.wrSdAddr(wc_addr), .wrSdData(wc_data),
@@ -2141,9 +2733,37 @@ module emu
 		.io_ack(scsi_ack),
 
 		.sd_buff_addr(sd_buff_addr[7:0]),
+		.sd_buff_addr_hi(sd_buff_addr[12:8]),
 		.sd_buff_dout(sd_buff_dout),
 		.sd_buff_din(scsi_buff_din),
 		.sd_buff_wr(sd_buff_wr),
+
+		// BlueSCSI Toolbox dedicated transport (slot VD_TOOLBOX).
+		.tb_mounted(tb_mounted),
+		.tb_lba(tb_lba),
+		.tb_rd(tb_rd),
+		.tb_wr(tb_wr),
+		.tb_ack(tb_ack),
+		.tb_buff_din(tb_buff_din),
+
+		// BlueSCSI Toolbox CD Changer transport (slot VD_CD_TOOLBOX).
+		.cdtb_mounted(cdtb_mounted),
+		.cdtb_lba(cdtb_lba),
+		.cdtb_rd(cdtb_rd),
+		.cdtb_wr(cdtb_wr),
+		.cdtb_ack(cdtb_ack),
+		.cdtb_buff_din(cdtb_buff_din),
+		.cd_snd_l(cd_snd_l),
+		.cd_snd_r(cd_snd_r),
+
+		// CD-ROM target (SCSI ID 3) block interface (slot VD_CDROM).
+		.cd_enable(cd_enable),
+		.cd_img_mounted(cd_mounted),
+		.cd_io_lba(cd_lba),
+		.cd_io_rd(cd_rd),
+		.cd_io_wr(),           // read-only target: never writes
+		.cd_io_ack(cd_ack),
+		.cd_sd_buff_din(cd_buff_din),
 
 		// PRAM persistence (NVRAM) — driven by the FSM above
 		.pram_load_wr(pram_load_wr),
@@ -2317,12 +2937,12 @@ module emu
 	);
 
 	// Write-protect, three terms, any one of which locks the disk:
-	//   - the OSD Floppy Write toggle is Off (default, and the safe state),
+	//   - the OSD Floppy writes toggle is Off (default, and the safe state),
 	//   - the slot was mounted read-only (latched at ITS OWN mount pulse), or
 	// DC42 is NOT excluded: the load path normalises the container away, so
 	// SDRAM holds pure sector data and a volatile write is container-agnostic.
 	// Only the write-BACK has to care which layout it is writing.
-	assign flp_int_wp = ~status[14] || flp_int_ro;
+	assign flp_int_wp = ~cfg[14] || flp_int_ro;
 
 	// -- Committed sectors reach the user's file ---------------------------
 	// Everything upstream is volatile: the committer lands a verified sector
@@ -2332,7 +2952,7 @@ module emu
 	// and nowhere else: ~flp_int_wp, the same condition that unlocks WRTPRT.
 	// The writer keeps NO copy of the data - it queues sector numbers and
 	// fetches each block from SDRAM at write time, through the controller's
-	// SDRAM readback for floppy image writeback.
+	// Ethernet-DMA requester shared with pds_enet by eth_port_arb below.
 	wire        flp_int_sdw_busy;
 	wire        flp_sdw_wr;
 	wire        flp_mem_req, flp_mem_ack;
@@ -2380,6 +3000,27 @@ module emu
 		.sd_buff_addr_i  ( sd_buff_addr ),
 		.sd_buff_din     ( sd_buff_din[VD_FLOPPY_INT] ),
 		.busy            ( flp_int_sdw_busy )
+	);
+
+	// The controller's eth port, shared: pds_enet (priority) and the floppy
+	// writer. The arbiter locks the grant through ack-fall and registers the
+	// muxed bundle — see rtl/floppy_sd.v for both reasons. rtl/sdram.v is
+	// unchanged; it still sees exactly one requester on that port.
+	wire        mem_eth_req, mem_eth_we, mem_eth_ack;
+	wire [23:0] mem_eth_addr;
+	wire [15:0] mem_eth_din, mem_eth_dout;
+	eth_port_arb eth_port_arb_i
+	(
+		.clk    ( clk_sys ),
+		.reset  ( !pll_locked_s ),
+		.a_req  ( pds_eth_req  ), .a_we ( pds_eth_we ), .a_addr ( pds_eth_addr ),
+		.a_din  ( pds_eth_din  ), .a_ack ( pds_eth_ack ), .a_dout ( pds_eth_dout ),
+		// Port b is the IIe card's native port, which also carries the
+		// floppy loader (card_native_port_mux inside the card platform).
+		.b_req  ( iie_native_req ), .b_we ( iie_native_we ), .b_addr ( iie_native_addr ),
+		.b_din  ( iie_native_din ), .b_ack ( iie_native_ack ), .b_dout ( iie_native_dout ),
+		.m_req  ( mem_eth_req  ), .m_we ( mem_eth_we ), .m_addr ( mem_eth_addr ),
+		.m_din  ( mem_eth_din  ), .m_ack ( mem_eth_ack ), .m_dout ( mem_eth_dout )
 	);
 
 	// The loader owns the slot while it is streaming an image in. The writer
@@ -2434,6 +3075,9 @@ module emu
 	// Download addresses (SDRAM word addresses):
 	//   ROM:      $500000 + offset
 	//   Floppy 1: $600000 + offset
+	//   ($700000 was Floppy 2, removed 2026-09-15. addrController_top still
+	//    maps the region for floppyExt's read path — that drive now never has
+	//    media, so nothing is fetched from it.)
 	reg [22:0] dio_a;
 	reg [15:0] dio_data;
 
@@ -2668,7 +3312,29 @@ module emu
 
 	assign SDRAM_CKE = 1;
 
-	// Diagnostic build: SDRAM init only on cold PLL loss.
+	// Dedicated SDRAM re-init pulse on the explicit user resets (R0 / R6 /
+	// core button). The reverted d88c098/50d0c32 attempts tied .init to
+	// signals that are ALSO asserted through the cold-load ROM download, so
+	// init swallowed the download writes and broke cold boot (HW-confirmed
+	// 2026-06-08). This pulse is structurally different — exactly the shape
+	// the handoff §5 follow-up prescribed:
+	//   * edge-triggered, never level-held through a download;
+	//   * fires only once the ROM is already in SDRAM (rom_loaded);
+	//   * suppressed while ANY download is active (!dio_download);
+	//   * the init ladder is content-preserving (NOPs + refreshes + mode-
+	//     register rewrite, ~126 us — see rtl/sdram.v), and n_reset's ~4 ms
+	//     stretch keeps the CPU in reset until long after it completes.
+	reg  [3:0] sdram_reinit_cnt = 4'd0;
+	reg        user_reset_d = 1'b0;
+	wire       user_reset_now = status[0] | buttons[1] | pram_force_reset;
+	always @(posedge clk_sys) begin
+		user_reset_d <= user_reset_now;
+		if (user_reset_now && !user_reset_d && rom_loaded && !dio_download)
+			sdram_reinit_cnt <= 4'd15;
+		else if (sdram_reinit_cnt != 0)
+			sdram_reinit_cnt <= sdram_reinit_cnt - 4'd1;
+	end
+	wire sdram_reinit = (sdram_reinit_cnt != 0);
 
     wire iie_memory_ready;
     wire [22:0] iie_iwm_control;
@@ -2678,7 +3344,7 @@ module emu
         .memory_ready(iie_memory_ready), .host_reset(!_cpuReset),
         .pds_address(cpuAddr), .pds_fc(cpuFC), .pds_as_n(_cpuAS),
         .pds_uds_n(_cpuUDS), .pds_lds_n(_cpuLDS), .pds_rw(_cpuRW), .pds_write_data(cpuDataOut),
-        .runtime_mode(status[18]), .debug_status(iie_debug_status), .diagnostic_boundary(iie_diagnostic_boundary), .diagnostic_fault(iie_diagnostic_fault),
+        .runtime_mode(status[20]), .debug_status(iie_debug_status), .diagnostic_boundary(iie_diagnostic_boundary), .diagnostic_fault(iie_diagnostic_fault),
         .claim(iie_card_claim_raw), .dtack_n(iie_card_dtack_n), .error(iie_card_error),
         .pds_read_data(iie_card_read_data),
         .floppy_req(flp_mem_req), .floppy_addr(flp_mem_addr), .floppy_ack(flp_mem_ack), .floppy_data(flp_mem_dout),
@@ -2704,7 +3370,10 @@ module emu
 	sdram sdram
 	(
 		// system interface
-		.init           ( !pll_locked ),
+		// Full init at config (`!pll_locked`), plus the gated user-reset
+		// re-init pulse above. Do NOT add any signal here that is held
+		// during the ROM download (see comment above for the history).
+		.init           ( !pll_locked || sdram_reinit ),
 		.memory_ready   ( iie_memory_ready ),
 		.clk_64         ( clk_mem                  ),
 		.clk_8          ( clk8                     ),
@@ -2750,13 +3419,16 @@ module emu
 		.dl_din         ( sdram_dldin_q            ),
 		.dl_ack         ( sdram_dl_ack             ),
 
-		// Floppy image writeback reads through the SDRAM DMA port.
-		.eth_req        ( iie_native_req ),
-		.eth_we         ( iie_native_we ),
-		.eth_addr       ( iie_native_addr ),
-		.eth_din        ( iie_native_din ),
-		.eth_ack        ( iie_native_ack ),
-		.eth_dout       ( iie_native_dout ),
+		// Ethernet guest-RAM DMA port (rtl/pds/pds_enet.sv, Phase 3), since
+		// Phase 4b shared with the floppy SD writer through eth_port_arb,
+		// whose outputs are clk_sys registers set one edge before the
+		// request rises — the same settled-value shape as the _q bundle.
+		.eth_req        ( mem_eth_req              ),
+		.eth_we         ( mem_eth_we               ),
+		.eth_addr       ( mem_eth_addr             ),
+		.eth_din        ( mem_eth_din              ),
+		.eth_ack        ( mem_eth_ack              ),
+		.eth_dout       ( mem_eth_dout             ),
 
 		.cpu_done       ( sdram_cpu_done           ),
 		.cpu_dout       ( sdram_cpu_dout           )
