@@ -476,7 +476,7 @@ module adb_device(
 			  9'h124: keyData[6:0] <= 7'h7F;
 			  9'h125: keyData[6:0] <= 7'h7F;
 			  9'h126: keyData[6:0] <= 7'h7F;
-			  9'h127: keyData[6:0] <= 7'h7F;
+			  9'h127: keyData[6:0] <= 7'h3A;	//RIGHT WINDOWS KEY (option)
 			  9'h128: keyData[6:0] <= 7'h7F;
 			  9'h129: keyData[6:0] <= 7'h7F;
 			  9'h12a: keyData[6:0] <= 7'h7F;
