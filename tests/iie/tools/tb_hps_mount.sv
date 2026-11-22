@@ -3,10 +3,12 @@
 // side copies sys_top's io_clk/rack/io_ack handshake and Main's command order:
 // 0x1D size, 0x1C mount, then 0x16 status polls answered with 0x0X17 sector
 // reads. Prints the controller's progress once per simulated millisecond.
+// The mount notice is the LC-family 16-bit word for a read-only file, (1 <<
+// SLOT) | 0x80, so slot 7 pulses too and must stay unserved.
 //   +image=<woz>  +ms=<run time>  +hps_ns=<HPS access time, default 60>
 module tb_hps_mount;
-    localparam VDNUM = 9;
-    localparam SLOT = 7;                  // VD_IIE_DRIVE1
+    localparam VDNUM = 10;
+    localparam SLOT = 8;                  // VD_IIE_DRIVE1
 
     reg clk = 0;
     always #15385 clk = !clk;             // 32.5 MHz clk_sys
@@ -144,7 +146,7 @@ module tb_hps_mount;
             disable_io();
             enable_io();
             spi_w(16'h001C, q);
-            spi_w(16'd1 << SLOT, q);
+            spi_w((16'd1 << SLOT) | 16'h0080, q);
             disable_io();
         end
     endtask

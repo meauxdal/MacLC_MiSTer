@@ -143,9 +143,10 @@ module emu
 `endif
 
 		// IIe options sit on bits the release leaves free: buttons 15-17
-		// (osd_chord), ROM mapping 20, trial overlay 9. Drive 1 is slot 7;
-		// drive 2 has no slot yet (see THE MOUNT BYTE).
-		"P3S7,WOZ,5.25 drive 1;",
+		// (osd_chord), ROM mapping 20, trial overlay 9. Drives are slots 8
+		// and 9 (see THE MOUNT WORD).
+		"P3S8,WOZ,5.25 drive 1;",
+		"P3S9,WOZ,5.25 drive 2;",
 		"P3-;",
 		"P3RF,Control-Reset;",
 		"P3RG,Restart (Ctrl-Cmd-Reset);",
@@ -280,20 +281,22 @@ module emu
 	// had, so a user's saved mounts (config/MacLC.sN) still resolve after the
 	// upgrade. Do not renumber these to "tidy up".
 	localparam VD_FLOPPY_INT = 6;      // floppy image -> hps_io slot 6
-	localparam VD_IIE_DRIVE1 = 7;      // IIe card external 5.25 WOZ image
-	localparam VDNUM      = 8;         // total hps_io block devices
+	localparam VD_SPARE   = 7;         // unused: shares bit 7 with read-only
+	localparam VD_IIE_DRIVE1 = 8;      // IIe card external 5.25 WOZ, drive 1
+	localparam VD_IIE_DRIVE2 = 9;      // IIe card external 5.25 WOZ, drive 2
+	localparam VDNUM      = 10;        // total hps_io block devices
 
-	// THE MOUNT BYTE. Main notifies a mount with ONE BYTE (user_io.cpp:
-	// spi_uio_cmd8(UIO_SET_SDSTAT, (1 << index) | (writable ? 0 : 0x80))),
-	// so slots 8 and up cannot be announced at all: 1 << 8 truncates to 0,
-	// and hps_io turns a 0 into img_mounted[0], a false mount of SCSI ID 0.
-	// Never put a mount slot above 7 without a Main change.
+	// THE MOUNT WORD. Main's generic mount notice is ONE BYTE, (1 << index)
+	// | 0x80 if read-only, so slot 8 and up truncate to 0 and hps_io takes a
+	// 0 as img_mounted[0], a false mount of SCSI ID 0. For cores that can
+	// hold the IIe card (LC and Color Classic families) Main sends the same value as a 16-bit word (support/mac/mac.cpp,
+	// mac_mount_notice), which unmodified hps_io decodes into slots 8 and 9.
+	// An older Main still sends the byte: slots 8/9 then never mount, and
+	// mounting one remounts SCSI ID 0.
 	// Bit 7 is both slot 7 and the read-only flag, so a read-only mount of
-	// slot N arrives as bits N and 7 together. Slot 7 alone (0x80) is the
-	// only pattern that means slot 7, so drive 1 accepts img_mounted[7] only
-	// when no other bit is set. img_readonly is always 1 there, so drive 1
-	// stays write-protected whatever the file's attribute
-	// (iie_drive1_mounted, below the bus declarations).
+	// any slot also raises img_mounted[7], and slot 7 itself can never be
+	// mounted writable. Slot 7 therefore stays empty (VD_SPARE, tied off).
+	// Never put a device there.
 
 	// the status register is controlled by the on screen display (OSD)
 	wire [31:0] status;
@@ -311,7 +314,6 @@ module emu
 	wire           [15:0] sd_buff_din[VDNUM];
 	wire                  sd_buff_wr;
 	wire  [VDNUM-1:0] img_mounted;
-	wire iie_drive1_mounted = img_mounted[VD_IIE_DRIVE1] && !(|img_mounted[VD_IIE_DRIVE1-1:0]);
 	wire           [63:0] img_size;
 	wire                  img_readonly;   // valid only at the active img_mounted bit
 
@@ -3357,22 +3359,26 @@ module emu
         .iwm_control(iie_iwm_control), .iwm_drive(iie_iwm_drive)
     );
 
-    // IIe card external 5.25 drives. Writes follow the floppy write option.
-    // Drive 1 is hps_io slot 7; drive 2 has no slot (see THE MOUNT BYTE), so
-    // its bus is tied off here and its outputs dangle.
-    wire [31:0] iie_drive2_lba;
-    wire        iie_drive2_rd, iie_drive2_wr;
-    wire [15:0] iie_drive2_buff_din;
+    // Slot 7 is never used (see THE MOUNT WORD).
+    assign sd_lba[VD_SPARE]      = 32'd0;
+    assign sd_rd [VD_SPARE]      = 1'b0;
+    assign sd_wr [VD_SPARE]      = 1'b0;
+    assign sd_buff_din[VD_SPARE] = 16'd0;
+
+    // IIe card external 5.25 drives on hps_io slots 8 and 9. Writes follow
+    // the floppy write option; a read-only file stays write-protected.
     card_iwm_backend iie_drive (
         .clk(clk_sys), .cold_reset(!pll_locked_s),
         .control(iie_iwm_control), .drive(iie_iwm_drive),
         .write_protect(~status[14]), .active(), .debug(iie_drive_debug), .scan_debug(iie_scan_debug),
-        .sd_lba({iie_drive2_lba, sd_lba[VD_IIE_DRIVE1]}),
-        .sd_rd({iie_drive2_rd, sd_rd[VD_IIE_DRIVE1]}), .sd_wr({iie_drive2_wr, sd_wr[VD_IIE_DRIVE1]}),
-        .sd_ack({1'b0, sd_ack[VD_IIE_DRIVE1]}), .sd_buff_addr(sd_buff_addr[7:0]),
+        .sd_lba({sd_lba[VD_IIE_DRIVE2], sd_lba[VD_IIE_DRIVE1]}),
+        .sd_rd({sd_rd[VD_IIE_DRIVE2], sd_rd[VD_IIE_DRIVE1]}),
+        .sd_wr({sd_wr[VD_IIE_DRIVE2], sd_wr[VD_IIE_DRIVE1]}),
+        .sd_ack({sd_ack[VD_IIE_DRIVE2], sd_ack[VD_IIE_DRIVE1]}), .sd_buff_addr(sd_buff_addr[7:0]),
         .sd_buff_dout(sd_buff_dout),
-        .sd_buff_din({iie_drive2_buff_din, sd_buff_din[VD_IIE_DRIVE1]}),
-        .sd_buff_wr(sd_buff_wr), .img_mounted({1'b0, iie_drive1_mounted}),
+        .sd_buff_din({sd_buff_din[VD_IIE_DRIVE2], sd_buff_din[VD_IIE_DRIVE1]}),
+        .sd_buff_wr(sd_buff_wr),
+        .img_mounted({img_mounted[VD_IIE_DRIVE2], img_mounted[VD_IIE_DRIVE1]}),
         .img_readonly(img_readonly), .img_size(img_size)
     );
 	sdram sdram
