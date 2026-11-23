@@ -152,7 +152,7 @@ File transfer, CUE/BIN and CHD CD images, CD swapping and Ethernet need support 
 
 **Floppy reading and writing work** — 800 KB GCR and 1.44 MB MFM. Mount images through the OSD's **Floppy** slot.
 
-Writes are **off by default**: with **Advanced > Floppy writes** set to Off, disks mount write-protected, exactly like a locked physical floppy. Set it to On to write to and format disks (Mac 800K and 1.44 MB, DOS 720K and 1.44 MB, 400K MFS); changes are saved back to the image file and survive eject, remount and power cycles. An image that is read-only on the SD card stays write-protected whatever the option says.
+Disks are writable, as on a real LC: you can write to and format them (Mac 800K and 1.44 MB, DOS 720K and 1.44 MB, 400K MFS), and changes are saved back to the image file and survive eject, remount and power cycles. **Floppy Write Protect** is the disk's write-protect tab: set it to On and the next disk you insert mounts write-protected. It is read at insert, so it doesn't change a disk that's already in the drive. An image that is read-only on the SD card is always write-protected.
 
 Both common image formats are auto-detected — no conversion needed:
 

@@ -358,7 +358,7 @@ module card_iwm_disk #(
         .LATCHED_SENSE_REG(3'b0), .IWM_MODE(5'b0), .MOTOR_ON(motor_here),
         .SW_MOTOR_ON(motor && selected), .DISKREG_SEL(1'b0), .SEL35(1'b0),
         .DRIVE_SELECT(id[0]), .DRIVE_SLOT(id[0]), .DISK_MOUNTED(mounted),
-        .DISK_WP(ctrl_wp || write_protect || !mounted), .DOUBLE_SIDED(1'b0),
+        .DISK_WP(ctrl_wp || readonly || write_protect || !mounted), .DOUBLE_SIDED(1'b0),
         .FLUX_TRANSITION(flux), .STEP_EVENT(), .TRACK0_EVENT(), .WRITE_PROTECT(wp),
         .SENSE(), .DISK_SWITCHED_OUT(), .STEP_BUSY_OUT(), .STEP_DIR_OUT(),
         .MOTOR_ON_SENSE_OUT(), .AT_TRACK0_OUT(), .MOTOR_SPINNING(), .DRIVE_READY(),
@@ -399,5 +399,33 @@ module card_iwm_disk #(
         if (sd_ack && !sd_ack_d) ack_count <= ack_count + 1'd1;
         if (load_done) load_count <= load_count + 1'd1;
     end
-    assign debug = {3'b0, mounted, 3'b0, spinning, qtrack[7:0], rd_count, ack_count, load_count};
+
+    // Sticky write-path flags for the overlay, cleared by a new mount. Each
+    // marks how far a write got: q7 seen while selected, a write cell
+    // strobed, a strobe refused by write protect, a track RAM byte written,
+    // and a write-back request to the SD.
+    reg seen_q7 = 0, seen_strobe = 0, seen_wp_block = 0;
+    reg seen_we = 0, seen_sd_wr = 0;
+    always @(posedge clk) begin
+        if (!mounted_d && img_mounted) begin
+            seen_q7 <= 0;
+            seen_strobe <= 0;
+            seen_wp_block <= 0;
+            seen_we <= 0;
+            seen_sd_wr <= 0;
+        end else begin
+            if (write_mode && selected) seen_q7 <= 1;
+            if (write_strobe && write_mode && selected) begin
+                seen_strobe <= 1;
+                if (wp) seen_wp_block <= 1;
+            end
+            if (write_we) seen_we <= 1;
+            if (sd_wr) seen_sd_wr <= 1;
+        end
+    end
+    // Top byte as hex: high digit = {q7, strobe, wp block, mounted},
+    // low digit = {write RAM, SD write, read-only latch, spinning}.
+    assign debug = {seen_q7, seen_strobe, seen_wp_block, mounted,
+                    seen_we, seen_sd_wr, readonly, spinning,
+                    qtrack[7:0], rd_count, ack_count, load_count};
 endmodule

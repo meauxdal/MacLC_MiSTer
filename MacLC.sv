@@ -90,8 +90,9 @@ module emu
 	localparam CONF_STR = {
 		"MACLC;UART57600:115200,MIDI;",
 		// Layout follows the computer-core OSD standard (danifunker/
-		// hp9000-715_MiSTer docs/osd-standard.md). Status bits are unchanged
-		// from the flat layout, so saved .CFG files still apply.
+		// hp9000-715_MiSTer docs/osd-standard.md). Status bits keep their
+		// meaning across menu moves, so saved .CFG files still apply; the one
+		// exception is bit 14, retired with Floppy writes (see Advanced).
 		// CD-ROM (SCSI ID 3): ISO/TOAST are raw 2048-byte images; CUE/BIN/CHD
 		// go through Main's translation layer.
 		"SC0,IMGVHDHDA,Pri. disk (ID 0);",
@@ -100,6 +101,13 @@ module emu
 		"SC4,ISOTO*CUEBINCHD,CD-ROM (ID 3);",
 `endif
 		"S6,DSKIMG,Floppy;",
+		// IIe card 5.25 drives are slots 8 and 9 (see THE MOUNT WORD).
+		"S8,WOZ,IIe 5.25 drive 1;",
+		"S9,WOZ,IIe 5.25 drive 2;",
+		// Floppy Write Protect acts like a disk's write-protect tab, for the Mac
+		// floppy and both IIe drives: sampled at insert, so toggling it affects
+		// only the next mount (the MacPlus/MacLC475 convention). No reset.
+		"O3,Floppy Write Protect,Off,On;",
 		"F0,ROM,Load ROM;",
 		"-;",
 		"O4,Memory,2 MB,10 MB;",
@@ -108,12 +116,13 @@ module emu
 `endif
 		"-;",
 		"P1,Machine;",
-		"P2,Video;",
-		"P3,Apple IIe Card;",
 `ifndef MACLC_NO_MT32PI
-		"P4,Audio;",
+		"P2,Audio and Video;",
+`else
+		"P2,Video;",
 `endif
-		"P5,Advanced;",
+		"P3,Apple IIe Card;",
+		"P4,Advanced;",
 		"-;",
 		"h0-,Changes pending;",
 		"R0,Apply and reset;",
@@ -131,23 +140,20 @@ module emu
 		"P2OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
 
 `ifndef MACLC_NO_MT32PI
-		"P4-,MT32-pi;",
-		"P4OO,Use MT32-pi,Yes,No;",
-		"H1P4OQ,Synthesizer,Munt,FluidSynth;",
-		"h1P4-;",
-		"H2P4ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
-		"H3P4OTV,SoundFont,0,1,2,3,4,5,6,7;",
-		"h1P4-;",
-		"H1P4OMN,Show info,No,Yes,LCD-On,LCD-Auto;",
-		"h1P4-;",
+		"P2-,MT32-pi;",
+		"P2OO,Use MT32-pi,Yes,No;",
+		"H1P2OQ,Synthesizer,Munt,FluidSynth;",
+		"h1P2-;",
+		"H2P2ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
+		"H3P2OTV,SoundFont,0,1,2,3,4,5,6,7;",
+		"h1P2-;",
+		"H1P2OMN,Show info,No,Yes,LCD-On,LCD-Auto;",
+		"h1P2-;",
 `endif
 
 		// IIe options sit on bits the release leaves free: buttons 15-17
-		// (osd_chord), ROM mapping 20, trial overlay 9. Drives are slots 8
-		// and 9 (see THE MOUNT WORD).
-		"P3S8,WOZ,5.25 drive 1;",
-		"P3S9,WOZ,5.25 drive 2;",
-		"P3-;",
+		// (osd_chord), ROM mapping 20, trial overlay 9. The drives are
+		// top-level loaders.
 		"P3RF,Control-Reset;",
 		"P3RG,Restart (Ctrl-Cmd-Reset);",
 		"P3RH,Option Panel (Quit IIe);",
@@ -155,25 +161,23 @@ module emu
 		"P3OK,ROM mapping,Automatic,Runtime;",
 		"P3O9,Trial overlay,On,Off;",
 
-		"P5SC2,NVR,PRAM image;",
-		"P5-;",
-		// Floppy writes default OFF and must stay that way: the ROM's write
-		// primitive polls the IWM handshake in an UNBOUNDED loop, so a write
-		// bug hangs the machine. A read-only mount stays write-protected
-		// whatever this says (flp_int_wp below).
-		"P5OE,Floppy writes,Off,On;",
+		// Bit 14 (the old Floppy writes option) is retired: Floppy Write
+		// Protect replaced it with the opposite default, so it must not be
+		// reused while saved .CFG files may still hold it set.
+		"P4SC2,NVR,PRAM image;",
+		"P4-;",
 `ifndef MACLC_NO_CDROM
-		"P5OI,CD-ROM drive,Enabled,Disabled;",
+		"P4OI,CD-ROM drive,Enabled,Disabled;",
+		"P4-;",
 `endif
-		"P5-;",
 		// Ethernet defaults OFF: with an older ethernet Main a card-ON boot
 		// hangs. ena_osd below is the matching un-inverted cfg[19].
 `ifndef MACLC_NO_ETHERNET
-		"P5OJ,Ethernet,Off,On;",
-		"P5o03,MAC suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
+		"P4OJ,Ethernet,Off,On;",
+		"P4o03,MAC suffix,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F;",
+		"P4-;",
 `endif
-		"P5-;",
-		"P5OL,Swap Alt/Win keys,No,Yes;",
+		"P4OL,Swap Alt/Win keys,No,Yes;",
 `ifndef MACLC_NO_MT32PI
 		"I,",
 		"MT32-pi: SoundFont #0,",
@@ -264,7 +268,11 @@ module emu
 	reg [31:0] cfg = 0;
 	always @(posedge clk_sys) if (~n_reset) cfg <= status;
 	// Settings that wait for reset; excludes unused bits and momentary actions.
-	localparam [31:0] CFG_MASK = 32'hFDCC4410;
+	localparam [31:0] CFG_MASK = 32'hFDCC0410;
+	// OSD Floppy Write Protect, a write-protect tab for the Mac floppy and the
+	// IIe drives. Folded into each drive's read-only flag, which it latches at
+	// its own mount, so it needs no reset and stays out of CFG_MASK.
+	wire floppy_lock = status[3];
 	// A PRAM image mounted from the OSD while the guest runs also waits for
 	// reset (see pram_mount_deferred in the PRAM block).
 	wire osd_pending = |((status ^ cfg) & CFG_MASK) | pram_mount_deferred;
@@ -1133,7 +1141,7 @@ module emu
 	// path runs in the fixed 24.576 MHz CLK_AUDIO domain; the LCD-overlay
 	// raster tracker runs on clk_vid (live video inputs below) and its box is
 	// composited into the final VGA_R/G/B at the video output above.
-	// Audio page settings (cfg[31:24]) apply on reset. "Show info"
+	// MT32-pi settings (cfg[31:24]) apply on reset. "Show info"
 	// (cfg[23:22]) selects the readout: 1=Yes → framework OSD info popup,
 	// 2/3=LCD-On/LCD-Auto → LCD overlay.
 	wire [15:0] mt32_i2s_l, mt32_i2s_r;
@@ -2927,7 +2935,7 @@ module emu
 		.clk_sys(clk_sys), .reset(!pll_locked_s),
 		.img_mounted (img_mounted[VD_FLOPPY_INT]),
 		.img_size    (img_size),
-		.img_readonly(img_readonly),
+		.img_readonly(img_readonly | floppy_lock),
 		.sd_lba(flp_ldr_lba), .sd_rd(flp_ldr_rd),
 		.sd_ack(sd_ack[VD_FLOPPY_INT]),
 		.sd_buff_addr(sd_buff_addr), .sd_buff_dout(sd_buff_dout), .sd_buff_wr(sd_buff_wr),
@@ -2942,13 +2950,13 @@ module emu
 		.dc42_fmt(flp_int_fmt)
 	);
 
-	// Write-protect, three terms, any one of which locks the disk:
-	//   - the OSD Floppy writes toggle is Off (default, and the safe state),
-	//   - the slot was mounted read-only (latched at ITS OWN mount pulse), or
-	// DC42 is NOT excluded: the load path normalises the container away, so
-	// SDRAM holds pure sector data and a volatile write is container-agnostic.
-	// Only the write-BACK has to care which layout it is writing.
-	assign flp_int_wp = ~cfg[14] || flp_int_ro;
+	// Write-protect is the loader's read-only latch, taken at the slot's own
+	// mount pulse from the image's read-only flag OR the OSD Floppy Write
+	// Protect, as a real disk's tab. DC42 is NOT excluded: the load path
+	// normalises the container away, so SDRAM holds pure sector data and a
+	// volatile write is container-agnostic. Only the write-BACK has to care
+	// which layout it is writing.
+	assign flp_int_wp = flp_int_ro;
 
 	// -- Committed sectors reach the user's file ---------------------------
 	// Everything upstream is volatile: the committer lands a verified sector
@@ -3365,12 +3373,13 @@ module emu
     assign sd_wr [VD_SPARE]      = 1'b0;
     assign sd_buff_din[VD_SPARE] = 16'd0;
 
-    // IIe card external 5.25 drives on hps_io slots 8 and 9. Writes follow
-    // the floppy write option; a read-only file stays write-protected.
+    // IIe card external 5.25 drives on hps_io slots 8 and 9. Each drive
+    // latches its read-only flag at its own mount: a read-only file or the
+    // OSD Floppy Write Protect write-protects it, as a disk's tab.
     card_iwm_backend iie_drive (
         .clk(clk_sys), .cold_reset(!pll_locked_s),
         .control(iie_iwm_control), .drive(iie_iwm_drive),
-        .write_protect(~status[14]), .active(), .debug(iie_drive_debug), .scan_debug(iie_scan_debug),
+        .write_protect(1'b0), .active(), .debug(iie_drive_debug), .scan_debug(iie_scan_debug),
         .sd_lba({sd_lba[VD_IIE_DRIVE2], sd_lba[VD_IIE_DRIVE1]}),
         .sd_rd({sd_rd[VD_IIE_DRIVE2], sd_rd[VD_IIE_DRIVE1]}),
         .sd_wr({sd_wr[VD_IIE_DRIVE2], sd_wr[VD_IIE_DRIVE1]}),
@@ -3379,7 +3388,7 @@ module emu
         .sd_buff_din({sd_buff_din[VD_IIE_DRIVE2], sd_buff_din[VD_IIE_DRIVE1]}),
         .sd_buff_wr(sd_buff_wr),
         .img_mounted({img_mounted[VD_IIE_DRIVE2], img_mounted[VD_IIE_DRIVE1]}),
-        .img_readonly(img_readonly), .img_size(img_size)
+        .img_readonly(img_readonly | floppy_lock), .img_size(img_size)
     );
 	sdram sdram
 	(
