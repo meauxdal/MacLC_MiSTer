@@ -1231,9 +1231,14 @@ module flux_drive (
     always @(posedge CLK_14M or posedge RESET) begin
         if (RESET) begin
             bit_position <= 17'd0;
-            bit_timer <= bit_cell_base;  // Start at full bit cell time
-            bit_half_timer <= bit_half_base;
-            bit_cell_cycles_reg <= bit_cell_base;
+            // MacLC: async reset to CONSTANTS only. bit_cell_base/half_base
+            // come from woz_cell525's registers, and an async load of a
+            // variable made Quartus build latches clocked by the reset
+            // synchronizer (STA warning 332060). The first cell after reset
+            // reloads from the bases anyway.
+            bit_timer <= IS_35_INCH ? BIT_CELL_35 : BIT_CELL_525;
+            bit_half_timer <= IS_35_INCH ? (BIT_CELL_35 >> 1) : (BIT_CELL_525 >> 1);
+            bit_cell_cycles_reg <= IS_35_INCH ? BIT_CELL_35 : BIT_CELL_525;
             bit_cell_frac <= 10'd0;
             bit_half_frac <= 10'd0;
             prev_write_mode <= 1'b0;

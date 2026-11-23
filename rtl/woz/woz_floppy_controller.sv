@@ -216,9 +216,21 @@ module woz_floppy_controller #(
         end
     endgenerate
 
+    // Scan window (ported from Newsdee/Apple-II_MiSTer 8bfeb2a, Apple2e
+    // Pocket 0.4.3): media is present but the metadata scan has not finished.
+    // disk_mounted is asserted at mount, before the scan, so the ROM may
+    // already be reading. bit_count=0 here means no flux at all, and an RWTS
+    // read times out into a spurious I/O ERROR. Present a nominal 5.25" track
+    // of transition-rich 0x96 bytes instead (bypasses the BRAM, so the scan
+    // stream is undisturbed). No-media and valid-WOZ behaviour is unchanged.
+    wire scan_window = img_mounted && !scan_failed && !woz_valid;
+    localparam [31:0] SCAN_BIT_COUNT = 32'd40000; // nominal 5.25" GCR track
+    localparam [7:0]  SCAN_FLUX_BYTE = 8'h96;     // GCR sync-style pattern
+
     // Use stable_side for data reads - this prevents SEL toggling during status reads
     // from causing the mux to return data from the wrong side
-    assign bit_data = (IS_35_INCH && stable_side) ? bit_data1 : bit_data0;
+    assign bit_data = scan_window ? SCAN_FLUX_BYTE :
+                      ((IS_35_INCH && stable_side) ? bit_data1 : bit_data0);
 
     // bit_count: Return the correct bit_count for the requested track.
     //
@@ -255,7 +267,8 @@ module woz_floppy_controller #(
     wire loading_matches_stable = (!IS_35_INCH) || (load_side == stable_side);
     wire [31:0] loading_bit_count = (trk_bit_count > 0 && loading_matches_stable) ? trk_bit_count : selected_bit_count;
     assign bit_count = woz_valid ? (selected_track_match ? selected_bit_count :
-                                    (is_loading ? loading_bit_count : selected_bit_count)) : 32'd0;
+                                    (is_loading ? loading_bit_count : selected_bit_count)) :
+                       (scan_window ? SCAN_BIT_COUNT : 32'd0);
 
     // FLUX track format selection - use stable_side like bit_count
     wire selected_is_flux = (IS_35_INCH && stable_side) ? is_flux_side1 : is_flux_side0;
