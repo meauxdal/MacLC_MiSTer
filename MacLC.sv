@@ -159,7 +159,9 @@ module emu
 		"P3RH,Option Panel (Quit IIe);",
 		"P3-;",
 		"P3OK,ROM mapping,Automatic,Runtime;",
+`ifdef USE_IIE_OVERLAY
 		"P3O9,Trial overlay,On,Off;",
+`endif
 
 		// Bit 14 (the old Floppy writes option) is retired: Floppy Write
 		// Protect replaced it with the opposite default, so it must not be
@@ -734,6 +736,7 @@ module emu
 `endif
 
     wire [23:0] native_rgb;
+`ifdef USE_IIE_OVERLAY
     iie_status_overlay iie_status (
         .clk_sys(clk_sys), .clk_vid(clk_vid), .reset(!pll_locked),
         .enable_sys(!status[9]),
@@ -743,6 +746,9 @@ module emu
         .red_in(hud_vga_r), .green_in(hud_vga_g), .blue_in(hud_vga_b),
         .red_out(native_rgb[23:16]), .green_out(native_rgb[15:8]), .blue_out(native_rgb[7:0])
     );
+`else
+    assign native_rgb = {hud_vga_r, hud_vga_g, hud_vga_b};
+`endif
 
     // ---- DDR3 PORT --------------------------------------------------------
     // Up to three clients share DDRAM on clk_mem through two tv_ddr_arbiter
