@@ -55,8 +55,8 @@ Main (file transfer, PRAM, CD swapping), and the guest never sees them:
 
 | OSD slot | SCSI ID | Purpose |
 |---|---|---|
-| `Pri. disk (ID 0)` | **0** | Primary hard disk (boot device) |
-| `Disk (ID 1)` | **1** | Secondary hard disk |
+| `SCSI disk (ID 0)` | **0** | Primary hard disk (boot device) |
+| `SCSI disk (ID 1)` | **1** | Secondary hard disk |
 | `CD-ROM (ID 3)` | **3** | CD-ROM drive |
 | `Advanced > NVR` | — | PRAM/NVRAM save image (host channel) |
 | *(no OSD entry)* | — | BlueSCSI Toolbox shared folder (host channel) |
@@ -71,10 +71,10 @@ CD changer commands by the **ID 3** target — clients find them by INQUIRY, not
 
 The on-screen display exposes two SCSI slots:
 
-- **Pri. disk (ID 0)** — primary drive (SCSI ID 0), the usual boot device
-- **Disk (ID 1)** — secondary drive (SCSI ID 1)
+- **SCSI disk (ID 0)** — primary drive, the usual boot device
+- **SCSI disk (ID 1)** — secondary drive
 
-> **The disk IDs are 0 and 1** (they were 6 and 5 in earlier builds). The boot SCSI ID is stored in PRAM, so an existing install blessed for ID 6 will not boot until you run **Machine > Clear PRAM and reset** — or re-bless the volume for its new ID.
+> **The disk IDs are 0 and 1** (they were 6 and 5 in earlier builds). The boot SCSI ID is stored in PRAM, so an existing install blessed for ID 6 will not boot until you run **Advanced > Clear PRAM and reset** — or re-bless the volume for its new ID.
 
 Images use a raw SCSI format (same as the SCSI2SD project, documented
 [here](http://www.codesrc.com/mediawiki/index.php?title=HFSFromScratch)) with a `.vhd`,
@@ -201,8 +201,8 @@ the real-time clock — is backed by a persistent NVRAM image:
 
 - **Save:** PRAM is written back when you open the OSD.
 - **Load:** the PRAM image is loaded automatically when the core starts.
-- **Switch:** mounting a different image with **Advanced > NVR** while the Mac is running does not disturb it: the OSD shows **Changes pending**, and **Apply and reset** restarts the Mac once on the new PRAM. The running Mac's settings are not saved into the newly mounted file.
-- **Clear:** **Machine > Clear PRAM and reset** clears PRAM and resets the machine (a fresh, default PRAM).
+- **Switch:** select a different image with **Advanced > PRAM image**. The OSD shows **Changes pending** until **Apply and reset** restarts the Mac with the new PRAM. Ejecting the image cancels the pending selection.
+- **Clear:** **Advanced > Clear PRAM and reset** clears PRAM and the selected image, then resets the machine.
 
 A default PRAM image is included as `releases/MacLC.nvr`.
 

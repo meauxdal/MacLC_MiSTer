@@ -89,37 +89,25 @@ module emu
 	`include "build_id.v"
 	localparam CONF_STR = {
 		"MACLC;UART57600:115200,MIDI;",
-		// Layout follows the computer-core OSD standard (danifunker/
-		// hp9000-715_MiSTer docs/osd-standard.md). Status bits keep their
-		// meaning across menu moves, so saved .CFG files still apply; the one
-		// exception is bit 14, retired with Floppy writes (see Advanced).
-		// CD-ROM (SCSI ID 3): ISO/TOAST are raw 2048-byte images; CUE/BIN/CHD
-		// go through Main's translation layer.
-		"SC0,IMGVHDHDA,Pri. disk (ID 0);",
-		"SC1,IMGVHDHDA,Disk (ID 1);",
+		"S6,DSKIMG,Floppy;",
+		"O3,Floppy Write Protect,Off,On;",
+		"SC0,IMGVHDHDA,SCSI disk (ID 0);",
+		"SC1,IMGVHDHDA,SCSI disk (ID 1);",
 `ifndef MACLC_NO_CDROM
 		"SC4,ISOTO*CUEBINCHD,CD-ROM (ID 3);",
 `endif
-		"S6,DSKIMG,Floppy;",
 		// IIe card 5.25 drives are slots 8 and 9 (see THE MOUNT WORD).
 		"S8,WOZ,IIe 5.25 drive 1;",
 		"S9,WOZ,IIe 5.25 drive 2;",
-		// Floppy Write Protect acts like a disk's write-protect tab, for the Mac
-		// floppy and both IIe drives: sampled at insert, so toggling it affects
-		// only the next mount (the MacPlus/MacLC475 convention). No reset.
-		"O3,Floppy Write Protect,Off,On;",
-		"F0,ROM,Load ROM;",
 		"-;",
 		"O4,Memory,2 MB,10 MB;",
 `ifndef MACLC_NO_ETHERNET
 		"o45,Network interface,eth0,tap0,macvlan,eth1;",
 `endif
 		"-;",
-		"P1,Machine;",
-`ifndef MACLC_NO_MT32PI
-		"P2,Audio and Video;",
-`else
 		"P2,Video;",
+`ifndef MACLC_NO_MT32PI
+		"P5,Audio;",
 `endif
 		"P3,Apple IIe Card;",
 		"P4,Advanced;",
@@ -127,12 +115,8 @@ module emu
 		"h0-,Changes pending;",
 		"R0,Apply and reset;",
 
-		"P1R5,Interrupt (NMI);",
-		"P1-;",
-		"P1R6,Clear PRAM and reset;",
-
 		// Aspect ratio and scale only steer the scaler, so they act at once.
-		"P2OA,Monitor,640x480 VGA,512x384 12in;",
+		"P2OA,Monitor,640x480 VGA,512x384 12-inch;",
 `ifdef MAC_TV525
 		"P2O12,Deflicker,Strong,Mild,Off;",
 `endif
@@ -140,15 +124,15 @@ module emu
 		"P2OCD,Scale,Normal,V-Integer,Narrower HV-Integer,Wider HV-Integer;",
 
 `ifndef MACLC_NO_MT32PI
-		"P2-,MT32-pi;",
-		"P2OO,Use MT32-pi,Yes,No;",
-		"H1P2OQ,Synthesizer,Munt,FluidSynth;",
-		"h1P2-;",
-		"H2P2ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
-		"H3P2OTV,SoundFont,0,1,2,3,4,5,6,7;",
-		"h1P2-;",
-		"H1P2OMN,Show info,No,Yes,LCD-On,LCD-Auto;",
-		"h1P2-;",
+		"P5-,MT32-pi;",
+		"P5OO,Use MT32-pi,Yes,No;",
+		"H1P5OQ,Synthesizer,Munt,FluidSynth;",
+		"h1P5-;",
+		"H2P5ORS,Munt ROM,MT-32 v1,MT-32 v2,CM-32L;",
+		"H3P5OTV,SoundFont,0,1,2,3,4,5,6,7;",
+		"h1P5-;",
+		"H1P5OMN,Show info,No,Yes,LCD-On,LCD-Auto;",
+		"h1P5-;",
 `endif
 
 		// IIe options sit on bits the release leaves free: buttons 15-17
@@ -166,7 +150,10 @@ module emu
 		// Bit 14 (the old Floppy writes option) is retired: Floppy Write
 		// Protect replaced it with the opposite default, so it must not be
 		// reused while saved .CFG files may still hold it set.
+		"P4F0,ROM,Load ROM;",
 		"P4SC2,NVR,PRAM image;",
+		"P4R6,Clear PRAM and reset;",
+		"P4R5,Interrupt (NMI);",
 		"P4-;",
 `ifndef MACLC_NO_CDROM
 		"P4OI,CD-ROM drive,Enabled,Disabled;",
@@ -427,13 +414,16 @@ module emu
 	        ? {pram_buf[{sd_buff_addr[6:0],1'b1}], pram_buf[{sd_buff_addr[6:0],1'b0}]}
 	        : 16'h0000;
 
-	reg        pram_ena;                        // a save image is mounted (size>0)
+	reg        pram_image_mounted;
+	reg        pram_ena;                        // the selected image can be saved
 	reg        pram_dirty;                      // PRAM changed since last save
 	reg        pram_rst_after;                  // pulse reset after the current save
 	reg        pram_load_pending, pram_flush_pending, pram_clr_pending;
 	reg [26:0] pram_settle;          // eager-flush settle timer (restarts on each PRAM write)
 	reg [24:0] osd_recent;           // >0 while the OSD is open and ~1 s after it closes
-	reg        old_pack, old_osd, old_mnt2, old_rstpram;
+	reg        old_pack, old_osd, old_mnt2, old_rstpram, old_n_reset;
+	reg        pram_session_started;
+	reg        pram_copy_stale;
 	reg        pram_ready;        // -> Egret: pram[] loaded (or no image / timed out)
 	reg [31:0] pram_rdy_cnt;      // ready backstop so a missing image never hangs boot
 	reg        pram_restart_after_load; // load landed after CPU release -> clean restart
@@ -450,15 +440,20 @@ module emu
 	reg  [3:0] pst;
 	reg  [8:0] pcnt;
 	reg  [6:0] rst_hold;
+	wire       pram_mount = img_mounted[VD_PRAM] && !old_mnt2;
+	wire       pram_from_menu = pram_session_started && (OSD_STATUS || osd_recent != 0);
+	wire       pram_apply = pram_mount_deferred && old_n_reset && !n_reset && !pram_force_reset;
 
 	always @(posedge clk_sys) begin
 		if (~pll_locked_s) begin
 			pst <= P_IDLE; pram_rd <= 0; pram_wr_req <= 0; pram_load_wr <= 0;
 			pram_ena <= 0; pram_dirty <= 0; pram_force_reset <= 0; pram_rst_after <= 0;
 			pram_mount_deferred <= 0; osd_recent <= 0;
+			pram_image_mounted <= 0; pram_session_started <= 0; pram_copy_stale <= 0;
 			pram_load_pending <= 0; pram_flush_pending <= 0; pram_clr_pending <= 0;
 			pram_settle <= 0;
 			old_pack <= 0; old_osd <= 0; old_mnt2 <= 0; old_rstpram <= 0; rst_hold <= 0;
+			old_n_reset <= 0;
 			pram_ready <= 0; pram_rdy_cnt <= 0;
 			pram_restart_after_load <= 0; pram_ld_wd <= 0; pram_ld_try <= 0;
 		end else begin
@@ -466,10 +461,13 @@ module emu
 			old_osd     <= OSD_STATUS;
 			old_mnt2    <= img_mounted[VD_PRAM];
 			old_rstpram <= status[6];
+			old_n_reset <= n_reset;
 			pram_load_wr <= 1'b0;                  // default low; pulsed in copy/clear
+			if (n_reset && pram_ready) pram_session_started <= 1'b1;
 
 			// PRAM SD-read capture (only while HPS services our slot)
-			if (pram_ack && sd_buff_wr && sd_buff_addr < 8'd128) begin
+			if ((pst == P_LD_RD || pst == P_LD_DAT) &&
+			    pram_ack && sd_buff_wr && sd_buff_addr < 8'd128) begin
 				pram_buf[{sd_buff_addr[6:0],1'b0}] <= sd_buff_dout[7:0];
 				pram_buf[{sd_buff_addr[6:0],1'b1}] <= sd_buff_dout[15:8];
 			end
@@ -477,48 +475,27 @@ module emu
 			// firmware PRAM writes mark the image dirty
 			if (pram_wr_stb) pram_dirty <= 1'b1;
 
-			// event latches
-			// A mount made from the OSD while the guest is running (pram_ready
-			// already up) is a machine setting like Memory or Monitor: it waits
-			// for Apply and reset instead of restarting the Mac on the spot.
-			// The LOAD waits too, not just the restart: after the boot-copy the
-			// Egret mirrors every guest PRAM write into pram[], so a loaded
-			// image would pick up the old session's writes (and the eager
-			// flush would save them into the new file) before Apply. pram_ena
-			// stays low meanwhile so nothing is flushed into the new file.
-			// Main hides the OSD BEFORE it mounts the picked image (menu.cpp
-			// MENU_GENERIC_IMAGE_SELECTED: MenuHide, then the mount), so an OSD
-			// pick shows up with OSD_STATUS already low. osd_recent bridges
-			// that: it holds for ~1 s (32.5 MHz clk_sys) after the OSD closes.
-			// Core-start autoloads arrive with the OSD long closed and keep the
-			// old path (load now; a late one restarts via
-			// pram_restart_after_load).
+			// Main closes the menu before reporting a file selection.
 			if (OSD_STATUS)          osd_recent <= 25'd32_500_000;
 			else if (osd_recent != 0) osd_recent <= osd_recent - 1'b1;
 
-			if (img_mounted[VD_PRAM] && !old_mnt2) begin
+			if (pram_mount) begin
+				pram_image_mounted <= img_size != 0;
+				pram_ena <= 1'b0;
+				pram_flush_pending <= 1'b0;
+				pram_mount_deferred <= img_size != 0 && pram_from_menu;
+				pram_load_pending <= img_size != 0 && !pram_from_menu;
+				if (pst == P_LD_CPY) pram_copy_stale <= 1'b1;
+				else if (img_size == 0 || pram_from_menu) pram_ready <= 1'b1;
+			end else if (pram_apply) begin
+				// Hold the Egret boot-copy even if the PRAM port is still busy.
 				pram_mount_deferred <= 1'b0;
-				if (img_size != 0 && pram_ready && (OSD_STATUS || osd_recent != 0)) begin
-					pram_ena <= 1'b0;
-					pram_mount_deferred <= 1'b1;
-				end else begin
-					pram_ena <= (img_size != 0);
-					if (img_size != 0) pram_load_pending <= 1'b1;  // load runs -> P_LD_CPY sets pram_ready
-					else               pram_ready        <= 1'b1;  // no image: release the boot-copy now
-				end
-			end
-			// Apply (or any reset): run the deferred load while the 68k is held.
-			// Dropping pram_ready makes the Egret's boot-copy wait for it, and
-			// since the load then lands before the CPU runs, P_LD_DAT sees
-			// pram_ready low and does not add a second restart.
-			else if (pram_mount_deferred && !n_reset) begin
-				pram_mount_deferred <= 1'b0;
-				pram_ena <= 1'b1;
 				pram_ready <= 1'b0;
 				pram_rdy_cnt <= 0;
 				pram_load_pending <= 1'b1;
+			end else if (OSD_STATUS && !old_osd && pram_dirty && pram_ena) begin
+				pram_flush_pending <= 1'b1;
 			end
-			if (OSD_STATUS && !old_osd && pram_dirty && pram_ena) pram_flush_pending <= 1'b1;
 			// ── EAGER NVRAM PERSISTENCE (2026-08-19 user directive) ─────────
 			// Flush PRAM to SD whenever it has changed and the writes have
 			// settled (~2-4 s), instead of only on OSD-open. Rationale: the
@@ -534,7 +511,7 @@ module emu
 			else if (pram_settle > 27'd1)   pram_settle <= pram_settle - 1'b1;
 			else if (pram_settle == 27'd1) begin
 				pram_settle <= 27'd0;
-				if (pram_dirty && pram_ena) pram_flush_pending <= 1'b1;
+				if (!pram_mount && pram_dirty && pram_ena) pram_flush_pending <= 1'b1;
 			end
 			if (status[6] && !old_rstpram) pram_clr_pending <= 1'b1;
 
@@ -563,14 +540,25 @@ module emu
 				else rst_hold <= rst_hold - 1'b1;
 			end
 
-			case (pst)
+			// Main switches the backing file on a mount. Drop obsolete SD
+			// requests, but finish any local copy so PRAM stays coherent.
+			if (pram_mount && pst != P_LD_CPY && pst != P_CLR && pst != P_RST) begin
+				pram_rd <= 0;
+				pram_wr_req <= 0;
+				pram_rst_after <= 0;
+				pst <= pram_rst_after ? P_RST : P_IDLE;
+			end else case (pst)
 			P_IDLE: begin
-				if (pram_clr_pending) begin
+				if (pram_clr_pending && !pram_ack) begin
 					pram_clr_pending <= 0; pcnt <= 0; pst <= P_CLR;
-				end else if (pram_load_pending) begin
+					pram_mount_deferred <= 0;
+					pram_load_pending <= 0;
+					pram_flush_pending <= 0;
+					pram_ena <= pram_image_mounted;
+				end else if (pram_load_pending && !pram_ack) begin
 					pram_load_pending <= 0; pram_rd <= 1'b1;
 					pram_ld_wd <= 0; pram_ld_try <= 0; pst <= P_LD_RD;
-				end else if (pram_flush_pending) begin
+				end else if (pram_flush_pending && pram_ena && !pram_ack) begin
 					pram_flush_pending <= 0; pram_rst_after <= 0; pcnt <= 0; pst <= P_FILL;
 				end
 			end
@@ -602,6 +590,7 @@ module emu
 					// so the machine comes up ON the loaded PRAM (automates the
 					// old manual mount-then-reset ritual).
 					pram_restart_after_load <= pram_ready;
+					pram_copy_stale <= 1'b0;
 					pst <= P_LD_CPY;
 				end
 				else if (pram_ld_wd == PRAM_LD_WD_MAX) begin
@@ -613,9 +602,14 @@ module emu
 				pram_load_addr <= pcnt[7:0];
 				pram_load_data <= pram_buf[pcnt[7:0]];
 				if (pcnt == 9'd255) begin
-					pram_dirty <= 0; pram_ena <= 1; pram_ready <= 1'b1;
-					if (pram_restart_after_load) begin pram_restart_after_load <= 0; pst <= P_RST; end
-					else pst <= P_IDLE;
+					pst <= P_IDLE;
+					if (!pram_copy_stale && !pram_mount) begin
+						pram_dirty <= 0; pram_ena <= 1; pram_ready <= 1'b1;
+						if (pram_restart_after_load && !pram_clr_pending) pst <= P_RST;
+					end else if (!pram_load_pending && !pram_apply &&
+					             (!pram_mount || img_size == 0 || pram_from_menu)) begin
+						pram_ready <= 1'b1;
+					end
 				end
 				else pcnt <= pcnt + 1'b1;
 			end
@@ -637,18 +631,19 @@ module emu
 				else pst <= P_IDLE;
 			end
 
-			// ---- Reset PRAM & Core ----
+			// ---- Clear PRAM and reset ----
 			P_CLR: begin                                   // zero Egret pram[] + pram_buf
 				pram_load_wr   <= 1'b1;
 				pram_load_addr <= pcnt[7:0];
 				pram_load_data <= 8'h00;
 				pram_buf[pcnt[7:0]] <= 8'h00;
 				if (pcnt == 9'd255) begin
-					if (pram_ena) begin pram_rst_after <= 1; pst <= P_SV_WR; end
+					if (pram_ena && !pram_mount) begin pram_rst_after <= 1; pst <= P_SV_WR; end
 					else pst <= P_RST;
 				end else pcnt <= pcnt + 1'b1;
 			end
 			P_RST: begin
+				pram_ready <= 1'b1;
 				pram_force_reset <= 1'b1; rst_hold <= 7'd127; pst <= P_IDLE;
 			end
 			default: pst <= P_IDLE;

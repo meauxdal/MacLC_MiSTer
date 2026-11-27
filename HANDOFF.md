@@ -44,3 +44,30 @@
 - Unresolved: hardware preview is unverified; no Quartus build run.
 - Next: user builds the core and checks live aspect ratio/Scale preview and
   pending indication only for memory/monitor changes.
+
+# Shared Macintosh OSD
+
+- Objective: put everyday media first, keep saved settings compatible, and
+  let reset apply any PRAM image selected during the session.
+- Baseline: `IIe-refine` at `ca082a48`, with an existing unrelated
+  `AGENTS.md` edit. The baseline already deferred manual PRAM selections.
+- Changes: `MacLC.sv` groups Floppy, SCSI, CD-ROM and IIe media on the front
+  page and keeps their loader indices and format lists. Video and Audio
+  have separate pages. Advanced starts with Load ROM, PRAM image, Clear
+  PRAM and reset, and Interrupt (NMI). Saved setting bits and value order
+  are preserved. `readme.md` uses the current labels.
+- PRAM: a replacement invalidates obsolete SD requests and pending saves.
+  Only Apply or a machine reset loads a menu selection. Eject cancels it.
+  Clear overrides the queued load and writes zeros to the selected image.
+  Startup auto-mount, late auto-mount restart and the existing boot and
+  read watchdogs remain in place.
+- Verified: WSL Icarus compiled the top with unrelated modules unresolved
+  and passed `scratch/osd/tb_lc_osd.sv` in the default and a combined
+  TV525/IIe overlay variant with MT32-pi, Ethernet and CD-ROM disabled.
+  The bench covered startup, pending state, live scaler, deferred Apply,
+  eject, in-flight replacement, the ready backstop and clear priority.
+  Four static-initialization warnings point to unchanged code.
+  `git diff --check` passed. The old `scripts/osd_check.py` has stale menu
+  expectations and rejects both the baseline and current layout.
+- Next: with a separately authorized hardware build, check menu rendering,
+  startup and manual PRAM mounts, and MGL launch using the existing slots.
